@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🎲 Party Game</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <!-- Menu Screen -->
+  <div id="menu" class="screen active">
+    <h1>🎲 Party Game</h1>
+    <p class="subtitle">Обери гру та грай з друзями!</p>
+    <div class="game-grid">
+      <button class="game-btn truth-btn" onclick="startGame('truth')">
+        <span class="game-icon">🎯</span>
+        <span class="game-name">Правда</span>
+      </button>
+      <button class="game-btn dare-btn" onclick="startGame('dare')">
+        <span class="game-icon">🔥</span>
+        <span class="game-name">Дія</span>
+      </button>
+      <button class="game-btn never-btn" onclick="startGame('never')">
+        <span class="game-icon">🍺</span>
+        <span class="game-name">Я ніколи не...</span>
+      </button>
+      <button class="game-btn rather-btn" onclick="startGame('rather')">
+        <span class="game-icon">⚖️</span>
+        <span class="game-name">Що б ти обрав?</span>
+      </button>
+    </div>
+    <button class="random-btn" onclick="startGame('random')">🎲 Випадкове питання</button>
+    <div class="share-section">
+      <button class="share-btn" onclick="shareBot()">📢 Запросити друзів</button>
+    </div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="game" class="screen">
+    <div class="game-header">
+      <button class="back-btn" onclick="showMenu()">← Назад</button>
+      <span id="game-title" class="game-title-text"></span>
+      <span id="counter" class="counter"></span>
+    </div>
+    <div id="question-card" class="question-card">
+      <div id="question-text" class="question-text"></div>
+      <div id="rather-options" class="rather-options hidden">
+        <button class="option-btn option-a" onclick="vote('A')">🅰️ <span id="optA"></span></button>
+        <button class="option-btn option-b" onclick="vote('B')">🅱️ <span id="optB"></span></button>
+      </div>
+      <div id="never-btns" class="never-btns hidden">
+        <button class="react-btn drink" onclick="react('drink')">🍺 Я робив!</button>
+        <button class="react-btn clean" onclick="react('clean')">😇 Не я!</button>
+      </div>
+    </div>
+    <button id="next-btn" class="next-btn" onclick="nextQuestion()">➡️ Наступне</button>
+    <button class="share-question-btn" onclick="shareQuestion()">📢 Поділитися питанням</button>
+  </div>
+</div>
+
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

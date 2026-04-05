@@ -1,0 +1,194 @@
+:root {
+  --bg: var(--tg-theme-bg-color, #1a1a2e);
+  --text: var(--tg-theme-text-color, #eee);
+  --hint: var(--tg-theme-hint-color, #999);
+  --btn: var(--tg-theme-button-color, #6c5ce7);
+  --btn-text: var(--tg-theme-button-text-color, #fff);
+  --secondary-bg: var(--tg-theme-secondary-bg-color, #16213e);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.screen { display: none; padding: 16px; animation: fadeIn 0.3s ease; }
+.screen.active { display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideIn { from { opacity: 0; transform: scale(0.95) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+h1 { font-size: 2em; margin: 20px 0 4px; }
+.subtitle { color: var(--hint); margin-bottom: 24px; font-size: 0.95em; }
+
+.game-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 16px;
+}
+
+.game-btn {
+  background: var(--secondary-bg);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 20px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+
+.game-btn:active { transform: scale(0.95); }
+.game-btn .game-icon { font-size: 2.5em; }
+.game-btn .game-name { font-size: 0.9em; font-weight: 600; }
+
+.truth-btn:hover, .truth-btn:active { border-color: #e17055; }
+.dare-btn:hover, .dare-btn:active { border-color: #fdcb6e; }
+.never-btn:hover, .never-btn:active { border-color: #74b9ff; }
+.rather-btn:hover, .rather-btn:active { border-color: #a29bfe; }
+
+.random-btn {
+  background: var(--btn);
+  color: var(--btn-text);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  transition: all 0.2s;
+}
+.random-btn:active { transform: scale(0.97); }
+
+.share-section { margin-top: 20px; width: 100%; max-width: 400px; }
+.share-btn {
+  background: transparent;
+  border: 2px solid var(--btn);
+  color: var(--btn);
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 1em;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+}
+.share-btn:active { background: var(--btn); color: var(--btn-text); }
+
+/* Game Screen */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--btn);
+  font-size: 1em;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.game-title-text { font-weight: 700; font-size: 1.1em; }
+.counter { color: var(--hint); font-size: 0.9em; }
+
+.question-card {
+  background: var(--secondary-bg);
+  border-radius: 20px;
+  padding: 28px 20px;
+  width: 100%;
+  max-width: 400px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: slideIn 0.35s ease;
+  text-align: center;
+}
+
+.question-text { font-size: 1.25em; line-height: 1.5; font-weight: 500; }
+
+.rather-options { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 16px; }
+.rather-options.hidden, .never-btns.hidden { display: none; }
+
+.option-btn {
+  background: var(--bg);
+  border: 2px solid var(--hint);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--text);
+  font-size: 1em;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+.option-btn:active { border-color: var(--btn); background: rgba(108, 92, 231, 0.15); }
+.option-btn.selected { border-color: var(--btn); background: rgba(108, 92, 231, 0.2); }
+
+.never-btns { display: flex; gap: 10px; margin-top: 16px; width: 100%; }
+.react-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  border: 2px solid var(--hint);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.react-btn:active { transform: scale(0.95); }
+.react-btn.drink:active { border-color: #fdcb6e; background: rgba(253, 203, 110, 0.15); }
+.react-btn.clean:active { border-color: #55efc4; background: rgba(85, 239, 196, 0.15); }
+
+.next-btn {
+  background: var(--btn);
+  color: var(--btn-text);
+  border: none;
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-size: 1.15em;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 20px;
+  transition: all 0.15s;
+}
+.next-btn:active { transform: scale(0.97); }
+
+.share-question-btn {
+  background: transparent;
+  border: 1.5px solid var(--hint);
+  color: var(--hint);
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 0.9em;
+  cursor: pointer;
+  margin-top: 12px;
+  width: 100%;
+  max-width: 400px;
+}
+.share-question-btn:active { border-color: var(--btn); color: var(--btn); }
+
+/* Haptic animation */
+.question-card.pop { animation: slideIn 0.35s ease; }

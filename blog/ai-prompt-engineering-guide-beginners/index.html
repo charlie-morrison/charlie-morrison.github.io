@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Prompt Engineering: A Practical Guide for Beginners - Charlie Morrison Digital</title>
+<meta name="description" content="Learn prompt engineering from scratch. Core techniques, common mistakes, and practical examples for ChatGPT, Claude, and other AI models.">
+<meta name="keywords" content="prompt engineering guide, how to write AI prompts, ChatGPT prompt tips, AI prompt techniques beginners">
+<link rel="canonical" href="https://charlie-morrison.github.io/blog/ai-prompt-engineering-guide-beginners">
+<meta property="og:title" content="AI Prompt Engineering: A Practical Guide for Beginners">
+<meta property="og:description" content="Learn the core prompt engineering techniques in one practical guide.">
+<meta property="og:type" content="article">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"AI Prompt Engineering: A Practical Guide for Beginners","datePublished":"2026-04-05","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+h2{font-size:1.4em;margin:32px 0 12px}
+h3{font-size:1.15em;margin:20px 0 8px}
+p{margin-bottom:16px;color:#333}
+code{background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:.9em}
+pre{background:#1a1a2e;color:#e0e0e0;padding:16px;border-radius:8px;overflow-x:auto;margin:16px 0}
+pre code{background:none;padding:0;color:inherit}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+.tip{background:#f0f8ff;border-left:4px solid #667eea;padding:16px;margin:16px 0;border-radius:0 8px 8px 0}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>AI Prompt Engineering: A Practical Guide for Beginners</h1>
+<div class="meta">April 5, 2026 · 10 min read</div>
+
+<p>Prompt engineering sounds fancy. It's not. It's the skill of telling an AI what you actually want — clearly enough that it delivers something useful on the first try instead of the third.</p>
+
+<p>This guide covers the techniques that matter most, with examples you can use today.</p>
+
+<h2>Why Your Prompts Get Bad Results</h2>
+<p>The number one reason people get mediocre AI output: vague input. Compare these:</p>
+
+<p><strong>Vague:</strong> "Write me a blog post about marketing."</p>
+<p><strong>Specific:</strong> "Write a 1,200-word blog post about email marketing for SaaS startups with less than 1,000 subscribers. Include 3 actionable strategies with examples. Tone: practical, slightly informal. Target reader: a non-technical founder."</p>
+
+<p>The second prompt gives the AI constraints. Constraints aren't limitations — they're instructions that eliminate guesswork.</p>
+
+<h2>The 5 Core Techniques</h2>
+
+<h3>1. Role Assignment</h3>
+<p>Tell the AI who to be. This activates relevant knowledge patterns.</p>
+<pre><code>You are a senior data analyst at a Fortune 500 company.
+Analyze this sales data and identify the top 3 trends
+that would be most relevant to present to the C-suite.</code></pre>
+
+<h3>2. Output Formatting</h3>
+<p>Specify exactly what format you want. Tables, bullet points, numbered lists, JSON — be explicit.</p>
+<pre><code>Compare React, Vue, and Svelte. Format as a table with columns:
+Framework | Learning Curve | Performance | Ecosystem | Best For</code></pre>
+
+<h3>3. Few-Shot Examples</h3>
+<p>Show the AI what good output looks like by providing 1-3 examples.</p>
+<pre><code>Convert these product features to customer benefits:
+
+Feature: "256GB storage" → Benefit: "Never worry about running out of space for your photos, videos, and apps"
+Feature: "5000mAh battery" → Benefit: "Go from morning to midnight without reaching for a charger"
+
+Now convert:
+Feature: "120Hz AMOLED display" →</code></pre>
+
+<h3>4. Chain of Thought</h3>
+<p>Ask the AI to think step by step. This dramatically improves accuracy for complex tasks.</p>
+<pre><code>Calculate the ROI of this marketing campaign. Think step by step:
+1. First, identify all costs
+2. Then, calculate total revenue attributed
+3. Then, compute ROI percentage
+4. Finally, compare to industry benchmarks
+
+Campaign data: [data]</code></pre>
+
+<h3>5. Constraints and Guardrails</h3>
+<p>Tell the AI what NOT to do. This prevents common failure modes.</p>
+<pre><code>Write a product description for [product].
+- Maximum 150 words
+- No buzzwords (innovative, revolutionary, cutting-edge)
+- No exclamation marks
+- Include one specific number or statistic
+- End with a clear call to action</code></pre>
+
+<h2>Common Mistakes to Avoid</h2>
+
+<ol>
+<li><strong>Being too polite.</strong> "Could you perhaps help me with..." wastes tokens. Just state what you need.</li>
+<li><strong>Not iterating.</strong> Your first prompt rarely produces the best result. Refine it.</li>
+<li><strong>Ignoring context windows.</strong> Longer conversations lose early context. Repeat important instructions.</li>
+<li><strong>Asking yes/no questions.</strong> Ask "What are the trade-offs?" not "Is this a good approach?"</li>
+<li><strong>Not specifying audience.</strong> "Explain Docker" has wildly different answers for a CTO vs a student.</li>
+</ol>
+
+<h2>The Meta-Prompt Trick</h2>
+<p>When you're not sure how to prompt for something, ask the AI to help you write the prompt:</p>
+<pre><code>I want to use AI to [goal]. Help me write the most effective
+prompt for this task. Include role, context, format instructions,
+and constraints. Then I'll use your prompt.</code></pre>
+<p>This works surprisingly well because the AI knows its own strengths and limitations.</p>
+
+<div class="tip">
+<strong>Pro tip:</strong> Save your best prompts. A library of proven prompts is worth more than memorizing techniques. Start with 5-10 prompts you use weekly, refine them over time.
+</div>
+
+<h2>Quick Reference: The CRAFT Framework</h2>
+<p>Use this checklist for any prompt:</p>
+<ul>
+<li><strong>C</strong>ontext — Background info the AI needs</li>
+<li><strong>R</strong>ole — Who should the AI be?</li>
+<li><strong>A</strong>ction — What specific task?</li>
+<li><strong>F</strong>ormat — How should the output look?</li>
+<li><strong>T</strong>one — What voice and style?</li>
+</ul>
+
+<p>Not every prompt needs all five. But if you're getting bad results, check which element is missing.</p>
+
+<div class="cta-box">
+<h3>Skip the Learning Curve</h3>
+<p>Our prompt packs come pre-engineered with all these techniques built in. Just fill in your details and get professional results.</p>
+<a href="/#products">Browse All Prompt Packs</a>
+</div>
+
+<h2>Start Here</h2>
+<p>Pick one technique from this guide. Use it for your next 10 AI interactions. Once it becomes automatic, add another one. Within a week, your AI output quality will be noticeably better.</p>
+
+<p>Prompt engineering isn't about memorizing templates. It's about developing the habit of being specific about what you want. That habit alone puts you ahead of 90% of AI users.</p>
+
+<a href="/blog" class="back">← Back to blog</a>
+</article>
+<footer><p>&copy; 2026 Charlie Morrison Digital</p></footer>
+</body>
+</html>

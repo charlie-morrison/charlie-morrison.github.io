@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Best AI Prompts for Developers in 2026 - Charlie Morrison Digital</title>
+<meta name="description" content="10 battle-tested AI prompt patterns that senior developers use daily with ChatGPT and Claude for code review, debugging, and architecture.">
+<meta name="keywords" content="AI prompts for developers, ChatGPT coding prompts, Claude code review, best developer prompts 2026">
+<link rel="canonical" href="https://charlie-morrison.github.io/blog/best-ai-prompts-for-developers-2026">
+<meta property="og:title" content="Best AI Prompts for Developers in 2026">
+<meta property="og:description" content="10 battle-tested AI prompt patterns that senior developers use daily.">
+<meta property="og:type" content="article">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Best AI Prompts for Developers in 2026","datePublished":"2026-04-05","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+p{margin-bottom:16px;color:#333}
+code{background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:.9em}
+pre{background:#1a1a2e;color:#e0e0e0;padding:16px;border-radius:8px;overflow-x:auto;margin:16px 0}
+pre code{background:none;padding:0;color:inherit}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>Best AI Prompts for Developers in 2026</h1>
+<div class="meta">April 5, 2026 · 8 min read</div>
+
+<p>Most developers use AI like a search engine with extra steps. They paste code, ask "what's wrong?", and get a generic answer. That's leaving 90% of the value on the table.</p>
+
+<p>After months of building and refining prompt libraries for professional developers, here are 10 patterns that consistently produce better results than the default "fix my code" approach.</p>
+
+<h2>1. The Rubber Duck Prompt</h2>
+<p>Instead of asking the AI to debug directly, have it explain what your code does line by line:</p>
+<pre><code>Walk through this function line by line. For each line, explain:
+1. What it does
+2. What assumptions it makes
+3. What could go wrong
+
+[paste code]</code></pre>
+<p>This catches bugs you'd miss because the AI is forced to verbalize every assumption — including the wrong ones.</p>
+
+<h2>2. The Senior Reviewer</h2>
+<p>Give the AI a persona with specific concerns:</p>
+<pre><code>Review this code as a senior engineer focused on:
+- Production reliability (what fails at scale?)
+- Security (what can be exploited?)
+- Maintainability (will a new team member understand this in 6 months?)
+
+Be specific. Reference line numbers. Suggest concrete fixes.
+
+[paste code]</code></pre>
+
+<h2>3. The Test-First Debugger</h2>
+<p>Before fixing a bug, make the AI write a test that reproduces it:</p>
+<pre><code>This function has a bug: [describe symptoms]
+
+Don't fix it yet. First:
+1. Write a test that should pass but currently fails
+2. Explain why it fails
+3. Then propose a minimal fix
+
+[paste code]</code></pre>
+
+<h2>4. The Architecture Advisor</h2>
+<pre><code>I'm building [feature]. Current stack: [tech stack].
+
+Compare these approaches:
+A) [approach 1]
+B) [approach 2]
+
+For each, rate on: complexity (1-10), scalability (1-10), time to implement.
+Include trade-offs I might not be considering.</code></pre>
+
+<h2>5. The Documentation Generator</h2>
+<pre><code>Generate documentation for this [function/class/module] that includes:
+- One-line summary
+- Parameters with types and descriptions
+- Return value
+- Usage example with a realistic scenario
+- Edge cases to watch for
+
+Don't document the obvious. Focus on the non-obvious behavior.
+
+[paste code]</code></pre>
+
+<h2>6. The Refactoring Coach</h2>
+<pre><code>This code works but smells. Identify the top 3 code smells and for each:
+1. Name the smell
+2. Show the problematic lines
+3. Provide the refactored version
+4. Explain why the refactored version is better
+
+Prioritize by impact on maintainability.
+
+[paste code]</code></pre>
+
+<h2>7. The Error Message Decoder</h2>
+<pre><code>Error message: [paste error]
+Context: [what you were doing]
+Stack: [relevant tech]
+
+Give me:
+1. What this error actually means (plain English)
+2. The 3 most likely causes, ranked by probability
+3. How to fix each one
+4. How to prevent it in the future</code></pre>
+
+<h2>8. The Migration Planner</h2>
+<pre><code>I need to migrate from [old] to [new].
+
+Create a step-by-step migration plan that:
+- Can be done incrementally (no big-bang rewrites)
+- Includes rollback points at each step
+- Flags the highest-risk changes
+- Estimates relative effort (S/M/L) per step</code></pre>
+
+<h2>9. The Performance Profiler</h2>
+<pre><code>Analyze this code for performance issues:
+- Time complexity of each operation
+- Memory allocation patterns
+- Potential bottlenecks at 10x, 100x, 1000x current load
+- Specific optimization suggestions with expected impact
+
+[paste code]</code></pre>
+
+<h2>10. The Commit Message Writer</h2>
+<pre><code>Write a commit message for this diff following conventional commits format.
+
+Rules:
+- First line: type(scope): description (under 72 chars)
+- Body: explain WHY, not WHAT (the diff shows what)
+- Footer: breaking changes, issue references
+
+[paste diff]</code></pre>
+
+<div class="cta-box">
+<h3>Want 108 More Developer Prompts?</h3>
+<p>The AI Developer Toolkit includes all 10 patterns above plus 98 more — covering debugging, testing, DevOps, API design, and database optimization.</p>
+<a href="https://payhip.com/b/7VLIx">Get the Full Toolkit — $19</a>
+</div>
+
+<h2>Making These Prompts Work Better</h2>
+<p>The pattern behind all 10 prompts is the same: <strong>constrain the output</strong>. Instead of asking open-ended questions, tell the AI exactly what format you want, what to focus on, and what to skip.</p>
+
+<p>General rule: the more specific your prompt, the more useful the response. "Review my code" gets you a C+ answer. "Review my code for production reliability, reference line numbers, suggest concrete fixes" gets you an A.</p>
+
+<p>The developers getting the most out of AI aren't the ones with the fanciest models — they're the ones with the best prompts.</p>
+
+<a href="/blog" class="back">← Back to blog</a>
+</article>
+<footer><p>&copy; 2026 Charlie Morrison Digital</p></footer>
+</body>
+</html>

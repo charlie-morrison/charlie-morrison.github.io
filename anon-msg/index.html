@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🎭 Anonymous Message</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0d0d0d;--card:#1a1a2e;--accent:#6c5ce7;--accent2:#a29bfe;--text:#e0e0e0;--muted:#666;--success:#00b894;--border:#2a2a4e}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* Header */
+.header{text-align:center;padding:2rem 1rem 1.5rem;background:linear-gradient(135deg,#1a1a2e 0%,#2d1b69 50%,#1a1a2e 100%)}
+.header h1{font-size:1.8rem;margin-bottom:.3rem}
+.header .subtitle{color:var(--muted);font-size:.95rem}
+.header .target-name{color:var(--accent2);font-size:1.2rem;font-weight:700;margin:.5rem 0}
+
+/* Send Form */
+.send-section{max-width:500px;margin:0 auto;padding:1.5rem 1rem}
+.msg-box{position:relative;margin-bottom:1rem}
+.msg-box textarea{width:100%;min-height:140px;padding:1rem;border-radius:16px;border:2px solid var(--border);background:var(--card);color:var(--text);font-size:1rem;font-family:inherit;resize:none;transition:border-color .2s}
+.msg-box textarea:focus{outline:none;border-color:var(--accent)}
+.msg-box textarea::placeholder{color:var(--muted)}
+.char-count{position:absolute;bottom:12px;right:14px;font-size:.75rem;color:var(--muted)}
+
+.send-btn{width:100%;padding:1rem;border:none;border-radius:14px;background:linear-gradient(135deg,var(--accent),#8b7cf7);color:#fff;font-size:1.1rem;font-weight:700;cursor:pointer;transition:opacity .2s,transform .1s}
+.send-btn:active{transform:scale(.97)}
+.send-btn:disabled{opacity:.5;cursor:default}
+
+.hint{text-align:center;color:var(--muted);font-size:.85rem;margin-top:1rem}
+.hint span{color:var(--accent2)}
+
+/* Prompts - suggestion chips */
+.prompts{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:1.2rem;padding:0 .5rem}
+.prompt-chip{padding:.5rem .9rem;border-radius:20px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:.82rem;cursor:pointer;transition:all .2s}
+.prompt-chip:active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Success state */
+.success-screen{display:none;text-align:center;padding:3rem 1rem}
+.success-screen.active{display:block}
+.success-icon{font-size:4rem;margin-bottom:1rem;animation:pop .4s ease}
+.success-text{font-size:1.2rem;margin-bottom:.5rem}
+.success-sub{color:var(--muted);margin-bottom:2rem}
+.own-link-btn{display:inline-block;padding:.8rem 1.5rem;border-radius:12px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;font-size:.95rem}
+
+/* My Link screen */
+.mylink-section{display:none;max-width:500px;margin:0 auto;padding:1.5rem 1rem;text-align:center}
+.mylink-section.active{display:block}
+.link-display{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:1rem;margin:1rem 0;font-size:.9rem;word-break:break-all;color:var(--accent2);cursor:pointer;transition:border-color .2s}
+.link-display:active{border-color:var(--accent)}
+.copy-hint{color:var(--success);font-size:.8rem;opacity:0;transition:opacity .3s}
+.copy-hint.show{opacity:1}
+.share-actions{display:flex;flex-direction:column;gap:.8rem;margin-top:1.5rem}
+.share-btn{padding:.9rem;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:opacity .2s}
+.share-btn:active{opacity:.8}
+.share-tg{background:linear-gradient(135deg,#0088cc,#00b4d8);color:#fff}
+.share-copy{background:var(--card);border:1px solid var(--border);color:var(--text)}
+.share-insta{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:#fff}
+
+.stats-card{background:var(--card);border-radius:14px;padding:1.2rem;margin:1.5rem 0;display:flex;justify-content:center;gap:2rem}
+.stat{text-align:center}
+.stat-num{font-size:1.5rem;font-weight:700;color:var(--accent2)}
+.stat-label{font-size:.75rem;color:var(--muted)}
+
+.promo{margin-top:2rem;padding:1rem;border-radius:12px;background:linear-gradient(135deg,#1a1a2e,#2d1b69);border:1px solid var(--border)}
+.promo p{font-size:.85rem;color:var(--muted);margin-bottom:.5rem}
+.promo a{color:var(--accent2);text-decoration:none;font-weight:600}
+
+@keyframes pop{0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.shake{animation:shake .3s ease}
+</style>
+</head>
+<body>
+
+<!-- SEND MESSAGE SCREEN -->
+<div id="send-screen">
+  <div class="header">
+    <h1>🎭</h1>
+    <div id="target-name" class="target-name"></div>
+    <div class="subtitle">Надішли анонімне повідомлення</div>
+  </div>
+  <div class="send-section">
+    <div class="prompts" id="prompts">
+      <span class="prompt-chip" onclick="usePrompt(this)">Що ти про мене думаєш? 🤔</span>
+      <span class="prompt-chip" onclick="usePrompt(this)">Скажи правду... 👀</span>
+      <span class="prompt-chip" onclick="usePrompt(this)">Хочу сказати тобі щось 💬</span>
+      <span class="prompt-chip" onclick="usePrompt(this)">Мені подобається в тобі... ❤️</span>
+      <span class="prompt-chip" onclick="usePrompt(this)">Чесна порада 💡</span>
+    </div>
+    <div class="msg-box">
+      <textarea id="msg-input" placeholder="Напиши щось анонімно..." maxlength="1000" oninput="updateCount()"></textarea>
+      <span class="char-count" id="char-count">0/1000</span>
+    </div>
+    <button class="send-btn" id="send-btn" onclick="sendMessage()" disabled>✉️ Надіслати анонімно</button>
+    <div class="hint">🔒 Повідомлення повністю анонімне. <span>Ніхто не дізнається, хто ти.</span></div>
+  </div>
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div id="success-screen" class="success-screen">
+  <div class="success-icon">✅</div>
+  <div class="success-text">Повідомлення надіслано!</div>
+  <div class="success-sub">Отримувач побачить його анонімно</div>
+  <button class="send-btn" onclick="resetForm()" style="max-width:300px;margin:1rem auto">📝 Надіслати ще</button>
+  <div style="margin-top:1.5rem">
+    <a class="own-link-btn" href="https://t.me/charlie_anonmsg_bot?start=getlink">🎭 Створити своє посилання</a>
+  </div>
+</div>
+
+<!-- MY LINK SCREEN (when opened without target) -->
+<div id="mylink-section" class="mylink-section">
+  <h2 style="margin-bottom:.5rem">🎭 Анонімні повідомлення</h2>
+  <p style="color:var(--muted)">Поділись посиланням — отримай анонімні повідомлення від друзів!</p>
+
+  <div class="link-display" id="my-link" onclick="copyLink()">Завантаження...</div>
+  <div class="copy-hint" id="copy-hint">✅ Скопійовано!</div>
+
+  <div class="stats-card" id="stats-card" style="display:none">
+    <div class="stat"><div class="stat-num" id="stat-msgs">0</div><div class="stat-label">повідомлень</div></div>
+    <div class="stat"><div class="stat-num" id="stat-today">0</div><div class="stat-label">сьогодні</div></div>
+  </div>
+
+  <div class="share-actions">
+    <button class="share-btn share-tg" onclick="shareTG()">📤 Поділитися в Telegram</button>
+    <button class="share-btn share-copy" onclick="copyLink()">📋 Скопіювати посилання</button>
+  </div>
+
+  <div class="promo">
+    <p>🤖 Більше ботів:</p>
+    <a href="https://t.me/charlie_party_bot">🎲 Party Game</a> ·
+    <a href="https://t.me/charlie_dl_bot">🎬 Downloader</a>
+  </div>
+</div>
+
+<script>
+const tg = window.Telegram?.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+
+const BOT = 'charlie_anonmsg_bot';
+let targetLinkCode = null;
+let targetName = null;
+
+// Parse start parameter from TG WebApp
+function init() {
+  const startParam = tg?.initDataUnsafe?.start_param || getUrlParam('startapp') || '';
+
+  if (startParam && startParam !== 'getlink') {
+    // Someone opened this to send a message
+    targetLinkCode = startParam;
+    targetName = decodeURIComponent(getUrlParam('name') || '');
+    showSendScreen();
+  } else {
+    // User wants their own link
+    showMyLinkScreen();
+  }
+}
+
+function getUrlParam(key) {
+  return new URLSearchParams(window.location.search).get(key) || '';
+}
+
+function showSendScreen() {
+  document.getElementById('send-screen').style.display = 'block';
+  document.getElementById('mylink-section').classList.remove('active');
+  document.getElementById('success-screen').classList.remove('active');
+
+  const nameEl = document.getElementById('target-name');
+  nameEl.textContent = targetName || 'Анонімне повідомлення';
+
+  if (tg) {
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => tg.close());
+  }
+}
+
+function showMyLinkScreen() {
+  document.getElementById('send-screen').style.display = 'none';
+  document.getElementById('mylink-section').classList.add('active');
+
+  // Get user's link from bot
+  const userId = tg?.initDataUnsafe?.user?.id;
+  if (userId) {
+    const link = 'https://t.me/' + BOT + '/anon';
+    document.getElementById('my-link').textContent = link;
+  } else {
+    document.getElementById('my-link').textContent = 'Відкрий через @' + BOT;
+  }
+}
+
+function updateCount() {
+  const input = document.getElementById('msg-input');
+  const count = input.value.length;
+  document.getElementById('char-count').textContent = count + '/1000';
+  document.getElementById('send-btn').disabled = count === 0;
+}
+
+function usePrompt(el) {
+  const input = document.getElementById('msg-input');
+  input.value = el.textContent.replace(/[🤔👀💬❤️💡]/g, '').trim();
+  updateCount();
+  input.focus();
+  if (tg) tg.HapticFeedback?.impactOccurred('light');
+}
+
+function sendMessage() {
+  const text = document.getElementById('msg-input').value.trim();
+  if (!text || !targetLinkCode) return;
+
+  if (tg) tg.HapticFeedback?.impactOccurred('medium');
+
+  // Send via bot deep link (bot handles the actual message delivery)
+  // The Mini App can't directly call the bot API, so we use sendData
+  if (tg?.sendData) {
+    tg.sendData(JSON.stringify({
+      action: 'send_anon',
+      target: targetLinkCode,
+      text: text
+    }));
+  }
+
+  // Show success
+  document.getElementById('send-screen').style.display = 'none';
+  document.getElementById('success-screen').classList.add('active');
+}
+
+function resetForm() {
+  document.getElementById('msg-input').value = '';
+  updateCount();
+  document.getElementById('success-screen').classList.remove('active');
+  document.getElementById('send-screen').style.display = 'block';
+  if (tg) tg.HapticFeedback?.impactOccurred('light');
+}
+
+function copyLink() {
+  const link = document.getElementById('my-link').textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(link);
+  }
+  document.getElementById('copy-hint').classList.add('show');
+  setTimeout(() => document.getElementById('copy-hint').classList.remove('show'), 2000);
+  if (tg) tg.HapticFeedback?.notificationOccurred('success');
+}
+
+function shareTG() {
+  const userId = tg?.initDataUnsafe?.user?.id || '';
+  const link = 'https://t.me/' + BOT + '?start=ref_' + userId;
+  const text = '🎭 Надішли мені анонімне повідомлення! Я не дізнаюсь, хто ти 👀';
+
+  if (tg?.switchInlineQuery) {
+    tg.switchInlineQuery('', ['users', 'groups', 'channels']);
+  } else {
+    window.open('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text), '_blank');
+  }
+}
+
+init();
+</script>
+</body>
+</html>

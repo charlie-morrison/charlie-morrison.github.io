@@ -11,6 +11,8 @@ let currentMode = null;
 let questionCount = 0;
 let currentQuestion = null;
 let usedIndices = {};
+let sessionStats = { total: 0, truth: 0, dare: 0, never: 0, rather: 0, drinks: 0, clean: 0 };
+const SUMMARY_INTERVAL = 10;
 
 function pick(arr, mode) {
   if (!usedIndices[mode]) usedIndices[mode] = new Set();
@@ -57,13 +59,22 @@ function updateTitle() {
 }
 
 function nextQuestion() {
+  // Show summary every N questions
+  if (questionCount > 0 && questionCount % SUMMARY_INTERVAL === 0) {
+    showSummary();
+    return;
+  }
+
   questionCount++;
+  sessionStats.total++;
   document.getElementById('counter').textContent = '#' + questionCount;
 
   let mode = currentMode;
   if (mode === 'random') {
     mode = ['truth', 'dare', 'never', 'rather'][Math.floor(Math.random() * 4)];
   }
+  // Track per-category
+  if (sessionStats[mode] !== undefined) sessionStats[mode]++;
 
   const card = document.getElementById('question-card');
   card.classList.remove('pop');
@@ -111,9 +122,57 @@ function vote(choice) {
 function react(type) {
   if (tg) tg.HapticFeedback?.impactOccurred('medium');
   if (type === 'drink') {
+    sessionStats.drinks++;
     tg?.showAlert?.('🍺 Ти робив це!') || alert('🍺 Ти робив це!');
   } else {
+    sessionStats.clean++;
     tg?.showAlert?.('😇 Чистий/чиста!') || alert('😇 Чистий/чиста!');
+  }
+}
+
+function showSummary() {
+  document.getElementById('stat-total').textContent = sessionStats.total;
+  document.getElementById('stat-truths').textContent = sessionStats.truth;
+  document.getElementById('stat-dares').textContent = sessionStats.dare;
+  document.getElementById('stat-nevers').textContent = sessionStats.never;
+  document.getElementById('stat-rathers').textContent = sessionStats.rather;
+
+  // Fun title based on stats
+  const titles = [
+    '🎉 Вечірка в розпалі!',
+    '🔥 Ти вогонь!',
+    '🎊 Легенда вечірки!',
+    '🤩 Нестримний/нестримна!'
+  ];
+  const titleIdx = Math.min(Math.floor(sessionStats.total / SUMMARY_INTERVAL) - 1, titles.length - 1);
+  document.getElementById('summary-title').textContent = titles[titleIdx];
+
+  showScreen('summary');
+  if (tg) tg.HapticFeedback?.notificationOccurred('success');
+}
+
+function continueGame() {
+  showScreen('game');
+  nextQuestion();
+}
+
+function shareResults() {
+  const userId = tg?.initDataUnsafe?.user?.id || '';
+  const name = tg?.initDataUnsafe?.user?.first_name || 'Хтось';
+  const refLink = `https://t.me/charlie_party_bot/partygame`;
+
+  let text = `🎲 ${name} зіграв ${sessionStats.total} раундів у Party Game!\n`;
+  if (sessionStats.truth) text += `🎯 ${sessionStats.truth} правд\n`;
+  if (sessionStats.dare) text += `🔥 ${sessionStats.dare} дій\n`;
+  if (sessionStats.never) text += `🍺 ${sessionStats.never} "ніколи" (зізнань: ${sessionStats.drinks})\n`;
+  if (sessionStats.rather) text += `⚖️ ${sessionStats.rather} складних виборів\n`;
+  text += `\nГрай і ти → ${refLink}`;
+
+  const shareUrl = `https://t.me/share/url?text=${encodeURIComponent(text)}`;
+  if (tg?.openTelegramLink) {
+    tg.openTelegramLink(shareUrl);
+  } else {
+    window.open(shareUrl, '_blank');
   }
 }
 

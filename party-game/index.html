@@ -58,6 +58,41 @@
     <button id="next-btn" class="next-btn" onclick="nextQuestion()">➡️ Наступне</button>
     <button class="share-question-btn" onclick="shareQuestion()">📢 Поділитися питанням</button>
   </div>
+
+  <!-- Session Summary Screen -->
+  <div id="summary" class="screen">
+    <div class="summary-card">
+      <h2>🏆 Твоя сесія</h2>
+      <div class="summary-stats">
+        <div class="stat-item">
+          <span class="stat-number" id="stat-total">0</span>
+          <span class="stat-label">питань</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="stat-truths">0</span>
+          <span class="stat-label">🎯 правд</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="stat-dares">0</span>
+          <span class="stat-label">🔥 дій</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="stat-nevers">0</span>
+          <span class="stat-label">🍺 ніколи</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="stat-rathers">0</span>
+          <span class="stat-label">⚖️ виборів</span>
+        </div>
+      </div>
+      <div class="summary-title" id="summary-title">🎉 Молодець!</div>
+      <div class="summary-actions">
+        <button class="share-result-btn" onclick="shareResults()">📢 Поділитися результатом</button>
+        <button class="play-again-btn" onclick="continueGame()">🎲 Продовжити гру</button>
+        <button class="menu-btn" onclick="showMenu()">← В меню</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="questions.js"></script>

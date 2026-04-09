@@ -7,6 +7,37 @@ if (tg) {
 
 const BOT_USERNAME = 'charlie_party_bot';
 
+// i18n strings
+const i18n = isEn ? {
+  title: '🎲 Party Game',
+  subtitle: 'Pick a game and play with friends!',
+  truth: '🎯 Truth', dare: '🔥 Dare', never: '🍺 Never Have I Ever', rather: '⚖️ Would You Rather',
+  random: '🎲 Random question', invite: '📢 Invite friends', next: '➡️ Next', back: '← Back',
+  share: '📢 Share this question', iDid: '🍺 I did!', notMe: '😇 Not me!',
+  choose: 'Would you rather...?', mix: '🎲 Mix',
+  sessionTitle: '🏆 Your session', questions: 'questions', truths: '🎯 truths', dares: '🔥 dares',
+  nevers: '🍺 never', choices: '⚖️ choices',
+  shareResult: '📢 Share results', continueGame: '🎲 Continue', toMenu: '← Menu',
+  played: 'played', rounds: 'rounds in Party Game!',
+  confessions: 'confessions',
+  playToo: 'Play too →',
+  funTitles: ['🎉 Party started!', '🔥 You\'re on fire!', '🎊 Party legend!', '🤩 Unstoppable!']
+} : {
+  title: '🎲 Party Game',
+  subtitle: 'Обери гру та грай з друзями!',
+  truth: '🎯 Правда', dare: '🔥 Дія', never: '🍺 Я ніколи не...', rather: '⚖️ Що б ти обрав?',
+  random: '🎲 Випадкове питання', invite: '📢 Запросити друзів', next: '➡️ Наступне', back: '← Назад',
+  share: '📢 Поділитися питанням', iDid: '🍺 Я робив!', notMe: '😇 Не я!',
+  choose: 'Що б ти обрав?', mix: '🎲 Мікс',
+  sessionTitle: '🏆 Твоя сесія', questions: 'питань', truths: '🎯 правд', dares: '🔥 дій',
+  nevers: '🍺 ніколи', choices: '⚖️ виборів',
+  shareResult: '📢 Поділитися результатом', continueGame: '🎲 Продовжити гру', toMenu: '← В меню',
+  played: 'зіграв', rounds: 'раундів у Party Game!',
+  confessions: 'зізнань',
+  playToo: 'Грай і ти →',
+  funTitles: ['🎉 Вечірка в розпалі!', '🔥 Ти вогонь!', '🎊 Легенда вечірки!', '🤩 Нестримний/нестримна!']
+};
+
 let currentMode = null;
 let questionCount = 0;
 let currentQuestion = null;
@@ -49,13 +80,13 @@ function startGame(mode) {
 
 function updateTitle() {
   const titles = {
-    truth: '🎯 Правда',
-    dare: '🔥 Дія',
-    never: '🍺 Я ніколи не...',
-    rather: '⚖️ Що б ти обрав?',
-    random: '🎲 Мікс'
+    truth: i18n.truth,
+    dare: i18n.dare,
+    never: i18n.never,
+    rather: i18n.rather,
+    random: i18n.mix
   };
-  document.getElementById('game-title').textContent = titles[currentMode] || '🎲 Гра';
+  document.getElementById('game-title').textContent = titles[currentMode] || i18n.mix;
 }
 
 function nextQuestion() {
@@ -104,7 +135,7 @@ function nextQuestion() {
   } else if (mode === 'rather') {
     const pair = pick(RATHERS, 'rather');
     currentQuestion = pair;
-    document.getElementById('question-text').textContent = 'Що б ти обрав?';
+    document.getElementById('question-text').textContent = i18n.choose;
     document.getElementById('optA').textContent = pair[0];
     document.getElementById('optB').textContent = pair[1];
     ratherOpts.classList.remove('hidden');
@@ -123,10 +154,12 @@ function react(type) {
   if (tg) tg.HapticFeedback?.impactOccurred('medium');
   if (type === 'drink') {
     sessionStats.drinks++;
-    tg?.showAlert?.('🍺 Ти робив це!') || alert('🍺 Ти робив це!');
+    const msg = isEn ? '🍺 You did it!' : '🍺 Ти робив це!';
+    tg?.showAlert?.(msg) || alert(msg);
   } else {
     sessionStats.clean++;
-    tg?.showAlert?.('😇 Чистий/чиста!') || alert('😇 Чистий/чиста!');
+    const msg = isEn ? '😇 Clean!' : '😇 Чистий/чиста!';
+    tg?.showAlert?.(msg) || alert(msg);
   }
 }
 
@@ -138,14 +171,8 @@ function showSummary() {
   document.getElementById('stat-rathers').textContent = sessionStats.rather;
 
   // Fun title based on stats
-  const titles = [
-    '🎉 Вечірка в розпалі!',
-    '🔥 Ти вогонь!',
-    '🎊 Легенда вечірки!',
-    '🤩 Нестримний/нестримна!'
-  ];
-  const titleIdx = Math.min(Math.floor(sessionStats.total / SUMMARY_INTERVAL) - 1, titles.length - 1);
-  document.getElementById('summary-title').textContent = titles[titleIdx];
+  const titleIdx = Math.min(Math.floor(sessionStats.total / SUMMARY_INTERVAL) - 1, i18n.funTitles.length - 1);
+  document.getElementById('summary-title').textContent = i18n.funTitles[titleIdx];
 
   showScreen('summary');
   if (tg) tg.HapticFeedback?.notificationOccurred('success');
@@ -161,12 +188,12 @@ function shareResults() {
   const name = tg?.initDataUnsafe?.user?.first_name || 'Хтось';
   const refLink = `https://t.me/charlie_party_bot/partygame`;
 
-  let text = `🎲 ${name} зіграв ${sessionStats.total} раундів у Party Game!\n`;
-  if (sessionStats.truth) text += `🎯 ${sessionStats.truth} правд\n`;
-  if (sessionStats.dare) text += `🔥 ${sessionStats.dare} дій\n`;
-  if (sessionStats.never) text += `🍺 ${sessionStats.never} "ніколи" (зізнань: ${sessionStats.drinks})\n`;
-  if (sessionStats.rather) text += `⚖️ ${sessionStats.rather} складних виборів\n`;
-  text += `\nГрай і ти → ${refLink}`;
+  let text = `🎲 ${name} ${i18n.played} ${sessionStats.total} ${i18n.rounds}\n`;
+  if (sessionStats.truth) text += `🎯 ${sessionStats.truth} ${isEn ? 'truths' : 'правд'}\n`;
+  if (sessionStats.dare) text += `🔥 ${sessionStats.dare} ${isEn ? 'dares' : 'дій'}\n`;
+  if (sessionStats.never) text += `🍺 ${sessionStats.never} "${isEn ? 'never' : 'ніколи'}" (${i18n.confessions}: ${sessionStats.drinks})\n`;
+  if (sessionStats.rather) text += `⚖️ ${sessionStats.rather} ${isEn ? 'tough choices' : 'складних виборів'}\n`;
+  text += `\n${i18n.playToo} ${refLink}`;
 
   const shareUrl = `https://t.me/share/url?text=${encodeURIComponent(text)}`;
   if (tg?.openTelegramLink) {
@@ -179,7 +206,7 @@ function shareResults() {
 function shareBot() {
   const userId = tg?.initDataUnsafe?.user?.id || '';
   const refLink = `https://t.me/${BOT_USERNAME}?start=ref_${userId}`;
-  const text = '🎲 Грай у Правду чи Дію з друзями!';
+  const text = isEn ? '🎲 Play Truth or Dare with friends!' : '🎲 Грай у Правду чи Дію з друзями!';
 
   if (tg?.switchInlineQuery) {
     // Share via inline
@@ -196,7 +223,7 @@ function shareQuestion() {
   } else {
     text = currentQuestion;
   }
-  text += `\n\n🎲 Грати → @${BOT_USERNAME}`;
+  text += isEn ? `\n\n🎲 Play → @${BOT_USERNAME}` : `\n\n🎲 Грати → @${BOT_USERNAME}`;
 
   if (tg?.switchInlineQuery) {
     tg.switchInlineQuery('', ['users', 'groups', 'channels']);

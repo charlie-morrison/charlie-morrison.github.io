@@ -1,4 +1,9 @@
-const TRUTHS = [
+// Language detection from Telegram WebApp
+const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+const userLang = (tgUser?.language_code || navigator.language || 'uk').substring(0, 2);
+const isEn = !['uk', 'ru', 'be'].includes(userLang);
+
+const TRUTHS_UK = [
   "Яка найбільш безглузда річ, яку ти коли-небудь робив/робила?",
   "Який найнезручніший момент у твоєму житті?",
   "Чи є у тебе секрет, який ти нікому не розповідав/розповідала?",
@@ -45,7 +50,54 @@ const TRUTHS = [
   "Яка найсмішніша відмазка, яку ти використовував/використовувала?"
 ];
 
-const DARES = [
+const TRUTHS_EN = [
+  "What's the most ridiculous thing you've ever done?",
+  "What's the most embarrassing moment of your life?",
+  "Do you have a secret you've never told anyone?",
+  "Who from this group would you take to a deserted island?",
+  "What song is your guilty pleasure?",
+  "When was the last time you cried and why?",
+  "Do you have a hidden talent?",
+  "What's the weirdest food you've ever tried?",
+  "What do you regret most?",
+  "Who was your first crush?",
+  "Have you ever cheated on a test?",
+  "What's the biggest lie you've ever told?",
+  "Is there something you're really afraid of?",
+  "If you could change one thing in your past, what would it be?",
+  "What's the last thing you googled?",
+  "Do you talk to yourself?",
+  "What's the most expensive thing you've broken?",
+  "Do you have a funny childhood story?",
+  "What annoys you most about people?",
+  "If you were invisible for a day, what would you do?",
+  "What's your biggest achievement?",
+  "Do you have an annoying habit?",
+  "Which celebrity would you love to meet?",
+  "What's the funniest situation at work or school?",
+  "Have you ever seen a ghost?",
+  "What's the weirdest thing in your search history?",
+  "Do you have a photo you'd never show anyone?",
+  "What's the most you've ever spent at once?",
+  "What's your most unusual hobby?",
+  "What's the weirdest dream you've had?",
+  "Is there someone you owe an apology to?",
+  "What would you do with a million dollars?",
+  "What's the worst advice you've ever given?",
+  "What's your biggest weakness?",
+  "What was your first impression of someone in this group?",
+  "What's the last show you binge-watched until 4 AM?",
+  "Do you have a secret social media account?",
+  "Who in this group do you think about most?",
+  "What's the funniest texting mistake you've made?",
+  "Do you still have a favorite childhood toy?",
+  "What's the weirdest place you've fallen asleep?",
+  "What's the biggest secret you found out by accident?",
+  "Is there someone you're jealous of? Why?",
+  "What's the funniest excuse you've ever used?"
+];
+
+const DARES_UK = [
   "Зроби 10 присідань прямо зараз",
   "Надішли останнє фото з галереї",
   "Напиши комплімент наступній людині в контактах",
@@ -78,14 +130,47 @@ const DARES = [
   "Зроби серйозне фото з найкумеднішим предметом поруч"
 ];
 
-const NEVERS = [
+const DARES_EN = [
+  "Do 10 squats right now",
+  "Send the last photo from your gallery",
+  "Send a compliment to the next person in your contacts",
+  "Tell a joke (if it's not funny — tell another!)",
+  "Change your avatar to the funniest photo for 1 hour",
+  "Send a voice message of you singing",
+  "Take a selfie right now and send it here",
+  "Speak only in rhymes for the next 5 minutes",
+  "Write a poem about someone in this group",
+  "Do 20 jumping jacks",
+  "Send the oldest photo on your phone",
+  "Give a compliment to every person in this group",
+  "Imitate an animal in a voice message",
+  "Draw a portrait of the next player and send it",
+  "Balance your phone on your head for 30 seconds (photo proof!)",
+  "Sing your favorite song in a voice message",
+  "Take a photo of the weirdest thing in the room",
+  "Write a poem about yourself in 2 minutes and send it",
+  "Send a voice message trying to rap battle",
+  "Hold a plank for 30 seconds (photo/video proof!)",
+  "Record a video of you dancing for 15 seconds",
+  "Take a serious selfie with caption 'I have the situation under control'",
+  "Draw a self-portrait in 1 minute and send it",
+  "Record a video explaining quantum physics in 15 seconds",
+  "Record a video greeting this group as a news anchor",
+  "Send a photo of your fridge",
+  "Record a voice message imitating a robot",
+  "Send the funniest meme from your phone",
+  "Do 5 burpees (video proof!)",
+  "Take a serious photo with the funniest object nearby"
+];
+
+const NEVERS_UK = [
   "Я ніколи не... прогулював/прогулювала роботу/пари",
   "Я ніколи не... засинав/засинала в громадському транспорті",
   "Я ніколи не... надсилав/надсилала повідомлення не тій людині",
   "Я ніколи не... гуглив/гуглила себе",
   "Я ніколи не... їв/їла їжу, яку впустив/впустила на підлогу",
   "Я ніколи не... плакав/плакала від фільму",
-  "Я ніколи не... обманював/обманювала батьків",
+  "Я ніколи не... обманував/обманювала батьків",
   "Я ніколи не... розмовляв/розмовляла з тваринами як з людьми",
   "Я ніколи не... робив/робила вигляд, що не чую когось",
   "Я ніколи не... дивився/дивилася серіал цілу ніч",
@@ -119,7 +204,48 @@ const NEVERS = [
   "Я ніколи не... співав/співала караоке перед незнайомцями"
 ];
 
-const RATHERS = [
+const NEVERS_EN = [
+  "Never have I ever... skipped work or class",
+  "Never have I ever... fallen asleep on public transport",
+  "Never have I ever... sent a message to the wrong person",
+  "Never have I ever... googled myself",
+  "Never have I ever... eaten food I dropped on the floor",
+  "Never have I ever... cried from a movie",
+  "Never have I ever... lied to my parents",
+  "Never have I ever... talked to animals like they're people",
+  "Never have I ever... pretended not to hear someone",
+  "Never have I ever... binge-watched a show all night",
+  "Never have I ever... forgotten someone's birthday",
+  "Never have I ever... faked being sick to avoid something",
+  "Never have I ever... danced in front of a mirror",
+  "Never have I ever... read someone else's messages",
+  "Never have I ever... eaten snow",
+  "Never have I ever... met a celebrity",
+  "Never have I ever... gone outside in pajamas",
+  "Never have I ever... sung in the shower",
+  "Never have I ever... broken a bone",
+  "Never have I ever... blocked someone on a messenger",
+  "Never have I ever... eaten at 3 AM",
+  "Never have I ever... looked at someone else's phone screen",
+  "Never have I ever... forgot where I put my phone",
+  "Never have I ever... pretended to know what was going on",
+  "Never have I ever... gone to the movies alone",
+  "Never have I ever... gotten a tattoo",
+  "Never have I ever... jumped from a height",
+  "Never have I ever... won a lottery",
+  "Never have I ever... fallen asleep at work or in class",
+  "Never have I ever... eavesdropped on someone's conversation",
+  "Never have I ever... forgotten someone's name right after meeting them",
+  "Never have I ever... accidentally liked an old photo while stalking someone",
+  "Never have I ever... rode public transport without a ticket",
+  "Never have I ever... pretended not to see someone I know on the street",
+  "Never have I ever... googled symptoms and diagnosed myself",
+  "Never have I ever... cried from laughing",
+  "Never have I ever... online shopped at 3 AM",
+  "Never have I ever... sung karaoke in front of strangers"
+];
+
+const RATHERS_UK = [
   ["Мати суперсилу літати", "Бути невидимим"],
   ["Ніколи не їсти солодке", "Ніколи не їсти солоне"],
   ["Знати всі мови світу", "Вміти грати на всіх інструментах"],
@@ -160,3 +286,51 @@ const RATHERS = [
   ["Мати ідеальний слух", "Мати ідеальний зір"],
   ["Жити в майбутньому без технологій", "Жити в минулому з сучасними технологіями"]
 ];
+
+const RATHERS_EN = [
+  ["Have the superpower of flight", "Be invisible"],
+  ["Never eat sweets again", "Never eat salty food again"],
+  ["Know every language in the world", "Play every musical instrument"],
+  ["Live without internet", "Live without AC"],
+  ["Be the smartest person", "Be the most attractive person"],
+  ["Travel to the past", "Travel to the future"],
+  ["Have 10 close friends", "Have 1000 acquaintances"],
+  ["Always tell the truth", "Always lie"],
+  ["Live in the mountains", "Live by the sea"],
+  ["Be forever young", "Be forever rich"],
+  ["Never sleep", "Sleep 16 hours a day"],
+  ["Read minds", "Teleport anywhere"],
+  ["Live without music", "Live without movies"],
+  ["Have perfect memory", "Have perfect intuition"],
+  ["Be the most famous person", "Be the happiest person"],
+  ["Eat only pizza forever", "Eat only sushi forever"],
+  ["Live in the year 2226", "Live in the year 1826"],
+  ["Be a CEO", "Be a free traveler"],
+  ["Have a perfect body", "Have a perfect mind"],
+  ["Live without a smartphone", "Live without a computer"],
+  ["Always be the center of attention", "Be invisible in every room"],
+  ["Have unlimited money", "Have unlimited time"],
+  ["Win an Oscar", "Win a Nobel Prize"],
+  ["Live 200 years as a normal person", "Live 80 years as a superhuman"],
+  ["Know everyone's secrets", "Have nobody know yours"],
+  ["Live in outer space", "Live at the bottom of the ocean"],
+  ["Be the best at one thing", "Be decent at everything"],
+  ["Live in a world without lies", "Live in a world without crime"],
+  ["Stop time", "Rewind time"],
+  ["Always be full", "Always be well-rested"],
+  ["Live without social media", "Live without games"],
+  ["Be a cat", "Be a dog"],
+  ["Breathe underwater", "Never need sleep"],
+  ["Live in Middle-earth", "Live in the Harry Potter universe"],
+  ["Always know the truth", "Be able to convince anyone"],
+  ["Be the best dancer", "Be the best singer"],
+  ["Never wait in line", "Never be stuck in traffic"],
+  ["Have perfect hearing", "Have perfect vision"],
+  ["Live in the future without technology", "Live in the past with modern tech"]
+];
+
+// Active question sets based on language
+const TRUTHS = isEn ? TRUTHS_EN : TRUTHS_UK;
+const DARES = isEn ? DARES_EN : DARES_UK;
+const NEVERS = isEn ? NEVERS_EN : NEVERS_UK;
+const RATHERS = isEn ? RATHERS_EN : RATHERS_UK;

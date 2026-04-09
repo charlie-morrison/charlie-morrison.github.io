@@ -97,5 +97,27 @@
 
 <script src="questions.js"></script>
 <script src="app.js"></script>
+<script>
+// Apply i18n to static HTML
+if (typeof i18n !== 'undefined') {
+  document.querySelector('#menu h1').textContent = i18n.title;
+  document.querySelector('#menu .subtitle').textContent = i18n.subtitle;
+  document.querySelector('.truth-btn .game-name').textContent = isEn ? 'Truth' : 'Правда';
+  document.querySelector('.dare-btn .game-name').textContent = isEn ? 'Dare' : 'Дія';
+  document.querySelector('.never-btn .game-name').textContent = isEn ? 'Never Have I...' : 'Я ніколи не...';
+  document.querySelector('.rather-btn .game-name').textContent = isEn ? 'Would You Rather?' : 'Що б ти обрав?';
+  document.querySelector('.random-btn').textContent = i18n.random;
+  document.querySelector('.share-btn').textContent = i18n.invite;
+  document.querySelector('#next-btn').textContent = i18n.next;
+  document.querySelector('.share-question-btn').textContent = i18n.share;
+  document.querySelector('.react-btn.drink').textContent = i18n.iDid;
+  document.querySelector('.react-btn.clean').textContent = i18n.notMe;
+  // Summary screen
+  document.querySelector('#summary .summary-card h2').textContent = i18n.sessionTitle;
+  document.querySelector('.share-result-btn').textContent = i18n.shareResult;
+  document.querySelector('.play-again-btn').textContent = i18n.continueGame;
+  document.querySelector('.menu-btn').textContent = i18n.toMenu;
+}
+</script>
 </body>
 </html>

@@ -106,6 +106,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   <div style="margin:1.5rem auto;max-width:340px;padding:1.2rem;border-radius:14px;background:linear-gradient(135deg,#1a1a2e,#2d1b69);border:1px solid var(--border);text-align:center">
     <div style="font-size:1.1rem;font-weight:600;margin-bottom:.5rem">🎭 Хочеш отримувати анонімні повідомлення?</div>
     <div style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">Створи посилання і поділись з друзями!</div>
+    <button class="share-btn share-tg" onclick="shareOwnLink()" style="width:100%;margin-bottom:.6rem">📤 Поділитися в Telegram</button>
     <a class="own-link-btn" href="https://t.me/charlie_anonmsg_bot?start=getlink" style="display:block;text-align:center">🔗 Створити своє посилання</a>
   </div>
   <button class="send-btn" onclick="resetForm()" style="max-width:300px;margin:1rem auto">📝 Надіслати ще одне</button>
@@ -254,6 +255,19 @@ function shareTG() {
     tg.switchInlineQuery('', ['users', 'groups', 'channels']);
   } else {
     window.open('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text), '_blank');
+  }
+}
+
+function shareOwnLink() {
+  const userId = tg?.initDataUnsafe?.user?.id || '';
+  const name = tg?.initDataUnsafe?.user?.first_name || '';
+  const link = 'https://t.me/' + BOT + '/anon';
+  const text = '🎭 Надішли мені анонімне повідомлення! Я не дізнаюсь, хто ти 👀';
+  const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text);
+  if (tg?.openTelegramLink) {
+    tg.openTelegramLink(shareUrl);
+  } else {
+    window.open(shareUrl, '_blank');
   }
 }
 

@@ -177,18 +177,64 @@ h1 { font-size: 2em; margin: 20px 0 4px; }
 .next-btn:active { transform: scale(0.97); }
 
 .share-question-btn {
-  background: transparent;
-  border: 1.5px solid var(--hint);
-  color: var(--hint);
+  background: rgba(0, 184, 148, 0.12);
+  border: 1.5px solid #00b894;
+  color: #00b894;
   border-radius: 10px;
   padding: 10px 20px;
   font-size: 0.9em;
+  font-weight: 500;
   cursor: pointer;
   margin-top: 12px;
   width: 100%;
   max-width: 400px;
+  transition: all 0.2s;
 }
-.share-question-btn:active { border-color: var(--btn); color: var(--btn); }
+.share-question-btn:active { background: #00b894; color: #fff; }
+
+/* Share nudge toast */
+.share-nudge {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--secondary-bg);
+  border: 1.5px solid var(--btn);
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.35s ease;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  max-width: 340px;
+}
+.share-nudge.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.share-nudge #nudge-text { font-size: 0.9em; flex: 1; }
+.nudge-share-btn {
+  background: var(--btn);
+  color: var(--btn-text);
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+.nudge-close-btn {
+  background: none;
+  border: none;
+  color: var(--hint);
+  font-size: 1em;
+  cursor: pointer;
+  padding: 4px;
+}
 
 /* Haptic animation */
 .question-card.pop { animation: slideIn 0.35s ease; }

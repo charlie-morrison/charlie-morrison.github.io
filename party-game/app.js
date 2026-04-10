@@ -44,6 +44,8 @@ let currentQuestion = null;
 let usedIndices = {};
 let sessionStats = { total: 0, truth: 0, dare: 0, never: 0, rather: 0, drinks: 0, clean: 0 };
 const SUMMARY_INTERVAL = 10;
+const SHARE_NUDGE_INTERVAL = 5;
+let nudgeDismissed = false;
 
 function pick(arr, mode) {
   if (!usedIndices[mode]) usedIndices[mode] = new Set();
@@ -89,11 +91,33 @@ function updateTitle() {
   document.getElementById('game-title').textContent = titles[currentMode] || i18n.mix;
 }
 
+function showShareNudge() {
+  const nudge = document.getElementById('share-nudge');
+  if (!nudge || nudgeDismissed) return;
+  const msgs = isEn
+    ? ['Friends make it better!', 'Challenge someone!', 'Share the fun!']
+    : ['З друзями веселіше!', 'Кинь виклик другу!', 'Поділись весельком!'];
+  document.getElementById('nudge-text').textContent = msgs[Math.floor(Math.random() * msgs.length)];
+  nudge.classList.add('visible');
+  setTimeout(() => nudge.classList.remove('visible'), 4000);
+}
+
+function dismissNudge() {
+  const nudge = document.getElementById('share-nudge');
+  if (nudge) nudge.classList.remove('visible');
+  nudgeDismissed = true;
+}
+
 function nextQuestion() {
   // Show summary every N questions
   if (questionCount > 0 && questionCount % SUMMARY_INTERVAL === 0) {
     showSummary();
     return;
+  }
+
+  // Show share nudge every 5 questions (but not on summary intervals)
+  if (questionCount > 0 && questionCount % SHARE_NUDGE_INTERVAL === 0 && questionCount % SUMMARY_INTERVAL !== 0) {
+    showShareNudge();
   }
 
   questionCount++;

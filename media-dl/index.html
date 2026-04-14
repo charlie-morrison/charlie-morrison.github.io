@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Media Downloader</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root {
+  --bg: var(--tg-theme-bg-color, #1a1a2e);
+  --text: var(--tg-theme-text-color, #e0e0e0);
+  --hint: var(--tg-theme-hint-color, #8a8a9a);
+  --btn: var(--tg-theme-button-color, #6c5ce7);
+  --btn-text: var(--tg-theme-button-text-color, #fff);
+  --secondary: var(--tg-theme-secondary-bg-color, #16213e);
+  --link: var(--tg-theme-link-color, #a29bfe);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 16px;
+  padding-bottom: 100px;
+}
+
+.header {
+  text-align: center;
+  padding: 20px 0 16px;
+}
+
+.header h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.header p {
+  color: var(--hint);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.input-section {
+  margin: 16px 0;
+}
+
+.url-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: var(--secondary);
+  color: var(--text);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.url-input:focus {
+  border-color: var(--btn);
+}
+
+.url-input::placeholder {
+  color: var(--hint);
+}
+
+.format-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.format-btn {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid var(--secondary);
+  border-radius: 12px;
+  background: var(--secondary);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.format-btn.active {
+  border-color: var(--btn);
+  background: color-mix(in srgb, var(--btn) 20%, var(--bg));
+}
+
+.download-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--btn);
+  color: var(--btn-text);
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: opacity 0.2s;
+}
+
+.download-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.platforms {
+  margin: 24px 0 16px;
+}
+
+.platforms h3 {
+  font-size: 14px;
+  color: var(--hint);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.platform-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 4px;
+  border-radius: 12px;
+  background: var(--secondary);
+  font-size: 12px;
+  color: var(--hint);
+}
+
+.platform-item .icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.status-msg {
+  text-align: center;
+  padding: 16px;
+  margin-top: 12px;
+  border-radius: 12px;
+  display: none;
+  font-size: 15px;
+}
+
+.status-msg.loading {
+  display: block;
+  background: color-mix(in srgb, var(--btn) 15%, var(--bg));
+  color: var(--btn);
+}
+
+.status-msg.error {
+  display: block;
+  background: #ff6b6b22;
+  color: #ff6b6b;
+}
+
+.status-msg.success {
+  display: block;
+  background: #51cf6622;
+  color: #51cf66;
+}
+
+.premium-banner {
+  margin: 16px 0;
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6c5ce722, #a29bfe22);
+  border: 1px solid var(--btn);
+  text-align: center;
+  cursor: pointer;
+}
+
+.premium-banner .title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.premium-banner .desc {
+  font-size: 13px;
+  color: var(--hint);
+  margin-top: 4px;
+}
+
+.history-section {
+  margin-top: 24px;
+}
+
+.history-section h3 {
+  font-size: 14px;
+  color: var(--hint);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--secondary);
+  margin-bottom: 8px;
+}
+
+.history-item .emoji {
+  font-size: 24px;
+}
+
+.history-item .info {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-item .title {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-item .meta {
+  font-size: 12px;
+  color: var(--hint);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px;
+  color: var(--hint);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.loading .spinner {
+  animation: pulse 1.5s infinite;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🎬 Media Downloader</h1>
+  <p>Paste a link, choose format, download</p>
+</div>
+
+<div class="input-section">
+  <input type="url" class="url-input" id="urlInput" placeholder="Paste video URL here..." autocomplete="off">
+
+  <div class="format-row">
+    <button class="format-btn active" data-format="video" onclick="selectFormat(this)">🎬 Video</button>
+    <button class="format-btn" data-format="audio" onclick="selectFormat(this)">🎵 Audio (MP3)</button>
+  </div>
+
+  <button class="download-btn" id="downloadBtn" onclick="startDownload()" disabled>Download</button>
+</div>
+
+<div class="status-msg" id="statusMsg"></div>
+
+<div class="premium-banner" id="premiumBanner" onclick="buyPremium()">
+  <div class="title">⭐ Premium — Unlimited Downloads</div>
+  <div class="desc">50 Stars = 30 days, no limits</div>
+</div>
+
+<div class="platforms">
+  <h3>Supported platforms</h3>
+  <div class="platform-grid">
+    <div class="platform-item"><span class="icon">▶️</span>YouTube</div>
+    <div class="platform-item"><span class="icon">🎵</span>TikTok</div>
+    <div class="platform-item"><span class="icon">📸</span>Instagram</div>
+    <div class="platform-item"><span class="icon">🐦</span>X</div>
+    <div class="platform-item"><span class="icon">📘</span>Facebook</div>
+    <div class="platform-item"><span class="icon">🤖</span>Reddit</div>
+    <div class="platform-item"><span class="icon">🎥</span>Vimeo</div>
+    <div class="platform-item"><span class="icon">📺</span>Dailymtn</div>
+  </div>
+</div>
+
+<div class="history-section" id="historySection">
+  <h3>Recent downloads</h3>
+  <div id="historyList">
+    <div class="empty-state">No downloads yet. Paste a URL above!</div>
+  </div>
+</div>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
+
+const urlInput = document.getElementById('urlInput');
+const downloadBtn = document.getElementById('downloadBtn');
+const statusMsg = document.getElementById('statusMsg');
+let selectedFormat = 'video';
+
+const SUPPORTED = ['youtube.com', 'youtu.be', 'tiktok.com', 'instagram.com',
+  'twitter.com', 'x.com', 'facebook.com', 'fb.watch', 'reddit.com',
+  'vimeo.com', 'dailymotion.com'];
+
+const YOUTUBE = ['youtube.com', 'youtu.be'];
+
+urlInput.addEventListener('input', () => {
+  const url = urlInput.value.trim();
+  downloadBtn.disabled = !isValidUrl(url);
+
+  // Show audio option only for YouTube
+  const isYT = isYouTube(url);
+  document.querySelectorAll('.format-btn')[1].style.display = isYT ? '' : 'none';
+  if (!isYT && selectedFormat === 'audio') {
+    selectFormat(document.querySelectorAll('.format-btn')[0]);
+  }
+});
+
+function isValidUrl(url) {
+  try {
+    const hostname = new URL(url).hostname.replace('www.', '');
+    return SUPPORTED.some(d => hostname.includes(d));
+  } catch { return false; }
+}
+
+function isYouTube(url) {
+  try {
+    const hostname = new URL(url).hostname.replace('www.', '');
+    return YOUTUBE.some(d => hostname.includes(d));
+  } catch { return false; }
+}
+
+function selectFormat(btn) {
+  document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedFormat = btn.dataset.format;
+  tg.HapticFeedback.selectionChanged();
+}
+
+function showStatus(text, type) {
+  statusMsg.textContent = text;
+  statusMsg.className = 'status-msg ' + type;
+}
+
+function hideStatus() {
+  statusMsg.className = 'status-msg';
+}
+
+function startDownload() {
+  const url = urlInput.value.trim();
+  if (!isValidUrl(url)) return;
+
+  tg.HapticFeedback.impactOccurred('medium');
+
+  // Send to bot via sendData
+  const data = JSON.stringify({
+    action: 'download',
+    url: url,
+    format: selectedFormat
+  });
+
+  tg.sendData(data);
+
+  showStatus('⏳ Sent to bot! Check the chat for your file.', 'loading');
+  downloadBtn.disabled = true;
+
+  // Save to history
+  saveHistory(url, selectedFormat);
+  renderHistory();
+
+  setTimeout(() => {
+    hideStatus();
+    urlInput.value = '';
+    downloadBtn.disabled = true;
+  }, 3000);
+}
+
+function buyPremium() {
+  tg.HapticFeedback.impactOccurred('light');
+  tg.sendData(JSON.stringify({ action: 'premium' }));
+}
+
+// Local history (localStorage)
+function getHistory() {
+  try { return JSON.parse(localStorage.getItem('dl_history') || '[]'); }
+  catch { return []; }
+}
+
+function saveHistory(url, format) {
+  const history = getHistory();
+  const hostname = new URL(url).hostname.replace('www.', '');
+  history.unshift({
+    url, format, hostname,
+    time: new Date().toISOString()
+  });
+  if (history.length > 20) history.length = 20;
+  localStorage.setItem('dl_history', JSON.stringify(history));
+}
+
+function platformEmoji(hostname) {
+  if (hostname.includes('youtube') || hostname.includes('youtu.be')) return '▶️';
+  if (hostname.includes('tiktok')) return '🎵';
+  if (hostname.includes('instagram')) return '📸';
+  if (hostname.includes('twitter') || hostname.includes('x.com')) return '🐦';
+  if (hostname.includes('facebook') || hostname.includes('fb.')) return '📘';
+  if (hostname.includes('reddit')) return '🤖';
+  if (hostname.includes('vimeo')) return '🎥';
+  return '📺';
+}
+
+function renderHistory() {
+  const history = getHistory();
+  const list = document.getElementById('historyList');
+
+  if (!history.length) {
+    list.innerHTML = '<div class="empty-state">No downloads yet. Paste a URL above!</div>';
+    return;
+  }
+
+  list.innerHTML = history.slice(0, 10).map(h => {
+    const time = new Date(h.time);
+    const ago = formatAgo(time);
+    return `<div class="history-item">
+      <span class="emoji">${platformEmoji(h.hostname)}</span>
+      <div class="info">
+        <div class="title">${h.hostname}</div>
+        <div class="meta">${h.format === 'audio' ? '🎵 MP3' : '🎬 Video'} · ${ago}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function formatAgo(date) {
+  const diff = (Date.now() - date.getTime()) / 1000;
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+  return Math.floor(diff / 86400) + 'd ago';
+}
+
+renderHistory();
+
+// Auto-paste from clipboard on focus
+urlInput.addEventListener('focus', async () => {
+  if (urlInput.value) return;
+  try {
+    const text = await navigator.clipboard.readText();
+    if (text && isValidUrl(text)) {
+      urlInput.value = text;
+      urlInput.dispatchEvent(new Event('input'));
+      tg.HapticFeedback.notificationOccurred('success');
+    }
+  } catch {}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Tech Quiz</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#1a1a2e;--card:#16213e;--accent:#0f3460;--highlight:#e94560;--text:#eee;--correct:#27ae60;--wrong:#e74c3c}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px;overflow-x:hidden}
+.screen{display:none;width:100%;max-width:400px;flex-direction:column;align-items:center;gap:16px}
+.screen.active{display:flex}
+h1{font-size:28px;text-align:center;margin-top:20px}
+h2{font-size:20px;text-align:center}
+.subtitle{color:#aaa;text-align:center;font-size:14px}
+.stats-row{display:flex;gap:12px;justify-content:center;width:100%}
+.stat-box{background:var(--card);border-radius:12px;padding:12px 16px;text-align:center;flex:1}
+.stat-box .num{font-size:24px;font-weight:700;color:var(--highlight)}
+.stat-box .label{font-size:11px;color:#aaa;margin-top:4px}
+.btn{background:var(--highlight);color:#fff;border:none;border-radius:12px;padding:14px 24px;font-size:16px;font-weight:600;cursor:pointer;width:100%;max-width:300px;transition:transform .1s}
+.btn:active{transform:scale(.96)}
+.btn-secondary{background:var(--accent)}
+.progress-bar{width:100%;height:6px;background:var(--card);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--highlight);transition:width .3s}
+.question-num{font-size:13px;color:#aaa}
+.question-text{font-size:18px;font-weight:600;text-align:center;line-height:1.4;min-height:60px}
+.answers{display:flex;flex-direction:column;gap:10px;width:100%}
+.answer-btn{background:var(--card);border:2px solid transparent;border-radius:12px;padding:14px 16px;font-size:15px;color:var(--text);cursor:pointer;text-align:left;transition:all .2s}
+.answer-btn:active{transform:scale(.98)}
+.answer-btn.selected{border-color:var(--highlight);background:#1e2a4a}
+.answer-btn.correct{border-color:var(--correct);background:#1a3a2a}
+.answer-btn.wrong{border-color:var(--wrong);background:#3a1a1a}
+.answer-btn.disabled{pointer-events:none;opacity:.7}
+.timer{font-size:14px;color:#aaa;display:flex;align-items:center;gap:6px}
+.timer-circle{width:28px;height:28px;border-radius:50%;border:3px solid var(--highlight);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--highlight)}
+.timer-circle.warning{border-color:var(--wrong);color:var(--wrong)}
+.result-icon{font-size:64px;margin:10px 0}
+.score-display{font-size:48px;font-weight:700;color:var(--highlight)}
+.score-label{font-size:14px;color:#aaa}
+.share-msg{background:var(--card);border-radius:12px;padding:16px;text-align:center;font-size:14px;line-height:1.5;width:100%}
+.streak-badge{background:linear-gradient(135deg,#f39c12,#e74c3c);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:600;display:inline-block}
+.ad-slot{width:100%;min-height:50px;background:var(--card);border-radius:8px;display:flex;align-items:center;justify-content:center;margin:8px 0;font-size:12px;color:#666}
+.category-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.cat-btn{background:var(--card);border:2px solid transparent;border-radius:12px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .2s}
+.cat-btn:active{transform:scale(.96)}
+.cat-btn.selected{border-color:var(--highlight)}
+.cat-icon{font-size:28px;margin-bottom:6px}
+.cat-name{font-size:13px;font-weight:600}
+.lives{display:flex;gap:4px;font-size:20px}
+.lives .lost{opacity:.3}
+</style>
+</head>
+<body>
+
+<div id="home" class="screen active">
+  <h1>Tech Quiz</h1>
+  <p class="subtitle">Test your tech knowledge!</p>
+  <div class="stats-row">
+    <div class="stat-box"><div class="num" id="home-best">0</div><div class="label">Best Score</div></div>
+    <div class="stat-box"><div class="num" id="home-games">0</div><div class="label">Games</div></div>
+    <div class="stat-box"><div class="num" id="home-streak">0</div><div class="label">Best Streak</div></div>
+  </div>
+  <h2>Pick a Category</h2>
+  <div class="category-grid">
+    <div class="cat-btn selected" data-cat="mixed"><div class="cat-icon">🎲</div><div class="cat-name">Mixed</div></div>
+    <div class="cat-btn" data-cat="ai"><div class="cat-icon">🤖</div><div class="cat-name">AI & ML</div></div>
+    <div class="cat-btn" data-cat="web"><div class="cat-icon">🌐</div><div class="cat-name">Web Dev</div></div>
+    <div class="cat-btn" data-cat="crypto"><div class="cat-icon">🪙</div><div class="cat-name">Crypto</div></div>
+    <div class="cat-btn" data-cat="history"><div class="cat-icon">📜</div><div class="cat-name">Tech History</div></div>
+    <div class="cat-btn" data-cat="security"><div class="cat-icon">🔒</div><div class="cat-name">Security</div></div>
+  </div>
+  <button class="btn" onclick="startGame()">Play Now</button>
+  <!-- Ad slot placeholder for RichAds -->
+  <div class="ad-slot" id="ad-home"></div>
+</div>
+
+<div id="game" class="screen">
+  <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
+    <div class="question-num" id="q-num">1 / 10</div>
+    <div class="lives" id="lives"></div>
+    <div class="timer"><div class="timer-circle" id="timer-circle">15</div></div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+  <div id="streak-indicator" style="display:none"><span class="streak-badge" id="streak-text"></span></div>
+  <div class="question-text" id="question"></div>
+  <div class="answers" id="answers"></div>
+  <div style="text-align:center;font-size:13px;color:#aaa" id="score-live">Score: 0</div>
+</div>
+
+<div id="result" class="screen">
+  <div class="result-icon" id="result-icon">🏆</div>
+  <div class="score-display" id="final-score">0</div>
+  <div class="score-label">points</div>
+  <div class="stats-row">
+    <div class="stat-box"><div class="num" id="r-correct">0</div><div class="label">Correct</div></div>
+    <div class="stat-box"><div class="num" id="r-streak">0</div><div class="label">Best Streak</div></div>
+    <div class="stat-box"><div class="num" id="r-time">0s</div><div class="label">Avg Time</div></div>
+  </div>
+  <div class="share-msg" id="share-msg"></div>
+  <!-- Ad slot between rounds -->
+  <div class="ad-slot" id="ad-result"></div>
+  <button class="btn" onclick="startGame()">Play Again</button>
+  <button class="btn btn-secondary" onclick="showScreen('home')">Home</button>
+</div>
+
+<script>
+const tg = window.Telegram && window.Telegram.WebApp;
+if(tg){tg.ready();tg.expand();tg.setHeaderColor('#1a1a2e');tg.setBackgroundColor('#1a1a2e')}
+
+const QUESTIONS={
+ai:[
+{q:"What does GPT stand for?",a:["Generative Pre-trained Transformer","General Purpose Technology","Graphical Processing Terminal","Global Pattern Tracker"],c:0},
+{q:"Which company created ChatGPT?",a:["OpenAI","Google","Meta","Microsoft"],c:0},
+{q:"What is a 'hallucination' in AI?",a:["When AI generates false information confidently","When AI crashes","When AI refuses to answer","When AI runs slowly"],c:0},
+{q:"Which of these is NOT a type of machine learning?",a:["Recursive learning","Supervised learning","Unsupervised learning","Reinforcement learning"],c:0},
+{q:"What year was the original Transformer paper published?",a:["2017","2015","2019","2020"],c:0},
+{q:"What does 'fine-tuning' mean in AI?",a:["Training a pre-trained model on specific data","Making the model smaller","Fixing bugs in AI code","Increasing model speed"],c:0},
+{q:"Which company developed the Claude AI model?",a:["Anthropic","OpenAI","Google DeepMind","Meta"],c:0},
+{q:"What is RAG in the context of LLMs?",a:["Retrieval-Augmented Generation","Random Access Generation","Recursive Algorithm Growth","Real-time AI Gateway"],c:0},
+{q:"How many parameters does GPT-4 reportedly have?",a:["~1.8 trillion","~175 billion","~500 billion","~10 trillion"],c:0},
+{q:"What is 'prompt engineering'?",a:["Crafting inputs to get better AI outputs","Building AI hardware","Programming AI from scratch","Testing AI for bugs"],c:0},
+{q:"Which AI technique mimics biological neural networks?",a:["Deep learning","Decision trees","Linear regression","K-means clustering"],c:0},
+{q:"What does RLHF stand for?",a:["Reinforcement Learning from Human Feedback","Recursive Learning with Heuristic Functions","Real-time Language Handling Framework","Random Layer Hyperparameter Fitting"],c:0}
+],
+web:[
+{q:"What does HTML stand for?",a:["HyperText Markup Language","High Tech Modern Language","Home Tool Markup Language","Hyper Transfer Markup Logic"],c:0},
+{q:"Which company created React.js?",a:["Facebook (Meta)","Google","Twitter","Amazon"],c:0},
+{q:"What is the purpose of CSS?",a:["Styling web pages","Server-side scripting","Database management","Network security"],c:0},
+{q:"What does API stand for?",a:["Application Programming Interface","Advanced Program Integration","Automated Process Interaction","Application Protocol Interface"],c:0},
+{q:"Which HTTP status code means 'Not Found'?",a:["404","500","301","200"],c:0},
+{q:"What is TypeScript?",a:["A typed superset of JavaScript","A database language","A CSS framework","A Python library"],c:0},
+{q:"What does npm stand for?",a:["Node Package Manager","New Programming Module","Network Protocol Manager","Node Process Monitor"],c:0},
+{q:"Which of these is a CSS framework?",a:["Tailwind","Express","Flask","Django"],c:0},
+{q:"What is a REST API?",a:["An API using HTTP methods for CRUD operations","A sleeping computer program","A testing framework","A database type"],c:0},
+{q:"What does SSR stand for in web dev?",a:["Server-Side Rendering","Secure Socket Relay","Static Site Repository","Simple Script Runner"],c:0},
+{q:"Which protocol does HTTPS use for encryption?",a:["TLS/SSL","FTP","SSH","AES"],c:0},
+{q:"What is WebSocket used for?",a:["Real-time bidirectional communication","File uploads only","Database queries","Email sending"],c:0}
+],
+crypto:[
+{q:"Who created Bitcoin?",a:["Satoshi Nakamoto","Vitalik Buterin","Charlie Lee","Elon Musk"],c:0},
+{q:"What is a 'smart contract'?",a:["Self-executing code on a blockchain","An AI-powered legal document","A crypto wallet feature","A type of encryption"],c:0},
+{q:"What does DeFi stand for?",a:["Decentralized Finance","Digital Financial Infrastructure","Distributed File Index","Defined Fiscal Interest"],c:0},
+{q:"Which blockchain does ETH run on?",a:["Ethereum","Bitcoin","Solana","Polygon"],c:0},
+{q:"What is 'gas' in Ethereum?",a:["Fee for computation on the network","A type of token","Mining energy cost","Internet bandwidth"],c:0},
+{q:"What does HODL mean?",a:["Hold On for Dear Life","High Output Digital Ledger","Hash Operated Data Layer","Hybrid On-chain Distribution"],c:0},
+{q:"What is an NFT?",a:["Non-Fungible Token","New Financial Technology","Network File Transfer","Node Forwarding Tool"],c:0},
+{q:"What consensus mechanism does Bitcoin use?",a:["Proof of Work","Proof of Stake","Delegated Proof of Stake","Proof of Authority"],c:0},
+{q:"What is a 'rug pull' in crypto?",a:["Developers abandoning a project after taking funds","A mining technique","A type of smart contract","A wallet recovery method"],c:0},
+{q:"What does TVL stand for in DeFi?",a:["Total Value Locked","Token Verification Layer","Transaction Validation Logic","Transfer Volume Limit"],c:0},
+{q:"What is a DEX?",a:["Decentralized Exchange","Digital Export","Data Encryption Extension","Distributed Execution"],c:0},
+{q:"What is 'staking' in crypto?",a:["Locking tokens to earn rewards and secure the network","Selling tokens quickly","Mining with specialized hardware","Creating new tokens"],c:0}
+],
+history:[
+{q:"In what year was the first iPhone released?",a:["2007","2005","2009","2010"],c:0},
+{q:"Who co-founded Apple with Steve Jobs?",a:["Steve Wozniak","Bill Gates","Tim Cook","Larry Page"],c:0},
+{q:"What was the first popular web browser?",a:["Mosaic/Netscape","Internet Explorer","Chrome","Firefox"],c:0},
+{q:"When was the World Wide Web invented?",a:["1989","1995","1983","1991"],c:0},
+{q:"Which company created the first commercial microprocessor?",a:["Intel","AMD","IBM","Texas Instruments"],c:0},
+{q:"What programming language was created in 1995 in just 10 days?",a:["JavaScript","Python","Java","Ruby"],c:0},
+{q:"What was the first message sent over ARPANET?",a:["'LO' (tried to type LOGIN, crashed)","'Hello World'","'Test'","'SYN'"],c:0},
+{q:"Which company originally developed Android?",a:["Android Inc. (acquired by Google)","Google","Samsung","HTC"],c:0},
+{q:"What year did Wikipedia launch?",a:["2001","1999","2003","2005"],c:0},
+{q:"Who is known as the 'father of computer science'?",a:["Alan Turing","Charles Babbage","John von Neumann","Ada Lovelace"],c:0},
+{q:"What was IBM's first personal computer released in?",a:["1981","1977","1984","1990"],c:0},
+{q:"Which company created the first search engine?",a:["Archie (McGill University)","Google","Yahoo","AltaVista"],c:0}
+],
+security:[
+{q:"What does VPN stand for?",a:["Virtual Private Network","Very Protected Network","Validated Public Node","Virtual Processing Network"],c:0},
+{q:"What is phishing?",a:["Tricking users into revealing sensitive info","A type of encryption","A network scanning tool","A firewall bypass"],c:0},
+{q:"What does 2FA stand for?",a:["Two-Factor Authentication","Two-File Authorization","Total Firewall Access","Token-Free Authentication"],c:0},
+{q:"What is a zero-day exploit?",a:["An attack using an unknown vulnerability","A day-one software release","A backup that's 0 days old","A type of antivirus"],c:0},
+{q:"What does SQL injection attack?",a:["Databases through user input fields","Network routers","Operating systems","Hardware firmware"],c:0},
+{q:"What is end-to-end encryption?",a:["Only sender and receiver can read messages","Encryption of the first byte only","Server-side encryption","File compression"],c:0},
+{q:"What is a DDoS attack?",a:["Flooding a server with traffic to take it down","Downloading data from servers","Decrypting passwords","Duplicating databases"],c:0},
+{q:"What is the purpose of a firewall?",a:["Filter network traffic based on rules","Encrypt all data","Speed up internet","Store passwords"],c:0},
+{q:"What does HTTPS guarantee?",a:["Encrypted connection between browser and server","The website is safe","No malware on the site","Fast loading speed"],c:0},
+{q:"What is social engineering in security?",a:["Manipulating people to reveal information","Building social networks","Engineering social media algorithms","Creating fake websites"],c:0},
+{q:"What is a 'man-in-the-middle' attack?",a:["Intercepting communication between two parties","A physical break-in","A brute force attack","A DNS poisoning"],c:0},
+{q:"What tool is commonly used for penetration testing?",a:["Metasploit","Photoshop","Excel","Slack"],c:0}
+]
+};
+
+let state={score:0,current:0,correct:0,streak:0,bestStreak:0,lives:3,questions:[],category:'mixed',timer:null,timeLeft:15,totalTime:0,answeredCount:0};
+let stats=JSON.parse(localStorage.getItem('tq_stats')||'{"best":0,"games":0,"bestStreak":0}');
+
+function updateHomeStats(){
+document.getElementById('home-best').textContent=stats.best;
+document.getElementById('home-games').textContent=stats.games;
+document.getElementById('home-streak').textContent=stats.bestStreak;
+}
+updateHomeStats();
+
+document.querySelectorAll('.cat-btn').forEach(b=>{
+b.onclick=()=>{document.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');state.category=b.dataset.cat}
+});
+
+function showScreen(id){
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+function shuffle(arr){
+for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}
+return arr;
+}
+
+function getQuestions(cat,n=10){
+let pool=[];
+if(cat==='mixed'){Object.values(QUESTIONS).forEach(qs=>pool.push(...qs))}
+else{pool=QUESTIONS[cat]?[...QUESTIONS[cat]]:Object.values(QUESTIONS).flat()}
+shuffle(pool);
+return pool.slice(0,n).map(q=>{
+const indices=[0,1,2,3];
+shuffle(indices);
+const correctIdx=indices.indexOf(0);
+return{q:q.q,a:indices.map(i=>q.a[i]),c:correctIdx};
+});
+}
+
+function startGame(){
+state={score:0,current:0,correct:0,streak:0,bestStreak:0,lives:3,questions:getQuestions(state.category),category:state.category,timer:null,timeLeft:15,totalTime:0,answeredCount:0};
+showScreen('game');
+renderQuestion();
+}
+
+function renderLives(){
+const el=document.getElementById('lives');
+let h='';
+for(let i=0;i<3;i++)h+=`<span class="${i>=state.lives?'lost':''}">❤️</span>`;
+el.innerHTML=h;
+}
+
+function startTimer(){
+clearInterval(state.timer);
+state.timeLeft=15;
+const circle=document.getElementById('timer-circle');
+circle.textContent=state.timeLeft;
+circle.classList.remove('warning');
+state.timer=setInterval(()=>{
+state.timeLeft--;
+circle.textContent=state.timeLeft;
+if(state.timeLeft<=5)circle.classList.add('warning');
+if(state.timeLeft<=0){clearInterval(state.timer);handleTimeout()}
+},1000);
+}
+
+function handleTimeout(){
+state.lives--;
+state.streak=0;
+document.getElementById('streak-indicator').style.display='none';
+const btns=document.querySelectorAll('.answer-btn');
+btns.forEach((b,i)=>{
+b.classList.add('disabled');
+if(i===state.questions[state.current].c)b.classList.add('correct');
+});
+renderLives();
+if(state.lives<=0){setTimeout(endGame,1200);return}
+setTimeout(nextQuestion,1200);
+}
+
+function renderQuestion(){
+const q=state.questions[state.current];
+document.getElementById('q-num').textContent=`${state.current+1} / ${state.questions.length}`;
+document.getElementById('progress').style.width=`${(state.current/state.questions.length)*100}%`;
+document.getElementById('question').textContent=q.q;
+document.getElementById('score-live').textContent=`Score: ${state.score}`;
+renderLives();
+const container=document.getElementById('answers');
+container.innerHTML='';
+q.a.forEach((a,i)=>{
+const btn=document.createElement('button');
+btn.className='answer-btn';
+btn.textContent=a;
+btn.onclick=()=>selectAnswer(i);
+container.appendChild(btn);
+});
+startTimer();
+}
+
+function selectAnswer(idx){
+clearInterval(state.timer);
+const q=state.questions[state.current];
+const btns=document.querySelectorAll('.answer-btn');
+btns.forEach(b=>b.classList.add('disabled'));
+const timeTaken=15-state.timeLeft;
+state.totalTime+=timeTaken;
+state.answeredCount++;
+
+if(idx===q.c){
+btns[idx].classList.add('correct');
+state.correct++;
+state.streak++;
+if(state.streak>state.bestStreak)state.bestStreak=state.streak;
+const bonus=Math.max(1,Math.floor(state.timeLeft/3));
+const streakBonus=state.streak>=3?state.streak*2:0;
+state.score+=10+bonus+streakBonus;
+if(state.streak>=3){
+document.getElementById('streak-indicator').style.display='block';
+document.getElementById('streak-text').textContent=`🔥 ${state.streak} streak! +${streakBonus} bonus`;
+}
+if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
+}else{
+btns[idx].classList.add('wrong');
+btns[q.c].classList.add('correct');
+state.lives--;
+state.streak=0;
+document.getElementById('streak-indicator').style.display='none';
+renderLives();
+if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('error');
+if(state.lives<=0){setTimeout(endGame,1200);return}
+}
+document.getElementById('score-live').textContent=`Score: ${state.score}`;
+setTimeout(nextQuestion,1000);
+}
+
+function nextQuestion(){
+state.current++;
+if(state.current>=state.questions.length){endGame();return}
+renderQuestion();
+}
+
+function endGame(){
+clearInterval(state.timer);
+stats.games++;
+if(state.score>stats.best)stats.best=state.score;
+if(state.bestStreak>stats.bestStreak)stats.bestStreak=state.bestStreak;
+localStorage.setItem('tq_stats',JSON.stringify(stats));
+updateHomeStats();
+
+document.getElementById('final-score').textContent=state.score;
+document.getElementById('r-correct').textContent=`${state.correct}/${state.questions.length}`;
+document.getElementById('r-streak').textContent=state.bestStreak;
+document.getElementById('r-time').textContent=state.answeredCount>0?`${(state.totalTime/state.answeredCount).toFixed(1)}s`:'--';
+
+let icon='🏆',msg='';
+if(state.correct===state.questions.length){icon='👑';msg='Perfect score! You are a true tech master!';}
+else if(state.correct>=8){icon='🌟';msg='Excellent! Almost perfect!';}
+else if(state.correct>=6){icon='💪';msg='Good job! Keep learning!';}
+else if(state.correct>=4){icon='📚';msg='Not bad! Room for improvement.';}
+else{icon='🎯';msg='Keep practicing! You will get there.';}
+document.getElementById('result-icon').textContent=icon;
+
+const shareText=`I scored ${state.score} points (${state.correct}/${state.questions.length}) in Tech Quiz! 🧠\n\n${msg}\n\nPlay now: @charlie_dl_bot`;
+document.getElementById('share-msg').innerHTML=`<b>${msg}</b><br><br>Share your score with friends!`;
+
+showScreen('result');
+
+if(tg&&tg.MainButton){
+tg.MainButton.text='Share Score';
+tg.MainButton.show();
+tg.MainButton.onClick(()=>{
+if(tg.switchInlineQuery)tg.switchInlineQuery(`I scored ${state.score} in Tech Quiz! Play: @charlie_dl_bot`,'');
+});
+}
+}
+</script>
+</body>
+</html>

@@ -115,6 +115,11 @@ function nextQuestion() {
     return;
   }
 
+  // Show rewarded ad every 10 questions
+  if (questionCount > 0 && questionCount % 10 === 0 && typeof show_10917064 === 'function') {
+    show_10917064().catch(() => {});
+  }
+
   // Show share nudge every 5 questions (but not on summary intervals)
   if (questionCount > 0 && questionCount % SHARE_NUDGE_INTERVAL === 0 && questionCount % SUMMARY_INTERVAL !== 0) {
     showShareNudge();

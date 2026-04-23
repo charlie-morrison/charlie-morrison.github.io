@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Tech Quiz</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src='//libtl.com/sdk.js' data-zone='10917064' data-sdk='show_10917064'></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#1a1a2e;--card:#16213e;--accent:#0f3460;--highlight:#e94560;--text:#eee;--correct:#27ae60;--wrong:#e74c3c}
@@ -98,9 +99,8 @@ h2{font-size:20px;text-align:center}
     <div class="stat-box"><div class="num" id="r-time">0s</div><div class="label">Avg Time</div></div>
   </div>
   <div class="share-msg" id="share-msg"></div>
-  <!-- Ad slot between rounds -->
-  <div class="ad-slot" id="ad-result"></div>
-  <button class="btn" onclick="startGame()">Play Again</button>
+  <button class="btn" id="ad-life-btn" style="background:#f39c12;display:none" onclick="watchAdForLife()">🎬 Watch Ad = +1 Life Next Game</button>
+  <button class="btn" onclick="playAgainWithAd()">Play Again</button>
   <button class="btn btn-secondary" onclick="showScreen('home')">Home</button>
 </div>
 
@@ -354,6 +354,43 @@ if(tg.switchInlineQuery)tg.switchInlineQuery(`I scored ${state.score} in Tech Qu
 });
 }
 }
+
+let bonusLife=false;
+function watchAdForLife(){
+if(typeof show_10917064!=='function')return;
+const btn=document.getElementById('ad-life-btn');
+btn.textContent='Loading ad...';
+btn.style.pointerEvents='none';
+show_10917064().then(()=>{
+bonusLife=true;
+btn.textContent='✅ +1 Life earned!';
+btn.style.background='var(--correct)';
+if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
+}).catch(()=>{
+btn.textContent='Ad unavailable';
+btn.style.pointerEvents='auto';
+setTimeout(()=>{btn.textContent='🎬 Watch Ad = +1 Life Next Game';btn.style.background='#f39c12';},2000);
+});
+}
+
+function playAgainWithAd(){
+if(typeof show_10917064==='function'&&stats.games%3===0){
+show_10917064().catch(()=>{}).finally(()=>startGameWithBonus());
+}else{startGameWithBonus()}
+}
+
+const _origStart=startGame;
+function startGameWithBonus(){
+_origStart();
+if(bonusLife){state.lives=4;renderLives();bonusLife=false}
+}
+
+const _origEnd=endGame;
+endGame=function(){
+_origEnd();
+const btn=document.getElementById('ad-life-btn');
+if(typeof show_10917064==='function'){btn.style.display='block';btn.textContent='🎬 Watch Ad = +1 Life Next Game';btn.style.background='#f39c12';btn.style.pointerEvents='auto'}
+};
 </script>
 </body>
 </html>

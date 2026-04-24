@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Tech Quiz</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src='//libtl.com/sdk.js' data-zone='10917064' data-sdk='show_10917064'></script>
+<script src='//libtl.com/sdk.js' data-zone='10917067' data-sdk='show_10917067'></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#1a1a2e;--card:#16213e;--accent:#0f3460;--highlight:#e94560;--text:#eee;--correct:#27ae60;--wrong:#e74c3c}
+:root{--bg:#1a1a2e;--card:#16213e;--accent:#0f3460;--highlight:#e94560;--text:#eee;--correct:#27ae60;--wrong:#e74c3c;--gold:#f39c12}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px;overflow-x:hidden}
 .screen{display:none;width:100%;max-width:400px;flex-direction:column;align-items:center;gap:16px}
 .screen.active{display:flex}
@@ -22,6 +22,8 @@ h2{font-size:20px;text-align:center}
 .btn{background:var(--highlight);color:#fff;border:none;border-radius:12px;padding:14px 24px;font-size:16px;font-weight:600;cursor:pointer;width:100%;max-width:300px;transition:transform .1s}
 .btn:active{transform:scale(.96)}
 .btn-secondary{background:var(--accent)}
+.btn-invite{background:linear-gradient(135deg,#667eea,#764ba2);font-size:15px}
+.btn-challenge{background:linear-gradient(135deg,#f39c12,#e74c3c)}
 .progress-bar{width:100%;height:6px;background:var(--card);border-radius:3px;overflow:hidden}
 .progress-fill{height:100%;background:var(--highlight);transition:width .3s}
 .question-num{font-size:13px;color:#aaa}
@@ -41,7 +43,10 @@ h2{font-size:20px;text-align:center}
 .score-label{font-size:14px;color:#aaa}
 .share-msg{background:var(--card);border-radius:12px;padding:16px;text-align:center;font-size:14px;line-height:1.5;width:100%}
 .streak-badge{background:linear-gradient(135deg,#f39c12,#e74c3c);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:600;display:inline-block}
-.ad-slot{width:100%;min-height:50px;background:var(--card);border-radius:8px;display:flex;align-items:center;justify-content:center;margin:8px 0;font-size:12px;color:#666}
+.daily-streak{background:var(--card);border-radius:12px;padding:14px;width:100%;text-align:center}
+.daily-streak .streak-num{font-size:32px;font-weight:700;color:var(--gold)}
+.daily-streak .streak-label{font-size:12px;color:#aaa;margin-top:4px}
+.daily-streak .fire{font-size:24px}
 .category-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
 .cat-btn{background:var(--card);border:2px solid transparent;border-radius:12px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .2s}
 .cat-btn:active{transform:scale(.96)}
@@ -50,6 +55,10 @@ h2{font-size:20px;text-align:center}
 .cat-name{font-size:13px;font-weight:600}
 .lives{display:flex;gap:4px;font-size:20px}
 .lives .lost{opacity:.3}
+.invite-box{background:linear-gradient(135deg,#1e2a4a,#16213e);border:1px solid #334;border-radius:12px;padding:16px;width:100%;text-align:center}
+.invite-box .invite-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.invite-box .invite-desc{font-size:12px;color:#aaa;margin-bottom:12px}
+.invite-count{font-size:11px;color:var(--gold);margin-top:8px}
 </style>
 </head>
 <body>
@@ -57,6 +66,11 @@ h2{font-size:20px;text-align:center}
 <div id="home" class="screen active">
   <h1>Tech Quiz</h1>
   <p class="subtitle">Test your tech knowledge!</p>
+  <div class="daily-streak" id="daily-streak-box" style="display:none">
+    <span class="fire">🔥</span>
+    <span class="streak-num" id="daily-num">0</span>
+    <span class="streak-label">day streak</span>
+  </div>
   <div class="stats-row">
     <div class="stat-box"><div class="num" id="home-best">0</div><div class="label">Best Score</div></div>
     <div class="stat-box"><div class="num" id="home-games">0</div><div class="label">Games</div></div>
@@ -72,8 +86,12 @@ h2{font-size:20px;text-align:center}
     <div class="cat-btn" data-cat="security"><div class="cat-icon">🔒</div><div class="cat-name">Security</div></div>
   </div>
   <button class="btn" onclick="startGame()">Play Now</button>
-  <!-- Ad slot placeholder for RichAds -->
-  <div class="ad-slot" id="ad-home"></div>
+  <div class="invite-box">
+    <div class="invite-title">👥 Invite Friends</div>
+    <div class="invite-desc">Challenge friends & earn bonus lives!</div>
+    <button class="btn btn-invite" onclick="inviteFriends()">Send Invite</button>
+    <div class="invite-count" id="invite-count"></div>
+  </div>
 </div>
 
 <div id="game" class="screen">
@@ -99,7 +117,8 @@ h2{font-size:20px;text-align:center}
     <div class="stat-box"><div class="num" id="r-time">0s</div><div class="label">Avg Time</div></div>
   </div>
   <div class="share-msg" id="share-msg"></div>
-  <button class="btn" id="ad-life-btn" style="background:#f39c12;display:none" onclick="watchAdForLife()">🎬 Watch Ad = +1 Life Next Game</button>
+  <button class="btn btn-challenge" onclick="challengeFriend()">⚔️ Challenge a Friend</button>
+  <button class="btn" id="ad-life-btn" style="background:#f39c12;display:none" onclick="watchAdForLife()">🎬 Watch Ad = +1 Life</button>
   <button class="btn" onclick="playAgainWithAd()">Play Again</button>
   <button class="btn btn-secondary" onclick="showScreen('home')">Home</button>
 </div>
@@ -107,6 +126,9 @@ h2{font-size:20px;text-align:center}
 <script>
 const tg = window.Telegram && window.Telegram.WebApp;
 if(tg){tg.ready();tg.expand();tg.setHeaderColor('#1a1a2e');tg.setBackgroundColor('#1a1a2e')}
+
+const userId = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 0;
+const userName = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? (tg.initDataUnsafe.user.first_name || 'Player') : 'Player';
 
 const QUESTIONS={
 ai:[
@@ -182,12 +204,31 @@ security:[
 };
 
 let state={score:0,current:0,correct:0,streak:0,bestStreak:0,lives:3,questions:[],category:'mixed',timer:null,timeLeft:15,totalTime:0,answeredCount:0};
-let stats=JSON.parse(localStorage.getItem('tq_stats')||'{"best":0,"games":0,"bestStreak":0}');
+let stats=JSON.parse(localStorage.getItem('tq_stats')||'{"best":0,"games":0,"bestStreak":0,"dailyStreak":0,"lastPlayDate":""}');
+
+function todayStr(){return new Date().toISOString().slice(0,10)}
+
+function updateDailyStreak(){
+const today=todayStr();
+if(stats.lastPlayDate===today)return;
+const yesterday=new Date();
+yesterday.setDate(yesterday.getDate()-1);
+const yStr=yesterday.toISOString().slice(0,10);
+if(stats.lastPlayDate===yStr){stats.dailyStreak=(stats.dailyStreak||0)+1}
+else if(stats.lastPlayDate!==today){stats.dailyStreak=1}
+stats.lastPlayDate=today;
+localStorage.setItem('tq_stats',JSON.stringify(stats));
+}
 
 function updateHomeStats(){
 document.getElementById('home-best').textContent=stats.best;
 document.getElementById('home-games').textContent=stats.games;
 document.getElementById('home-streak').textContent=stats.bestStreak;
+const ds=stats.dailyStreak||0;
+if(ds>0){
+document.getElementById('daily-streak-box').style.display='block';
+document.getElementById('daily-num').textContent=ds;
+}
 }
 updateHomeStats();
 
@@ -325,6 +366,7 @@ clearInterval(state.timer);
 stats.games++;
 if(state.score>stats.best)stats.best=state.score;
 if(state.bestStreak>stats.bestStreak)stats.bestStreak=state.bestStreak;
+updateDailyStreak();
 localStorage.setItem('tq_stats',JSON.stringify(stats));
 updateHomeStats();
 
@@ -340,28 +382,44 @@ else if(state.correct>=6){icon='💪';msg='Good job! Keep learning!';}
 else if(state.correct>=4){icon='📚';msg='Not bad! Room for improvement.';}
 else{icon='🎯';msg='Keep practicing! You will get there.';}
 document.getElementById('result-icon').textContent=icon;
-
-const shareText=`I scored ${state.score} points (${state.correct}/${state.questions.length}) in Tech Quiz! 🧠\n\n${msg}\n\nPlay now: @charlie_dl_bot`;
-document.getElementById('share-msg').innerHTML=`<b>${msg}</b><br><br>Share your score with friends!`;
+document.getElementById('share-msg').innerHTML=`<b>${msg}</b><br><br>Can your friends beat ${state.score} points?`;
 
 showScreen('result');
 
 if(tg&&tg.MainButton){
-tg.MainButton.text='Share Score';
+tg.MainButton.text='Challenge a Friend';
 tg.MainButton.show();
-tg.MainButton.onClick(()=>{
-if(tg.switchInlineQuery)tg.switchInlineQuery(`I scored ${state.score} in Tech Quiz! Play: @charlie_dl_bot`,'');
-});
+tg.MainButton.onClick(()=>challengeFriend());
+}
+}
+
+function challengeFriend(){
+const text=`⚔️ ${userName} scored ${state.score} points in Tech Quiz! Can you beat that?\n\n🧠 ${state.correct}/${state.questions.length} correct, 🔥 ${state.bestStreak} streak\n\nPlay now:`;
+const url=`https://t.me/charlie_dl_bot?start=quiz`;
+if(tg&&tg.openTelegramLink){
+tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+}else{
+window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,'_blank');
+}
+}
+
+function inviteFriends(){
+const text=`🧠 I'm playing Tech Quiz — AI, Crypto, Web Dev, Security questions!\n\n🔥 My best: ${stats.best} points\n\nJoin and challenge me:`;
+const url=`https://t.me/charlie_dl_bot?start=quiz`;
+if(tg&&tg.openTelegramLink){
+tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+}else{
+window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,'_blank');
 }
 }
 
 let bonusLife=false;
 function watchAdForLife(){
-if(typeof show_10917064!=='function')return;
+if(typeof show_10917067!=='function')return;
 const btn=document.getElementById('ad-life-btn');
 btn.textContent='Loading ad...';
 btn.style.pointerEvents='none';
-show_10917064().then(()=>{
+show_10917067().then(()=>{
 bonusLife=true;
 btn.textContent='✅ +1 Life earned!';
 btn.style.background='var(--correct)';
@@ -369,13 +427,13 @@ if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred('success');
 }).catch(()=>{
 btn.textContent='Ad unavailable';
 btn.style.pointerEvents='auto';
-setTimeout(()=>{btn.textContent='🎬 Watch Ad = +1 Life Next Game';btn.style.background='#f39c12';},2000);
+setTimeout(()=>{btn.textContent='🎬 Watch Ad = +1 Life';btn.style.background='#f39c12';},2000);
 });
 }
 
 function playAgainWithAd(){
-if(typeof show_10917064==='function'&&stats.games%3===0){
-show_10917064().catch(()=>{}).finally(()=>startGameWithBonus());
+if(typeof show_10917067==='function'&&stats.games%3===0){
+show_10917067().catch(()=>{}).finally(()=>startGameWithBonus());
 }else{startGameWithBonus()}
 }
 
@@ -389,7 +447,7 @@ const _origEnd=endGame;
 endGame=function(){
 _origEnd();
 const btn=document.getElementById('ad-life-btn');
-if(typeof show_10917064==='function'){btn.style.display='block';btn.textContent='🎬 Watch Ad = +1 Life Next Game';btn.style.background='#f39c12';btn.style.pointerEvents='auto'}
+if(typeof show_10917067==='function'){btn.style.display='block';btn.textContent='🎬 Watch Ad = +1 Life';btn.style.background='#f39c12';btn.style.pointerEvents='auto'}
 };
 </script>
 </body>

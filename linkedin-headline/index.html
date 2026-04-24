@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free LinkedIn Headline Generator — Create a Standout Headline</title>
+<meta name="description" content="Free LinkedIn headline generator. Enter your role, skills, and goals to get multiple professional headline options that attract recruiters and connections.">
+<meta name="keywords" content="LinkedIn headline generator, LinkedIn profile optimization, LinkedIn headline examples, professional headline, LinkedIn tips">
+<link rel="canonical" href="https://charliemorrison.dev/linkedin-headline">
+<meta property="og:title" content="Free LinkedIn Headline Generator">
+<meta property="og:description" content="Generate compelling LinkedIn headlines that attract recruiters. Free, instant, no signup required.">
+<meta property="og:url" content="https://charliemorrison.dev/linkedin-headline">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"LinkedIn Headline Generator","description":"Free tool to generate compelling LinkedIn headlines that attract recruiters and connections","url":"https://charliemorrison.dev/linkedin-headline","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.6;background:#f8f9fa}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+.container{max-width:800px;margin:0 auto;padding:20px}
+h1{font-size:2em;margin:30px 0 8px;text-align:center}
+.subtitle{text-align:center;color:#666;margin-bottom:30px;font-size:1.05em}
+.form-card{background:#fff;border-radius:12px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-weight:600;margin-bottom:6px;font-size:.95em}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:.95em;font-family:inherit;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#0077b5}
+.form-group textarea{height:80px;resize:vertical}
+.form-group .hint{font-size:.82em;color:#888;margin-top:4px}
+.btn{display:block;width:100%;background:#0077b5;color:#fff;padding:16px;border:none;border-radius:8px;font-size:1.1em;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.9}
+.results{display:none}
+.headline-card{background:#fff;border:2px solid #e8f4f8;border-radius:10px;padding:20px;margin-bottom:14px;position:relative;transition:border-color .2s}
+.headline-card:hover{border-color:#0077b5}
+.headline-card .style-tag{display:inline-block;background:#e8f4f8;color:#0077b5;font-size:.75em;font-weight:700;padding:3px 10px;border-radius:12px;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.headline-card .headline-text{font-size:1.15em;font-weight:600;color:#1a1a2e;margin-bottom:8px;line-height:1.4}
+.headline-card .char-count{font-size:.8em;color:#888}
+.headline-card .char-count.over{color:#e74c3c;font-weight:600}
+.copy-btn{position:absolute;top:16px;right:16px;background:#f0f0f0;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.85em;font-weight:600;transition:background .2s}
+.copy-btn:hover{background:#0077b5;color:#fff}
+.copy-btn.copied{background:#27ae60;color:#fff}
+.tips{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-top:30px}
+.tips h2{font-size:1.3em;margin-bottom:14px;color:#0077b5}
+.tips ul{padding-left:20px}
+.tips li{margin-bottom:8px;color:#444}
+.cta{background:linear-gradient(135deg,#0077b5,#00a0dc);color:#fff;border-radius:12px;padding:28px;text-align:center;margin-top:30px}
+.cta h3{font-size:1.3em;margin-bottom:8px}
+.cta p{margin-bottom:16px;opacity:.9}
+.cta a{display:inline-block;background:#fff;color:#0077b5;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;transition:transform .2s}
+.cta a:hover{transform:translateY(-2px)}
+footer{text-align:center;padding:30px 20px;color:#888;font-size:.85em}
+footer a{color:#0077b5;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison</a></nav>
+<div class="container">
+<h1>LinkedIn Headline Generator</h1>
+<p class="subtitle">Create a compelling headline that attracts recruiters. 100% free, runs in your browser.</p>
+
+<div class="form-card">
+<div class="form-group">
+<label>Your Current Role / Job Title</label>
+<input type="text" id="role" placeholder="e.g., Senior Software Engineer, Marketing Manager, Data Analyst">
+</div>
+<div class="form-group">
+<label>Top 3 Skills or Specialties</label>
+<input type="text" id="skills" placeholder="e.g., Python, Machine Learning, Team Leadership">
+<div class="hint">Separate with commas</div>
+</div>
+<div class="form-group">
+<label>Industry / Niche</label>
+<input type="text" id="industry" placeholder="e.g., FinTech, Healthcare, SaaS, E-commerce">
+</div>
+<div class="form-group">
+<label>What makes you different? (Optional)</label>
+<textarea id="usp" placeholder="e.g., Helped 3 startups reach $1M ARR, 10+ years in remote teams, Published author"></textarea>
+</div>
+<div class="form-group">
+<label>Headline Tone</label>
+<select id="tone">
+<option value="professional">Professional & Authoritative</option>
+<option value="creative">Creative & Conversational</option>
+<option value="results">Results-Focused</option>
+<option value="recruiter">Recruiter-Friendly</option>
+<option value="personal">Personal Brand</option>
+</select>
+</div>
+<button class="btn" onclick="generateHeadlines()">Generate Headlines</button>
+</div>
+
+<div class="results" id="results">
+<h2 style="margin-bottom:16px">Your LinkedIn Headlines</h2>
+<div id="headlines-container"></div>
+</div>
+
+<div class="tips">
+<h2>LinkedIn Headline Best Practices</h2>
+<ul>
+<li><strong>Stay under 220 characters</strong> — LinkedIn truncates longer headlines on mobile</li>
+<li><strong>Front-load keywords</strong> — recruiters search by job titles and skills</li>
+<li><strong>Show value, not just title</strong> — "Helping SaaS companies reduce churn by 30%" beats "Customer Success Manager"</li>
+<li><strong>Use separators</strong> — pipes (|), bullets, or em dashes improve readability</li>
+<li><strong>Include measurable results</strong> — numbers catch attention in search results</li>
+<li><strong>Update every 3-6 months</strong> — keep it current with your latest achievements</li>
+</ul>
+</div>
+
+<div class="cta">
+<h3>Want 50+ LinkedIn & Social Media AI Prompts?</h3>
+<p>Get the complete Social Media AI Mastery pack — optimized prompts for LinkedIn, X/Twitter, Instagram, TikTok, and YouTube.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/25d29bad-2dfa-4cc5-b4dd-1f2b61b81759">Get Social Media AI Mastery — $17</a>
+</div>
+</div>
+
+<footer>
+<a href="/">Home</a> · <a href="/resume-checker">Resume ATS Checker</a> · <a href="https://github.com/charlie-morrison">GitHub</a>
+<br>Built by <a href="/">Charlie Morrison</a>
+</footer>
+
+<script>
+const templates = {
+professional: [
+  (r,s,ind,u) => `${r} | ${s[0]} & ${s[1]} Specialist | ${ind}`,
+  (r,s,ind,u) => `${r} at the intersection of ${s[0]} and ${s[1]} | Driving results in ${ind}`,
+  (r,s,ind,u) => `Experienced ${r} | ${s.join(', ')} | ${ind} Professional`,
+  (r,s,ind,u) => `${r} | Leveraging ${s[0]} to deliver measurable ${ind} outcomes`,
+  (r,s,ind,u) => `${ind} ${r} | ${s[0]} · ${s[1]} · ${s[2] || 'Strategy'}`,
+  (r,s,ind,u) => u ? `${r} | ${u} | ${s[0]} & ${s[1]}` : `${r} | ${s[0]} & ${s[1]} | Building the future of ${ind}`,
+],
+creative: [
+  (r,s,ind,u) => `${r} who actually loves ${s[0]} | Making ${ind} less boring`,
+  (r,s,ind,u) => `Not your average ${r} | ${s[0]} enthusiast | ${ind} nerd`,
+  (r,s,ind,u) => `${r} by day, ${s[0]} advocate always | ${ind}`,
+  (r,s,ind,u) => `Turning ${s[0]} into ${ind} magic | ${r}`,
+  (r,s,ind,u) => u ? `${r} | ${u} | Also obsessed with ${s[0]}` : `${r} | Making ${ind} simpler with ${s[0]}`,
+  (r,s,ind,u) => `${r} | I help ${ind} teams fall in love with ${s[0]}`,
+],
+results: [
+  (r,s,ind,u) => u ? `${r} | ${u} | ${s[0]} & ${s[1]}` : `${r} | Driving growth through ${s[0]} in ${ind}`,
+  (r,s,ind,u) => `${r} | Helping ${ind} companies scale with ${s[0]}`,
+  (r,s,ind,u) => `${ind} ${r} | Proven track record in ${s[0]} & ${s[1]}`,
+  (r,s,ind,u) => `${r} | Delivering ROI through ${s[0]} | ${ind}`,
+  (r,s,ind,u) => u ? `${u} | ${r} specializing in ${s[0]}` : `${r} | Transforming ${ind} with ${s[0]} & ${s[1]}`,
+  (r,s,ind,u) => `${r} focused on measurable ${ind} impact | ${s[0]} · ${s[1]}`,
+],
+recruiter: [
+  (r,s,ind,u) => `${r} | ${s[0]} | ${s[1]} | ${s[2] || ind} | Open to opportunities`,
+  (r,s,ind,u) => `${r} | ${s.join(' · ')} | ${ind} | Let's connect`,
+  (r,s,ind,u) => `${ind} ${r} skilled in ${s[0]} and ${s[1]} | Actively exploring new roles`,
+  (r,s,ind,u) => `${r} | ${s[0]} & ${s[1]} | Building great things in ${ind}`,
+  (r,s,ind,u) => `Passionate ${r} | ${s[0]}, ${s[1]} | ${ind} sector`,
+  (r,s,ind,u) => u ? `${r} | ${u} | Seeking next challenge in ${ind}` : `${r} seeking impact in ${ind} | ${s[0]} · ${s[1]}`,
+],
+personal: [
+  (r,s,ind,u) => `${r} | Writing about ${s[0]} and ${ind} | Building in public`,
+  (r,s,ind,u) => u ? `${u} | ${r} sharing lessons in ${s[0]}` : `${r} sharing insights on ${s[0]} & ${ind}`,
+  (r,s,ind,u) => `${r} | Helping people master ${s[0]} | ${ind} creator`,
+  (r,s,ind,u) => `${r} → ${s[0]} educator → ${ind} thought leader`,
+  (r,s,ind,u) => `On a mission to democratize ${s[0]} in ${ind} | ${r}`,
+  (r,s,ind,u) => u ? `${r} | ${u} | Thoughts on ${s[0]} & ${ind}` : `${r} | ${s[0]} advocate | Making ${ind} accessible`,
+]
+};
+
+function generateHeadlines(){
+  const role = document.getElementById('role').value.trim();
+  const skillsRaw = document.getElementById('skills').value.trim();
+  const industry = document.getElementById('industry').value.trim();
+  const usp = document.getElementById('usp').value.trim();
+  const tone = document.getElementById('tone').value;
+
+  if(!role || !skillsRaw || !industry){
+    alert('Please fill in your role, skills, and industry.');
+    return;
+  }
+
+  const skills = skillsRaw.split(',').map(s => s.trim()).filter(Boolean);
+  while(skills.length < 3) skills.push(skills[skills.length-1] || 'Strategy');
+
+  const fns = templates[tone] || templates.professional;
+  const container = document.getElementById('headlines-container');
+  container.innerHTML = '';
+
+  fns.forEach((fn, i) => {
+    const text = fn(role, skills, industry, usp);
+    const len = text.length;
+    const card = document.createElement('div');
+    card.className = 'headline-card';
+    card.innerHTML = `
+      <span class="style-tag">${['Classic','Authority','Specialist','Impact','Expert','Signature'][i] || 'Option '+(i+1)}</span>
+      <button class="copy-btn" onclick="copyHL(this,'${text.replace(/'/g,"\\'")}')">Copy</button>
+      <div class="headline-text">${text}</div>
+      <div class="char-count ${len > 220 ? 'over' : ''}">${len}/220 characters${len > 220 ? ' — may be truncated on mobile' : ''}</div>
+    `;
+    container.appendChild(card);
+  });
+
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+
+function copyHL(btn, text){
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>

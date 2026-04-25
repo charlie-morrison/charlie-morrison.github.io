@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Cover Letter Generator — Create Professional Cover Letters Instantly</title>
+<meta name="description" content="Generate a professional cover letter in seconds. Enter your details and job description to get a tailored cover letter. Free, no signup required.">
+<meta name="keywords" content="cover letter generator, free cover letter, cover letter template, job application, cover letter builder">
+<link rel="canonical" href="https://charliemorrison.dev/cover-letter">
+<meta property="og:title" content="Free Cover Letter Generator">
+<meta property="og:description" content="Generate a tailored, professional cover letter in seconds. No signup, no email required.">
+<meta property="og:url" content="https://charliemorrison.dev/cover-letter">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Cover Letter Generator","description":"Free tool to generate professional, tailored cover letters from your details and the job description","url":"https://charliemorrison.dev/cover-letter","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.6;background:#f8f9fa}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+.container{max-width:900px;margin:0 auto;padding:20px}
+h1{font-size:2em;margin:30px 0 8px;text-align:center}
+.subtitle{text-align:center;color:#666;margin-bottom:30px;font-size:1.05em}
+.form-section{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:16px}
+.form-section h3{margin-bottom:14px;font-size:1.1em;color:#1a1a2e}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}}
+label{display:block;font-size:.9em;font-weight:600;margin-bottom:4px;color:#444}
+input,select,textarea{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 12px;font-size:.95em;font-family:inherit;transition:border-color .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#667eea}
+textarea{resize:vertical}
+.field{margin-bottom:12px}
+.tone-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.tone-opt{padding:8px 16px;border:2px solid #e0e0e0;border-radius:20px;cursor:pointer;font-size:.9em;transition:all .2s;background:#fff}
+.tone-opt:hover{border-color:#667eea}
+.tone-opt.active{background:#667eea;color:#fff;border-color:#667eea}
+.btn{display:block;width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:16px;border:none;border-radius:8px;font-size:1.1em;font-weight:700;cursor:pointer;transition:opacity .2s;margin-top:8px}
+.btn:hover{opacity:.9}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+#output{display:none;margin-top:20px}
+.letter-box{background:#fff;border-radius:10px;padding:30px;box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative}
+.letter-box pre{white-space:pre-wrap;font-family:Georgia,'Times New Roman',serif;font-size:1em;line-height:1.7;color:#333}
+.copy-bar{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
+.copy-btn{background:#667eea;color:#fff;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600;font-size:.9em}
+.copy-btn:hover{opacity:.85}
+.copy-btn.copied{background:#28a745}
+.tips{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:16px}
+.tips h3{margin-bottom:10px}
+.tips ul{padding-left:20px}
+.tips li{margin-bottom:6px;color:#555;font-size:.93em}
+.cta{background:linear-gradient(135deg,#667eea22,#764ba222);border:2px solid #667eea;border-radius:10px;padding:24px;text-align:center;margin-top:20px}
+.cta h3{margin-bottom:8px;color:#1a1a2e}
+.cta p{color:#555;margin-bottom:14px}
+.cta a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700}
+.cta a:hover{opacity:.9}
+.tools-row{display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.tools-row a{color:#667eea;font-size:.9em}
+footer{text-align:center;padding:30px;color:#888;font-size:.85em}
+footer a{color:#667eea}
+</style>
+</head>
+<body>
+<nav><a href="https://charliemorrison.dev">Charlie Morrison</a></nav>
+<div class="container">
+<h1>Cover Letter Generator</h1>
+<p class="subtitle">Fill in your details and the job info to generate a tailored, professional cover letter. Free — nothing leaves your browser.</p>
+
+<div class="form-section">
+<h3>Your Information</h3>
+<div class="grid2">
+<div class="field"><label>Full Name *</label><input type="text" id="fullName" placeholder="Jane Smith"></div>
+<div class="field"><label>Email</label><input type="email" id="email" placeholder="jane@email.com"></div>
+<div class="field"><label>Phone</label><input type="tel" id="phone" placeholder="+1 (555) 123-4567"></div>
+<div class="field"><label>City / Location</label><input type="text" id="location" placeholder="New York, NY"></div>
+</div>
+<div class="field"><label>Your Current Role / Title *</label><input type="text" id="currentRole" placeholder="Senior Software Engineer"></div>
+<div class="field"><label>Years of Experience</label><input type="text" id="experience" placeholder="5+ years"></div>
+<div class="field"><label>Key Skills (comma-separated) *</label><input type="text" id="skills" placeholder="Python, React, AWS, team leadership, agile"></div>
+<div class="field"><label>Key Achievement (one strong result you're proud of)</label><input type="text" id="achievement" placeholder="Led migration that reduced costs by 40%"></div>
+</div>
+
+<div class="form-section">
+<h3>Job Details</h3>
+<div class="grid2">
+<div class="field"><label>Company Name *</label><input type="text" id="company" placeholder="Acme Corp"></div>
+<div class="field"><label>Position Title *</label><input type="text" id="position" placeholder="Lead Developer"></div>
+</div>
+<div class="field"><label>Job Description (paste key requirements)</label><textarea id="jobDesc" rows="4" placeholder="Paste the most important requirements from the job posting..."></textarea></div>
+<div class="field"><label>Why this company? (optional — makes the letter more personal)</label><input type="text" id="whyCompany" placeholder="I admire your work on open-source developer tools"></div>
+</div>
+
+<div class="form-section">
+<h3>Tone</h3>
+<div class="tone-row">
+<div class="tone-opt active" data-tone="professional" onclick="setTone(this)">Professional</div>
+<div class="tone-opt" data-tone="confident" onclick="setTone(this)">Confident</div>
+<div class="tone-opt" data-tone="enthusiastic" onclick="setTone(this)">Enthusiastic</div>
+<div class="tone-opt" data-tone="concise" onclick="setTone(this)">Concise</div>
+</div>
+</div>
+
+<button class="btn" onclick="generate()">Generate Cover Letter</button>
+
+<div id="output">
+<div class="letter-box">
+<pre id="letterText"></pre>
+<div class="copy-bar">
+<button class="copy-btn" onclick="copyLetter()">Copy to Clipboard</button>
+<button class="copy-btn" style="background:#555" onclick="regenerate()">Regenerate</button>
+</div>
+</div>
+
+<div class="tips">
+<h3>Tips for Your Cover Letter</h3>
+<ul>
+<li><strong>Customize further:</strong> Add a specific project or detail about the company that shows you did your research.</li>
+<li><strong>Keep it under one page</strong> — hiring managers spend ~30 seconds on cover letters.</li>
+<li><strong>Match keywords</strong> from the job description — many companies use ATS to filter cover letters too.</li>
+<li><strong>Proofread carefully</strong> — typos in a cover letter are harder to forgive than in a resume.</li>
+<li><strong>Check your resume too:</strong> <a href="/resume-checker">Free Resume ATS Checker</a></li>
+</ul>
+</div>
+
+<div class="cta">
+<h3>Want 50+ AI prompts for your job search?</h3>
+<p>Cover letters, interview prep, salary negotiation, networking scripts, and more — all tailored to your situation.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/0c3f51d6-9089-466e-ada4-58a0b22036e0">Get the Job Search AI Toolkit — $12</a>
+</div>
+
+<div class="tools-row">
+<a href="/resume-checker">Resume ATS Checker</a> ·
+<a href="/linkedin-headline">LinkedIn Headline Generator</a> ·
+<a href="https://charliemorrison.dev">All Tools</a>
+</div>
+</div>
+</div>
+
+<footer>
+<p>Built by <a href="https://charliemorrison.dev">Charlie Morrison</a> · <a href="https://github.com/charlie-morrison">GitHub</a></p>
+<p style="margin-top:6px;font-size:.8em">Your data stays in your browser. Nothing is uploaded or stored.</p>
+</footer>
+
+<script>
+let selectedTone='professional';
+function setTone(el){document.querySelectorAll('.tone-opt').forEach(e=>e.classList.remove('active'));el.classList.add('active');selectedTone=el.dataset.tone}
+
+const openings={
+professional:[
+(name,role,company,pos)=>`I am writing to express my interest in the ${pos} position at ${company}. With my background as a ${role}, I am confident I can contribute meaningfully to your team.`,
+(name,role,company,pos)=>`I am excited to apply for the ${pos} role at ${company}. My experience as a ${role} has prepared me well for this opportunity.`,
+(name,role,company,pos)=>`Please accept my application for the ${pos} position at ${company}. As a ${role}, I bring a proven track record of delivering results.`
+],
+confident:[
+(name,role,company,pos)=>`The ${pos} role at ${company} is exactly the kind of challenge I thrive on. As a ${role}, I have consistently delivered results that move the needle.`,
+(name,role,company,pos)=>`I am applying for the ${pos} position at ${company} because I know I can make an immediate impact. My track record as a ${role} speaks for itself.`,
+(name,role,company,pos)=>`When I saw the ${pos} opening at ${company}, I knew it was the right fit. I have spent my career as a ${role} solving exactly the kind of problems you are facing.`
+],
+enthusiastic:[
+(name,role,company,pos)=>`I am thrilled to apply for the ${pos} position at ${company}! As a passionate ${role}, I have been following your work and would love to contribute to your mission.`,
+(name,role,company,pos)=>`I could not be more excited about the ${pos} opportunity at ${company}. My experience as a ${role} has fueled my passion for this kind of work.`,
+(name,role,company,pos)=>`The ${pos} role at ${company} immediately caught my attention — it aligns perfectly with my experience as a ${role} and my professional goals.`
+],
+concise:[
+(name,role,company,pos)=>`I am applying for the ${pos} role at ${company}. As a ${role}, I bring the skills and experience this position requires.`,
+(name,role,company,pos)=>`Re: ${pos} position. I am a ${role} with relevant experience for this role at ${company}.`,
+(name,role,company,pos)=>`I would like to be considered for the ${pos} position at ${company}. My background as a ${role} is directly relevant.`
+]
+};
+
+const bodies={
+professional:[
+(skills,exp,achievement,jd)=>{let s=skills.slice(0,4).join(', ');let t=`Throughout my ${exp||'career'}, I have developed strong expertise in ${s}. ${achievement?'Notably, I '+achievement.toLowerCase()+'. ':''}`;if(jd)t+=`The requirements you have outlined align well with my experience, and I am particularly drawn to the opportunity to apply my skills in this context.`;else t+='I am eager to bring this expertise to a new challenge and contribute to your team\'s success.';return t},
+(skills,exp,achievement,jd)=>{let s=skills.slice(0,3).join(', ');let t=`My core strengths include ${s}, developed over ${exp||'several years'} of hands-on experience. ${achievement?'A highlight of my career has been when I '+achievement.toLowerCase()+'. ':''}`;if(jd)t+=`I have reviewed the position requirements carefully and believe my background is an excellent match.`;else t+='I am confident these skills will translate directly into value for your organization.';return t}
+],
+confident:[
+(skills,exp,achievement,jd)=>{let s=skills.slice(0,4).join(', ');let t=`I bring ${exp||'extensive'} experience with ${s}. ${achievement?'I '+achievement.toLowerCase()+' — and that is just one example of the results I deliver. ':''}`;if(jd)t+='Your requirements read like a description of my career trajectory.';else t+='I do not just meet expectations — I exceed them.';return t},
+(skills,exp,achievement,jd)=>{let s=skills.slice(0,3).join(' and ');let t=`My expertise in ${s} is backed by ${exp||'years of'} real-world results. ${achievement?'For example, I '+achievement.toLowerCase()+'. ':''}`;t+='I am looking for a role where I can make a significant impact, and this position is exactly that.';return t}
+],
+enthusiastic:[
+(skills,exp,achievement,jd)=>{let s=skills.slice(0,4).join(', ');let t=`What excites me most about this opportunity is the chance to apply my skills in ${s}. Over ${exp||'my career'}, I have loved tackling complex challenges. ${achievement?'One of my proudest moments was when I '+achievement.toLowerCase()+'. ':''}`;if(jd)t+='Reading through the position details, I can already see several areas where I could contribute from day one.';return t},
+(skills,exp,achievement,jd)=>{let s=skills.slice(0,3).join(', ');let t=`I am genuinely passionate about ${s}, and ${exp?'my '+exp+' of experience have':'my experience has'} only deepened that passion. ${achievement?'A highlight: I '+achievement.toLowerCase()+'. ':''}`;t+='I would love the opportunity to bring this energy and expertise to your team.';return t}
+],
+concise:[
+(skills,exp,achievement,jd)=>{let s=skills.slice(0,4).join(', ');let t=`Key qualifications: ${s}. ${exp?exp+' of experience. ':''}${achievement?achievement+'. ':''}`;if(jd)t+='My background matches your stated requirements.';return t},
+(skills,exp,achievement,jd)=>{let s=skills.join(', ');return`Skills: ${s}. ${exp?'Experience: '+exp+'. ':''}${achievement?'Notable result: '+achievement+'. ':''}I am ready to contribute immediately.`}
+]
+};
+
+const closings={
+professional:[
+(company,pos)=>`I would welcome the opportunity to discuss how my background and skills can benefit ${company}. I am available for an interview at your convenience and look forward to hearing from you.`,
+(company,pos)=>`Thank you for considering my application. I am enthusiastic about the possibility of joining ${company} and would be happy to provide additional information or references upon request.`
+],
+confident:[
+(company,pos)=>`I would appreciate the chance to show you what I can bring to ${company}. Let us schedule a conversation — I am confident it will be a productive one.`,
+(company,pos)=>`I look forward to discussing this opportunity further. I am ready to hit the ground running at ${company}.`
+],
+enthusiastic:[
+(company,pos)=>`I am so excited about the possibility of joining ${company}! I would love to discuss how I can contribute to your team. Thank you for your time and consideration.`,
+(company,pos)=>`Thank you for this incredible opportunity. I cannot wait to learn more about the ${pos} role and show you what I can bring to ${company}.`
+],
+concise:[
+(company,pos)=>`Available for interview at your convenience. Looking forward to discussing the ${pos} role.`,
+(company,pos)=>`Happy to discuss further. References available upon request.`
+]
+};
+
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+
+function generate(){
+const name=document.getElementById('fullName').value.trim();
+const emailVal=document.getElementById('email').value.trim();
+const phoneVal=document.getElementById('phone').value.trim();
+const loc=document.getElementById('location').value.trim();
+const role=document.getElementById('currentRole').value.trim();
+const exp=document.getElementById('experience').value.trim();
+const skillsRaw=document.getElementById('skills').value.trim();
+const achievement=document.getElementById('achievement').value.trim();
+const company=document.getElementById('company').value.trim();
+const pos=document.getElementById('position').value.trim();
+const jd=document.getElementById('jobDesc').value.trim();
+const why=document.getElementById('whyCompany').value.trim();
+
+if(!name||!role||!company||!pos||!skillsRaw){alert('Please fill in the required fields (marked with *)');return}
+
+const skills=skillsRaw.split(',').map(s=>s.trim()).filter(Boolean);
+const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+let header='';
+if(name)header+=name+'\n';
+if(emailVal)header+=emailVal;
+if(phoneVal)header+=(emailVal?' · ':'')+phoneVal;
+if(loc)header+=((emailVal||phoneVal)?' · ':'')+loc;
+if(emailVal||phoneVal||loc)header+='\n';
+header+='\n'+today+'\n';
+header+='\nHiring Manager\n'+company+'\n';
+
+const opening=pick(openings[selectedTone])(name,role,company,pos);
+const body=pick(bodies[selectedTone])(skills,exp,achievement,jd);
+const whyLine=why?`\n\n${why.charAt(0).toUpperCase()+why.slice(1)}${why.endsWith('.')?'':'. '}This is a key reason I am drawn to this role.`:'';
+const closing=pick(closings[selectedTone])(company,pos);
+
+const letter=`${header}
+Dear Hiring Manager,
+
+${opening}
+
+${body}${whyLine}
+
+${closing}
+
+Sincerely,
+${name}`;
+
+document.getElementById('letterText').textContent=letter;
+document.getElementById('output').style.display='block';
+document.getElementById('output').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function regenerate(){generate()}
+
+function copyLetter(){
+const text=document.getElementById('letterText').textContent;
+navigator.clipboard.writeText(text).then(()=>{
+const btn=document.querySelector('.copy-btn');
+btn.textContent='Copied!';btn.classList.add('copied');
+setTimeout(()=>{btn.textContent='Copy to Clipboard';btn.classList.remove('copied')},2000);
+});
+}
+</script>
+</body>
+</html>

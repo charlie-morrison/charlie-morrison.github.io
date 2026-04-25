@@ -117,6 +117,7 @@ h2{font-size:20px;text-align:center}
     <div class="stat-box"><div class="num" id="r-time">0s</div><div class="label">Avg Time</div></div>
   </div>
   <div class="share-msg" id="share-msg"></div>
+  <button class="btn" id="save-score-btn" style="background:linear-gradient(135deg,#27ae60,#2ecc71)" onclick="saveToLeaderboard()">🏆 Save to Leaderboard</button>
   <button class="btn btn-challenge" onclick="challengeFriend()">⚔️ Challenge a Friend</button>
   <button class="btn" id="ad-life-btn" style="background:#f39c12;display:none" onclick="watchAdForLife()">🎬 Watch Ad = +1 Life</button>
   <button class="btn" onclick="playAgainWithAd()">Play Again</button>
@@ -143,7 +144,11 @@ ai:[
 {q:"How many parameters does GPT-4 reportedly have?",a:["~1.8 trillion","~175 billion","~500 billion","~10 trillion"],c:0},
 {q:"What is 'prompt engineering'?",a:["Crafting inputs to get better AI outputs","Building AI hardware","Programming AI from scratch","Testing AI for bugs"],c:0},
 {q:"Which AI technique mimics biological neural networks?",a:["Deep learning","Decision trees","Linear regression","K-means clustering"],c:0},
-{q:"What does RLHF stand for?",a:["Reinforcement Learning from Human Feedback","Recursive Learning with Heuristic Functions","Real-time Language Handling Framework","Random Layer Hyperparameter Fitting"],c:0}
+{q:"What does RLHF stand for?",a:["Reinforcement Learning from Human Feedback","Recursive Learning with Heuristic Functions","Real-time Language Handling Framework","Random Layer Hyperparameter Fitting"],c:0},
+{q:"What is a 'token' in the context of LLMs?",a:["A piece of text the model processes","A cryptocurrency","A login credential","A hardware component"],c:0},
+{q:"What is 'temperature' in AI model settings?",a:["Controls randomness of output","The GPU heat level","Processing speed","Model size parameter"],c:0},
+{q:"Which company developed Gemini AI?",a:["Google DeepMind","OpenAI","Meta","Amazon"],c:0},
+{q:"What is an AI 'agent'?",a:["An AI that can take actions autonomously","A person who trains AI","An AI testing tool","A type of neural network"],c:0}
 ],
 web:[
 {q:"What does HTML stand for?",a:["HyperText Markup Language","High Tech Modern Language","Home Tool Markup Language","Hyper Transfer Markup Logic"],c:0},
@@ -157,7 +162,11 @@ web:[
 {q:"What is a REST API?",a:["An API using HTTP methods for CRUD operations","A sleeping computer program","A testing framework","A database type"],c:0},
 {q:"What does SSR stand for in web dev?",a:["Server-Side Rendering","Secure Socket Relay","Static Site Repository","Simple Script Runner"],c:0},
 {q:"Which protocol does HTTPS use for encryption?",a:["TLS/SSL","FTP","SSH","AES"],c:0},
-{q:"What is WebSocket used for?",a:["Real-time bidirectional communication","File uploads only","Database queries","Email sending"],c:0}
+{q:"What is WebSocket used for?",a:["Real-time bidirectional communication","File uploads only","Database queries","Email sending"],c:0},
+{q:"What is Docker used for?",a:["Containerizing applications","Drawing diagrams","Video editing","Email management"],c:0},
+{q:"What does CORS stand for?",a:["Cross-Origin Resource Sharing","Central Object Routing System","Client-Only Request Service","Cached Origin Response Storage"],c:0},
+{q:"What is GraphQL?",a:["A query language for APIs","A graph database","A JavaScript framework","A CSS preprocessor"],c:0},
+{q:"What is a Progressive Web App (PWA)?",a:["A web app that works like a native app","A slow-loading website","An old-style website","A backend framework"],c:0}
 ],
 crypto:[
 {q:"Who created Bitcoin?",a:["Satoshi Nakamoto","Vitalik Buterin","Charlie Lee","Elon Musk"],c:0},
@@ -171,7 +180,10 @@ crypto:[
 {q:"What is a 'rug pull' in crypto?",a:["Developers abandoning a project after taking funds","A mining technique","A type of smart contract","A wallet recovery method"],c:0},
 {q:"What does TVL stand for in DeFi?",a:["Total Value Locked","Token Verification Layer","Transaction Validation Logic","Transfer Volume Limit"],c:0},
 {q:"What is a DEX?",a:["Decentralized Exchange","Digital Export","Data Encryption Extension","Distributed Execution"],c:0},
-{q:"What is 'staking' in crypto?",a:["Locking tokens to earn rewards and secure the network","Selling tokens quickly","Mining with specialized hardware","Creating new tokens"],c:0}
+{q:"What is 'staking' in crypto?",a:["Locking tokens to earn rewards and secure the network","Selling tokens quickly","Mining with specialized hardware","Creating new tokens"],c:0},
+{q:"What is a 'whale' in crypto?",a:["A holder of large amounts of cryptocurrency","A type of trading bot","A blockchain protocol","A mining pool"],c:0},
+{q:"What does 'DYOR' mean?",a:["Do Your Own Research","Deliver Your Own Returns","Digital Yield On Reserve","Don't Yield On Resistance"],c:0},
+{q:"What is a Layer 2 solution?",a:["A protocol built on top of a blockchain to improve scalability","A second blockchain","A type of wallet","A mining technique"],c:0}
 ],
 history:[
 {q:"In what year was the first iPhone released?",a:["2007","2005","2009","2010"],c:0},
@@ -185,7 +197,10 @@ history:[
 {q:"What year did Wikipedia launch?",a:["2001","1999","2003","2005"],c:0},
 {q:"Who is known as the 'father of computer science'?",a:["Alan Turing","Charles Babbage","John von Neumann","Ada Lovelace"],c:0},
 {q:"What was IBM's first personal computer released in?",a:["1981","1977","1984","1990"],c:0},
-{q:"Which company created the first search engine?",a:["Archie (McGill University)","Google","Yahoo","AltaVista"],c:0}
+{q:"Which company created the first search engine?",a:["Archie (McGill University)","Google","Yahoo","AltaVista"],c:0},
+{q:"What year was Python first released?",a:["1991","1995","1989","2000"],c:0},
+{q:"Which company built the first transistor?",a:["Bell Labs","IBM","Intel","Fairchild"],c:0},
+{q:"When did Spotify launch?",a:["2008","2006","2010","2012"],c:0}
 ],
 security:[
 {q:"What does VPN stand for?",a:["Virtual Private Network","Very Protected Network","Validated Public Node","Virtual Processing Network"],c:0},
@@ -199,7 +214,9 @@ security:[
 {q:"What does HTTPS guarantee?",a:["Encrypted connection between browser and server","The website is safe","No malware on the site","Fast loading speed"],c:0},
 {q:"What is social engineering in security?",a:["Manipulating people to reveal information","Building social networks","Engineering social media algorithms","Creating fake websites"],c:0},
 {q:"What is a 'man-in-the-middle' attack?",a:["Intercepting communication between two parties","A physical break-in","A brute force attack","A DNS poisoning"],c:0},
-{q:"What tool is commonly used for penetration testing?",a:["Metasploit","Photoshop","Excel","Slack"],c:0}
+{q:"What tool is commonly used for penetration testing?",a:["Metasploit","Photoshop","Excel","Slack"],c:0},
+{q:"What is a 'honeypot' in cybersecurity?",a:["A decoy system to attract attackers","A type of malware","An encryption method","A firewall configuration"],c:0},
+{q:"What does XSS stand for?",a:["Cross-Site Scripting","Extra Secure Socket","XML Schema Standard","Cross-System Security"],c:0}
 ]
 };
 
@@ -391,6 +408,14 @@ tg.MainButton.text='Challenge a Friend';
 tg.MainButton.show();
 tg.MainButton.onClick(()=>challengeFriend());
 }
+}
+
+function saveToLeaderboard(){
+if(!tg||!tg.sendData){alert('Open via Telegram to save scores!');return}
+const btn=document.getElementById('save-score-btn');
+btn.textContent='✅ Saving...';
+btn.style.pointerEvents='none';
+tg.sendData(JSON.stringify({action:'quiz_score',score:state.score,correct:state.correct,total:state.questions.length,bestStreak:state.bestStreak,category:state.category}));
 }
 
 function challengeFriend(){

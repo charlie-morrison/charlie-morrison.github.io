@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Follow-Up Email Generator - Free Tool | Charlie Morrison</title>
+    <meta name="description" content="Generate professional interview follow-up and thank-you emails in seconds. Free, runs in your browser, no data collected.">
+    <link rel="canonical" href="https://charliemorrison.dev/follow-up-email">
+    <meta property="og:title" content="Free Interview Follow-Up Email Generator">
+    <meta property="og:description" content="Generate professional follow-up emails after job interviews. Runs in your browser.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://charliemorrison.dev/follow-up-email">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Interview Follow-Up Email Generator",
+        "description": "Generate professional interview follow-up and thank-you emails",
+        "url": "https://charliemorrison.dev/follow-up-email",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Charlie Morrison", "url": "https://charliemorrison.dev" }
+    }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f0f23; color: #e0e0e0; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { font-size: 1.8em; margin-bottom: 8px; background: linear-gradient(135deg, #4ecdc4, #44a08d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: #888; margin-bottom: 30px; font-size: 0.95em; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; color: #ccc; font-size: 0.9em; }
+        input, select, textarea { width: 100%; padding: 12px; background: #1a1a2e; border: 1px solid #333; border-radius: 8px; color: #e0e0e0; font-size: 1em; font-family: inherit; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #4ecdc4; }
+        select { cursor: pointer; }
+        textarea { resize: vertical; min-height: 80px; }
+        .row { display: flex; gap: 16px; }
+        .row .form-group { flex: 1; }
+        button.generate { width: 100%; padding: 14px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border: none; border-radius: 8px; color: #fff; font-size: 1.05em; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        button.generate:hover { opacity: 0.9; }
+        .results { display: none; margin-top: 30px; }
+        .email-card { background: #1a1a2e; border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; position: relative; }
+        .email-card h3 { color: #4ecdc4; margin-bottom: 4px; font-size: 1.1em; }
+        .email-label { color: #888; font-size: 0.8em; margin-bottom: 12px; }
+        .email-subject { background: #16162b; padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; font-size: 0.92em; }
+        .email-subject strong { color: #4ecdc4; }
+        .email-text { white-space: pre-wrap; font-size: 0.92em; line-height: 1.7; color: #d0d0d0; }
+        .copy-btn { position: absolute; top: 16px; right: 16px; background: #333; border: 1px solid #555; border-radius: 6px; color: #ccc; padding: 6px 14px; cursor: pointer; font-size: 0.85em; }
+        .copy-btn:hover { background: #444; }
+        .copy-btn.copied { background: #2d6a4f; color: #fff; border-color: #2d6a4f; }
+        .tips { background: #1a1a2e; border-left: 3px solid #4ecdc4; padding: 16px 20px; border-radius: 0 8px 8px 0; margin-top: 20px; }
+        .tips h3 { color: #4ecdc4; margin-bottom: 8px; }
+        .tips ul { padding-left: 20px; }
+        .tips li { margin-bottom: 6px; color: #aaa; font-size: 0.9em; }
+        .cta { text-align: center; margin-top: 30px; padding: 20px; background: #1a1a2e; border-radius: 12px; }
+        .cta a { color: #4ecdc4; text-decoration: none; font-weight: 600; }
+        .cta a:hover { text-decoration: underline; }
+        .cta p { color: #888; font-size: 0.9em; margin-top: 8px; }
+        .nav { margin-bottom: 20px; }
+        .nav a { color: #4ecdc4; text-decoration: none; font-size: 0.9em; }
+        .badge { display: inline-block; background: #2d6a4f; color: #fff; font-size: 0.75em; padding: 2px 8px; border-radius: 4px; margin-left: 8px; }
+        .tools-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        .tools-links a { background: #1a1a2e; border: 1px solid #333; padding: 6px 14px; border-radius: 6px; color: #ccc; font-size: 0.85em; text-decoration: none; }
+        .tools-links a:hover { border-color: #4ecdc4; color: #4ecdc4; }
+        @media (max-width: 600px) { .row { flex-direction: column; gap: 0; } h1 { font-size: 1.4em; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav"><a href="/">← All Tools</a></div>
+    <h1>Interview Follow-Up Email Generator</h1>
+    <p class="subtitle">Generate a professional thank-you or follow-up email after your interview. Free, private, runs entirely in your browser.</p>
+
+    <div class="form-group">
+        <label>Email Type</label>
+        <select id="emailType">
+            <option value="thankyou">Thank-You After Interview</option>
+            <option value="followup">Follow-Up (No Response Yet)</option>
+            <option value="second">After Second/Final Round</option>
+            <option value="rejection">After Rejection (Stay Connected)</option>
+            <option value="withdraw">Withdrawing Application</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" id="yourName" placeholder="Alex Chen">
+        </div>
+        <div class="form-group">
+            <label>Interviewer's Name</label>
+            <input type="text" id="interviewerName" placeholder="Sarah Johnson">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <label>Company</label>
+            <input type="text" id="company" placeholder="Acme Corp">
+        </div>
+        <div class="form-group">
+            <label>Position</label>
+            <input type="text" id="position" placeholder="Software Engineer">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Tone</label>
+        <select id="tone">
+            <option value="professional">Professional</option>
+            <option value="warm">Warm & Personable</option>
+            <option value="enthusiastic">Enthusiastic</option>
+            <option value="concise">Short & Direct</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Something specific from the interview (optional — makes it personal)</label>
+        <textarea id="detail" placeholder="e.g., We discussed the migration to microservices, The team culture around code reviews, The new product launch in Q3"></textarea>
+    </div>
+
+    <button class="generate" onclick="generate()">Generate Email</button>
+
+    <div class="results" id="results"></div>
+
+    <div class="tips">
+        <h3>Follow-Up Email Tips</h3>
+        <ul>
+            <li>Send your thank-you email within 24 hours of the interview</li>
+            <li>Reference something specific you discussed — it shows you were engaged</li>
+            <li>Keep it under 200 words. Interviewers are busy</li>
+            <li>If following up on a decision, wait at least 5-7 business days</li>
+            <li>Proofread twice. Typos in a follow-up email are worse than no email</li>
+            <li>Don't copy-paste a template verbatim — adjust the details to sound like you</li>
+        </ul>
+    </div>
+
+    <div class="cta">
+        <p>Need more help with your job search?</p>
+        <a href="https://charliemorrison.lemonsqueezy.com/buy/f5b0d9db-7d2d-42ca-b1a6-e5cdd92a2c7f">Job Search AI Toolkit — $12</a>
+        <p>50+ prompts for resumes, interviews, networking, and salary negotiation</p>
+        <div class="tools-links" style="justify-content: center; margin-top: 16px;">
+            <a href="/resume-checker">ATS Checker</a>
+            <a href="/linkedin-headline">LinkedIn Headlines</a>
+            <a href="/cover-letter">Cover Letters</a>
+            <a href="/salary-negotiation">Salary Scripts</a>
+        </div>
+    </div>
+</div>
+
+<script>
+const templates = {
+    thankyou: {
+        professional: [
+            {
+                subject: "Thank you for the {position} interview",
+                body: `Dear {interviewer},
+
+Thank you for taking the time to meet with me today about the {position} role at {company}. I appreciated learning more about the team and the work you're doing.{detail_line}
+
+The position aligns well with my background, and I'm confident I could contribute meaningfully to your team. I'm particularly drawn to the way {company} approaches its work, and our conversation reinforced my interest in joining.
+
+Please don't hesitate to reach out if you need any additional information from me. I look forward to hearing about next steps.
+
+Best regards,
+{name}`
+            },
+            {
+                subject: "Great meeting you — {position} at {company}",
+                body: `Hi {interviewer},
+
+I wanted to reach out and thank you for the conversation today about the {position} position. I enjoyed learning about {company}'s direction and how this role fits into the bigger picture.{detail_line}
+
+After our discussion, I'm even more excited about the opportunity. The challenges you described are exactly the kind of problems I enjoy solving, and I believe my experience would be a strong fit.
+
+If there's anything else you'd like to know, I'm happy to provide it. Looking forward to the next step.
+
+Thanks again,
+{name}`
+            }
+        ],
+        warm: [
+            {
+                subject: "Enjoyed our conversation — {position} at {company}",
+                body: `Hi {interviewer},
+
+I really enjoyed our conversation today. It's not every day you walk out of an interview feeling more excited about the role than when you walked in — but that's exactly what happened.{detail_line}
+
+What stood out to me most was the team dynamic at {company}. The way you described how the group collaborates tells me this is a place where people genuinely enjoy what they do. That matters a lot to me.
+
+I'd love the chance to be part of it. Please let me know if there's anything else I can share.
+
+Warm regards,
+{name}`
+            },
+            {
+                subject: "Thank you for today, {interviewer}",
+                body: `Hi {interviewer},
+
+Thank you for making today's interview feel less like an interrogation and more like an actual conversation. I walked away with a much clearer picture of what the {position} role involves, and I like what I see.{detail_line}
+
+I could genuinely see myself contributing to what {company} is building. If there's anything else you'd like to discuss or any materials I can send over, just say the word.
+
+Hope to talk again soon,
+{name}`
+            }
+        ],
+        enthusiastic: [
+            {
+                subject: "Excited about the {position} opportunity!",
+                body: `Hi {interviewer},
+
+I just wanted to say — I left our interview today feeling genuinely fired up about the {position} role. The problems {company} is tackling are exactly the kind of work I want to be doing.{detail_line}
+
+I spent the bus ride home already thinking about how I'd approach some of the challenges we discussed. That's usually a good sign that it's the right fit.
+
+I'd love to continue the conversation. Let me know what comes next — I'm ready.
+
+Thanks so much,
+{name}`
+            },
+            {
+                subject: "Thank you! Loved learning about {company}",
+                body: `Hi {interviewer},
+
+Thank you for a great conversation today. Honestly, I walked in interested and walked out sold. The {position} role at {company} is exactly the kind of opportunity I've been looking for.{detail_line}
+
+I can already picture how my skills would fit in, and I'm excited about the possibility of contributing to what you're building. Whatever the next step is, count me in.
+
+Best,
+{name}`
+            }
+        ],
+        concise: [
+            {
+                subject: "Thank you — {position} interview",
+                body: `Hi {interviewer},
+
+Thanks for your time today discussing the {position} role.{detail_line}
+
+I'm very interested in the position and confident I'd be a strong addition to {company}. Happy to provide any additional information you need.
+
+Best,
+{name}`
+            },
+            {
+                subject: "Following up — {position} at {company}",
+                body: `Hi {interviewer},
+
+Appreciate the time today. The {position} role sounds like a great fit for my background.{detail_line}
+
+Looking forward to next steps.
+
+Thanks,
+{name}`
+            }
+        ]
+    },
+    followup: {
+        professional: [
+            {
+                subject: "Following up on {position} application — {company}",
+                body: `Dear {interviewer},
+
+I hope this message finds you well. I wanted to follow up on our conversation about the {position} role at {company}. I understand these decisions take time, and I wanted to reiterate my strong interest in the position.{detail_line}
+
+If there are any updates on the timeline or if you need additional information from my end, I'm happy to assist. I remain very enthusiastic about the opportunity to join {company}.
+
+Thank you for your consideration.
+
+Best regards,
+{name}`
+            }
+        ],
+        warm: [
+            {
+                subject: "Checking in — {position} at {company}",
+                body: `Hi {interviewer},
+
+I hope you're doing well! I wanted to check in about the {position} role we discussed. I know hiring decisions involve a lot of moving parts, so no rush at all — just wanted to confirm I'm still very much interested.{detail_line}
+
+If the timeline has shifted or if there's anything I can do on my end, please let me know. I've been thinking about our conversation and I'm still excited about the possibility.
+
+Thanks for keeping me in the loop,
+{name}`
+            }
+        ],
+        enthusiastic: [
+            {
+                subject: "Still excited about {position} at {company}!",
+                body: `Hi {interviewer},
+
+Just wanted to touch base about the {position} role. I've been thinking about our conversation a lot, and my enthusiasm hasn't faded one bit.{detail_line}
+
+I know these things take time, but I wanted to make sure you know I'm still very much interested. If there's anything else I can provide or any way I can make your decision easier, I'm all ears.
+
+Hope to hear from you soon!
+
+Best,
+{name}`
+            }
+        ],
+        concise: [
+            {
+                subject: "Following up — {position}",
+                body: `Hi {interviewer},
+
+Checking in on the {position} role at {company}. Still very interested and available to provide any additional information.
+
+Thanks,
+{name}`
+            }
+        ]
+    },
+    second: {
+        professional: [
+            {
+                subject: "Thank you for the final round — {position} at {company}",
+                body: `Dear {interviewer},
+
+Thank you for including me in the final round of interviews for the {position} position. Meeting the broader team gave me an even stronger sense of {company}'s culture and goals.{detail_line}
+
+After going through the full process, I'm more convinced than ever that this role is the right fit. My skills and experience align closely with what you're looking for, and I'm ready to hit the ground running.
+
+I appreciate the time everyone invested in this process. Please don't hesitate to reach out if you need anything else from me.
+
+Best regards,
+{name}`
+            }
+        ],
+        warm: [
+            {
+                subject: "Grateful for the opportunity — {position}",
+                body: `Hi {interviewer},
+
+Thank you for bringing me back for the final round. Meeting more of the team at {company} only made me more excited about the {position} role.{detail_line}
+
+It's clear that this is a team that cares about doing good work, and I'd be proud to be part of it. Whatever you decide, I appreciate the chance to have been considered.
+
+Looking forward to hearing from you,
+{name}`
+            }
+        ],
+        enthusiastic: [
+            {
+                subject: "Loved meeting the full team at {company}!",
+                body: `Hi {interviewer},
+
+What a great final round. Meeting the rest of the team at {company} honestly made me want this role even more.{detail_line}
+
+Every conversation I had reinforced that this is the right fit — the problems are interesting, the people are sharp, and the culture feels right. I'm genuinely excited about the possibility.
+
+Whatever comes next, thank you for a great process.
+
+Best,
+{name}`
+            }
+        ],
+        concise: [
+            {
+                subject: "Thank you — final interview for {position}",
+                body: `Hi {interviewer},
+
+Thanks for the final round today. Meeting the full team confirmed my interest in the {position} role.{detail_line}
+
+Ready to move forward whenever you are.
+
+Best,
+{name}`
+            }
+        ]
+    },
+    rejection: {
+        professional: [
+            {
+                subject: "Thank you for considering me — {position}",
+                body: `Dear {interviewer},
+
+Thank you for letting me know about the decision on the {position} role. While I'm disappointed, I understand and respect the process.
+
+I genuinely enjoyed learning about {company} and meeting the team.{detail_line} If a similar opportunity opens up in the future, I'd welcome the chance to be considered again.
+
+I'd also appreciate staying connected on LinkedIn if you're open to it. Wishing you and the team all the best.
+
+Best regards,
+{name}`
+            }
+        ],
+        warm: [
+            {
+                subject: "Appreciate the update — {company}",
+                body: `Hi {interviewer},
+
+Thanks for letting me know. I won't pretend I'm not a bit bummed — I was really excited about the {position} role. But I get it, and I appreciate you taking the time to tell me directly.{detail_line}
+
+If something else opens up down the road that might be a fit, I'd love to hear about it. And I'd be happy to stay in touch regardless — I enjoyed our conversations.
+
+All the best to you and the team,
+{name}`
+            }
+        ],
+        enthusiastic: [
+            {
+                subject: "Thank you — and best of luck!",
+                body: `Hi {interviewer},
+
+Thanks for the update. I'm disappointed, but I'm genuinely glad I got to learn about what {company} is building. It's exciting work, and whoever you went with is lucky.{detail_line}
+
+If things change or another role opens up, you know where to find me. I'd jump at the chance.
+
+Wishing the team nothing but success,
+{name}`
+            }
+        ],
+        concise: [
+            {
+                subject: "Thank you — {position} at {company}",
+                body: `Hi {interviewer},
+
+Thank you for letting me know. I appreciate the opportunity and enjoyed the process.{detail_line}
+
+If anything changes in the future, I'd be glad to reconnect.
+
+Best,
+{name}`
+            }
+        ]
+    },
+    withdraw: {
+        professional: [
+            {
+                subject: "Withdrawing my application — {position}",
+                body: `Dear {interviewer},
+
+I wanted to reach out personally to let you know that I've decided to withdraw my application for the {position} role at {company}. This was not an easy decision — I have a lot of respect for {company} and enjoyed our conversations.
+
+After careful consideration, I've accepted another opportunity that aligns more closely with my current goals. I hope this doesn't cause any inconvenience, and I'm sorry for any disruption to your process.
+
+I'd love to stay in touch, and I hope our paths cross again in the future. Thank you for the time and consideration you've given me.
+
+Best regards,
+{name}`
+            }
+        ],
+        warm: [
+            {
+                subject: "Tough decision — stepping away from {position}",
+                body: `Hi {interviewer},
+
+This is a hard email to write because I genuinely enjoyed going through the process with {company}. But I've decided to move in a different direction and need to withdraw from the {position} role.
+
+I want you to know it's not a reflection of {company} — your team and mission made a real impression on me. Sometimes timing just doesn't line up.
+
+I hope we can stay connected. If our paths cross again, I'd be glad to pick the conversation back up.
+
+All the best,
+{name}`
+            }
+        ],
+        enthusiastic: [
+            {
+                subject: "Stepping back (for now) — {position}",
+                body: `Hi {interviewer},
+
+I have some bittersweet news. I've decided to accept another opportunity, which means I need to withdraw from the {position} process at {company}.
+
+I want to be upfront: I loved everything I learned about {company}. The role sounded amazing, and the team was great. But the other offer just turned out to be the better fit for where I am right now.
+
+I really hope this isn't the last we talk. If something comes up in the future, I'd be first in line.
+
+Thanks for everything,
+{name}`
+            }
+        ],
+        concise: [
+            {
+                subject: "Withdrawing from {position} process",
+                body: `Hi {interviewer},
+
+I'm writing to withdraw my application for the {position} role at {company}. I've accepted another opportunity.
+
+Thank you for your time and consideration. I hope to stay connected.
+
+Best,
+{name}`
+            }
+        ]
+    }
+};
+
+function generate() {
+    const type = document.getElementById('emailType').value;
+    const name = document.getElementById('yourName').value.trim() || 'Your Name';
+    const interviewer = document.getElementById('interviewerName').value.trim() || 'Interviewer';
+    const company = document.getElementById('company').value.trim() || 'the company';
+    const position = document.getElementById('position').value.trim() || 'the position';
+    const tone = document.getElementById('tone').value;
+    const detail = document.getElementById('detail').value.trim();
+
+    const pool = templates[type][tone] || templates[type].professional;
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '';
+
+    const detailLine = detail ? `\n\n${getDetailTransition(type)} ${detail}.` : '';
+
+    pool.forEach((tmpl, i) => {
+        const subject = tmpl.subject
+            .replace(/{position}/g, position)
+            .replace(/{company}/g, company)
+            .replace(/{interviewer}/g, interviewer)
+            .replace(/{name}/g, name);
+
+        const body = tmpl.body
+            .replace(/{position}/g, position)
+            .replace(/{company}/g, company)
+            .replace(/{interviewer}/g, interviewer)
+            .replace(/{name}/g, name)
+            .replace(/{detail_line}/g, detailLine);
+
+        const card = document.createElement('div');
+        card.className = 'email-card';
+        card.innerHTML = `
+            <h3>Version ${i + 1}</h3>
+            <p class="email-label">${getTypeLabel(type)} · ${getToneLabel(tone)}</p>
+            <div class="email-subject"><strong>Subject:</strong> ${escapeHtml(subject)}</div>
+            <div class="email-text">${escapeHtml(body)}</div>
+            <button class="copy-btn" onclick="copyEmail(this, '${escapeForAttr(subject)}')">Copy</button>
+        `;
+        resultsDiv.appendChild(card);
+    });
+
+    resultsDiv.style.display = 'block';
+    resultsDiv.scrollIntoView({ behavior: 'smooth' });
+}
+
+function getDetailTransition(type) {
+    const transitions = {
+        thankyou: "I especially enjoyed discussing",
+        followup: "I've been reflecting on our discussion about",
+        second: "Across the interviews, I was particularly interested in",
+        rejection: "I especially valued our discussion about",
+        withdraw: "I particularly enjoyed learning about"
+    };
+    return transitions[type] || "I particularly appreciated discussing";
+}
+
+function getTypeLabel(type) {
+    return { thankyou: 'Thank-You', followup: 'Follow-Up', second: 'Final Round', rejection: 'Post-Rejection', withdraw: 'Withdrawal' }[type] || type;
+}
+
+function getToneLabel(tone) {
+    return { professional: 'Professional', warm: 'Warm', enthusiastic: 'Enthusiastic', concise: 'Concise' }[tone] || tone;
+}
+
+function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function escapeForAttr(str) {
+    return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+function copyEmail(btn, subject) {
+    const card = btn.closest('.email-card');
+    const body = card.querySelector('.email-text').innerText;
+    const full = `Subject: ${subject}\n\n${body}`;
+    navigator.clipboard.writeText(full).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+}
+</script>
+</body>
+</html>

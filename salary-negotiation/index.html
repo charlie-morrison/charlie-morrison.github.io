@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Salary Negotiation Script Generator - Free Tool | Charlie Morrison</title>
+    <meta name="description" content="Generate personalized salary negotiation scripts for job offers, raises, and promotions. Free, runs in your browser, no data collected.">
+    <link rel="canonical" href="https://charliemorrison.dev/salary-negotiation">
+    <meta property="og:title" content="Free Salary Negotiation Script Generator">
+    <meta property="og:description" content="Generate personalized negotiation scripts for job offers, raises, and promotions. Runs in your browser.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://charliemorrison.dev/salary-negotiation">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Salary Negotiation Script Generator",
+        "description": "Generate personalized salary negotiation scripts for job offers, raises, and promotions",
+        "url": "https://charliemorrison.dev/salary-negotiation",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Charlie Morrison", "url": "https://charliemorrison.dev" }
+    }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f0f23; color: #e0e0e0; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { font-size: 1.8em; margin-bottom: 8px; background: linear-gradient(135deg, #4ecdc4, #44a08d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: #888; margin-bottom: 30px; font-size: 0.95em; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; color: #ccc; font-size: 0.9em; }
+        input, select, textarea { width: 100%; padding: 12px; background: #1a1a2e; border: 1px solid #333; border-radius: 8px; color: #e0e0e0; font-size: 1em; font-family: inherit; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #4ecdc4; }
+        select { cursor: pointer; }
+        .row { display: flex; gap: 16px; }
+        .row .form-group { flex: 1; }
+        button.generate { width: 100%; padding: 14px; background: linear-gradient(135deg, #4ecdc4, #44a08d); border: none; border-radius: 8px; color: #fff; font-size: 1.05em; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        button.generate:hover { opacity: 0.9; }
+        .results { display: none; margin-top: 30px; }
+        .script-card { background: #1a1a2e; border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; position: relative; }
+        .script-card h3 { color: #4ecdc4; margin-bottom: 12px; font-size: 1.1em; }
+        .script-text { white-space: pre-wrap; font-size: 0.92em; line-height: 1.7; color: #d0d0d0; }
+        .script-text .highlight { color: #4ecdc4; font-weight: 600; }
+        .copy-btn { position: absolute; top: 16px; right: 16px; background: #333; border: 1px solid #555; border-radius: 6px; color: #ccc; padding: 6px 14px; cursor: pointer; font-size: 0.85em; }
+        .copy-btn:hover { background: #444; }
+        .copy-btn.copied { background: #2d6a4f; color: #fff; border-color: #2d6a4f; }
+        .tips { background: #1a1a2e; border-left: 3px solid #4ecdc4; padding: 16px 20px; border-radius: 0 8px 8px 0; margin-top: 20px; }
+        .tips h3 { color: #4ecdc4; margin-bottom: 8px; }
+        .tips ul { padding-left: 20px; }
+        .tips li { margin-bottom: 6px; color: #aaa; font-size: 0.9em; }
+        .cta { text-align: center; margin-top: 30px; padding: 20px; background: #1a1a2e; border-radius: 12px; }
+        .cta a { color: #4ecdc4; text-decoration: none; font-weight: 600; }
+        .cta a:hover { text-decoration: underline; }
+        .cta p { color: #888; font-size: 0.9em; margin-top: 8px; }
+        .nav { margin-bottom: 20px; }
+        .nav a { color: #4ecdc4; text-decoration: none; font-size: 0.9em; }
+        .badge { display: inline-block; background: #2d6a4f; color: #fff; font-size: 0.75em; padding: 2px 8px; border-radius: 4px; margin-left: 8px; }
+        @media (max-width: 600px) { .row { flex-direction: column; gap: 0; } h1 { font-size: 1.4em; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav"><a href="/">&larr; Charlie Morrison</a></nav>
+        <h1>Salary Negotiation Script Generator</h1>
+        <p class="subtitle">Generate ready-to-use negotiation scripts. Everything runs in your browser &mdash; nothing is sent anywhere.</p>
+
+        <div class="form-group">
+            <label>Scenario</label>
+            <select id="scenario">
+                <option value="new_offer">Negotiating a new job offer</option>
+                <option value="raise">Asking for a raise at current job</option>
+                <option value="promotion">Negotiating a promotion</option>
+                <option value="counter">Countering a lowball offer</option>
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label>Your Role / Title</label>
+                <input type="text" id="role" placeholder="e.g. Senior Software Engineer">
+            </div>
+            <div class="form-group">
+                <label>Industry</label>
+                <input type="text" id="industry" placeholder="e.g. Tech, Finance, Healthcare">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label>Their Offer / Current Salary</label>
+                <input type="text" id="currentSalary" placeholder="e.g. $85,000">
+            </div>
+            <div class="form-group">
+                <label>Your Target Salary</label>
+                <input type="text" id="targetSalary" placeholder="e.g. $105,000">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Your Key Strengths (1-3 bullet points)</label>
+            <textarea id="strengths" rows="3" placeholder="e.g. Led migration to microservices, saving $200K/year in infra costs&#10;Mentored 4 junior developers who all got promoted&#10;Built the real-time analytics pipeline handling 5M events/day"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Years of Experience</label>
+            <input type="number" id="experience" placeholder="e.g. 7" min="0" max="50">
+        </div>
+
+        <div class="form-group">
+            <label>Tone</label>
+            <select id="tone">
+                <option value="confident">Confident & Direct</option>
+                <option value="collaborative">Collaborative & Warm</option>
+                <option value="data">Data-Driven & Analytical</option>
+                <option value="humble">Humble but Firm</option>
+            </select>
+        </div>
+
+        <button class="generate" onclick="generateScripts()">Generate Negotiation Scripts</button>
+
+        <div class="results" id="results"></div>
+    </div>
+
+<script>
+const TEMPLATES = {
+    new_offer: {
+        confident: [
+            "Thank you for the offer of {current} for the {role} position. I'm genuinely excited about joining the team.\n\nAfter researching market rates for {role} roles in {industry} and considering my {exp} years of experience, I believe a salary of {target} better reflects the value I'd bring.\n\nSpecifically:\n{strengths_formatted}\n\nI'm not trying to play hardball here. I want to start this role feeling valued and fully committed. Would {target} work on your end?",
+            "I appreciate the offer of {current}. I've been thinking about this carefully.\n\nBased on what {role} positions pay in {industry} right now, and given what I bring to the table — {exp} years of hands-on experience, plus results like:\n{strengths_formatted}\n\n— I'd like to propose {target}. That number reflects both the market rate and the impact I expect to have in this role.\n\nI'm flexible on other parts of the package if that helps. What are your thoughts?"
+        ],
+        collaborative: [
+            "Thanks so much for the offer — I really enjoyed the interview process and I'm looking forward to contributing to the team.\n\nI want to be upfront: the offer of {current} is a bit below what I was expecting based on my research into {role} compensation in {industry}. With {exp} years of experience and a track record that includes:\n{strengths_formatted}\n\nI was hoping we could land closer to {target}. I want us both to feel good about this — is there room to discuss?",
+            "I'm thrilled about this opportunity and grateful for the offer of {current}.\n\nBefore I sign, I wanted to have an honest conversation about compensation. I've done my homework on {role} salaries in {industry}, and with my background — {exp} years plus achievements like:\n{strengths_formatted}\n\n— I think {target} would be a fair number. I'm open to discussing how we get there, whether that's base salary, bonus structure, or other benefits."
+        ],
+        data: [
+            "Thank you for the offer. I'd like to discuss the compensation component.\n\nI've researched {role} compensation in {industry} across multiple sources. The market range for someone with {exp} years of experience and my skillset is typically 15-25% above the current offer of {current}.\n\nMy target of {target} is based on:\n• Market data for comparable {role} positions\n• My quantifiable contributions:\n{strengths_formatted}\n\nI believe this adjustment is well-supported by the data. Can we discuss?",
+            "I appreciate the offer of {current} for the {role} position. I've put together some data points I'd like to share.\n\nCompensation benchmarks for {role} in {industry} with {exp}+ years of experience consistently show a range that places {target} at the median. My specific results strengthen this case:\n{strengths_formatted}\n\nI'd rather ground this conversation in numbers than feelings. Does the data I'm citing align with what you're seeing internally?"
+        ],
+        humble: [
+            "Thank you for this offer — it means a lot, and I'm genuinely excited about the role.\n\nI want to be respectful of your budget, and I also want to be honest. The offer of {current} is below what I've seen for {role} positions in {industry}, especially for someone with {exp} years of experience.\n\nI don't say that lightly. My track record speaks for itself:\n{strengths_formatted}\n\nWould it be possible to move closer to {target}? I'm committed to this role either way, but I want to make sure the compensation reflects the value I'll deliver.",
+            "First — thank you. I'm grateful for the offer and excited about the {role} position.\n\nI've given the compensation a lot of thought. With {exp} years in {industry} and contributions like:\n{strengths_formatted}\n\nI was hoping we could discuss moving the salary to {target}. I understand there are constraints, and I'm open to creative solutions — signing bonus, accelerated review, equity adjustments. What works best on your end?"
+        ]
+    },
+    raise: {
+        confident: [
+            "I'd like to talk about my compensation. I've been in this {role} position for a while now, and I think my contributions warrant a discussion.\n\nMy current salary is {current}. Based on my {exp} years of experience, current market rates for {role} in {industry}, and the results I've delivered:\n{strengths_formatted}\n\nI'm requesting an adjustment to {target}. This reflects both my market value and the impact I've had on the team. When can we discuss this?",
+            "I want to have a direct conversation about my pay. I'm currently at {current}, and I believe I've earned an increase to {target}.\n\nHere's why:\n{strengths_formatted}\n\nThese aren't hypothetical contributions — they're measurable results from the past year. Combined with {exp} years of experience and what the market pays for {role} in {industry}, I think {target} is fair. What do you think?"
+        ],
+        collaborative: [
+            "I've been thinking about my growth here, and I'd love to discuss my compensation as part of that conversation.\n\nI'm currently at {current}. Over the past year, I've taken on more responsibility and delivered some results I'm proud of:\n{strengths_formatted}\n\nWith {exp} years in {industry} and the current market for {role} positions, I'd like to discuss moving to {target}. I value this team and want to keep growing here — I just want to make sure my compensation keeps pace with my contributions.",
+            "Thanks for making time for this. I want to talk about where I'm at and where I'd like to be.\n\nMy salary is {current}. I've been contributing at a level that I think goes beyond my current title, with results like:\n{strengths_formatted}\n\nI've looked at what {role} positions in {industry} are paying for someone with {exp} years of experience, and {target} is in line with that. Can we work together on getting there?"
+        ],
+        data: [
+            "I'd like to present a case for a salary adjustment.\n\nCurrent: {current}\nProposed: {target}\nBasis: market rate for {role} in {industry}, {exp} years experience\n\nKey performance data:\n{strengths_formatted}\n\nThe gap between my current compensation and the market rate for this role has widened. I've documented my contributions above with specific metrics. I'd like to close that gap. What's the process for making this happen?",
+            "I've prepared a compensation review request. My current salary of {current} is below market for a {role} with {exp} years of experience in {industry}.\n\nHere's the case:\n{strengths_formatted}\n\nBased on salary data from multiple sources, {target} represents fair market compensation for my experience level and output. I'd like to discuss the timeline for this adjustment."
+        ],
+        humble: [
+            "I hope this is a good time to bring up compensation. I've been going back and forth about whether to ask, but I think it's important to be honest.\n\nI'm currently at {current}. I've worked hard this past year, and I think the results show:\n{strengths_formatted}\n\nWith {exp} years in the field and what I'm seeing {role} positions pay in {industry}, I'd like to request an increase to {target}. I know budgets are tight — I just want to make sure my pay reflects the work I'm doing.",
+            "I want to bring up something that's been on my mind. I really value this team and the work we're doing, which is why I want to have this conversation rather than just quietly looking elsewhere.\n\nMy current salary is {current}. Market rates for {role} in {industry} with {exp} years of experience suggest {target} is reasonable, and my recent contributions support that:\n{strengths_formatted}\n\nI'm not issuing an ultimatum. I just want to make sure we're aligned on my value here."
+        ]
+    },
+    promotion: {
+        confident: [
+            "I'd like to formally discuss a promotion. I've been operating above my current {role} level, and I believe it's time to make that official.\n\nI'm currently at {current}. For the next level in {industry}, with {exp} years of experience and the scope of work I've been handling:\n{strengths_formatted}\n\nI'm proposing {target} to match the responsibilities I've already taken on. When can we discuss the path forward?",
+            "Let's talk about my trajectory here. I've been doing the work of a more senior {role} for several months now, and I think it's time to formalize that.\n\nThe contributions speak for themselves:\n{strengths_formatted}\n\nWith {exp} years of experience in {industry}, I'm ready for the next level — and I'd like the compensation to reflect that, moving from {current} to {target}. What does the timeline look like?"
+        ],
+        collaborative: [
+            "I've been thinking about my career path here and wanted to share where I see myself growing.\n\nOver the past year, I've been taking on work that goes beyond my current {role} scope:\n{strengths_formatted}\n\nWith {exp} years in {industry}, I feel ready for the next step. I'd love to discuss what a promotion looks like — including moving compensation from {current} to {target}. What are your thoughts on timing and what else I might need to demonstrate?",
+            "I'd love to talk about my growth path. I've been in the {role} position for a while and have been consistently delivering above expectations:\n{strengths_formatted}\n\nI'm at {current} now. With {exp} years in {industry} and the scope I've been handling, I believe {target} at the next level is appropriate. I'd value your input on the best path to get there."
+        ],
+        data: [
+            "I'd like to propose a promotion based on the following:\n\nCurrent level: {role} at {current}\nProposed: Next level at {target}\nExperience: {exp} years in {industry}\n\nEvidence of operating at the next level:\n{strengths_formatted}\n\nI've been delivering at this level consistently. The title and compensation should catch up to the output. Can we discuss the formal process?",
+            "Here's my case for promotion. I've been tracking my contributions for the past year to make this conversation data-driven:\n{strengths_formatted}\n\nThese results exceed {role}-level expectations. At {exp} years in {industry}, peers at the next level in comparable companies earn around {target}. I'm currently at {current}. I'd like to discuss aligning my level and compensation with my actual output."
+        ],
+        humble: [
+            "I've been giving this a lot of thought, and I'd like to talk about the possibility of a promotion.\n\nI've been in the {role} position for a while, and I think my recent work shows I'm ready for more:\n{strengths_formatted}\n\nI'm at {current} now. With {exp} years of experience in {industry}, I think {target} at the next level would be fair. I know these decisions involve a lot of factors beyond my control — I just wanted to make my case and see where we stand.",
+            "I wanted to bring up something that's been on my mind. I've been pushing myself to operate above my current level as {role}, and I think the results reflect that:\n{strengths_formatted}\n\nI'm not expecting this to happen overnight, but with {exp} years in {industry} and my current salary at {current}, I'd like to work toward a promotion with compensation around {target}. What would you need to see from me to make that happen?"
+        ]
+    },
+    counter: {
+        confident: [
+            "Thank you for the offer of {current}. I want to be straightforward: that's significantly below what I'm seeing for {role} positions in {industry}.\n\nWith {exp} years of experience and a track record that includes:\n{strengths_formatted}\n\nI need to be at {target} to accept. I'm not trying to negotiate for the sake of it — that number reflects my market value and the results I'll deliver. Is there flexibility on your end?",
+            "I appreciate the offer, but I have to be honest — {current} is well below market for this role.\n\nI've done my research. {role} positions in {industry} with {exp} years of experience are paying significantly more. And I bring specific, measurable value:\n{strengths_formatted}\n\nMy counter is {target}. I believe that's fair for both sides. Can we get there?"
+        ],
+        collaborative: [
+            "Thank you for the offer. I'm very interested in this role, and I want to find a number that works for both of us.\n\nThe offer of {current} is lower than I expected based on market data for {role} in {industry}. With {exp} years of experience and results like:\n{strengths_formatted}\n\nI'd like to counter at {target}. I'm flexible on how we structure it — base, bonus, equity, signing bonus — as long as the total comp reflects the value I'll bring. What options are available?",
+            "I'm excited about this role and want to make this work. The current offer of {current} is a gap from where I need to be, though.\n\nFor a {role} in {industry} with {exp} years of experience and my background:\n{strengths_formatted}\n\n{target} is what I'm looking for. I know that's a jump — are there creative ways to bridge the gap? I'm open to different comp structures."
+        ],
+        data: [
+            "I'd like to discuss the offer of {current}. Here's my analysis:\n\n• Market rate for {role} in {industry}: {target} range (based on multiple salary databases)\n• My experience: {exp} years with demonstrated results\n• Gap: the current offer is well below the median\n\nMy results justify the higher end of the range:\n{strengths_formatted}\n\nI'm countering at {target}. The data supports this ask. What's your flexibility?",
+            "Thank you for the offer. I've benchmarked it against current compensation data for {role} in {industry}.\n\nThe offer of {current} sits below the 25th percentile for someone with {exp} years of experience and this kind of track record:\n{strengths_formatted}\n\nMy counter: {target}, which is in line with the median. I'd rather we both start with a number grounded in data. Does this align with your internal bands?"
+        ],
+        humble: [
+            "Thank you for the offer of {current}. I'm really interested in this position, and I don't want compensation to be the thing that gets in the way.\n\nThat said, I have to be honest — the number is lower than what I've seen for {role} positions in {industry}, especially with {exp} years of experience. My recent work includes:\n{strengths_formatted}\n\nWould {target} be possible? I'm open to discussing different structures. I just want to make sure I'm being fairly valued from day one.",
+            "I appreciate the offer. This isn't easy for me to say, but {current} is below what I can accept for a {role} position.\n\nI know my worth, not in an arrogant way, but because the market data is clear. With {exp} years in {industry} and results like:\n{strengths_formatted}\n\nI'd like to respectfully counter at {target}. I'm committed to this opportunity and want to start on the right foot."
+        ]
+    }
+};
+
+function generateScripts() {
+    const scenario = document.getElementById('scenario').value;
+    const role = document.getElementById('role').value || 'this role';
+    const industry = document.getElementById('industry').value || 'this industry';
+    const current = document.getElementById('currentSalary').value || '$X';
+    const target = document.getElementById('targetSalary').value || '$Y';
+    const strengths = document.getElementById('strengths').value;
+    const exp = document.getElementById('experience').value || 'several';
+    const tone = document.getElementById('tone').value;
+
+    const strengthLines = strengths ? strengths.split('\n').filter(l => l.trim()).map(l => '• ' + l.trim()).join('\n') : '• [Add your key achievements here]';
+
+    const templates = TEMPLATES[scenario][tone];
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.style.display = 'block';
+
+    const scenarioNames = {
+        new_offer: 'New Offer Negotiation',
+        raise: 'Raise Request',
+        promotion: 'Promotion Discussion',
+        counter: 'Counter Offer'
+    };
+
+    const toneNames = {
+        confident: 'Confident & Direct',
+        collaborative: 'Collaborative & Warm',
+        data: 'Data-Driven',
+        humble: 'Humble but Firm'
+    };
+
+    let html = '';
+
+    templates.forEach((tpl, i) => {
+        const script = tpl
+            .replace(/\{role\}/g, role)
+            .replace(/\{industry\}/g, industry)
+            .replace(/\{current\}/g, current)
+            .replace(/\{target\}/g, target)
+            .replace(/\{exp\}/g, exp)
+            .replace(/\{strengths_formatted\}/g, strengthLines);
+
+        html += `
+            <div class="script-card">
+                <h3>${scenarioNames[scenario]} — ${toneNames[tone]} (Version ${i + 1})</h3>
+                <button class="copy-btn" onclick="copyScript(this)">Copy</button>
+                <div class="script-text">${escapeHtml(script)}</div>
+            </div>
+        `;
+    });
+
+    html += `
+        <div class="tips">
+            <h3>Negotiation Tips</h3>
+            <ul>
+                <li>Practice saying your target number out loud. The first time should not be in the actual conversation.</li>
+                <li>After stating your ask, stop talking. Silence is uncomfortable but powerful.</li>
+                <li>Never give a range. The low end becomes the ceiling.</li>
+                <li>Have a walk-away number. Know it before the conversation starts.</li>
+                <li>Negotiate beyond salary: signing bonus, equity, remote days, PTO, learning budget, title.</li>
+                <li>Get the final offer in writing before accepting verbally.</li>
+            </ul>
+        </div>
+    `;
+
+    resultsDiv.innerHTML = html;
+    resultsDiv.scrollIntoView({ behavior: 'smooth' });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function copyScript(btn) {
+    const text = btn.parentElement.querySelector('.script-text').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+}
+</script>
+
+    <div class="container">
+        <div class="cta">
+            <p>Want 100+ job search prompts, interview scripts, and salary templates?</p>
+            <a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/0c3f51d6-9089-466e-ada4-58a0b22036e0">Get the Job Search AI Toolkit ($12) &rarr;</a>
+            <p>Also check out: <a href="/resume-checker">Resume ATS Checker</a> &bull; <a href="/cover-letter">Cover Letter Generator</a> &bull; <a href="/linkedin-headline">LinkedIn Headline Generator</a></p>
+        </div>
+    </div>
+</body>
+</html>

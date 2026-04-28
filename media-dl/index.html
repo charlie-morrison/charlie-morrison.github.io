@@ -276,7 +276,7 @@ body {
 
 <div class="premium-banner" id="premiumBanner" onclick="buyPremium()">
   <div class="title">⭐ Premium — Unlimited Downloads</div>
-  <div class="desc">50 Stars = 30 days, no limits</div>
+  <div class="desc">50 Stars = 30 days, no limits, instant speed</div>
 </div>
 
 <div class="platforms">
@@ -320,12 +320,7 @@ urlInput.addEventListener('input', () => {
   const url = urlInput.value.trim();
   downloadBtn.disabled = !isValidUrl(url);
 
-  // Show audio option only for YouTube
-  const isYT = isYouTube(url);
-  document.querySelectorAll('.format-btn')[1].style.display = isYT ? '' : 'none';
-  if (!isYT && selectedFormat === 'audio') {
-    selectFormat(document.querySelectorAll('.format-btn')[0]);
-  }
+  // Audio available for all platforms now
 });
 
 function isValidUrl(url) {

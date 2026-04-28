@@ -27,7 +27,10 @@ jobs:
           
           for dir in $(find . -name "index.html" -not -path "./index.html" -not -path "./.git/*" -not -path "./.github/*" | sort); do
             path=$(dirname "$dir" | sed 's|^\./||')
-            lastmod=$(git log -1 --format="%Y-%m-%d" -- "$dir" 2>/dev/null || echo "$TODAY")
+            lastmod=$(git log -1 --format='%ci' -- "$dir" 2>/dev/null | cut -d' ' -f1)
+            if [ -z "$lastmod" ]; then
+              lastmod="$TODAY"
+            fi
             if echo "$path" | grep -q "^blog/"; then
               priority="0.9"
             elif [ "$path" = "blog" ] || [ "$path" = "bots" ]; then
@@ -40,7 +43,6 @@ jobs:
           
           echo '</urlset>' >> sitemap.xml
           echo "Generated sitemap with $(grep -c '<url>' sitemap.xml) URLs"
-          cat sitemap.xml
 
       - name: Commit sitemap if changed
         run: |

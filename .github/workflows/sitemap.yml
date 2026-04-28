@@ -1,0 +1,55 @@
+name: Update Sitemap
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate sitemap.xml
+        run: |
+          DOMAIN="https://charliemorrison.dev"
+          TODAY=$(date +%Y-%m-%d)
+          
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
+          echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' >> sitemap.xml
+          
+          echo "<url><loc>${DOMAIN}/</loc><lastmod>${TODAY}</lastmod><priority>1.0</priority></url>" >> sitemap.xml
+          
+          for dir in $(find . -name "index.html" -not -path "./index.html" -not -path "./.git/*" -not -path "./.github/*" | sort); do
+            path=$(dirname "$dir" | sed 's|^\./||')
+            lastmod=$(git log -1 --format="%Y-%m-%d" -- "$dir" 2>/dev/null || echo "$TODAY")
+            if echo "$path" | grep -q "^blog/"; then
+              priority="0.9"
+            elif [ "$path" = "blog" ] || [ "$path" = "bots" ]; then
+              priority="0.9"
+            else
+              priority="0.8"
+            fi
+            echo "<url><loc>${DOMAIN}/${path}</loc><lastmod>${lastmod}</lastmod><priority>${priority}</priority></url>" >> sitemap.xml
+          done
+          
+          echo '</urlset>' >> sitemap.xml
+          echo "Generated sitemap with $(grep -c '<url>' sitemap.xml) URLs"
+          cat sitemap.xml
+
+      - name: Commit sitemap if changed
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add sitemap.xml
+          if ! git diff --cached --quiet sitemap.xml; then
+            git commit -m "Auto-update sitemap.xml"
+            git push
+          else
+            echo "Sitemap unchanged, skipping commit"
+          fi

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Job Interview Question Generator — Prepare for Any Role</title>
+<meta name="description" content="Generate personalized interview questions for any job role. Practice behavioral, technical, and situational questions. Free, runs in your browser, no data collection.">
+<meta name="keywords" content="interview questions, job interview prep, behavioral interview questions, technical interview, interview practice, STAR method">
+<link rel="canonical" href="https://charliemorrison.dev/interview-prep">
+<meta property="og:title" content="Free Job Interview Question Generator">
+<meta property="og:description" content="Get personalized interview questions for any role. Practice answers using the STAR method. 100% free, no signup.">
+<meta property="og:url" content="https://charliemorrison.dev/interview-prep">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Job Interview Question Generator","description":"Free tool to generate personalized interview questions for any job role with STAR method answer frameworks","url":"https://charliemorrison.dev/interview-prep","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.6;background:#f8f9fa}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+.container{max-width:900px;margin:0 auto;padding:20px}
+h1{font-size:2em;margin:30px 0 8px;text-align:center}
+.subtitle{text-align:center;color:#666;margin-bottom:30px;font-size:1.05em}
+.input-section{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px}
+.input-section label{display:block;font-weight:600;margin-bottom:6px;font-size:.95em}
+.input-section input,.input-section select,.input-section textarea{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:12px;font-size:.95em;font-family:inherit;transition:border-color .2s;margin-bottom:16px}
+.input-section input:focus,.input-section select:focus,.input-section textarea:focus{outline:none;border-color:#667eea}
+.input-section textarea{height:120px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+.btn{display:block;width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:16px;border:none;border-radius:8px;font-size:1.1em;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.9}
+#results{display:none;margin-top:24px}
+.category{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:16px}
+.category h3{margin-bottom:14px;font-size:1.15em;color:#1a1a2e;display:flex;align-items:center;gap:8px}
+.category h3 span{font-size:1.2em}
+.question{padding:14px;border:1px solid #e8e8f0;border-radius:8px;margin-bottom:10px;position:relative}
+.question:last-child{margin-bottom:0}
+.q-text{font-weight:600;margin-bottom:8px;padding-right:30px}
+.q-tip{color:#555;font-size:.9em;line-height:1.5}
+.q-tip strong{color:#667eea}
+.copy-btn{position:absolute;top:12px;right:12px;background:none;border:1px solid #ddd;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.8em;color:#888;transition:all .2s}
+.copy-btn:hover{border-color:#667eea;color:#667eea}
+.star-guide{background:linear-gradient(135deg,#667eea15,#764ba215);border:1px solid #667eea40;border-radius:10px;padding:20px;margin-bottom:20px}
+.star-guide h3{margin-bottom:10px}
+.star-guide .star-item{display:flex;gap:12px;margin-bottom:8px}
+.star-guide .star-letter{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.star-guide .star-desc{padding-top:4px}
+.cta{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center;margin-top:16px}
+.cta h3{margin-bottom:8px}
+.cta p{color:#555;margin-bottom:16px}
+.cta a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;transition:opacity .2s}
+.cta a:hover{opacity:.9}
+.tools-bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:24px;padding-top:20px;border-top:1px solid #eee}
+.tools-bar a{padding:6px 14px;border:1px solid #ddd;border-radius:20px;text-decoration:none;color:#555;font-size:.85em;transition:all .2s}
+.tools-bar a:hover{border-color:#667eea;color:#667eea}
+footer{text-align:center;padding:30px;color:#888;font-size:.85em}
+</style>
+</head>
+<body>
+<nav><a href="https://charliemorrison.dev">← Charlie Morrison</a></nav>
+<div class="container">
+<h1>Job Interview Question Generator</h1>
+<p class="subtitle">Get personalized interview questions for any role. Practice your answers. Land the job.</p>
+
+<div class="input-section">
+<label for="jobTitle">Job Title *</label>
+<input type="text" id="jobTitle" placeholder="e.g. Senior Product Manager, Data Analyst, Frontend Developer">
+
+<div class="row">
+<div>
+<label for="industry">Industry</label>
+<select id="industry">
+<option value="">Select industry (optional)</option>
+<option value="tech">Technology / Software</option>
+<option value="finance">Finance / Banking</option>
+<option value="healthcare">Healthcare</option>
+<option value="marketing">Marketing / Advertising</option>
+<option value="education">Education</option>
+<option value="retail">Retail / E-commerce</option>
+<option value="consulting">Consulting</option>
+<option value="nonprofit">Non-profit</option>
+<option value="government">Government</option>
+<option value="startup">Startup</option>
+<option value="other">Other</option>
+</select>
+</div>
+<div>
+<label for="level">Experience Level</label>
+<select id="level">
+<option value="any">Any level</option>
+<option value="entry">Entry Level / Junior</option>
+<option value="mid">Mid-Level (2-5 years)</option>
+<option value="senior">Senior (5+ years)</option>
+<option value="lead">Lead / Manager</option>
+<option value="exec">Director / Executive</option>
+</select>
+</div>
+</div>
+
+<label for="jd">Key Skills or Job Description (optional)</label>
+<textarea id="jd" placeholder="Paste key skills or requirements from the job description for more targeted questions..."></textarea>
+
+<button class="btn" onclick="generateQuestions()">Generate Interview Questions</button>
+</div>
+
+<div id="results"></div>
+
+<div class="tools-bar">
+<a href="https://charliemorrison.dev/resume-checker">ATS Resume Checker</a>
+<a href="https://charliemorrison.dev/cover-letter">Cover Letter Generator</a>
+<a href="https://charliemorrison.dev/linkedin-headline">LinkedIn Headline Generator</a>
+<a href="https://charliemorrison.dev/salary-negotiation">Salary Negotiation Scripts</a>
+<a href="https://charliemorrison.dev/follow-up-email">Follow-Up Email Generator</a>
+</div>
+</div>
+<footer>© 2026 Charlie Morrison · All tools run locally in your browser · No data collected</footer>
+
+<script>
+const behavioralBank = {
+general: [
+{q:"Tell me about a time you had to deal with a difficult coworker or stakeholder.",tip:"Focus on the resolution, not the conflict. Show empathy and communication skills."},
+{q:"Describe a situation where you had to meet a tight deadline with limited resources.",tip:"Emphasize prioritization and resourcefulness. Quantify the outcome."},
+{q:"Give an example of a time you failed at something. What did you learn?",tip:"Pick a real failure, not a humble-brag. Show self-awareness and what you changed afterward."},
+{q:"Tell me about a project you're most proud of. Why?",tip:"Choose something relevant to the role. Focus on your specific contribution and the measurable impact."},
+{q:"Describe a time you had to persuade someone who initially disagreed with you.",tip:"Show that you listened first, then used data or evidence to build your case."},
+{q:"How do you handle situations where priorities suddenly change?",tip:"Give a specific example. Show flexibility without losing focus on outcomes."},
+{q:"Tell me about a time you went above and beyond what was expected.",tip:"Be specific about what 'above and beyond' meant. Avoid sounding like you don't respect boundaries."},
+{q:"Describe a situation where you had to make a decision with incomplete information.",tip:"Show your reasoning process. What data did you have? What assumptions did you make? How did it turn out?"},
+{q:"Give an example of how you've handled receiving critical feedback.",tip:"Show you can separate ego from growth. What changed in your behavior afterward?"},
+{q:"Tell me about a time you identified a problem before it became urgent.",tip:"Proactive problem-solving is gold. Show the impact of catching it early."}
+],
+leadership: [
+{q:"Describe a time you had to lead a team through a significant change.",tip:"Focus on communication, buy-in, and how you handled resistance."},
+{q:"Tell me about a time you had to give difficult feedback to a team member.",tip:"Show directness balanced with empathy. What was the outcome for the person?"},
+{q:"How have you developed or mentored someone on your team?",tip:"Specific example with measurable growth. Did they get promoted? Take on new responsibilities?"},
+{q:"Describe a situation where you had to delegate effectively under pressure.",tip:"Show trust in your team and clear communication of priorities."},
+{q:"Tell me about a time you had to make an unpopular decision.",tip:"Show conviction backed by reasoning, and how you communicated the why."}
+],
+entry: [
+{q:"What's a project from school or a personal project that you're proud of?",tip:"Treat it like a professional project. Problem → approach → result."},
+{q:"How do you approach learning a new skill or tool you've never used before?",tip:"Show your learning process. Give a specific recent example."},
+{q:"Describe a time you worked effectively as part of a team.",tip:"Focus on your specific role and contribution, not just the team's success."},
+{q:"Tell me about a challenge you faced in your studies or early career. How did you overcome it?",tip:"Show resilience and problem-solving. Even small challenges count if you tell the story well."},
+{q:"Why are you interested in this field?",tip:"Be genuine. Connect it to something specific you've done, not just general enthusiasm."}
+]
+};
+
+const technicalBank = {
+tech: [
+{q:"Walk me through how you would design a system to handle [specific feature from JD].",tip:"Start with requirements, discuss trade-offs, mention scalability. It's about your thinking process, not the perfect answer."},
+{q:"How do you approach debugging a production issue that you can't reproduce locally?",tip:"Show systematic thinking: logs, monitoring, reproducing conditions, rollback strategies."},
+{q:"Describe your experience with [key technology from JD]. What's the most complex thing you've built with it?",tip:"Be specific about architecture decisions and why you made them."},
+{q:"How do you decide between building something custom vs. using an existing tool or library?",tip:"Show pragmatism: maintenance cost, team familiarity, timeline, specific requirements."},
+{q:"Tell me about a time you had to optimize performance in an application.",tip:"Quantify: response time before/after, throughput improvements, cost savings."}
+],
+finance: [
+{q:"Walk me through a financial model you've built. What were the key assumptions?",tip:"Show analytical rigor and awareness of how assumptions drive outcomes."},
+{q:"How do you validate data accuracy in your analyses?",tip:"Specific methods: cross-referencing sources, sanity checks, peer review processes."},
+{q:"Describe a situation where your analysis led to a business decision. What was the outcome?",tip:"Connect numbers to actions to results. Quantify the business impact."},
+{q:"How do you communicate complex financial concepts to non-financial stakeholders?",tip:"Give an example of simplifying without losing accuracy."},
+{q:"What's your approach to risk assessment?",tip:"Show a framework, not just intuition. Mention specific tools or methodologies."}
+],
+marketing: [
+{q:"Tell me about a campaign you managed from concept to execution. What were the results?",tip:"Metrics matter: ROI, conversion rates, reach, engagement. Show the full funnel."},
+{q:"How do you measure the success of a marketing initiative?",tip:"Show you think beyond vanity metrics. What drives actual business outcomes?"},
+{q:"Describe your approach to audience segmentation and targeting.",tip:"Specific tools and data sources. Show you can balance reach with relevance."},
+{q:"How do you stay current with marketing trends and platform changes?",tip:"Name specific sources. Show that you test new approaches, not just read about them."},
+{q:"Tell me about a time a campaign didn't perform as expected. What did you do?",tip:"Show analytical thinking: what you measured, what you changed, what you learned."}
+],
+healthcare: [
+{q:"How do you handle situations where protocol and patient needs seem to conflict?",tip:"Show ethical reasoning and communication with the care team."},
+{q:"Describe your experience with electronic health records systems.",tip:"Specific systems, efficiency improvements, data accuracy practices."},
+{q:"Tell me about a time you had to communicate sensitive information to a patient or family.",tip:"Empathy, clarity, and follow-up. Show the human side."},
+{q:"How do you stay current with best practices in your specialty?",tip:"Specific journals, conferences, continuing education. Show commitment to evidence-based practice."},
+{q:"Describe a high-pressure clinical situation and how you managed it.",tip:"Show calm decision-making, team coordination, and patient outcomes."}
+],
+general: [
+{q:"What tools or software are you most proficient with?",tip:"Match your answer to the JD requirements. Give examples of how you've used each tool."},
+{q:"How do you approach a task or project type you haven't done before?",tip:"Show your learning process: research, ask experts, prototype, iterate."},
+{q:"Describe your workflow for managing multiple projects simultaneously.",tip:"Specific tools and methods: prioritization frameworks, time blocking, communication cadence."},
+{q:"What's an industry trend you think is overhyped? What's underrated?",tip:"Show independent thinking and genuine knowledge of the field."},
+{q:"How do you ensure quality in your work?",tip:"Specific practices: checklists, peer review, testing, documentation."}
+]
+};
+
+const situationalBank = [
+{q:"If you were given a project with unclear requirements and a fixed deadline, what would you do first?",tip:"Show you'd clarify scope before starting. Ask questions, define MVP, communicate trade-offs."},
+{q:"Your manager asks you to complete a task you've never done before by end of week. How do you approach it?",tip:"Research, break it down, identify who to ask for help, communicate progress."},
+{q:"A colleague takes credit for work you did. How do you handle it?",tip:"Direct but professional. Document your contributions. Focus on the relationship, not just the credit."},
+{q:"You disagree with a decision your team has made. What do you do?",tip:"Voice your concern with data. If overruled, commit to the decision and execute well."},
+{q:"You realize you're going to miss a deadline. When and how do you communicate this?",tip:"Immediately, with a revised timeline and what you need to get back on track. Never wait until the deadline passes."},
+{q:"A client or stakeholder requests something that isn't technically feasible in the timeline. How do you respond?",tip:"Acknowledge the need, explain constraints, offer alternatives. Don't just say no."},
+{q:"You're onboarding and notice the team's process has an obvious inefficiency. Do you say something?",tip:"Listen first, understand the history, then suggest improvements with data to back them up."},
+{q:"Your workload is unsustainable. How do you address it?",tip:"Quantify the workload, prioritize with your manager, propose solutions (delegation, timeline shifts, scope reduction)."}
+];
+
+function extractSkills(text) {
+if (!text) return [];
+const common = /\b(python|java|javascript|typescript|react|angular|vue|node|sql|aws|azure|gcp|docker|kubernetes|agile|scrum|jira|figma|photoshop|excel|tableau|power bi|salesforce|hubspot|sap|oracle|linux|git|ci\/cd|machine learning|data analysis|project management|product management|marketing automation|seo|sem|ppc|crm|erp|communication|leadership|teamwork|problem.solving|analytical|strategic|creative)\b/gi;
+const matches = text.match(common) || [];
+return [...new Set(matches.map(m => m.toLowerCase()))];
+}
+
+function pickRandom(arr, n) {
+const shuffled = [...arr].sort(() => Math.random() - 0.5);
+return shuffled.slice(0, Math.min(n, arr.length));
+}
+
+function generateQuestions() {
+const title = document.getElementById('jobTitle').value.trim();
+if (!title) { alert('Please enter a job title'); return; }
+const industry = document.getElementById('industry').value;
+const level = document.getElementById('level').value;
+const jd = document.getElementById('jd').value.trim();
+const skills = extractSkills(jd + ' ' + title);
+const isLeader = ['lead','exec'].includes(level);
+const isEntry = level === 'entry';
+
+let behavioral = pickRandom(behavioralBank.general, isEntry ? 3 : 4);
+if (isLeader) behavioral = behavioral.concat(pickRandom(behavioralBank.leadership, 3));
+if (isEntry) behavioral = behavioral.concat(pickRandom(behavioralBank.entry, 3));
+
+const techSource = technicalBank[industry] || technicalBank.general;
+let technical = pickRandom(techSource, 4);
+if (skills.length > 0) {
+  technical = technical.map(q => ({
+    q: q.q.replace('[key technology from JD]', skills[0]).replace('[specific feature from JD]', skills.slice(0,2).join(' and ')),
+    tip: q.tip
+  }));
+}
+
+let situational = pickRandom(situationalBank, 4);
+
+const roleSpecific = [
+  {q:`Why do you want to work as a ${title}?`, tip:"Connect your experience and interests to this specific role. Show you've researched the company."},
+  {q:`What do you think are the biggest challenges facing a ${title} today?`, tip:"Show industry awareness. Pick 1-2 challenges and briefly mention how you'd approach them."},
+  {q:`Where do you see yourself in 3-5 years?`, tip:"Be honest but strategic. Show ambition that aligns with the role's growth path."},
+  {q:`What questions do you have for us?`, tip:"Always have 3-5 ready. Ask about team culture, success metrics, challenges, growth. Never say 'nothing.'"}
+];
+
+let html = '';
+
+html += `<div class="star-guide">
+<h3>💡 Answer Using the STAR Method</h3>
+<div class="star-item"><div class="star-letter">S</div><div class="star-desc"><strong>Situation</strong> — Set the scene. Where were you? What was the context?</div></div>
+<div class="star-item"><div class="star-letter">T</div><div class="star-desc"><strong>Task</strong> — What was your responsibility? What needed to happen?</div></div>
+<div class="star-item"><div class="star-letter">A</div><div class="star-desc"><strong>Action</strong> — What specifically did YOU do? (Not the team — you.)</div></div>
+<div class="star-item"><div class="star-letter">R</div><div class="star-desc"><strong>Result</strong> — What happened? Quantify if possible (%, $, time saved).</div></div>
+</div>`;
+
+function renderCategory(icon, name, questions) {
+  let h = `<div class="category"><h3><span>${icon}</span> ${name}</h3>`;
+  questions.forEach((q, i) => {
+    h += `<div class="question">
+      <div class="q-text">${i+1}. ${q.q}</div>
+      <div class="q-tip"><strong>Tip:</strong> ${q.tip}</div>
+      <button class="copy-btn" onclick="copyQ(this,'${q.q.replace(/'/g,"\\'")}')">Copy</button>
+    </div>`;
+  });
+  h += '</div>';
+  return h;
+}
+
+html += renderCategory('🎯', `Role-Specific — ${title}`, roleSpecific);
+html += renderCategory('💬', 'Behavioral Questions', behavioral);
+html += renderCategory('🔧', 'Technical / Domain Questions', technical);
+html += renderCategory('🧩', 'Situational Questions', situational);
+
+html += `<div class="cta">
+<h3>Want 100+ AI-Powered Interview Prep Prompts?</h3>
+<p>Resume optimization, cover letters, mock interviews, salary negotiation — the full job search toolkit.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/0c3f51d6-9089-466e-ada4-58a0b22036e0">Get the Job Search AI Toolkit — $12</a>
+</div>`;
+
+document.getElementById('results').innerHTML = html;
+document.getElementById('results').style.display = 'block';
+document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function copyQ(btn, text) {
+navigator.clipboard.writeText(text).then(() => {
+  btn.textContent = 'Copied!';
+  setTimeout(() => btn.textContent = 'Copy', 1500);
+});
+}
+</script>
+</body>
+</html>

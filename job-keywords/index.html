@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Job Description Keyword Extractor — Find Resume Keywords Fast</title>
+<meta name="description" content="Paste any job description and instantly extract the keywords you need on your resume. Free, runs in your browser, no data collected.">
+<meta name="keywords" content="job description keywords, resume keywords, ATS keywords, job posting analyzer, resume optimization">
+<link rel="canonical" href="https://charliemorrison.dev/job-keywords">
+<meta property="og:title" content="Free Job Description Keyword Extractor">
+<meta property="og:description" content="Extract the exact keywords from any job posting that your resume needs. Free and private.">
+<meta property="og:url" content="https://charliemorrison.dev/job-keywords">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Job Description Keyword Extractor","description":"Free tool to extract keywords from job descriptions for resume optimization","url":"https://charliemorrison.dev/job-keywords","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.6;background:#f8f9fa}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+.container{max-width:900px;margin:0 auto;padding:20px}
+h1{font-size:2em;margin:30px 0 8px;text-align:center}
+.subtitle{text-align:center;color:#666;margin-bottom:30px;font-size:1.05em}
+.input-group{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px}
+.input-group h3{margin-bottom:10px;font-size:1em}
+.input-group textarea{width:100%;height:280px;border:2px solid #e0e0e0;border-radius:8px;padding:12px;font-size:.9em;font-family:inherit;resize:vertical;transition:border-color .2s}
+.input-group textarea:focus{outline:none;border-color:#667eea}
+.btn{display:block;width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:16px;border:none;border-radius:8px;font-size:1.1em;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.9}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+#results{display:none;margin-top:20px}
+.summary{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px;text-align:center}
+.summary .stat{display:inline-block;margin:0 20px;text-align:center}
+.summary .stat-num{font-size:2em;font-weight:800;color:#667eea}
+.summary .stat-label{font-size:.85em;color:#888;display:block}
+.section{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px}
+.section h3{margin-bottom:14px;font-size:1.1em;display:flex;align-items:center;gap:8px}
+.badge{display:inline-block;background:#667eea;color:#fff;padding:2px 8px;border-radius:10px;font-size:.75em;font-weight:600}
+.kw-list{display:flex;flex-wrap:wrap;gap:8px}
+.kw{padding:6px 14px;border-radius:16px;font-size:.88em;font-weight:500;cursor:pointer;transition:all .15s;position:relative}
+.kw:hover{transform:scale(1.05)}
+.kw.high{background:#e8f5e9;color:#1b5e20;border:1px solid #a5d6a7}
+.kw.medium{background:#fff8e1;color:#f57f17;border:1px solid #ffe082}
+.kw.low{background:#f3e5f5;color:#6a1b9a;border:1px solid #ce93d8}
+.kw .count{font-size:.7em;margin-left:4px;opacity:.7}
+.copy-section{background:#f8f9fa;border:2px dashed #ddd;border-radius:10px;padding:20px;margin-bottom:20px;text-align:center}
+.copy-section textarea{width:100%;height:100px;border:1px solid #e0e0e0;border-radius:8px;padding:12px;font-size:.85em;margin-bottom:12px;font-family:inherit}
+.copy-btn{background:#1a1a2e;color:#fff;padding:10px 24px;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:.95em}
+.copy-btn:hover{opacity:.85}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:20px}
+.tool-link{display:block;background:#fff;border:2px solid #e8e8e8;border-radius:10px;padding:16px;text-decoration:none;color:#1a1a2e;transition:border-color .2s,transform .15s;text-align:center}
+.tool-link:hover{border-color:#667eea;transform:translateY(-2px)}
+.tool-link strong{display:block;margin-bottom:4px}
+.tool-link span{font-size:.85em;color:#888}
+.cta{background:linear-gradient(135deg,#667eea22,#764ba222);border:2px solid #667eea;border-radius:10px;padding:24px;text-align:center;margin-top:20px}
+.cta h3{margin-bottom:8px;color:#1a1a2e}.cta p{color:#555;margin-bottom:14px}
+.cta a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700}
+footer{text-align:center;padding:30px;color:#888;font-size:.85em}footer a{color:#667eea}
+</style>
+</head>
+<body>
+<nav><a href="https://charliemorrison.dev">Charlie Morrison</a></nav>
+<div class="container">
+<h1>Job Description Keyword Extractor</h1>
+<p class="subtitle">Paste a job posting. Get the exact keywords your resume needs. Runs in your browser — nothing uploaded, nothing stored.</p>
+
+<div class="input-group">
+<h3>Paste the Job Description</h3>
+<textarea id="jobdesc" placeholder="Copy and paste the full job description here..."></textarea>
+</div>
+
+<button class="btn" onclick="extract()">Extract Keywords</button>
+
+<div id="results">
+<div class="summary" id="summary"></div>
+
+<div class="section" id="tech-section" style="display:none">
+<h3>Technical Skills <span class="badge" id="tech-count"></span></h3>
+<div class="kw-list" id="tech-kws"></div>
+</div>
+
+<div class="section" id="soft-section" style="display:none">
+<h3>Soft Skills & Traits <span class="badge" id="soft-count"></span></h3>
+<div class="kw-list" id="soft-kws"></div>
+</div>
+
+<div class="section" id="tools-section" style="display:none">
+<h3>Tools & Platforms <span class="badge" id="tools-count"></span></h3>
+<div class="kw-list" id="tools-kws"></div>
+</div>
+
+<div class="section" id="certs-section" style="display:none">
+<h3>Certifications & Education <span class="badge" id="certs-count"></span></h3>
+<div class="kw-list" id="certs-kws"></div>
+</div>
+
+<div class="section" id="action-section" style="display:none">
+<h3>Action Verbs & Responsibilities <span class="badge" id="action-count"></span></h3>
+<div class="kw-list" id="action-kws"></div>
+</div>
+
+<div class="copy-section">
+<h3 style="margin-bottom:12px">Copy All Keywords</h3>
+<textarea id="copyText" readonly></textarea>
+<br><button class="copy-btn" onclick="copyKeywords()">Copy to Clipboard</button>
+<p style="margin-top:8px;font-size:.85em;color:#888" id="copyStatus"></p>
+</div>
+
+<div style="margin-top:24px">
+<h3 style="margin-bottom:12px;text-align:center">Use these keywords with our other free tools</h3>
+<div class="tools">
+<a class="tool-link" href="/resume-checker"><strong>ATS Resume Checker</strong><span>Score your resume against these keywords</span></a>
+<a class="tool-link" href="/cover-letter"><strong>Cover Letter Generator</strong><span>Build a letter using these skills</span></a>
+<a class="tool-link" href="/linkedin-headline"><strong>LinkedIn Headline</strong><span>Craft a headline with top keywords</span></a>
+<a class="tool-link" href="/interview-prep"><strong>Interview Prep</strong><span>Prepare for questions about these skills</span></a>
+<a class="tool-link" href="/salary-negotiation"><strong>Salary Scripts</strong><span>Negotiate based on your matching skills</span></a>
+<a class="tool-link" href="/follow-up-email"><strong>Follow-Up Emails</strong><span>Reference key skills in your follow-up</span></a>
+</div>
+</div>
+
+<div class="cta">
+<h3>Want the complete toolkit?</h3>
+<p>45+ AI prompts for resume writing, interview prep, salary negotiation, and more.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/0c3f51d6-9089-466e-ada4-58a0b22036e0">Get Job Search AI Toolkit — $12</a>
+</div>
+</div>
+</div>
+
+<footer>
+<p>Built by <a href="https://charliemorrison.dev">Charlie Morrison</a> | Free tools: <a href="/resume-checker">ATS Checker</a> · <a href="/linkedin-headline">LinkedIn Headlines</a> · <a href="/cover-letter">Cover Letters</a> · <a href="/salary-negotiation">Salary Scripts</a> · <a href="/follow-up-email">Follow-Up Emails</a> · <a href="/interview-prep">Interview Prep</a></p>
+<p style="margin-top:8px">100% client-side. Your data never leaves your browser.</p>
+</footer>
+
+<script>
+const TECH_SKILLS = ['javascript','typescript','python','java','c\\+\\+','c#','ruby','go','golang','rust','swift','kotlin','php','sql','html','css','react','angular','vue','node','express','django','flask','spring','rails','laravel','.net','aws','azure','gcp','google cloud','docker','kubernetes','terraform','jenkins','ci/cd','git','linux','unix','rest','graphql','api','microservices','mongodb','postgresql','mysql','redis','elasticsearch','kafka','rabbitmq','nginx','apache','webpack','babel','sass','less','tailwind','bootstrap','jquery','redux','nextjs','next.js','nuxt','gatsby','svelte','flutter','react native','swift','objective-c','android','ios','machine learning','deep learning','nlp','natural language','computer vision','tensorflow','pytorch','scikit-learn','pandas','numpy','spark','hadoop','airflow','databricks','snowflake','bigquery','tableau','power bi','looker','dbt','etl','data pipeline','data warehouse','agile','scrum','kanban','jira','confluence','figma','sketch','adobe','photoshop','illustrator','after effects','premiere','blender','unity','unreal','blockchain','solidity','web3','defi','smart contract','ai','artificial intelligence','llm','large language model','prompt engineering','rag','vector database','embeddings','fine-tuning','langchain','openai','claude','gpt','copilot','github actions','gitlab','bitbucket','circleci','datadog','grafana','prometheus','splunk','new relic','sentry','pagerduty','cloudflare','vercel','netlify','heroku','digitalocean','firebase','supabase','prisma','sequelize','typeorm','mongoose','graphql','apollo','trpc','storybook','cypress','jest','mocha','playwright','selenium','puppeteer','pytest','junit','rspec','testng','postman','swagger','openapi','oauth','jwt','saml','sso','ldap','active directory','vpn','ssl','tls','https','encryption','security','penetration testing','soc2','gdpr','hipaa','pci','compliance','devops','sre','infrastructure','networking','tcp','dns','load balancer','cdn','s3','ec2','lambda','ecs','eks','fargate','rds','dynamodb','sqs','sns','kinesis','cloudwatch','iam','vpc','route53','cloudfront','api gateway','step functions','glue','athena','redshift','emr','sagemaker','bedrock','vertex ai','cloud run','cloud functions','app engine','compute engine','cloud storage','pub/sub','bigtable','spanner','cosmos db','azure devops','arm templates','bicep','cdk','cloudformation','pulumi','ansible','chef','puppet','saltstack','vagrant','packer','consul','vault','nomad','istio','envoy','linkerd','argocd','flux','helm','kustomize','tekton','spinnaker','octopus','bamboo','teamcity','travis','appveyor','sonarqube','checkmarx','snyk','dependabot','renovate','npm','yarn','pnpm','pip','poetry','cargo','maven','gradle','sbt','nuget','composer','bundler','cocoapods','swift package manager','cmake','make','bazel','pants','turborepo','lerna','monorepo','nx','vite','esbuild','rollup','parcel','swc','rome','biome','eslint','prettier','rubocop','black','flake8','mypy','pylint','tsc','flow'];
+
+const SOFT_SKILLS = ['communication','leadership','teamwork','collaboration','problem solving','problem-solving','critical thinking','analytical','creative','creativity','adaptability','flexible','flexibility','time management','organization','organizational','attention to detail','detail-oriented','interpersonal','negotiation','conflict resolution','decision making','decision-making','strategic','strategy','mentoring','coaching','presentation','public speaking','writing','written communication','verbal communication','stakeholder management','cross-functional','self-motivated','self-starter','proactive','initiative','empathy','emotional intelligence','customer-focused','client-facing','results-driven','goal-oriented','fast-paced','deadline','prioritization','multitasking','resilience','accountability','ownership','autonomy','independent','team player','relationship building','networking','persuasion','influence','facilitation','delegation','planning','coordination','resourceful','curious','passionate','driven','motivated','enthusiastic','reliable','dependable','trustworthy','professional','ethical','integrity'];
+
+const TOOLS_PLATFORMS = ['slack','teams','microsoft teams','zoom','google workspace','google docs','google sheets','excel','word','powerpoint','outlook','gmail','salesforce','hubspot','zendesk','intercom','freshdesk','notion','asana','trello','monday','linear','clickup','basecamp','airtable','miro','figma','sketch','invision','zeplin','abstract','principle','framer','canva','mailchimp','sendgrid','twilio','stripe','paypal','shopify','wordpress','webflow','squarespace','wix','contentful','sanity','strapi','ghost','medium','substack','buffer','hootsuite','sprout social','google analytics','mixpanel','amplitude','segment','heap','hotjar','optimizely','launchdarkly','split','statsig','fullstory','logrocket','bugsnag','crashlytics','firebase','supabase','auth0','okta','onelogin','workday','bamboohr','greenhouse','lever','workable','rippling','gusto','carta','plaid','alpaca','bloomberg','reuters','factset','quickbooks','xero','netsuite','sage','freshbooks','wave','github','gitlab','bitbucket','sourcetree','gitkraken','vs code','vscode','intellij','pycharm','webstorm','rider','eclipse','xcode','android studio','postman','insomnia','charles proxy','wireshark','terminal','iterm','warp','tmux','vim','neovim','emacs','sublime','atom','notepad\\+\\+'];
+
+const CERTS_EDU = ['bachelor','master','phd','mba','degree','certification','certified','certificate','cpa','cfa','pmp','scrum master','csm','cspo','safe','aws certified','azure certified','google certified','cissp','cism','cisa','comptia','security\\+','network\\+','a\\+','ccna','ccnp','itil','togaf','prince2','six sigma','lean','green belt','black belt','professional engineer','pe','licensed','accredited','cka','ckad','istqb','professional scrum','hashicorp certified','terraform associate','solutions architect','developer associate','sysops','devops engineer','data engineer','machine learning specialty','database specialty','networking specialty','security specialty','bootcamp','nanodegree','coursera','udemy','edx','pluralsight','linkedin learning'];
+
+const ACTION_VERBS = ['manage','lead','develop','design','implement','build','create','architect','optimize','improve','analyze','drive','deliver','execute','coordinate','collaborate','oversee','mentor','train','support','maintain','monitor','troubleshoot','debug','deploy','migrate','scale','automate','integrate','configure','administer','evaluate','research','innovate','transform','modernize','refactor','review','test','validate','document','communicate','present','report','advise','consult','facilitate','negotiate','influence','advocate','champion','pioneer','spearhead','launch','ship','release','iterate','experiment','prototype','discover','identify','resolve','investigate','diagnose','remediate','mitigate','prevent','secure','protect','audit','assess','benchmark','measure','track','forecast','budget','allocate','prioritize','streamline','standardize','establish','define','specify','plan','schedule','estimate','scope','roadmap','align','onboard','recruit','hire','retain','grow','expand','acquire','engage','convert','revenue','profit','reduce cost','increase efficiency','decrease','accelerate','enhance'];
+
+function extract() {
+  const text = document.getElementById('jobdesc').value.trim();
+  if (!text) return alert('Paste a job description first.');
+  if (text.length < 50) return alert('That seems too short. Paste the full job description.');
+
+  const lower = text.toLowerCase();
+  const results = { tech: {}, soft: {}, tools: {}, certs: {}, actions: {} };
+
+  function findMatches(patterns, category) {
+    for (const p of patterns) {
+      const re = new RegExp('\\b' + p + '\\b', 'gi');
+      const matches = text.match(re);
+      if (matches) {
+        const canonical = matches[0].replace(/\\\+/g, '+');
+        results[category][canonical] = (results[category][canonical] || 0) + matches.length;
+      }
+    }
+  }
+
+  findMatches(TECH_SKILLS, 'tech');
+  findMatches(SOFT_SKILLS, 'soft');
+  findMatches(TOOLS_PLATFORMS, 'tools');
+  findMatches(CERTS_EDU, 'certs');
+  findMatches(ACTION_VERBS, 'actions');
+
+  const yearsMatch = text.match(/(\d+)\+?\s*(?:years?|yrs?)\s*(?:of\s*)?(?:experience|exp)/gi);
+  if (yearsMatch) {
+    for (const m of yearsMatch) results.certs[m.trim()] = 1;
+  }
+
+  renderResults(results);
+}
+
+function renderResults(results) {
+  document.getElementById('results').style.display = 'block';
+
+  const totalKws = Object.values(results).reduce((s, o) => s + Object.keys(o).length, 0);
+  const highPriority = Object.values(results).reduce((s, o) => {
+    return s + Object.values(o).filter(c => c >= 2).length;
+  }, 0);
+
+  document.getElementById('summary').innerHTML =
+    '<div class="stat"><span class="stat-num">' + totalKws + '</span><span class="stat-label">keywords found</span></div>' +
+    '<div class="stat"><span class="stat-num">' + highPriority + '</span><span class="stat-label">mentioned 2+ times</span></div>';
+
+  const sections = [
+    { key: 'tech', id: 'tech', label: 'Technical Skills' },
+    { key: 'soft', id: 'soft', label: 'Soft Skills' },
+    { key: 'tools', id: 'tools', label: 'Tools & Platforms' },
+    { key: 'certs', id: 'certs', label: 'Certifications & Education' },
+    { key: 'actions', id: 'action', label: 'Action Verbs' }
+  ];
+
+  let allKeywords = [];
+
+  for (const sec of sections) {
+    const data = results[sec.key];
+    const entries = Object.entries(data).sort((a, b) => b[1] - a[1]);
+    const el = document.getElementById(sec.id + '-section');
+    const kwEl = document.getElementById(sec.id + '-kws');
+    const countEl = document.getElementById(sec.id + '-count');
+
+    if (entries.length === 0) {
+      el.style.display = 'none';
+      continue;
+    }
+
+    el.style.display = 'block';
+    countEl.textContent = entries.length;
+    kwEl.innerHTML = entries.map(([kw, count]) => {
+      const cls = count >= 3 ? 'high' : count >= 2 ? 'medium' : 'low';
+      const countStr = count > 1 ? '<span class="count">x' + count + '</span>' : '';
+      return '<span class="kw ' + cls + '" onclick="copyOne(this)" title="Click to copy">' + kw + countStr + '</span>';
+    }).join('');
+
+    if (sec.key !== 'actions') {
+      allKeywords = allKeywords.concat(entries.map(e => e[0]));
+    }
+  }
+
+  document.getElementById('copyText').value = allKeywords.join(', ');
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+}
+
+function copyKeywords() {
+  const ta = document.getElementById('copyText');
+  ta.select();
+  navigator.clipboard.writeText(ta.value).then(() => {
+    document.getElementById('copyStatus').textContent = 'Copied!';
+    setTimeout(() => document.getElementById('copyStatus').textContent = '', 2000);
+  }).catch(() => {
+    document.execCommand('copy');
+    document.getElementById('copyStatus').textContent = 'Copied!';
+  });
+}
+
+function copyOne(el) {
+  const text = el.textContent.replace(/x\d+$/, '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    el.style.outline = '2px solid #667eea';
+    setTimeout(() => el.style.outline = '', 600);
+  });
+}
+</script>
+</body>
+</html>

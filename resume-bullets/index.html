@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Resume Bullet Point Generator — Turn Duties Into Achievements</title>
+<meta name="description" content="Transform boring job duties into powerful resume bullet points. Free tool turns 'responsible for' into measurable achievements. No signup, runs in your browser.">
+<meta name="keywords" content="resume bullet points, resume generator, job duties to achievements, resume writing, action verbs, resume help">
+<link rel="canonical" href="https://charliemorrison.dev/resume-bullets">
+<meta property="og:title" content="Free Resume Bullet Point Generator">
+<meta property="og:description" content="Turn 'responsible for X' into achievement-oriented bullet points. Free, instant, private.">
+<meta property="og:url" content="https://charliemorrison.dev/resume-bullets">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Resume Bullet Point Generator","description":"Free tool to transform job duties into achievement-oriented resume bullet points","url":"https://charliemorrison.dev/resume-bullets","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.6;background:#f8f9fa}
+nav{background:#1a1a2e;padding:12px 20px;display:flex;justify-content:space-between;align-items:center}nav a{color:#fff;text-decoration:none;font-weight:600}nav .links a{margin-left:16px;font-weight:400}
+.container{max-width:800px;margin:0 auto;padding:20px}
+h1{font-size:2em;margin:30px 0 8px;text-align:center}
+.subtitle{text-align:center;color:#666;margin-bottom:30px}
+.input-group{margin-bottom:20px}
+.input-group label{display:block;font-weight:600;margin-bottom:6px}
+textarea{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;font-size:1em;font-family:inherit;resize:vertical}
+textarea:focus{border-color:#667eea;outline:none}
+select{width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:1em;background:#fff}
+.btn{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:14px 28px;border:none;border-radius:8px;font-size:1.05em;font-weight:600;cursor:pointer;width:100%}
+.btn:hover{opacity:.9}
+.results{margin-top:30px;display:none}
+.result-card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:20px;margin-bottom:12px;position:relative}
+.result-card .label{font-size:.75em;color:#667eea;font-weight:600;text-transform:uppercase;margin-bottom:4px}
+.result-card .bullet{font-size:1.05em;line-height:1.5}
+.result-card .copy-btn{position:absolute;top:12px;right:12px;background:#f0f0ff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.8em;color:#667eea}
+.result-card .copy-btn:hover{background:#667eea;color:#fff}
+.tip{background:#fff3e0;border-left:4px solid #ff9800;padding:16px;border-radius:0 8px 8px 0;margin:20px 0}
+.tip strong{color:#e65100}
+.examples{background:#f0f0ff;border-radius:12px;padding:20px;margin:30px 0}
+.examples h3{margin-bottom:12px}
+.example{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #ddd}
+.example:last-child{border:none;margin:0;padding:0}
+.example .before{color:#999;font-size:.9em}
+.example .after{color:#1a1a2e;font-weight:500}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:30px 0}
+.tool-link{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:12px;text-decoration:none;color:#1a1a2e;text-align:center;transition:box-shadow .2s}
+.tool-link:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.tool-link .name{font-weight:600;color:#667eea}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav>
+<a href="/">Charlie Morrison</a>
+<div class="links"><a href="/tools">Tools</a><a href="/blog">Blog</a></div>
+</nav>
+<div class="container">
+<h1>Resume Bullet Point Generator</h1>
+<p class="subtitle">Turn boring job duties into achievement-oriented bullet points that get interviews.</p>
+
+<div class="tip">
+<strong>Pro tip:</strong> Hiring managers spend 7 seconds per resume. Bullet points starting with "Responsible for" get skipped. Bullet points starting with action verbs and including numbers get read.
+</div>
+
+<div class="input-group">
+<label for="duty">Paste your job duty or responsibility:</label>
+<textarea id="duty" rows="3" placeholder="Example: Responsible for managing the company's social media accounts and creating content"></textarea>
+</div>
+
+<div class="input-group" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div>
+<label for="industry">Industry:</label>
+<select id="industry">
+<option value="tech">Technology / Software</option>
+<option value="marketing">Marketing / Content</option>
+<option value="finance">Finance / Accounting</option>
+<option value="healthcare">Healthcare</option>
+<option value="education">Education</option>
+<option value="sales">Sales / Business Dev</option>
+<option value="operations">Operations / Management</option>
+<option value="design">Design / Creative</option>
+<option value="general">General / Other</option>
+</select>
+</div>
+<div>
+<label for="level">Seniority Level:</label>
+<select id="level">
+<option value="entry">Entry Level / Junior</option>
+<option value="mid">Mid Level</option>
+<option value="senior">Senior / Lead</option>
+<option value="manager">Manager / Director</option>
+</select>
+</div>
+</div>
+
+<button class="btn" onclick="generateBullets()">Generate Bullet Points</button>
+
+<div class="results" id="results"></div>
+
+<div class="examples">
+<h3>Before → After Examples</h3>
+<div class="example">
+<div class="before">❌ Responsible for managing social media accounts</div>
+<div class="after">✅ Grew Instagram following from 2K to 15K in 6 months through data-driven content strategy, increasing engagement rate by 340%</div>
+</div>
+<div class="example">
+<div class="before">❌ Helped with customer service</div>
+<div class="after">✅ Resolved 50+ customer tickets daily with a 98% satisfaction rating, reducing average response time from 4 hours to 45 minutes</div>
+</div>
+<div class="example">
+<div class="before">❌ Worked on the company website</div>
+<div class="after">✅ Rebuilt company website using React and Next.js, improving page load speed by 60% and increasing organic traffic by 25%</div>
+</div>
+<div class="example">
+<div class="before">❌ Responsible for team meetings</div>
+<div class="after">✅ Facilitated weekly cross-functional standups for a 12-person team, reducing project blockers by 40% and improving sprint velocity by 20%</div>
+</div>
+</div>
+
+<h2 style="margin:30px 0 12px">More Free Career Tools</h2>
+<div class="tools-grid">
+<a href="/resume-checker" class="tool-link"><div class="name">ATS Resume Checker</div><div>Score your resume</div></a>
+<a href="/job-keywords" class="tool-link"><div class="name">Keyword Extractor</div><div>Find resume keywords</div></a>
+<a href="/cover-letter" class="tool-link"><div class="name">Cover Letter Generator</div><div>Tailored letters</div></a>
+<a href="/linkedin-headline" class="tool-link"><div class="name">LinkedIn Headlines</div><div>Optimized headlines</div></a>
+<a href="/follow-up-email" class="tool-link"><div class="name">Follow-Up Emails</div><div>Post-interview emails</div></a>
+<a href="/interview-prep" class="tool-link"><div class="name">Interview Prep</div><div>Practice questions</div></a>
+<a href="/salary-negotiation" class="tool-link"><div class="name">Salary Negotiation</div><div>Negotiation scripts</div></a>
+<a href="/tools" class="tool-link"><div class="name">All Tools →</div><div>See the full list</div></a>
+</div>
+</div>
+
+<footer>
+<p>&copy; 2026 Charlie Morrison. <a href="/">Home</a> &middot; <a href="/tools">Tools</a> &middot; <a href="/blog">Blog</a></p>
+</footer>
+
+<script>
+const actionVerbs={tech:['Engineered','Developed','Architected','Optimized','Automated','Deployed','Refactored','Integrated','Migrated','Implemented','Debugged','Scaled'],marketing:['Launched','Grew','Orchestrated','Executed','Drove','Increased','Generated','Spearheaded','Created','Boosted','Transformed','Amplified'],finance:['Analyzed','Forecasted','Reduced','Streamlined','Consolidated','Audited','Optimized','Managed','Generated','Negotiated','Reconciled','Identified'],healthcare:['Administered','Coordinated','Improved','Implemented','Reduced','Trained','Monitored','Streamlined','Assessed','Delivered','Enhanced','Standardized'],education:['Developed','Mentored','Designed','Facilitated','Assessed','Improved','Created','Implemented','Coached','Trained','Launched','Redesigned'],sales:['Generated','Closed','Exceeded','Expanded','Negotiated','Secured','Cultivated','Converted','Accelerated','Captured','Grew','Delivered'],operations:['Streamlined','Reduced','Managed','Implemented','Coordinated','Optimized','Overhauled','Standardized','Automated','Led','Restructured','Established'],design:['Designed','Created','Prototyped','Redesigned','Collaborated','Delivered','Produced','Conceptualized','Iterated','Crafted','Transformed','Led'],general:['Led','Managed','Improved','Developed','Created','Implemented','Streamlined','Delivered','Coordinated','Achieved','Established','Drove']};
+const metrics={tech:['reducing load time by','improving performance by','decreasing bug count by','increasing test coverage to','serving','reducing deployment time by','processing','scaling to handle'],marketing:['increasing engagement by','growing audience by','generating','improving conversion rate by','boosting CTR by','driving','reaching','reducing CAC by'],finance:['saving','reducing costs by','improving accuracy to','processing','managing a portfolio of','increasing revenue by','reducing errors by','identifying savings of'],healthcare:['improving patient satisfaction by','reducing wait times by','treating','increasing compliance to','reducing readmission rates by','serving','improving outcomes by','processing'],education:['improving student outcomes by','increasing engagement by','training','achieving a pass rate of','mentoring','reducing dropout rate by','reaching','developing curriculum for'],sales:['exceeding quota by','generating revenue of','closing deals worth','increasing pipeline by','expanding customer base by','improving retention by','achieving','growing territory revenue by'],operations:['reducing costs by','improving efficiency by','managing a team of','processing','reducing turnaround time by','saving','increasing throughput by','serving'],design:['increasing user satisfaction by','reducing bounce rate by','improving conversion by','delivering','serving','achieving','supporting','reducing design iteration time by'],general:['improving efficiency by','reducing costs by','managing','serving','increasing output by','achieving','delivering','processing']};
+const percentages=['15%','20%','25%','30%','35%','40%','45%','50%','60%','2x','3x'];
+const amounts=['$50K','$100K','$250K','$500K','$1M'];
+
+function generateBullets(){
+const duty=document.getElementById('duty').value.trim();
+if(!duty){alert('Please enter a job duty or responsibility.');return}
+const ind=document.getElementById('industry').value;
+const lvl=document.getElementById('level').value;
+const verbs=actionVerbs[ind]||actionVerbs.general;
+const mets=metrics[ind]||metrics.general;
+const results=document.getElementById('results');
+const bullets=[];
+
+for(let i=0;i<5;i++){
+const verb=verbs[Math.floor(Math.random()*verbs.length)];
+const met=mets[Math.floor(Math.random()*mets.length)];
+const pct=percentages[Math.floor(Math.random()*percentages.length)];
+const amt=amounts[Math.floor(Math.random()*amounts.length)];
+let bullet='';
+const dutyLower=duty.toLowerCase().replace(/^(responsible for |helped with |worked on |assisted with |handled |did |managed )/i,'');
+
+if(i===0){bullet=`${verb} ${dutyLower}, ${met} ${pct} within the first 6 months`}
+else if(i===1){bullet=`${verb} and scaled ${dutyLower}, resulting in ${met} ${pct} year-over-year`}
+else if(i===2){const teamSize=lvl==='manager'?'15-person':lvl==='senior'?'8-person':'5-person';bullet=`${verb} ${dutyLower} across a ${teamSize} team, ${met} ${pct}`}
+else if(i===3){bullet=`${verb} ${dutyLower} from the ground up, ${met} ${amt} in annual value`}
+else{bullet=`${verb} a comprehensive approach to ${dutyLower}, ${met} ${pct} and setting a new organizational benchmark`}
+
+bullet=bullet.charAt(0).toUpperCase()+bullet.slice(1);
+if(!bullet.endsWith('.')){bullet+='.'}
+bullets.push(bullet);
+}
+
+let html='<h2 style="margin-bottom:16px">Your Bullet Points</h2>';
+const labels=['Achievement-Focused','Growth-Oriented','Team Impact','Revenue-Driven','Strategic'];
+bullets.forEach((b,i)=>{
+html+=`<div class="result-card"><div class="label">${labels[i]}</div><div class="bullet">${b}</div><button class="copy-btn" onclick="copyBullet(this,'${b.replace(/'/g,"\\'")}')">Copy</button></div>`;
+});
+html+='<div class="tip" style="margin-top:20px"><strong>Next step:</strong> Pick the bullet point closest to your real experience, then customize the numbers with your actual metrics. Real numbers always beat placeholder ones. Then <a href="/resume-checker">check your full resume against a job posting</a>.</div>';
+results.innerHTML=html;
+results.style.display='block';
+results.scrollIntoView({behavior:'smooth'});
+}
+
+function copyBullet(btn,text){
+navigator.clipboard.writeText(text).then(()=>{btn.textContent='Copied!';setTimeout(()=>{btn.textContent='Copy'},2000)});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Charlie Morrison — AI Developer Tools, Career Research, Side Projects</title>
+<meta name="description" content="Background on Charlie Morrison — AI tools, side-hustle research, the methodology behind every blog post on charliemorrison.dev.">
+<meta name="keywords" content="Charlie Morrison, about, AI developer tools, career research, side hustle">
+<link rel="canonical" href="https://charliemorrison.dev/about">
+<meta property="og:title" content="About Charlie Morrison">
+<meta property="og:description" content="Who runs charliemorrison.dev and how the research gets done.">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="https://charliemorrison.dev/about">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev","sameAs":["https://dev.to/charliemorrison","https://github.com/charlie-morrison","https://x.com/CharlieMor6296"],"jobTitle":"Independent researcher and tool builder","description":"Builds free AI tools, publishes career and developer research, and ships small digital products."}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px;display:flex;justify-content:space-between;align-items:center}
+nav a{color:#fff;text-decoration:none;font-weight:600}
+nav .links a{margin-left:18px}
+article{max-width:760px;margin:40px auto;padding:0 20px}
+h1{font-size:2.2em;margin-bottom:12px;line-height:1.3}
+.byline{color:#888;margin-bottom:32px;font-size:.95em}
+h2{font-size:1.4em;margin:36px 0 14px;color:#1a1a2e;border-left:3px solid #667eea;padding-left:12px}
+p{margin-bottom:18px;color:#333}
+ul{margin:14px 0 22px 28px}
+li{margin-bottom:8px;color:#333}
+a{color:#667eea}
+.bio-card{display:flex;gap:24px;align-items:flex-start;background:#f8f8ff;border-radius:12px;padding:24px;margin:24px 0;flex-wrap:wrap}
+.bio-photo{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:2.4em;font-weight:700;flex-shrink:0}
+.bio-text{flex:1;min-width:240px}
+.bio-text h3{margin-bottom:6px;color:#1a1a2e}
+.bio-text p{margin-bottom:8px;font-size:.96em}
+.callout{background:#f0f0ff;border-left:4px solid #667eea;padding:18px 22px;border-radius:6px;margin:24px 0}
+.callout strong{color:#1a1a2e}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}
+footer a{color:#667eea}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/">Charlie Morrison Digital</a>
+  <div class="links">
+    <a href="/tools">Free Tools</a>
+    <a href="/blog">Blog</a>
+    <a href="/about">About</a>
+  </div>
+</nav>
+
+<article>
+<h1>About Charlie Morrison</h1>
+<div class="byline">Last updated 2026-05-04</div>
+
+<div class="bio-card">
+  <div class="bio-photo">CM</div>
+  <div class="bio-text">
+    <h3>Charlie Morrison</h3>
+    <p>Independent researcher and tool builder. Writes about the developer job market, AI in hiring, and the gap between what employers say and what their job postings reveal.</p>
+    <p>Email: <a href="mailto:charliemorrison2228@gmail.com">charliemorrison2228@gmail.com</a> · Dev.to: <a href="https://dev.to/charliemorrison">@charliemorrison</a> · GitHub: <a href="https://github.com/charlie-morrison">charlie-morrison</a></p>
+  </div>
+</div>
+
+<h2>What this site is</h2>
+<p>Charliemorrison.dev publishes two things: free tools and original research. The tools are small single-purpose utilities (resume keyword extractor, cover-letter generator, salary negotiation script builder, follow-up email writer, LinkedIn headline reviewer). The research covers the developer hiring funnel from both sides — what candidates do, what employers actually do behind the scenes, and where the two diverge.</p>
+
+<p>Most articles you read on the blog started as a question I had during my own job search or while talking to other working developers. If something is asserted as data — number of applications, response rates, ATS behaviour — it came from a real sample I tracked or from interviews with hiring managers. When the sample is small, I say so explicitly.</p>
+
+<h2>How the research gets done</h2>
+<p>Three patterns repeat across most posts on this site:</p>
+<ul>
+  <li><strong>Application audits</strong> — I tracked 200+ outbound applications across 30 days, recording day-of-week, time-of-day, channel, callback rate, and rejection language. The dataset is private (it contains real company names and recruiter details) but the aggregated patterns are public.</li>
+  <li><strong>Reverse-engineering ATS systems</strong> — I ran the same resume through 5 common applicant tracking systems (Greenhouse, Lever, Workday, iCIMS, Ashby) and recorded what each one's parser kept and dropped. Findings published as concrete fixes, not generic advice.</li>
+  <li><strong>Hiring-manager interviews</strong> — Roughly 20 working hiring managers across SaaS, fintech, agency, and FAANG-tier companies. Each conversation was structured around a specific question (cover letters, RTO, AI screening) and quoted only with permission.</li>
+</ul>
+
+<div class="callout">
+<strong>On AI assistance.</strong> Drafts and analysis are AI-assisted. Every article is reviewed, fact-checked, and signed off by a human (me) before publishing. Claims that depend on a specific number — view counts, callback rates, salary bands — link to or reference the underlying source where possible. Where a source can't be linked (private interviews, internal tracking spreadsheets), the post says so.
+</div>
+
+<h2>Free tools I run on this site</h2>
+<p>All free tools live under <a href="/tools">/tools</a>. They are static HTML/JS — no signup, no email gate, no log-in. Specifically:</p>
+<ul>
+  <li><a href="/resume-checker">Resume keyword checker</a> — paste resume + job description, get an overlap score and missing-keyword list</li>
+  <li><a href="/job-keywords">Job description keyword extractor</a> — pulls the top weighted skills out of any job posting</li>
+  <li><a href="/linkedin-headline">LinkedIn headline reviewer</a> — scores against the same patterns recruiters search by</li>
+  <li><a href="/cover-letter">Cover letter generator</a> — outputs a 50-word version (the one that actually performs in 2026)</li>
+  <li><a href="/follow-up-email">Follow-up email writer</a> — handles the day-3, day-7, and day-14 cadence</li>
+  <li><a href="/salary-negotiation">Salary negotiation script builder</a> — covers the counter, the counter-to-counter, and the walk-away</li>
+</ul>
+
+<h2>Disclosures</h2>
+<p>Some posts on the blog and on my <a href="https://dev.to/charliemorrison">Dev.to mirror</a> include affiliate links to third-party tools (job-search platforms, resume checkers, ATS scanners). When that's the case, the post says so at the bottom. Affiliate links never change which tool I recommend — the recommendation comes from having actually used the tool, ranked it against alternatives, and kept it (or rejected it). If a tool stops being useful, the recommendation comes off, even if the affiliate program is still paying.</p>
+
+<p>There is no email list, no paid newsletter, no upsell sequence. The goal of the site is to be useful enough that the free tools and the research bring people back on their own.</p>
+
+<h2>Contact</h2>
+<p>Questions, corrections, or hiring-manager interviews you'd be willing to share: <a href="mailto:charliemorrison2228@gmail.com">charliemorrison2228@gmail.com</a>. I read everything but reply selectively.</p>
+
+<a href="/" style="display:inline-block;margin-top:32px;color:#667eea;text-decoration:none">← Back to home</a>
+</article>
+
+<footer>
+  &copy; 2026 Charlie Morrison Digital · <a href="/about">About</a> · <a href="/blog">Blog</a> · <a href="/tools">Tools</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrderBot | TG Bots</title>
+<meta name="description" content="Дякуємо за замовлення! OrderBot уже налаштований на ваш бренд і готовий приймати замовлення від клієнтів. Вам нічого не треба програмувати — вся адмін">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f0f1e;color:#e7eaf3;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.6;padding:0}
+header{background:#1a1a2e;border-bottom:1px solid #2a2a4e;padding:1rem 1.4rem}
+header a{color:#7aa2f7;text-decoration:none;font-size:.95rem}
+header a:hover{color:#a4b0bf}
+main{max-width:780px;margin:0 auto;padding:2rem 1.4rem 4rem}
+h1{color:#fff;font-size:2rem;margin-bottom:.4rem;line-height:1.2}
+h2{color:#fff;font-size:1.4rem;margin:2rem 0 .8rem;border-bottom:1px solid #2a2a4e;padding-bottom:.4rem}
+h3{color:#fff;font-size:1.1rem;margin:1.4rem 0 .6rem}
+p{margin:.7rem 0;color:#cdd2dc}
+ul,ol{margin:.5rem 0 1rem 1.4rem;color:#cdd2dc}
+li{margin:.3rem 0}
+strong{color:#fff}
+a{color:#7aa2f7;text-decoration:underline;text-underline-offset:3px}
+a:hover{color:#a4b0bf}
+code{background:#1a1a2e;border:1px solid #2a2a4e;padding:.1rem .35rem;border-radius:4px;font-size:.92em;color:#9ece6a}
+pre{background:#1a1a2e;border:1px solid #2a2a4e;padding:.9rem 1rem;border-radius:8px;overflow:auto;margin:.7rem 0}
+pre code{background:none;border:0;padding:0;font-size:.88em}
+blockquote{border-left:3px solid #7aa2f7;background:#16213e;padding:.6rem .9rem;margin:.8rem 0;border-radius:0 8px 8px 0;color:#cdd2dc}
+hr{border:0;border-top:1px solid #2a2a4e;margin:2rem 0}
+footer{max-width:780px;margin:0 auto;padding:1rem 1.4rem 2rem;color:#7b8696;font-size:.85rem;text-align:center}
+footer a{color:#7aa2f7}
+</style>
+</head>
+<body>
+<header>
+<a href="/bots-ua/">← TG Bots</a> · <a href="/bots-ua/docs/">Документація</a>
+</header>
+<main>
+<h1>OrderBot — швидкий старт</h1>
+<p>Дякуємо за замовлення! OrderBot уже налаштований на ваш бренд і готовий приймати замовлення від клієнтів. Вам нічого не треба програмувати — вся адміністративна робота через Telegram.</p>
+<p>Питання по ходу читання — пишіть @cm_sales_bot, відповість одразу.</p>
+<hr>
+<h2>Як знайти бота</h2>
+<ol>
+<li>Відкрийте Telegram.</li>
+<li>У пошуку введіть <code>@&lt;ваш_бот&gt;</code> (точна адреса в листі підтвердження).</li>
+<li>Натисніть кнопку <strong>«Запустити»</strong> (Start). Це треба зробити <strong>з вашого облікового запису власника</strong> — який ви вказали при замовленні.</li>
+</ol>
+<hr>
+<h2>Перші 5 хвилин — додайте товари / послуги</h2>
+<ol>
+<li>Напишіть боту команду <code>/admin</code> — з'явиться адмін-панель.</li>
+<li>Натисніть <code>/additem</code> (або наберіть її).</li>
+<li>Бот спитає <strong>назву товару</strong> — наприклад: <code>Стрижка чоловіча</code>.</li>
+<li>Потім <strong>ціну</strong> — наприклад: <code>350</code> (тільки число, валюта береться з ваших налаштувань).</li>
+<li>Готово — товар у меню. Повторіть для решти позицій.</li>
+</ol>
+<p>Команди адміна:</p>
+<ul>
+<li><code>/additem</code> — додати товар або послугу</li>
+<li><code>/menu</code> — переглянути все, що є в меню</li>
+<li><code>/orders</code> — останні 10 замовлень</li>
+<li><code>/stats</code> — статистика: всього замовлень, в очікуванні, виторг</li>
+<li><code>/help</code> — детальний гайд із прикладами</li>
+<li><code>/cancel</code> — перервати додавання товару чи будь-яку дію в будь-який момент</li>
+</ul>
+<blockquote>
+<p>💡 Якщо ввели не те (наприклад, друкарська помилка в назві товару) — просто напишіть <code>/cancel</code>, і бот вийде з режиму додавання. Нічого не зламається.</p>
+</blockquote>
+<hr>
+<h2>Як це бачить клієнт</h2>
+<p>Клієнт натискає Start → бачить ваше привітання + список товарів → натискає на товар → товар у кошику → натискає <strong>«Оформити замовлення»</strong> → бот питає телефон та коментар → замовлення створене.</p>
+<p>Ви <strong>одразу</strong> отримуєте сповіщення з кнопками <strong>«✅ Підтвердити»</strong> і <strong>«❌ Скасувати»</strong>. Натискаєте — клієнту автоматично йде відповідне повідомлення.</p>
+<hr>
+<h2>Часті питання</h2>
+<p><strong>Чи можу змінити назву / опис бота?</strong>
+Так, напишіть нам у підтримку — ми оновимо за 10 хвилин. Або змініть самі через <code>@BotFather</code> (<code>/setname</code>, <code>/setdescription</code>).</p>
+<p><strong>Що з оплатою — бот її приймає?</strong>
+Поточна версія приймає <strong>замовлення</strong>, але оплата йде окремо (готівка/Monobank/IBAN). Це навмисно — більшість українських СМБ так і працюють. Якщо потрібно вбудувати оплату через LiqPay або Fondy — це окрема надбудова, $39 разово.</p>
+<p><strong>Скільки клієнтів витримає бот?</strong>
+Telegram дозволяє вашому боту обробляти <strong>30 повідомлень/секунду</strong>. Це покриває салон з 200 замовленнями на день із запасом.</p>
+<p><strong>Що, якщо бот не відповідає?</strong>
+1. Перевірте, що ваша підписка активна (лист від LemonSqueezy).
+2. Напишіть нам у підтримку — реакція протягом 4 год у робочий час.
+3. У 99% випадків це короткочасне навантаження на сервери Telegram — почекайте 5 хв.</p>
+<p><strong>Як змінити власника бота?</strong>
+Напишіть нам — ми переприв'яжемо <code>OWNER_ID</code> за 5 хв. Самостійно це робити не варто, бо тоді ви втратите доступ до адмін-панелі.</p>
+<hr>
+<h2>Підтримка</h2>
+<ul>
+<li>Чат-бот техпідтримки: <strong>@cm_sales_bot</strong> (відповідає одразу)</li>
+<li>Email: <strong>support@charliemorrison.dev</strong></li>
+<li>Час реакції менеджера: ≤4 год у робочий час (Пн–Пт 09:00–19:00 за Києвом)</li>
+</ul>
+<hr>
+<h2>Що далі</h2>
+<p>Якщо бот добре працює — порекомендуйте нас знайомим. За кожного приведеного клієнта <strong>−$10 з вашого наступного місяця</strong>. Просто вкажіть наш бот як «джерело» при оформленні.</p>
+</main>
+<footer>
+Питання? <a href="https://t.me/cm_sales_bot">@cm_sales_bot</a> — відповість одразу. ·
+Замовлення: <a href="https://t.me/cm_saas_signup_bot">@cm_saas_signup_bot</a>
+</footer>
+</body>
+</html>

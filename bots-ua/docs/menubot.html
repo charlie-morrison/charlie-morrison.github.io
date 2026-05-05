@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MenuBot | TG Bots</title>
+<meta name="description" content="Дякуємо за замовлення! MenuBot — це інтерактивне меню вашого закладу прямо в Telegram. Клієнти бачать категорії, фото страв і години роботи; ви адміні">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f0f1e;color:#e7eaf3;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.6;padding:0}
+header{background:#1a1a2e;border-bottom:1px solid #2a2a4e;padding:1rem 1.4rem}
+header a{color:#7aa2f7;text-decoration:none;font-size:.95rem}
+header a:hover{color:#a4b0bf}
+main{max-width:780px;margin:0 auto;padding:2rem 1.4rem 4rem}
+h1{color:#fff;font-size:2rem;margin-bottom:.4rem;line-height:1.2}
+h2{color:#fff;font-size:1.4rem;margin:2rem 0 .8rem;border-bottom:1px solid #2a2a4e;padding-bottom:.4rem}
+h3{color:#fff;font-size:1.1rem;margin:1.4rem 0 .6rem}
+p{margin:.7rem 0;color:#cdd2dc}
+ul,ol{margin:.5rem 0 1rem 1.4rem;color:#cdd2dc}
+li{margin:.3rem 0}
+strong{color:#fff}
+a{color:#7aa2f7;text-decoration:underline;text-underline-offset:3px}
+a:hover{color:#a4b0bf}
+code{background:#1a1a2e;border:1px solid #2a2a4e;padding:.1rem .35rem;border-radius:4px;font-size:.92em;color:#9ece6a}
+pre{background:#1a1a2e;border:1px solid #2a2a4e;padding:.9rem 1rem;border-radius:8px;overflow:auto;margin:.7rem 0}
+pre code{background:none;border:0;padding:0;font-size:.88em}
+blockquote{border-left:3px solid #7aa2f7;background:#16213e;padding:.6rem .9rem;margin:.8rem 0;border-radius:0 8px 8px 0;color:#cdd2dc}
+hr{border:0;border-top:1px solid #2a2a4e;margin:2rem 0}
+footer{max-width:780px;margin:0 auto;padding:1rem 1.4rem 2rem;color:#7b8696;font-size:.85rem;text-align:center}
+footer a{color:#7aa2f7}
+</style>
+</head>
+<body>
+<header>
+<a href="/bots-ua/">← TG Bots</a> · <a href="/bots-ua/docs/">Документація</a>
+</header>
+<main>
+<h1>MenuBot — швидкий старт</h1>
+<p>Дякуємо за замовлення! MenuBot — це інтерактивне меню вашого закладу прямо в Telegram. Клієнти бачать категорії, фото страв і години роботи; ви адмініструєте все через бота.</p>
+<p>Питання по ходу читання — пишіть @cm_sales_bot, відповість одразу.</p>
+<hr>
+<h2>Як знайти бота</h2>
+<ol>
+<li>Відкрийте Telegram.</li>
+<li>У пошуку введіть <code>@&lt;ваш_бот&gt;</code> (точна адреса в листі підтвердження).</li>
+<li>Натисніть кнопку <strong>«Запустити»</strong> (Start) — це треба зробити <strong>з вашого облікового запису власника</strong>, який ви вказали при замовленні.</li>
+</ol>
+<hr>
+<h2>Перші 10 хвилин — наповнюємо меню</h2>
+<h3>1. Створіть категорії</h3>
+<pre><code>/admin
+/addcategory
+</code></pre>
+<p>Бот спитає <strong>назву категорії</strong> — наприклад: <code>Кава</code>, <code>Сніданки</code>, <code>Десерти</code>. Назва — від 2 до 64 символів.</p>
+<p>Повторіть для кожної категорії. Категорії показуються клієнтам у тому порядку, в якому ви їх створили.</p>
+<h3>2. Додайте позиції</h3>
+<pre><code>/additem
+</code></pre>
+<p>Бот проведе вас 5 кроками:</p>
+<ol>
+<li><strong>Категорія</strong> — оберіть з кнопок.</li>
+<li><strong>Назва</strong> — наприклад <code>Капучино 250 мл</code> (до 80 символів).</li>
+<li><strong>Ціна</strong> — число, наприклад <code>85</code>. Валюта береться з ваших налаштувань.</li>
+<li><strong>Опис</strong> — короткий, наприклад <code>Подвійний еспресо, молоко з мікропінкою</code>. Або <code>/skip</code> щоб пропустити.</li>
+<li><strong>Фото</strong> — надішліть фото страви або <code>/skip</code>. Telegram сам зберігає картинку, додатково нічого не треба.</li>
+</ol>
+<p>Будь-коли — <code>/cancel</code> щоб вийти без збереження.</p>
+<h3>3. Налаштуйте години роботи</h3>
+<pre><code>/sethours
+</code></pre>
+<p>Бот покаже клавіатуру з 7 днями тижня (<code>Пн 08:00-20:00</code>, <code>Вт 08:00-20:00</code>, ...).</p>
+<p>Натискаєте день → вводите <code>08:00-22:00</code> АБО <code>/off</code> для вихідного. Готово, день оновлено.</p>
+<p>Клієнти побачать у вітанні <strong>🟢 Відчинено</strong> або <strong>🔴 Зачинено</strong> + поточні години.</p>
+<hr>
+<h2>Команди адміністратора</h2>
+<ul>
+<li><code>/addcategory</code> — створити нову категорію</li>
+<li><code>/additem</code> — додати позицію в категорію</li>
+<li><code>/setphoto #ID</code> — оновити фото для існуючої позиції (ID ви бачите у <code>/listmenu</code>)</li>
+<li><code>/sethours</code> — графік роботи (7 днів)</li>
+<li><code>/listmenu</code> — переглянути все меню з ID, цінами і маркером "📷" для фото</li>
+</ul>
+<blockquote>
+<p>💡 У <code>/listmenu</code> біля кожної позиції є <code>#ID</code> (наприклад <code>#42</code>) — використовуйте цей номер у <code>/setphoto #42</code> щоб оновити фото без перестворення позиції.</p>
+</blockquote>
+<hr>
+<h2>Як це бачить клієнт</h2>
+<p><code>/start</code> → вітальне повідомлення з 🟢/🔴 індикатором → <code>/menu</code> → бачить кнопки з категоріями → обирає категорію → бачить позиції з фото, назвою, ціною, описом.</p>
+<p>Меню оновлюється <strong>миттєво</strong> після <code>/additem</code> чи <code>/setphoto</code> — без рестартів.</p>
+<hr>
+<h2>Часті питання</h2>
+<p><strong>Чи бот приймає замовлення / оплату?</strong>
+Поточна версія — <strong>інтерактивне меню без оплати</strong>. Клієнт дивиться, вирішує, дзвонить вам або заходить у заклад. Якщо потрібен повний flow з замовленнями — це OrderBot ($79 + $12/міс) як другий бот.</p>
+<p><strong>Скільки фото можна тримати?</strong>
+Telegram зберігає фото безкоштовно у себе на серверах — обмежень з нашого боку нема. Кожна позиція тримає одне фото; для карусель-перегляду напишіть нам, додамо як надбудову ($29 разово).</p>
+<p><strong>Як змінити ціну позиції?</strong>
+Поточна версія — видалити позицію (через <code>/listmenu</code> → запит у нас) і додати наново. У наступному оновленні буде <code>/setprice #ID 95</code>. ETA — 2-3 тижні.</p>
+<p><strong>Чи показується меню клієнту як XLSX/PDF?</strong>
+Ні, тільки інтерактивно в Telegram. Це навмисно — клієнти зазвичай тиснуть кнопки на смартфоні швидше, ніж розгортають PDF.</p>
+<p><strong>Що робити, якщо завозите нові страви на сезон?</strong>
+Створіть нову категорію (наприклад <code>Літнє меню</code>) → додайте позиції. Стара категорія залишається. На зиму — пишіть нам, тимчасово приховаємо.</p>
+<p><strong>Як вимкнути бота на час відпустки?</strong>
+Найпростіше — поставте <code>/off</code> на всі 7 днів через <code>/sethours</code>. Клієнти побачать 🔴 і дізнаються, що зараз закрито. Альтернатива — пишіть нам, поставимо паузу на весь бот.</p>
+<hr>
+<h2>Підтримка</h2>
+<ul>
+<li>Чат-бот техпідтримки: <strong>@cm_sales_bot</strong> (відповідає одразу)</li>
+<li>Email: <strong>support@charliemorrison.dev</strong></li>
+<li>Час реакції менеджера: ≤4 год у робочий час (Пн–Пт 09:00–19:00 за Києвом)</li>
+</ul>
+<hr>
+<h2>Що далі</h2>
+<p>Якщо MenuBot працює — порекомендуйте нас знайомим власникам кав'ярень / закладів. За кожного приведеного клієнта <strong>−$10 з вашого наступного місяця</strong>. Ваш реферальний код — у листі від менеджера.</p>
+</main>
+<footer>
+Питання? <a href="https://t.me/cm_sales_bot">@cm_sales_bot</a> — відповість одразу. ·
+Замовлення: <a href="https://t.me/cm_saas_signup_bot">@cm_saas_signup_bot</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram-боти під ключ для українського бізнесу | Charlie Bots UA</title>
+<meta name="description" content="OrderBot, MenuBot, CRMBot — готові Telegram-боти для салонів, кафе, майстрів. Setup від $79, $12-15/міс. Демо в кліку, ваш бренд за 1 годину.">
+<meta name="keywords" content="telegram бот для бізнесу, бот замовлень, бот меню, crm для майстра, telegram бот україна, бот для кафе, бот для салону">
+<meta name="author" content="Charlie Morrison">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Telegram-боти під ключ — OrderBot, MenuBot, CRMBot">
+<meta property="og:description" content="Готовий бот для замовлень, меню, або CRM. Setup за годину. Демо доступне зараз.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://charliemorrison.dev/bots-ua/">
+<meta property="og:locale" content="uk_UA">
+<link rel="canonical" href="https://charliemorrison.dev/bots-ua/">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0a;color:#e0e0e0;min-height:100vh;line-height:1.5}
+.hero{text-align:center;padding:3.5rem 1rem 2rem;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)}
+.hero h1{font-size:2.2rem;margin-bottom:.6rem;background:linear-gradient(90deg,#00b4d8,#90e0ef);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
+.hero p{color:#8899aa;font-size:1.1rem;max-width:560px;margin:0 auto}
+.hero .lead{font-size:1.15rem;color:#cdd6e0;margin:.6rem auto;max-width:580px}
+.badges{display:flex;justify-content:center;gap:1.2rem;margin-top:1.5rem;flex-wrap:wrap}
+.badge{padding:6px 14px;border-radius:14px;background:#0f3460;color:#90e0ef;font-size:.8rem;font-weight:600}
+.bots{max-width:760px;margin:0 auto;padding:2rem 1rem}
+.bot-card{background:#1a1a2e;border-radius:16px;padding:1.6rem;margin-bottom:1.2rem;border:1px solid #2a2a4e;transition:transform .2s,border-color .2s}
+.bot-card:hover{transform:translateY(-2px);border-color:#00b4d8}
+.bot-header{display:flex;align-items:center;gap:1rem;margin-bottom:.8rem;flex-wrap:wrap}
+.bot-emoji{font-size:2.4rem}
+.bot-name{font-size:1.35rem;font-weight:700;color:#fff}
+.bot-tag{font-size:.78rem;padding:3px 10px;border-radius:12px;background:#0f3460;color:#00b4d8;margin-left:auto;font-weight:600}
+.bot-desc{color:#a4b0bf;line-height:1.6;margin-bottom:1rem}
+.bot-features{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.feature{font-size:.82rem;padding:5px 11px;border-radius:8px;background:#111;color:#77aacc;border:1px solid #223}
+.pricing{background:#111;border:1px solid #2a2a4e;border-radius:12px;padding:1rem;margin-top:.8rem;margin-bottom:1rem}
+.pricing-row{display:flex;gap:1rem;font-size:.92rem;color:#99aabb}
+.pricing-col{flex:1}
+.pricing-col strong{color:#fff;display:block;margin-bottom:.3rem;font-size:1.05rem}
+.price-uah{color:#7a8a99;font-size:.78rem;display:block;margin-top:.2rem}
+.bot-link{display:inline-block;background:linear-gradient(135deg,#0088cc,#00b4d8);color:#fff;text-decoration:none;padding:.75rem 1.6rem;border-radius:12px;font-weight:600;font-size:.95rem;transition:opacity .2s;margin-top:.3rem}
+.bot-link:hover{opacity:.85}
+.bot-link-secondary{background:transparent;border:1px solid #0088cc;color:#00b4d8;margin-left:.5rem}
+.section-title{text-align:center;font-size:1.6rem;color:#fff;margin:2.5rem 0 1.5rem;font-weight:700}
+.process{max-width:760px;margin:0 auto;padding:0 1rem}
+.process-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.process-step{background:#1a1a2e;border:1px solid #2a2a4e;border-radius:12px;padding:1.2rem;text-align:center}
+.process-num{font-size:2rem;font-weight:700;color:#00b4d8;margin-bottom:.4rem;line-height:1}
+.process-step h3{color:#fff;font-size:1rem;margin-bottom:.4rem}
+.process-step p{color:#99aabb;font-size:.88rem}
+.faq{max-width:760px;margin:0 auto;padding:1rem 1rem 0}
+.faq-item{background:#111;border:1px solid #223;border-radius:10px;padding:1rem 1.2rem;margin-bottom:.7rem}
+.faq-item h3{color:#fff;font-size:1rem;margin-bottom:.4rem;font-weight:600}
+.faq-item p{color:#99aabb;font-size:.92rem;line-height:1.55}
+.cta{text-align:center;padding:2.5rem 1rem 2rem;background:linear-gradient(135deg,#0f3460 0%,#16213e 100%);margin-top:2.5rem}
+.cta h2{color:#fff;font-size:1.5rem;margin-bottom:.6rem}
+.cta p{color:#a4b0bf;margin-bottom:1.2rem;max-width:520px;margin-left:auto;margin-right:auto}
+.cta .bot-link{font-size:1.05rem;padding:.85rem 2rem}
+.footer{text-align:center;padding:2rem;color:#556;font-size:.85rem}
+.footer a{color:#0088cc;text-decoration:none}
+.footer a:hover{color:#00b4d8}
+@media(max-width:500px){.hero h1{font-size:1.55rem}.hero .lead{font-size:1rem}.bot-header{gap:.6rem}.bot-tag{margin-left:0;order:3;width:100%;text-align:center;margin-top:.4rem}.pricing-row{flex-direction:column;gap:.6rem}.bot-link-secondary{margin-left:0;margin-top:.4rem}.section-title{font-size:1.3rem}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+<h1>Telegram-боти під ключ для бізнесу</h1>
+<p class="lead">OrderBot, MenuBot, CRMBot — готові рішення для салонів, кафе, майстрів і тренерів. Розгортаємо за годину з вашим брендом.</p>
+<p>Без розробників. Без передплати на софт. Окремий бот тільки для вас.</p>
+<div class="badges">
+<span class="badge">🇺🇦 Українська</span>
+<span class="badge">⚡ Запуск за 1 годину</span>
+<span class="badge">🔒 Окремий бот для кожного клієнта</span>
+</div>
+</div>
+
+<div class="bots">
+
+<div class="bot-card">
+<div class="bot-header">
+<div class="bot-emoji">📦</div>
+<div class="bot-name">OrderBot</div>
+<div class="bot-tag">для салонів і майстрів</div>
+</div>
+<div class="bot-desc">Бот приймає замовлення/записи прямо в Telegram. Клієнт обирає послугу або товар → пише ім'я й контакт → ви отримуєте сповіщення з усіма деталями. /admin меню керування каталогом.</div>
+<div class="bot-features">
+<span class="feature">🛒 Каталог товарів/послуг</span>
+<span class="feature">📲 Сповіщення про замовлення</span>
+<span class="feature">⚙️ /admin панель керування</span>
+<span class="feature">💳 LiqPay/Fondy (опція)</span>
+<span class="feature">🇺🇦 Все українською</span>
+</div>
+<div class="pricing">
+<div class="pricing-row">
+<div class="pricing-col"><strong>$79 setup</strong>Запуск, ваш бренд, навчання<span class="price-uah">≈ 3 200 ₴</span></div>
+<div class="pricing-col"><strong>$12 / міс</strong>Хостинг, оновлення, підтримка<span class="price-uah">≈ 490 ₴/міс</span></div>
+</div>
+</div>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/orderbot-setup" class="bot-link">Замовити OrderBot</a>
+<a href="https://t.me/cm_demo_order_bot" class="bot-link bot-link-secondary">Спробувати демо</a>
+</div>
+
+<div class="bot-card">
+<div class="bot-header">
+<div class="bot-emoji">🍽️</div>
+<div class="bot-name">MenuBot</div>
+<div class="bot-tag">для кафе і фудтраків</div>
+</div>
+<div class="bot-desc">Інтерактивне меню в Telegram з фото страв, цінами, годинами роботи. Гість тицяє категорію → бачить позиції з фото → робить замовлення. Власник керує меню через /admin без коду.</div>
+<div class="bot-features">
+<span class="feature">📷 Фото страв</span>
+<span class="feature">📁 Категорії</span>
+<span class="feature">🕒 Години роботи (🟢/🔴 авто)</span>
+<span class="feature">🛒 Кошик і замовлення</span>
+<span class="feature">📊 /listmenu — повний прайс</span>
+</div>
+<div class="pricing">
+<div class="pricing-row">
+<div class="pricing-col"><strong>$99 setup</strong>Завантаження меню, фото, бренд<span class="price-uah">≈ 4 000 ₴</span></div>
+<div class="pricing-col"><strong>$15 / міс</strong>Хостинг, оновлення, підтримка<span class="price-uah">≈ 610 ₴/міс</span></div>
+</div>
+</div>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/menubot-setup" class="bot-link">Замовити MenuBot</a>
+<a href="https://t.me/cm_demo_menu_bot" class="bot-link bot-link-secondary">Спробувати демо</a>
+</div>
+
+<div class="bot-card">
+<div class="bot-header">
+<div class="bot-emoji">📅</div>
+<div class="bot-name">CRMBot</div>
+<div class="bot-tag">для тренерів і репетиторів</div>
+</div>
+<div class="bot-desc">Простий CRM прямо в Telegram. /addclient → база контактів. /sched at 14:00 написати Олені про оплату → бот сам надсилає нагадування у вказаний час. Не пропускає клієнтів.</div>
+<div class="bot-features">
+<span class="feature">👥 База клієнтів</span>
+<span class="feature">⏰ Нагадування за розкладом</span>
+<span class="feature">🔁 Cron-вирази для повторюваних</span>
+<span class="feature">🔂 Авто-retry при помилці</span>
+<span class="feature">💾 Виживає рестарт сервера</span>
+</div>
+<div class="pricing">
+<div class="pricing-row">
+<div class="pricing-col"><strong>$79 setup</strong>Запуск, імпорт клієнтів, бренд<span class="price-uah">≈ 3 200 ₴</span></div>
+<div class="pricing-col"><strong>$12 / міс</strong>Хостинг, оновлення, підтримка<span class="price-uah">≈ 490 ₴/міс</span></div>
+</div>
+</div>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/crmbot-setup" class="bot-link">Замовити CRMBot</a>
+<a href="https://t.me/cm_demo_crm_bot" class="bot-link bot-link-secondary">Спробувати демо</a>
+</div>
+
+</div>
+
+<h2 class="section-title">Як це працює</h2>
+<div class="process">
+<div class="process-grid">
+<div class="process-step">
+<div class="process-num">1</div>
+<h3>Оплата</h3>
+<p>Замовляєте через LemonSqueezy. Карта, Apple/Google Pay. Чек на email.</p>
+</div>
+<div class="process-step">
+<div class="process-num">2</div>
+<h3>Бренд</h3>
+<p>Я надсилаю коротку анкету: назва, опис, контакти, логотип.</p>
+</div>
+<div class="process-step">
+<div class="process-num">3</div>
+<h3>Запуск</h3>
+<p>За годину ваш бот живий у Telegram. Передаю токен, інструкцію, демо-відео.</p>
+</div>
+<div class="process-step">
+<div class="process-num">4</div>
+<h3>Підтримка</h3>
+<p>Оновлення, виправлення, нові фічі. Пишете в Telegram — відповідаю.</p>
+</div>
+</div>
+</div>
+
+<h2 class="section-title">Питання-відповіді</h2>
+<div class="faq">
+
+<div class="faq-item">
+<h3>Чи треба мені реєструвати бот самому?</h3>
+<p>Ні. Я створюю окремий бот через @BotFather під ваш бренд, передаю токен і доступи. Ви отримуєте `@your_business_bot`, який належить тільки вам.</p>
+</div>
+
+<div class="faq-item">
+<h3>Що якщо я хочу зупинити підписку?</h3>
+<p>Скасовуєте підписку в LemonSqueezy в один клік — код і дані ваші. Бот зупиняється на нашому хостингу, але ви можете перенести його куди завгодно.</p>
+</div>
+
+<div class="faq-item">
+<h3>Яка різниця між setup і місячною оплатою?</h3>
+<p>Setup — разовий: створення бота, ваш бренд, налаштування каталогу/меню/клієнтів, навчання. Місячна — хостинг (Cloudzy VPS), резервні копії, оновлення коду, support у Telegram.</p>
+</div>
+
+<div class="faq-item">
+<h3>Чи можна під'єднати оплату прямо в боті?</h3>
+<p>Так, опція $39 разово — підключення LiqPay або Fondy. Клієнт оплачує всередині бота, кошти йдуть на ваш рахунок ФОП напряму.</p>
+</div>
+
+<div class="faq-item">
+<h3>Чи буде бот працювати 24/7?</h3>
+<p>Так. Хостинг на Cloudzy VPS, моніторинг кожні 10 хвилин. Якщо бот падає — авто-рестарт; якщо щось серйозне — мене інформують одразу.</p>
+</div>
+
+<div class="faq-item">
+<h3>Чи можна додати власні функції?</h3>
+<p>Так. Кастом-розробка від $30/година. Питання типу "додати поле X у форму", "інтеграція з Google Sheets", "інший формат повідомлень" зазвичай 1-3 години роботи.</p>
+</div>
+
+<div class="faq-item">
+<h3>Що з персональними даними клієнтів?</h3>
+<p>Дані зберігаються тільки на нашому VPS у вашій ізольованій папці. Жодних third-party сервісів. У будь-який момент можу віддати вам бекап SQLite-файлу.</p>
+</div>
+
+</div>
+
+<div class="cta">
+<h2>Не знаєте який бот вам підходить?</h2>
+<p>Напишіть мені опишіть ваш бізнес у двох реченнях — рекомендую SKU або скажу що для вас краще не брати нічого.</p>
+<a href="https://t.me/charliemorrison" class="bot-link">Написати @charliemorrison</a>
+</div>
+
+<div class="footer">
+<p>Made by <a href="https://t.me/charliemorrison">@charliemorrison</a> · <a href="/">charliemorrison.dev</a></p>
+<p style="margin-top:.5rem">Інші проєкти: <a href="/bots/">Free bots</a> · <a href="/blog/">Blog</a> · <a href="/about">About</a></p>
+</div>
+
+</body>
+</html>

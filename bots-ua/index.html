@@ -65,6 +65,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .footer a:hover{color:#00b4d8}
 @media(max-width:500px){.hero h1{font-size:1.55rem}.hero .lead{font-size:1rem}.bot-header{gap:.6rem}.bot-tag{margin-left:0;order:3;width:100%;text-align:center;margin-top:.4rem}.pricing-row{flex-direction:column;gap:.6rem}.bot-link-secondary{margin-left:0;margin-top:.4rem}.section-title{font-size:1.3rem}}
 </style>
+<!-- analytics: gtag injected by ads/apply-ga4.sh once GA4 ID is known -->
+<script>
+function trackCTA(a,s){try{if(typeof gtag==='function'){gtag('event',a,{sku:s||'',page:'bots-ua'});}}catch(e){}}
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('[data-track]').forEach(function(el){
+    el.addEventListener('click',function(){trackCTA(el.dataset.track,el.dataset.sku||'');});
+  });
+});
+</script>
 </head>
 <body>
 
@@ -101,8 +110,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="pricing-col"><strong>$12 / міс</strong>Хостинг, оновлення, підтримка<span class="price-uah">≈ 490 ₴/міс</span></div>
 </div>
 </div>
-<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/a53ff1ad-95ae-4e78-9949-ba25e1ac81d8" class="bot-link">Замовити OrderBot</a>
-<a href="https://t.me/cm_demo_order_bot" class="bot-link bot-link-secondary">Спробувати демо</a>
+<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/a53ff1ad-95ae-4e78-9949-ba25e1ac81d8" class="bot-link" data-track="ls_buy" data-sku="orderbot">Замовити OrderBot</a>
+<a href="https://t.me/cm_demo_order_bot" class="bot-link bot-link-secondary" data-track="demo_click" data-sku="orderbot">Спробувати демо</a>
 </div>
 
 <div class="bot-card">
@@ -125,8 +134,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="pricing-col"><strong>$15 / міс</strong>Хостинг, оновлення, підтримка<span class="price-uah">≈ 610 ₴/міс</span></div>
 </div>
 </div>
-<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/97eef267-04d9-4e02-89d8-dc179baa2503" class="bot-link">Замовити MenuBot</a>
-<a href="https://t.me/cm_demo_menu_bot" class="bot-link bot-link-secondary">Спробувати демо</a>
+<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/97eef267-04d9-4e02-89d8-dc179baa2503" class="bot-link" data-track="ls_buy" data-sku="menubot">Замовити MenuBot</a>
+<a href="https://t.me/cm_demo_menu_bot" class="bot-link bot-link-secondary" data-track="demo_click" data-sku="menubot">Спробувати демо</a>
 </div>
 
 <div class="bot-card">
@@ -149,8 +158,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="pricing-col"><strong>$12 / міс</strong>Хостинг, оновлення, підтримка<span class="price-uah">≈ 490 ₴/міс</span></div>
 </div>
 </div>
-<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/f9d768b3-fa59-4627-a397-716797dc0ddc" class="bot-link">Замовити CRMBot</a>
-<a href="https://t.me/cm_demo_crm_bot" class="bot-link bot-link-secondary">Спробувати демо</a>
+<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/f9d768b3-fa59-4627-a397-716797dc0ddc" class="bot-link" data-track="ls_buy" data-sku="crmbot">Замовити CRMBot</a>
+<a href="https://t.me/cm_demo_crm_bot" class="bot-link bot-link-secondary" data-track="demo_click" data-sku="crmbot">Спробувати демо</a>
 </div>
 
 </div>
@@ -158,8 +167,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="signup-cta">
 <h3>Не впевнені який бот вам потрібен?</h3>
 <p>Дві швидкі опції — обидві в Telegram, без зобов'язань:</p>
-<a href="https://t.me/cm_sales_bot" class="bot-link">💬 Запитати бота-консультанта → @cm_sales_bot</a>
-<a href="https://t.me/cm_saas_signup_bot" class="bot-link" style="margin-top:.5rem">📝 Залишити заявку (4 кроки) → @cm_saas_signup_bot</a>
+<a href="https://t.me/cm_sales_bot" class="bot-link" data-track="sales_click">💬 Запитати бота-консультанта → @cm_sales_bot</a>
+<a href="https://t.me/cm_saas_signup_bot" class="bot-link" style="margin-top:.5rem" data-track="signup_click">📝 Залишити заявку (4 кроки) → @cm_saas_signup_bot</a>
 <p style="margin-top:1rem;font-size:.85rem;color:#7b8696">Консультант відповідає одразу, заявку обробляє менеджер протягом дня.</p>
 </div>
 
@@ -193,7 +202,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="signup-cta">
 <h3>Як користуватись ботом після оплати?</h3>
 <p>Покрокові посібники з прикладами команд для кожного з трьох ботів. Українською, без жаргону.</p>
-<a href="/bots-ua/docs/" class="bot-link">📖 Відкрити документацію</a>
+<a href="/bots-ua/docs/" class="bot-link" data-track="docs_click">📖 Відкрити документацію</a>
 </div>
 
 <h2 class="section-title">Питання-відповіді</h2>
@@ -239,7 +248,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="cta">
 <h2>Не знаєте який бот вам підходить?</h2>
 <p>Напишіть мені опишіть ваш бізнес у двох реченнях — рекомендую SKU або скажу що для вас краще не брати нічого.</p>
-<a href="https://t.me/charliemorrison" class="bot-link">Написати @charliemorrison</a>
+<a href="https://t.me/charliemorrison" class="bot-link" data-track="dm_click">Написати @charliemorrison</a>
 </div>
 
 <div class="footer">

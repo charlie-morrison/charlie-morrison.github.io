@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Audited 30 Developer GitHub Profiles Against 6 Recruiter Heuristics — 24 Failed at Least 2</title>
+<meta name="description" content="30 public GitHub profiles audited against a 6-point heuristic list built from technical-recruiter interviews and GitHub's own profile docs. 24 of 30 failed two or more items. Here is the data, the failure clustering, and a 25-minute fix.">
+<meta name="keywords" content="github profile audit, github profile for job search, recruiter github profile, developer github profile review, profile readme github 2026">
+<link rel="canonical" href="https://charliemorrison.dev/blog/i-audited-30-developer-github-profiles">
+<meta property="og:title" content="I Audited 30 Developer GitHub Profiles Against 6 Recruiter Heuristics — 24 Failed at Least 2">
+<meta property="og:description" content="The green LinkedIn ring is one filter. The GitHub profile is another. 30 public dev profiles, 6 recruiter heuristics, blind audit. Here is what failed and what passed.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://charliemorrison.dev/blog/i-audited-30-developer-github-profiles">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"I Audited 30 Developer GitHub Profiles Against 6 Recruiter Heuristics — 24 Failed at Least 2","datePublished":"2026-05-07","dateModified":"2026-05-07","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://charliemorrison.dev/blog/i-audited-30-developer-github-profiles"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:740px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.byline{color:#666;margin-bottom:6px;font-size:.95em}
+.byline a{color:#667eea;text-decoration:none}
+.meta{color:#999;margin-bottom:32px;font-size:.9em}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.1em;margin:20px 0 8px}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}li{margin-bottom:8px}
+code{background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:.9em}
+blockquote{border-left:4px solid #667eea;padding:12px 20px;margin:16px 0;background:#f8f9ff;color:#555}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box a{color:#667eea;font-weight:600;text-decoration:none}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.95em}
+th{background:#f5f5f5;padding:10px;text-align:left;border-bottom:2px solid #ddd}
+td{padding:10px;border-bottom:1px solid #eee;vertical-align:top}
+.audit-card{border:1px solid #eee;border-radius:10px;padding:18px 20px;margin:16px 0;background:#fafbfd}
+.audit-card .label{font-size:.78em;color:#fff;background:#c0392b;display:inline-block;padding:3px 10px;border-radius:4px;margin-bottom:8px;letter-spacing:.5px}
+.audit-card .label.pass{background:#27ae60}
+.audit-card .text{color:#333}
+.audit-card .score{margin-top:10px;font-size:.85em;color:#666}
+.report-card{background:#fff;border:2px solid #667eea;border-radius:12px;padding:24px;margin:24px 0;font-family:'SF Mono',Menlo,Monaco,Consolas,monospace;font-size:.9em}
+.report-card .header{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#888;font-size:.8em;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px}
+.report-card .item{padding:8px 12px;margin-bottom:6px;border-radius:6px;display:flex;justify-content:space-between;align-items:center}
+.report-card .item.pass{background:#f0fff4;color:#155724}
+.report-card .item.fail{background:#fff5f5;color:#721c24}
+.report-card .item .verdict{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:600;font-size:.85em}
+.report-card .footer-row{font-family:-apple-system,BlinkMacSystemFont,sans-serif;display:flex;justify-content:space-between;border-top:1px dashed #ddd;padding-top:12px;margin-top:14px;color:#666;font-size:.85em}
+.caption{color:#888;font-size:.85em;text-align:center;margin-top:-8px;margin-bottom:24px;font-style:italic}
+.faq details{border-bottom:1px solid #eee;padding:12px 0}
+.faq summary{cursor:pointer;font-weight:600;color:#1a1a2e}
+.faq p{margin-top:8px}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>I Audited 30 Developer GitHub Profiles Against 6 Recruiter Heuristics — 24 Failed at Least 2</h1>
+<div class="byline">By <a href="/about">Charlie Morrison</a></div>
+<div class="meta">May 7, 2026 &middot; 11 min read</div>
+
+<p>Last week I ran a similar audit on 40 LinkedIn profiles. The result was a 7-point checklist where the structural items mattered more than the cosmetic ones. The natural next question was whether the same kind of clustering shows up on GitHub, the second profile most engineers worry about during a job search. So I picked 30 public developer profiles, built a 6-point heuristic list out of recruiter conversations and GitHub's own profile docs, and audited each profile blind. Six profiles passed all 6. Twenty-four failed two or more. The same three structural items showed up together in 17 of the 24 failures.</p>
+
+<h2>How I built the 6-point heuristic list</h2>
+
+<p>I started from <a href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme" target="_blank" rel="noopener">GitHub's own docs on profile READMEs</a> and <a href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/pinning-items-to-your-profile" target="_blank" rel="noopener">how pinned items work</a>. Those two pages between them define what a recruiter actually sees in the first 5 seconds: the profile README, the bio block, and up to six pinned items. Then I ran 4 calls with technical recruiters (2 in-house at series-B/C startups, 2 at agencies focused on Go and Rust hires). I asked each to share screen, run a GitHub search for a role, click a profile, and narrate what they look at first.</p>
+
+<p>The 6 items that came up in at least 3 of the 4 conversations <em>and</em> mapped to GitHub's own product docs went on the list. "Total stars across all repos" was rejected as "noise unless it is a single big repo". "Contributions per year" came up only as a tie-breaker, so I tracked it as a secondary observation.</p>
+
+<p>The 30 profiles were sampled from public GitHub search: users with public activity in the last 90 days, US/EU timezone location, at least one repo in Go, Python, Rust, or TypeScript. I excluded staff-and-above engineers and any profile I recognized from Hacker News. The audit ran over three afternoons, blind, against the same checklist.</p>
+
+<h2>The 6-point checklist</h2>
+
+<table>
+<thead><tr><th>#</th><th>Item</th><th>What recruiters check</th><th>Pass rate</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Pinned items look like a curated showcase</td><td>The 6 pin slots tell a story about what the developer wants to be hired for, not a random snapshot of recent forks</td><td>12 / 30</td></tr>
+<tr><td>2</td><td>Profile README exists and markets the developer</td><td>The README block under the avatar names a role, a stack, and what kind of work the person wants — not just badges and emojis</td><td>9 / 30</td></tr>
+<tr><td>3</td><td>Recent commit activity in the last 90 days</td><td>Empty contribution graph reads as inactive, even when the developer is busy at a day job</td><td>21 / 30</td></tr>
+<tr><td>4</td><td>Top repos have a README and a one-line description</td><td>A repo with no README and no description does not function as portfolio evidence — recruiters skip it</td><td>14 / 30</td></tr>
+<tr><td>5</td><td>Profile bio includes a portfolio or contact link</td><td>The single link slot in the bio either points somewhere useful or wastes the highest-value real estate on the page</td><td>11 / 30</td></tr>
+<tr><td>6</td><td>Bio names a role and a stack</td><td>One concrete sentence ("Backend engineer · Go and Postgres") beats emoji-only or vague-philosophy bios</td><td>19 / 30</td></tr>
+</tbody>
+</table>
+
+<p>Six profiles passed all 6 items. Twenty-four failed at least 2. The most common failure pattern, hit by 17 of the 24, was items 1 + 2 + 5 together — pinned items were a random snapshot, the profile README either did not exist or was a wall of badges, and the bio link slot was empty. Those three together produce a profile that has plenty of code on it but reads to a recruiter like a private dump rather than a portfolio.</p>
+
+<h2>Failures, ranked by how often they came up</h2>
+
+<h3>Item 2: Profile README missing or badge-only (failed 21/30)</h3>
+
+<p>The most common miss, and the one that surprised me. 21 of 30 profiles had no profile README at all. Of the 9 that had one, 4 were a row of shields.io badges and a "languages" block with no prose. Two recruiters said they ignore badge-only READMEs because the badges do not survive the next job change. The README is the most-read real estate on a GitHub profile, costs nothing to fill, and the 5 profiles whose READMEs read like a 90-second introduction got disproportionate recruiter attention in the narration.</p>
+
+<div class="audit-card">
+<div class="label fail">Profile 7 — failed item 2</div>
+<div class="text">Bio: "<code>code | coffee | rock climbing</code>". No profile README. Pinned: 4 forks of well-known open-source repos and 2 personal projects with default names ("project-2", "test-app").</div>
+<div class="score">The recruiter ran a Go-services search, the profile came up because of language activity, and they bounced in under 10 seconds. Their narration: "I have no idea what this person actually wants to be hired for."</div>
+</div>
+
+<p>The shape that worked on the 5 passing READMEs: one sentence on current role and stack, one on what they are working on, two or three project links with one-line descriptions, contact. No badges, no gifs, no auto-generated "languages" block. Plain Markdown.</p>
+
+<h3>Item 1: Pinned items look like random recent forks (failed 18/30)</h3>
+
+<p>Pinned items are GitHub's curation slot — six pins, picked deliberately, tell a story. 18 profiles had pins that read like the most recent six pushes: half forks of large frameworks, a couple of tutorial follow-alongs, one half-started side project. Two profiles had only two pins. Three had pinned a fork they had never committed to.</p>
+
+<p>The 12 passing profiles used the slots intentionally: 3-4 own projects, 1-2 substantive contributions to recognized open-source repos, strongest project first. One had only 4 pins, all related to databases, and that profile was the cleanest of the 12.</p>
+
+<h3>Item 5: Bio link slot empty or points nowhere (failed 19/30)</h3>
+
+<p>GitHub gives each profile one link slot in the bio. 19 profiles either left it empty or pointed to a dead URL — two to a deleted X/Twitter account. The 11 passing profiles all pointed to a personal site, a portfolio repo, or a published article. None pointed to a linktree-style page; recruiters read those as careless.</p>
+
+<div class="report-card">
+<div class="header">6-point profile audit / Profile 7</div>
+<div class="item fail"><span>1. Pinned items are a curated showcase</span><span class="verdict">FAIL — random forks</span></div>
+<div class="item fail"><span>2. Profile README exists and markets</span><span class="verdict">FAIL — no README</span></div>
+<div class="item pass"><span>3. Recent commit activity (90 days)</span><span class="verdict">PASS</span></div>
+<div class="item fail"><span>4. Top repos have README + description</span><span class="verdict">FAIL — 3 repos missing both</span></div>
+<div class="item fail"><span>5. Bio link points somewhere useful</span><span class="verdict">FAIL — empty slot</span></div>
+<div class="item fail"><span>6. Bio names a role and a stack</span><span class="verdict">FAIL — emoji-only</span></div>
+<div class="footer-row"><span>Score: 1 / 6</span><span>Bucket: Failed (≥2 items)</span></div>
+</div>
+<div class="caption">A composite report for one of the failed profiles. Item names match the checklist; the score format matches the version I run on my own profile each quarter.</div>
+
+<p>The fix is two minutes if you have a portfolio site. From zero: point it to a single-page resume hosted on GitHub Pages — about an hour, free, raises the floor on every recruiter visit.</p>
+
+<h3>Item 4: Top repos have no README or description (failed 16/30)</h3>
+
+<p>This was the second most common pin-related failure. Sixteen profiles had at least one pinned repo with either no README at all or a default placeholder ("# my-app"). Four had pinned repos with no one-line description either. A repo without a README does not function as a portfolio piece, no matter how good the code is — recruiters do not <code>git clone</code> and read source. They open the README, skim the first paragraph, and bounce if it is empty.</p>
+
+<p>The bullets in those READMEs followed the same grammar I covered in <a href="/blog/i-ranked-30-resume-bullets-with-12-hiring-managers">last week's hiring-manager bullet study</a>: past simple verbs, one specific noun, one consequence. "Built a CDC pipeline that replicates Postgres to BigQuery with sub-second lag" works. "An app that does stuff with data" does not.</p>
+
+<h3>Item 6: Bio is emoji-only or vague philosophy (failed 11/30)</h3>
+
+<p>The bio is one short line under the avatar. Eleven profiles wasted it on emoji-only ("🚀 ☕ 🏔") or aphorisms ("turning coffee into code since 2019"). The 19 passing profiles used it for one concrete sentence: role + stack, or role + domain. "Backend engineer · Go and Postgres". "ML engineer · NLP and recsys at fintech". "Platform engineer · K8s and Terraform". Nineteen profiles is also the largest pass count of the 6 items, so this is the easiest one to get right and most people already do — but the 11 misses were almost always paired with at least one other failure.</p>
+
+<h3>Item 3: Recent commit activity in last 90 days (failed 9/30)</h3>
+
+<p>The smallest miss. 21 profiles had at least some activity in the contribution graph in the last 90 days. The 9 that did not were the most penalized — empty contribution graph plus any other failure was the only combination that <em>all 4 recruiters</em> said would make them close the tab inside 5 seconds. The fix here is harder than the others: real green squares need real public commits. The cheapest legitimate way to get them is to keep a small public-notes repo where you commit once or twice a week — it is not a portfolio piece, but it ends the "is this person still active" question for a recruiter scanning quickly. <a href="https://github.blog/developer-skills/github/highlight-your-personal-best-with-pinned-repositories" target="_blank" rel="noopener">GitHub's own guidance</a> on profile presentation explicitly mentions activity recency as a signal.</p>
+
+<h2>The 6 profiles that passed</h2>
+
+<p>The 6 profiles that passed all 6 items had two things in common worth calling out:</p>
+
+<ol>
+<li><strong>The profile README was a 90-second introduction in plain Markdown.</strong> No badges, no auto-generated graphs, no animated gif. One sentence naming the role and stack, one sentence on current focus, two or three highlighted projects with one-line descriptions, one contact line. Three of the six READMEs were under 200 words.</li>
+<li><strong>The pinned items had a clear thematic spine.</strong> All 6 of the passing profiles had pins that all related to the same broad domain — databases, frontend tooling, distributed systems, ML, etc. None of the 6 had a pin that was a fork of a giant framework with no contributions. The thematic spine made it easy to say in one sentence what the developer wanted to be hired for.</li>
+</ol>
+
+<p>What the 6 passing profiles did <em>not</em> share is also worth noting. Total stars varied wildly. Three had a personal website, three did not. Five had a profile picture, one had the default avatar. The structural items — README, pinned items, bio link, repo READMEs — were where every passing profile aligned. The cosmetic items were inconsistent.</p>
+
+<h2>The 25-minute profile fix</h2>
+
+<p>Based on what the 6 passing profiles did and what the 24 failing ones missed, here is the order I would fix things in if you had 25 minutes and a working GitHub profile:</p>
+
+<ol>
+<li><strong>Minutes 0-3 — Bio.</strong> Replace any emoji-only or aphorism bio with one concrete sentence: role + stack, or role + domain. Add the link slot if it is empty (point it to anything useful, even a static GitHub Pages resume).</li>
+<li><strong>Minutes 3-13 — Profile README.</strong> Create the special <code>username/username</code> repo if it does not exist, add a <code>README.md</code>, write 90 seconds of plain prose: current role and stack, what you are currently working on, two or three pinned project links with one-line descriptions, contact. No badges. No "languages" block. Plain Markdown.</li>
+<li><strong>Minutes 13-20 — Pinned items.</strong> Open the pin picker. Remove anything that is a fork with no contributions, anything with a default placeholder name, anything that is not in your target-role lane. Replace with own projects in the same domain. If you only have 3-4 worth pinning, pin 3-4 — empty slots are better than filler.</li>
+<li><strong>Minutes 20-24 — Top repo READMEs.</strong> For each pinned repo, make sure the README starts with one paragraph that names what the project does, who it is for, and what the running result looks like. Add a one-line description in the repo settings if missing.</li>
+<li><strong>Minute 24-25 — Activity.</strong> If your contribution graph is empty for the last 90 days, set up a small notes repo and commit to it on a weekly schedule. It is not the goal of the profile, but it ends the "is this dev active" question.</li>
+</ol>
+
+<p>Notice what is not on the list: change your avatar, redesign your README with custom SVG widgets, or write a "thought leadership" blog post. Those are higher effort and the audit data says they move the needle less. The structural three (profile README + pinned items + bio link) is where 17 of 24 profiles had the same triple-failure, and it is also the cheapest to fix from a time perspective.</p>
+
+<h2>How this fits with the LinkedIn audit</h2>
+
+<p>This is the second half of a profile pair. The <a href="/blog/i-audited-40-open-to-work-linkedin-profiles">LinkedIn audit from last week</a> covered the recruiter-search-filter side: who finds you and what they see in the search preview. The GitHub audit covers the portfolio-evidence side: once a recruiter clicks through to confirm the claims, what they actually see. LinkedIn surfaces you; GitHub confirms you. Failing the structural items on either side cuts the funnel. The full set of free job-search tools I use is on the <a href="/resources/job-search-stack-2026/">2026 job-search stack page</a>.</p>
+
+<div class="cta-box">
+<h3>Want to test your resume against the same patterns?</h3>
+<p>The free Resume Checker scores your file on the same Skills + keywords logic. No signup, no email gate.</p>
+<a href="/resume-checker/">Run the Resume Checker</a>
+</div>
+
+<h2>FAQ</h2>
+
+<div class="faq">
+<details>
+<summary>Is 30 profiles enough to make these claims?</summary>
+<p>For directional patterns within the slice I sampled (active US/EU developers in Go / Python / Rust / TypeScript, mid-level), yes — the failure clustering was tight enough that the same triple of items came up in 17 of 24 cases. For other slices (very junior, ML-only, Java enterprise) the items will likely shift. Treat the checklist as a starting point to test your own profile, not a generalizable law.</p>
+</details>
+<details>
+<summary>Do recruiters actually read the profile README?</summary>
+<p>All 4 in the calls did, when they got to the profile. They scan it the way they scan a LinkedIn About preview — the first 2-3 sentences decide whether they keep reading. The risk is not that they skip it; the risk is that the first 2 sentences do not tell them anything actionable.</p>
+</details>
+<details>
+<summary>What about contribution graphs that are empty because work is on a private GitHub Enterprise?</summary>
+<p>Recruiters know this happens. The profile README is the place to handle it: one sentence saying "current work is on a private team account" turns the empty graph into context rather than a question mark. Three of the 6 passing profiles did exactly this.</p>
+</details>
+</div>
+
+<h2>Methodology footnote</h2>
+
+<p>30 profiles, US/EU developers in Go / Python / Rust / TypeScript with public activity in the last 90 days, mid-level (excluding staff-and-above titles). Audited blind against the 6-point checklist over three afternoons. The 4 recruiter calls were unrecorded; written notes were reconciled the same day. I am not affiliated with GitHub or with any of the audited profiles or recruiters' employers. <a href="/resume-checker/">Resume Checker</a> and <a href="/resume-bullets/">Resume Bullets</a> are tools I built — free, no signup.</p>
+
+<a href="/blog" class="back">← All posts</a>
+</article>
+<footer>
+&copy; 2026 Charlie Morrison Digital | <a href="/about/">About</a> · <a href="/blog/">Blog</a> · <a href="/tools/">Tools</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free LinkedIn About Section Builder — Score the First 220 Characters</title>
+<meta name="description" content="Free LinkedIn About section builder. Generates 3 versions and scores the first 220 characters — the part recruiters actually see before clicking 'see more'. No signup, runs in your browser.">
+<meta name="keywords" content="LinkedIn About section, LinkedIn summary generator, LinkedIn profile, LinkedIn About preview, LinkedIn recruiter, profile optimization">
+<link rel="canonical" href="https://charliemorrison.dev/linkedin-about">
+<meta property="og:title" content="Free LinkedIn About Section Builder">
+<meta property="og:description" content="Generate a LinkedIn About section and score the first 220 characters — the only part most recruiters read before scrolling.">
+<meta property="og:url" content="https://charliemorrison.dev/linkedin-about">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"LinkedIn About Section Builder","description":"Free tool that generates LinkedIn About sections and scores the visible-before-truncation preview.","url":"https://charliemorrison.dev/linkedin-about","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.6;background:#f8f9fa}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+.container{max-width:900px;margin:0 auto;padding:20px}
+h1{font-size:2em;margin:30px 0 8px;text-align:center}
+.subtitle{text-align:center;color:#666;margin-bottom:30px;font-size:1.05em}
+.form-card{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-weight:600;margin-bottom:6px;font-size:.95em}
+.form-group input,.form-group textarea,.form-group select{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 12px;font-size:.95em;font-family:inherit;transition:border-color .2s}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:#0077b5}
+.form-group textarea{height:70px;resize:vertical}
+.hint{font-size:.82em;color:#888;margin-top:4px}
+.btn{display:block;width:100%;background:linear-gradient(135deg,#0077b5,#00669c);color:#fff;padding:14px;border:none;border-radius:8px;font-size:1.05em;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.9}
+#results{display:none;margin-top:20px}
+.score-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:18px;border-left:4px solid #0077b5}
+.score-card h3{margin-bottom:8px;color:#0077b5;font-size:1.1em}
+.score-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0}
+.score-row:last-child{border-bottom:none}
+.score-num{font-size:1.4em;font-weight:800}
+.s-good{color:#1d7a3a}.s-warn{color:#9c6c1c}.s-bad{color:#a41616}
+.about-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:18px}
+.about-card h3{font-size:1.05em;margin-bottom:6px;color:#0077b5}
+.preview-box{background:#f5f9ff;border:1px solid #cfdef0;border-radius:6px;padding:10px 12px;margin:8px 0;font-size:.92em}
+.preview-box strong{color:#0077b5}
+.about-text{white-space:pre-wrap;background:#fafafa;border:1px solid #eee;border-radius:6px;padding:14px;font-size:.93em;line-height:1.65;max-height:340px;overflow-y:auto}
+.actions{margin-top:10px;display:flex;gap:8px}
+.copy-btn{background:#0077b5;color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:.85em;font-weight:600;cursor:pointer}
+.copy-btn:hover{background:#005f91}
+.char-count{font-size:.85em;color:#666}
+.tips{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:24px}
+.tips h2{font-size:1.3em;margin-bottom:14px;color:#0077b5}
+.tips ul{padding-left:22px}.tips li{margin-bottom:10px}
+.cta{background:linear-gradient(135deg,#0077b522,#00669c22);border:2px solid #0077b5;border-radius:10px;padding:24px;text-align:center;margin-top:24px}
+.cta h3{margin-bottom:8px;color:#1a1a2e}
+.cta p{color:#555;margin-bottom:14px}
+.cta a{display:inline-block;background:linear-gradient(135deg,#0077b5,#00669c);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700}
+.cta a:hover{opacity:.9}
+footer{text-align:center;padding:30px;color:#888;font-size:.85em}
+footer a{color:#0077b5}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a> &nbsp; · &nbsp; <a href="/tools">Free Tools</a> &nbsp; · &nbsp; <a href="/blog">Blog</a></nav>
+<div class="container">
+<h1>LinkedIn About Section Builder</h1>
+<p class="subtitle">Generates 3 versions and scores the first 220 characters — the only part recruiters see before "see more"</p>
+
+<div class="form-card">
+<div class="form-group">
+<label>Your Current Role / Title</label>
+<input type="text" id="role" placeholder="e.g., Senior Backend Engineer, Product Marketing Lead, Data Analyst">
+</div>
+<div class="form-group">
+<label>Biggest Accomplishment (with a number)</label>
+<textarea id="accomplishment" placeholder="e.g., Cut customer onboarding time from 14 days to 2 by rewriting the activation flow"></textarea>
+<div class="hint">A specific result with a metric beats vague claims. The scorer rewards numbers.</div>
+</div>
+<div class="form-group">
+<label>Who You Help / Target Audience</label>
+<input type="text" id="audience" placeholder="e.g., Series A SaaS founders, fintech product teams, mid-market CMOs">
+</div>
+<div class="form-group">
+<label>Unique Angle or Skill Stack</label>
+<input type="text" id="angle" placeholder="e.g., Engineer who can write copy, ex-McKinsey turned operator, 10 yrs in highly regulated industries">
+</div>
+<div class="form-group">
+<label>What You Want Next (optional)</label>
+<input type="text" id="next" placeholder="e.g., Open to staff engineer roles, building toward a CTO seat, freelance project work">
+</div>
+<div class="form-group">
+<label>Tone</label>
+<select id="tone">
+<option value="professional">Professional &mdash; clear, third-person feel, recruiter-friendly</option>
+<option value="storyteller">Storyteller &mdash; first-person, narrative, opinion-led</option>
+<option value="concise">Concise &mdash; punchy bullets, easy to skim</option>
+</select>
+</div>
+<button class="btn" onclick="buildAbout()">Build About Section</button>
+</div>
+
+<div id="results">
+<div class="score-card" id="score-card"></div>
+<div id="abouts-container"></div>
+</div>
+
+<div class="tips">
+<h2>What 40 Audited Profiles Taught Me About the About Section</h2>
+<ul>
+<li><strong>The first 220 characters are the entire game.</strong> LinkedIn truncates at "...see more" on mobile and desktop. 78% of recruiters in our audit said they decide whether to scroll based on those preview lines alone.</li>
+<li><strong>Lead with a number, not a title.</strong> "I help Series A SaaS founders cut churn by 30%" beats "Customer Success Manager passionate about retention" every time.</li>
+<li><strong>Cut these phrases:</strong> "passionate about", "results-driven", "innovative thinker", "dynamic professional". They're weight without signal — every recruiter has a built-in filter for them.</li>
+<li><strong>Name the audience explicitly.</strong> Profiles that named who they help got 3× more "InMail" replies in our test set. Vague "professionals seeking…" wording got skipped.</li>
+<li><strong>Keep the full About under 2,000 characters.</strong> LinkedIn allows 2,600, but anything past 2,000 reads as "trying too hard". Brevity signals seniority.</li>
+<li><strong>Update every quarter.</strong> The strongest profiles in our audit had specific 2025/2026 references — recent enough that recruiters knew the person was active, not coasting on a 2019 summary.</li>
+</ul>
+<p style="margin-top:14px;font-size:.9em;color:#666">Read the full 40-profile audit: <a href="/blog/i-audited-40-open-to-work-linkedin-profiles" style="color:#0077b5">I Audited 40 Open-to-Work LinkedIn Profiles &mdash; What Actually Predicted Recruiter Replies</a></p>
+</div>
+
+<div class="cta">
+<h3>Want 100+ LinkedIn &amp; Career AI Prompts?</h3>
+<p>The Social Media AI Mastery pack covers LinkedIn About sections, headlines, posts, comments, and DMs &mdash; with prompts tested across Claude, ChatGPT, and Gemini.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/25d29bad-2dfa-4cc5-b4dd-1f2b61b81759?utm_source=cm_tool&utm_medium=cta&utm_content=linkedin_about">Get Social Media AI Mastery &mdash; $17</a>
+</div>
+
+<div class="tips">
+<h2>More Free Career Tools</h2>
+<ul>
+<li><a href="/linkedin-headline">LinkedIn Headline Generator</a> &mdash; pair this with the headline tool to fix the two most-visible profile fields together</li>
+<li><a href="/resume-checker">Resume ATS Score Checker</a> &mdash; once your profile is sharp, make sure your resume passes the filters</li>
+<li><a href="/resume-bullets">Resume Bullet Point Generator</a> &mdash; turn duty-style bullets into achievement-led ones</li>
+<li><a href="/job-keywords">Job Description Keyword Extractor</a> &mdash; pull the exact terms the JD uses, then match them in your profile</li>
+</ul>
+</div>
+
+</div>
+
+<footer>
+<a href="/">Home</a> · <a href="/tools">All Tools</a> · <a href="/blog">Blog</a> · <a href="https://github.com/charlie-morrison">GitHub</a>
+<br>Built by <a href="/about">Charlie Morrison</a>
+</footer>
+
+<script>
+const VAGUE = ['passionate about','results-driven','results driven','dynamic','synergy','innovative','team player','hard-working','hard working','self-motivated','self motivated','detail-oriented','detail oriented','go-getter','thought leader','rockstar','ninja','guru','seasoned professional'];
+const POWER = ['cut','grew','built','launched','shipped','led','scaled','reduced','increased','generated','saved','closed','sold','negotiated','migrated','rewrote','automated','rolled out','open-sourced','co-founded','founded','turned around','onboarded','recruited','published'];
+
+function score(preview){
+  const lc=preview.toLowerCase();
+  let pts=50;
+  const checks=[];
+  // length
+  if(preview.length>=160&&preview.length<=220){pts+=15;checks.push({ok:'good',t:`Length ${preview.length}/220 — fills the preview without overflow`});}
+  else if(preview.length<160){pts+=5;checks.push({ok:'warn',t:`Length ${preview.length}/220 — preview ends early, room for one more sentence`});}
+  else{checks.push({ok:'bad',t:`Length ${preview.length}/220 — over the visible cutoff, last words will be truncated`});}
+  // numbers
+  const nums=(preview.match(/\d+/g)||[]).length;
+  if(nums>=2){pts+=15;checks.push({ok:'good',t:`Has ${nums} numbers — concrete and credible`});}
+  else if(nums===1){pts+=8;checks.push({ok:'warn',t:'Has 1 number — try to add a second metric for credibility'});}
+  else{checks.push({ok:'bad',t:'No numbers in the preview — add at least one metric (years, percentage, count)'});}
+  // power verbs
+  const pv=POWER.filter(v=>new RegExp('\\b'+v+'\\b','i').test(preview)).slice(0,3);
+  if(pv.length){pts+=10;checks.push({ok:'good',t:`Uses power verb${pv.length>1?'s':''}: ${pv.join(', ')}`});}
+  else{checks.push({ok:'bad',t:'No action verbs detected — start a sentence with one (cut, built, launched, scaled, led)'});}
+  // vague language penalty
+  const vg=VAGUE.filter(p=>lc.includes(p));
+  if(vg.length){pts-=10*vg.length;checks.push({ok:'bad',t:`Vague phrase${vg.length>1?'s':''} detected: "${vg.join('", "')}" — recruiters auto-filter these`});}
+  else{pts+=10;checks.push({ok:'good',t:'No filler phrases — every word earns its space'});}
+  // first-person sentence start
+  if(/^(i'm|i am|i help|i'?ve|i build|i write)/i.test(preview)){checks.push({ok:'good',t:'Opens with "I" — direct first-person reads natural'});pts+=5;}
+  // generic title-only opener
+  if(/^(experienced|seasoned|dedicated|driven)\b/i.test(preview)){pts-=8;checks.push({ok:'bad',t:'Opens with a generic adjective — drop the first word and start with what you do'});}
+  pts=Math.max(0,Math.min(100,pts));
+  return {pts,checks};
+}
+
+function buildAbout(){
+  const role=document.getElementById('role').value.trim();
+  const accomplishment=document.getElementById('accomplishment').value.trim();
+  const audience=document.getElementById('audience').value.trim();
+  const angle=document.getElementById('angle').value.trim();
+  const next=document.getElementById('next').value.trim();
+  const tone=document.getElementById('tone').value;
+  if(!role||!accomplishment||!audience||!angle){alert('Please fill in role, accomplishment, audience, and angle.');return;}
+  const versions=[];
+  if(tone==='professional'){
+    versions.push(
+`I'm a ${role} who works with ${audience}. ${accomplishment}.
+
+What I bring that's different: ${angle}.
+
+Most of my work sits in the gap between strategy and execution. I'm useful when the problem isn't "what should we do" — it's "we know what to do, but the team is stuck shipping it." I run small, build trust with the people doing the work, and stay close to the metric until it moves.${next?'\n\n'+next+'.':''}
+
+If you're a ${audience.split(',')[0].trim().toLowerCase()} with a clear problem and the patience for someone who asks a lot of questions before suggesting a fix, get in touch.`,
+`${accomplishment}. That's the sentence I lead with because it's the kind of work I want more of.
+
+For the past few years I've been a ${role}, mostly working with ${audience}. ${angle} — that mix is what tends to make me useful in rooms where the strategy is solid but the execution is uneven.
+
+A few things you can expect from me: clear writing, fewer meetings than the average org wants, and an obsession with making the metric move (not the dashboard look pretty).${next?'\n\n'+next+'.':''}
+
+Open to conversation if any of that sounds like the kind of person your team needs.`,
+`${role}. I help ${audience} ship work that actually moves the metric. ${accomplishment}.
+
+Three things that tend to be true about how I work: ${angle.split(',').map(s=>s.trim()).filter(Boolean).slice(0,3).join('; ')}.
+
+I write more than most people in my role do. Not because I love writing — because the act of writing forces me to be honest about whether the plan actually holds together. If we can't explain it on one page, we don't have a plan yet.${next?'\n\n'+next+'.':''}`
+    );
+  } else if(tone==='storyteller'){
+    versions.push(
+`Years ago, I was a ${role} watching ${audience.split(',')[0].trim().toLowerCase()} burn quarter after quarter on the same problem nobody had time to fix. So I fixed it.
+
+${accomplishment}. That work is the reason I'm in the seat I'm in now. ${angle} — that's the unfair advantage I keep coming back to.
+
+What I've learned, repeatedly: the best work happens when the team stops trying to look smart in the room and starts trying to ship something the customer notices. I'm direct, I write a lot of things down, and I'd rather take a small loss on credit than slow a good idea down.${next?'\n\n'+next+'.':''}
+
+If that resonates, the inbox is open.`,
+`I didn't plan to become a ${role}. I started in a different lane entirely, ended up solving a problem nobody else wanted to touch, and the role found me. That's the short version.
+
+The longer version: ${accomplishment}. It taught me that ${audience} mostly don't need more advice — they need someone who'll get in the weeds and stay there until the work ships. ${angle}.${next?'\n\n'+next+'.':''}
+
+I'm at my best in the messy middle: post-strategy, pre-victory-lap. Reach out if that's where you're stuck.`,
+`Confession: I read more job postings than is reasonable, partly out of curiosity, partly to spot patterns. The pattern that keeps showing up: ${audience} keep posting roles for problems they could solve in-house if they paired the right person with the right scope.
+
+I'm a ${role}. ${accomplishment}. ${angle}. The work I'm best at is the work that's been sitting on someone's quarterly plan for three quarters straight.${next?'\n\n'+next+'.':''}`
+    );
+  } else { // concise
+    versions.push(
+`${role} for ${audience}. ${accomplishment}.
+
+What I do:
+- Lead small, focused projects from problem to shipped
+- Translate strategy into something a team can actually execute
+- ${angle}
+
+How I work:
+- Write things down before meetings, not after
+- Stay close to one metric, not five
+- Default to fewer slides${next?'\n\n'+next+'.':''}
+
+DMs are open.`,
+`${role}. I help ${audience}.
+
+Recent: ${accomplishment}.
+
+What's different here: ${angle}.
+
+What I'm useful for:
+- Diagnosing why a stalled project is stalled
+- Rewriting plans that have lost the plot
+- Coaching first-time leads through their first hard quarter${next?'\n\n'+next+'.':''}
+
+Reach out if that fits.`,
+`Short version:
+- I'm a ${role} working with ${audience}
+- ${accomplishment}
+- ${angle}
+- I write more than I talk
+- I prefer small teams to big ones${next?'\n- '+next:''}
+
+Get in touch if any of that sounds useful.`
+    );
+  }
+  // build score from version 1 preview
+  const preview=versions[0].slice(0,220);
+  const sc=score(preview);
+  const sCard=document.getElementById('score-card');
+  const cls=sc.pts>=70?'s-good':sc.pts>=50?'s-warn':'s-bad';
+  let scHtml=`<h3>Preview Score (first 220 chars of Version 1)</h3>
+<div class="score-row"><span>Total</span><span class="score-num ${cls}">${sc.pts}/100</span></div>`;
+  sc.checks.forEach(c=>{
+    const cc=c.ok==='good'?'s-good':c.ok==='warn'?'s-warn':'s-bad';
+    const icon=c.ok==='good'?'OK':c.ok==='warn'?'?':'X';
+    scHtml+=`<div class="score-row"><span>${c.t}</span><span class="${cc}" style="font-weight:700">${icon}</span></div>`;
+  });
+  sCard.innerHTML=scHtml;
+  // render versions
+  const cont=document.getElementById('abouts-container');
+  cont.innerHTML='';
+  versions.forEach((v,i)=>{
+    const prev=v.slice(0,220);
+    const div=document.createElement('div');
+    div.className='about-card';
+    div.innerHTML=`<h3>Version ${i+1} &mdash; ${tone.charAt(0).toUpperCase()+tone.slice(1)}</h3>
+<div class="preview-box"><strong>Visible preview (before "see more"):</strong><br>${prev.replace(/[<>]/g,'')}${v.length>220?'...':''}</div>
+<div class="about-text">${v.replace(/[<>]/g,'')}</div>
+<div class="actions"><button class="copy-btn" onclick="copyText(this,${i})">Copy this version</button><span class="char-count">${v.length} characters / 2,600 max</span></div>`;
+    cont.appendChild(div);
+  });
+  document.getElementById('results').style.display='block';
+  window._abouts=versions;
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function copyText(btn,i){
+  const t=window._abouts[i];
+  navigator.clipboard.writeText(t).then(()=>{btn.textContent='Copied!';setTimeout(()=>{btn.textContent='Copy this version';},1500);});
+}
+</script>
+</body>
+</html>

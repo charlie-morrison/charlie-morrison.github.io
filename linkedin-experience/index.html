@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true});
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free LinkedIn Experience Bullet Builder — Rewrite Role Descriptions That Actually Convert</title>
+<meta name="description" content="Free LinkedIn experience section bullet generator. Turns vague responsibilities into metric-led achievement lines. Scores each bullet for power verbs, metrics, and length. Runs in your browser, no signup.">
+<meta name="keywords" content="LinkedIn experience section, LinkedIn bullets, LinkedIn job description rewriter, LinkedIn role description, achievement bullets, LinkedIn profile optimization">
+<link rel="canonical" href="https://charliemorrison.dev/linkedin-experience">
+<meta property="og:title" content="Free LinkedIn Experience Bullet Builder">
+<meta property="og:description" content="Rewrite vague responsibilities into metric-led achievement bullets that recruiters actually read.">
+<meta property="og:url" content="https://charliemorrison.dev/linkedin-experience">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"LinkedIn Experience Bullet Builder","description":"Free tool that rewrites LinkedIn experience section bullets into metric-led achievement lines and scores each for power verbs, metrics, and length.","url":"https://charliemorrison.dev/linkedin-experience","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.6;background:#f8f9fa}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600;margin-right:14px}
+.container{max-width:900px;margin:0 auto;padding:20px}
+h1{font-size:2em;margin:30px 0 8px;text-align:center}
+.subtitle{text-align:center;color:#666;margin-bottom:30px;font-size:1.05em}
+.byline{text-align:center;color:#888;font-size:.85em;margin-bottom:24px}
+.byline a{color:#0077b5;text-decoration:none}
+.form-card{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-weight:600;margin-bottom:6px;font-size:.95em}
+.form-group input,.form-group textarea,.form-group select{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 12px;font-size:.95em;font-family:inherit;transition:border-color .2s}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:#0077b5}
+.form-group textarea{height:60px;resize:vertical}
+.bullet-input{display:block;width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:.95em;font-family:inherit}
+.hint{font-size:.82em;color:#888;margin-top:4px}
+.btn{display:block;width:100%;background:linear-gradient(135deg,#0077b5,#00669c);color:#fff;padding:14px;border:none;border-radius:8px;font-size:1.05em;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.9}
+#results{display:none;margin-top:20px}
+.result-card{background:#fff;border-radius:10px;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:18px;border-left:4px solid #0077b5}
+.bullet-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f0f0}
+.bullet-row:last-child{border-bottom:none}
+.bullet-text{flex:1;font-size:.95em;line-height:1.55}
+.bullet-text strong{color:#0077b5}
+.bullet-meta{font-size:.78em;color:#999;margin-top:6px}
+.score-pill{font-size:.9em;font-weight:700;padding:5px 11px;border-radius:14px;white-space:nowrap;flex-shrink:0}
+.s-good{background:#e8f5e9;color:#1d7a3a}
+.s-warn{background:#fff8e1;color:#9c6c1c}
+.s-bad{background:#fdecec;color:#a41616}
+.feedback-list{margin:6px 0 0 18px;font-size:.82em;color:#666}
+.feedback-list li{margin-bottom:2px}
+.tone-tabs{display:flex;gap:4px;margin-bottom:14px;border-bottom:2px solid #eee}
+.tone-tab{padding:8px 14px;background:none;border:none;cursor:pointer;font-weight:600;color:#666;border-bottom:2px solid transparent;margin-bottom:-2px}
+.tone-tab.active{color:#0077b5;border-bottom-color:#0077b5}
+.combined{background:#fafafa;border:1px solid #eee;border-radius:6px;padding:14px;font-size:.93em;line-height:1.7;white-space:pre-wrap;max-height:280px;overflow-y:auto}
+.copy-btn{background:#0077b5;color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:.85em;font-weight:600;cursor:pointer;margin-top:10px}
+.copy-btn:hover{background:#005f91}
+.cta-box{background:linear-gradient(135deg,#0077b5,#005f91);color:#fff;border-radius:10px;padding:24px;margin-top:30px;text-align:center}
+.cta-box h3{margin-bottom:8px}.cta-box p{opacity:.95;margin-bottom:14px}
+.cta-box a{display:inline-block;background:#fff;color:#0077b5;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:700}
+.related{background:#fff;border-radius:10px;padding:18px 22px;margin:20px 0;border-left:4px solid #ddd}
+.related h4{margin-bottom:10px;font-size:1em}
+.related a{color:#0077b5;text-decoration:none;font-weight:600}
+.related ul{margin:0 0 0 22px;font-size:.92em;color:#555}.related li{margin-bottom:5px}
+footer{text-align:center;padding:24px;color:#999;font-size:.82em}
+footer a{color:#0077b5;text-decoration:none}
+.disclosure{font-size:.78em;color:#aaa;text-align:center;margin-top:8px}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison</a> <a href="/tools/">Free Tools</a> <a href="/blog/">Blog</a> <a href="/compare/">Compare</a> <a href="/about/">About</a></nav>
+
+<div class="container">
+<h1>LinkedIn Experience Bullet Builder</h1>
+<p class="subtitle">Rewrite vague responsibilities into metric-led achievement bullets recruiters actually read.</p>
+<p class="byline">By <a href="/about/">Charlie Morrison</a> · Free, no signup, runs in your browser</p>
+
+<div class="form-card">
+<div class="form-group">
+<label>Role Title</label>
+<input id="role" type="text" placeholder="e.g. Senior Backend Engineer">
+</div>
+
+<div class="form-group">
+<label>Company (optional)</label>
+<input id="company" type="text" placeholder="e.g. Stripe">
+</div>
+
+<div class="form-group">
+<label>Your raw responsibilities or achievements (one per line, 3-5 lines)</label>
+<textarea id="rawBullets" placeholder="e.g.
+Worked on payment processing system
+Helped reduce server costs
+Mentored junior developers
+Led migration to AWS"></textarea>
+<div class="hint">Just dump them as you'd describe to a friend. Numbers help — if you have any (saved hours, reduced %, sized team, processed volume), include them. The tool will rewrite each into a recruiter-friendly form.</div>
+</div>
+
+<div class="form-group">
+<label>Optional: Specific metrics you want included</label>
+<input id="metrics" type="text" placeholder="e.g. 40% latency reduction, 12-engineer team, $2M ARR">
+<div class="hint">Comma-separated. The tool will weave these into the bullets where they fit.</div>
+</div>
+
+<button class="btn" onclick="generateBullets()">Generate Bullets</button>
+</div>
+
+<div id="results">
+<div class="result-card">
+<div class="tone-tabs">
+<button class="tone-tab active" onclick="switchTone('achievement', this)">Achievement</button>
+<button class="tone-tab" onclick="switchTone('action', this)">Action</button>
+<button class="tone-tab" onclick="switchTone('concise', this)">Concise</button>
+</div>
+<div id="bulletDisplay"></div>
+<button class="copy-btn" onclick="copyAll()">Copy All Bullets</button>
+</div>
+
+<div class="result-card">
+<h3 style="color:#0077b5;margin-bottom:8px;font-size:1.05em">Combined for LinkedIn Experience field</h3>
+<p style="font-size:.85em;color:#666;margin-bottom:10px">LinkedIn allows up to 2000 chars per role description. Paste this whole block into the description field — it uses unicode bullet markers (•) since LinkedIn does not render markdown.</p>
+<div class="combined" id="combinedBlock"></div>
+<button class="copy-btn" onclick="copyCombined()">Copy Block</button>
+<div id="charCount" style="font-size:.82em;color:#888;margin-top:6px"></div>
+</div>
+</div>
+
+<div class="related">
+<h4>Pair this with the rest of the LinkedIn suite</h4>
+<ul>
+<li><a href="/linkedin-headline">LinkedIn Headline Generator</a> — the line under your name (220 char cap)</li>
+<li><a href="/linkedin-about">LinkedIn About Section Builder</a> — the longer summary, scored on the visible-before-truncation preview</li>
+<li><a href="/blog/i-audited-40-open-to-work-linkedin-profiles">The data behind these tools</a> — 40 profiles audited blind, 32 failed ≥3 of 7 items</li>
+</ul>
+</div>
+
+<div class="cta-box">
+<h3>Need more career-focused AI prompts?</h3>
+<p>The Social Media AI Mastery pack includes 100+ platform-specific prompts for LinkedIn, X, Instagram, TikTok, and YouTube — including LinkedIn experience-section frames written by recruiters.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/8b9e3b60-7a3e-4a8e-a5b8-c1c5b5e3d4f5?utm_source=cm_tool&utm_medium=cta&utm_content=linkedin_experience">Get the Pack — $17</a>
+<p class="disclosure">Affiliate link to my own product. We may earn a small commission if you buy. Independent tool — no vendor pays for placement.</p>
+</div>
+</div>
+
+<footer>
+<p>Built by <a href="/about/">Charlie Morrison</a> · See all <a href="/tools/">free tools</a> · Built using <a href="/compare/">tool comparisons</a> as research</p>
+</footer>
+
+<script>
+const POWER_VERBS = ["led","built","shipped","launched","delivered","scaled","reduced","increased","improved","optimized","architected","designed","drove","accelerated","grew","saved","cut","mentored","owned","spearheaded","unified","migrated","automated","streamlined","produced","authored"];
+
+const VAGUE_PHRASES = ["responsible for","worked on","helped with","involved in","participated in","assisted with","contributed to","handled","dealt with","took care of","passionate about","results-driven","detail-oriented","team player","hard worker","self-starter","go-getter","quick learner","team-oriented","proactive"];
+
+const FIRST_PERSON = ["i ","i'm","i've","my "];
+
+function detectMetric(text) {
+  return /(\d+%|\$\d+|\d+x|\d+\+|\d{2,}|\d+(\.\d+)?\s*(hours?|hrs?|days?|weeks?|months?|years?|minutes?|min|seconds?|sec|m|k|b|m\/s|gb|mb|kb|tb|users?|customers?|engineers?|developers?|reports?|teams?|countries?|regions?|markets?|languages?|products?|features?|projects?|sales?|deals?|leads?|opportunities|revenue|arr|mrr|conversion))/i.test(text);
+}
+
+function detectPowerVerb(text) {
+  const first = text.trim().split(/\s+/)[0].toLowerCase().replace(/[.,;:]/g, '');
+  return POWER_VERBS.includes(first);
+}
+
+function detectVague(text) {
+  const lower = text.toLowerCase();
+  return VAGUE_PHRASES.filter(p => lower.includes(p));
+}
+
+function detectFirstPerson(text) {
+  const lower = text.toLowerCase();
+  return FIRST_PERSON.some(p => lower.startsWith(p));
+}
+
+function rewrite(raw, role, company, tone, extraMetrics) {
+  let text = raw.trim();
+  if (!text) return null;
+  // Strip leading "I", "I'm", etc
+  text = text.replace(/^(i\s+|i'?m\s+|i'?ve\s+|my\s+)/i, '');
+  // Strip leading vague verbs
+  const vaguePrefixes = [/^worked on\s+/i, /^helped with\s+/i, /^helped\s+/i, /^was responsible for\s+/i, /^responsible for\s+/i, /^involved in\s+/i, /^participated in\s+/i, /^assisted with\s+/i, /^assisted in\s+/i, /^contributed to\s+/i, /^handled\s+/i, /^dealt with\s+/i, /^took care of\s+/i, /^was in charge of\s+/i, /^managed to\s+/i];
+  for (const p of vaguePrefixes) text = text.replace(p, '');
+  text = text.charAt(0).toUpperCase() + text.slice(1);
+
+  // Tone-specific prefix
+  let prefix = '';
+  if (tone === 'achievement') {
+    const verbs = {
+      'develop|develope|engineer|build|implement|create|design': 'Designed and shipped',
+      'reduce|decrease|cut|lower|minim': 'Reduced',
+      'increase|grow|boost|raise|improve|enhance|optimize': 'Drove',
+      'manage|lead|oversee|run|head': 'Led',
+      'mentor|coach|train|teach': 'Mentored',
+      'migrat|moved|transitioned|switched': 'Migrated',
+      'automat|streamlin|simplif': 'Automated',
+      'scal|expand|grow': 'Scaled',
+      'launch|ship|release|deploy|roll out': 'Launched',
+      'collaborat|partner|work with|coordinat': 'Partnered with',
+      'present|reported|communicat': 'Presented',
+      'analy|research|investigat': 'Analyzed',
+      'fix|resolv|debug|troubleshoot': 'Resolved',
+      'maintain|support|monitor': 'Owned',
+      'test|valid|verify|qa': 'Validated',
+      'review|audit|inspect': 'Audited',
+      'document|wrote|authored': 'Authored'
+    };
+    let matched = false;
+    for (const [pat, verb] of Object.entries(verbs)) {
+      if (new RegExp('\\b(' + pat + ')\\w*', 'i').test(text)) {
+        // Extract object
+        const obj = text.replace(new RegExp('^(.*?)(' + pat + ')\\w*\\s*', 'i'), '');
+        text = verb + ' ' + (obj.charAt(0).toLowerCase() + obj.slice(1));
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) {
+      text = 'Delivered ' + (text.charAt(0).toLowerCase() + text.slice(1));
+    }
+  } else if (tone === 'action') {
+    text = text.replace(/^(.*?)\s/, (m, w) => {
+      const wl = w.toLowerCase();
+      const map = {'developed':'Built','created':'Built','made':'Built','did':'Executed','went':'Drove','said':'Communicated','told':'Communicated','put':'Implemented','got':'Secured','took':'Owned'};
+      return (map[wl] || w) + ' ';
+    });
+    if (!detectPowerVerb(text)) {
+      text = 'Owned ' + (text.charAt(0).toLowerCase() + text.slice(1));
+    }
+  } else { // concise
+    // Trim to ~80 chars, single action verb + object
+    if (!detectPowerVerb(text)) {
+      text = 'Delivered ' + (text.charAt(0).toLowerCase() + text.slice(1));
+    }
+    if (text.length > 110) {
+      text = text.substring(0, 107).replace(/\s+\S*$/, '') + '.';
+    }
+  }
+
+  // Append a relevant extra metric if it exists and isn't already present
+  if (extraMetrics && extraMetrics.length) {
+    const lower = text.toLowerCase();
+    for (const m of extraMetrics) {
+      if (m && !lower.includes(m.toLowerCase().substring(0,8)) && !detectMetric(text)) {
+        text = text.replace(/\.?$/, '') + ' (' + m.trim() + ').';
+        break;
+      }
+    }
+  }
+
+  // Ensure terminal period
+  if (!/[.!?]$/.test(text)) text += '.';
+
+  return text;
+}
+
+function scoreBullet(text) {
+  let score = 50;
+  const feedback = [];
+
+  if (detectPowerVerb(text)) {
+    score += 20;
+  } else {
+    feedback.push('Start with a stronger action verb (Led, Built, Shipped, Drove, Reduced...)');
+  }
+
+  if (detectMetric(text)) {
+    score += 20;
+  } else {
+    score -= 5;
+    feedback.push('Add a number — saved hours, reduced %, team size, volume processed');
+  }
+
+  const vague = detectVague(text);
+  if (vague.length === 0) {
+    score += 5;
+  } else {
+    score -= vague.length * 6;
+    feedback.push('Drop vague phrasing: "' + vague.join('", "') + '"');
+  }
+
+  if (detectFirstPerson(text)) {
+    score -= 10;
+    feedback.push('Drop "I" / "my" — LinkedIn experience bullets read in third person');
+  }
+
+  // Length
+  const len = text.length;
+  if (len < 60) {
+    score -= 5;
+    feedback.push('Too short ('+len+' chars) — add what changed because of it');
+  } else if (len > 220) {
+    score -= 8;
+    feedback.push('Too long ('+len+' chars) — trim to one tight clause, max 200 chars');
+  }
+
+  return {score: Math.max(0, Math.min(100, score)), feedback};
+}
+
+let allBullets = {achievement: [], action: [], concise: []};
+let currentTone = 'achievement';
+
+function generateBullets() {
+  const role = document.getElementById('role').value.trim();
+  const company = document.getElementById('company').value.trim();
+  const raw = document.getElementById('rawBullets').value.trim();
+  const metrics = document.getElementById('metrics').value.trim().split(',').map(m => m.trim()).filter(Boolean);
+
+  if (!role || !raw) {
+    alert('Please fill in your role title and at least 3 raw bullets.');
+    return;
+  }
+
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+  if (lines.length < 2) {
+    alert('Please add at least 2 lines in the raw bullets field.');
+    return;
+  }
+
+  allBullets = {achievement: [], action: [], concise: []};
+  for (const tone of ['achievement', 'action', 'concise']) {
+    const usedMetrics = [...metrics];
+    for (const line of lines) {
+      const rewritten = rewrite(line, role, company, tone, usedMetrics);
+      const {score, feedback} = scoreBullet(rewritten);
+      allBullets[tone].push({text: rewritten, score, feedback});
+      // Remove a metric so different bullets get different metrics where possible
+      if (rewritten.includes('(') && usedMetrics.length) usedMetrics.shift();
+    }
+  }
+
+  document.getElementById('results').style.display = 'block';
+  renderTone('achievement');
+  document.getElementById('results').scrollIntoView({behavior:'smooth'});
+}
+
+function renderTone(tone) {
+  currentTone = tone;
+  const display = document.getElementById('bulletDisplay');
+  const bullets = allBullets[tone];
+  let html = '';
+  for (const b of bullets) {
+    const cls = b.score >= 80 ? 's-good' : b.score >= 60 ? 's-warn' : 's-bad';
+    html += '<div class="bullet-row">';
+    html += '<div class="bullet-text">';
+    html += '<div>' + b.text + '</div>';
+    if (b.feedback.length) {
+      html += '<ul class="feedback-list">';
+      for (const f of b.feedback) html += '<li>' + f + '</li>';
+      html += '</ul>';
+    }
+    html += '</div>';
+    html += '<span class="score-pill ' + cls + '">' + b.score + '/100</span>';
+    html += '</div>';
+  }
+  display.innerHTML = html;
+
+  // Combined block
+  const combined = bullets.map(b => '• ' + b.text).join('\n');
+  document.getElementById('combinedBlock').textContent = combined;
+  document.getElementById('charCount').textContent = combined.length + ' / 2000 chars (LinkedIn experience description limit)';
+}
+
+function switchTone(tone, btn) {
+  document.querySelectorAll('.tone-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderTone(tone);
+}
+
+function copyAll() {
+  const text = allBullets[currentTone].map(b => '• ' + b.text).join('\n');
+  navigator.clipboard.writeText(text).then(() => alert('Copied ' + allBullets[currentTone].length + ' bullets to clipboard.'));
+}
+
+function copyCombined() {
+  navigator.clipboard.writeText(document.getElementById('combinedBlock').textContent).then(() => alert('Copied to clipboard. Paste into LinkedIn experience description.'));
+}
+</script>
+</body>
+</html>

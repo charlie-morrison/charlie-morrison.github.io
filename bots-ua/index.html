@@ -72,7 +72,7 @@ window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);
 gtag('js',new Date());gtag('config','G-SE8T01PLBJ',{send_page_view:true});
 </script>
 <script>
-function trackCTA(a,s){try{if(typeof gtag==='function'){gtag('event',a,{sku:s||'',page:'bots-ua'});}}catch(e){}}
+function trackCTA(a,s){try{if(typeof gtag==='function'){gtag('event',a,{sku:s||'',page:'bots-ua'});if(a==='ls_buy'||a==='signup_click'||a==='sales_click'){gtag('event','bots_lead_submit',{source:a,sku:s||'',page:'bots-ua'});}}}catch(e){}}
 document.addEventListener('DOMContentLoaded',function(){
   document.querySelectorAll('[data-track]').forEach(function(el){
     el.addEventListener('click',function(){trackCTA(el.dataset.track,el.dataset.sku||'');});

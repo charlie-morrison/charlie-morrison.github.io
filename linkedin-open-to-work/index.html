@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true});
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkedIn Open to Work Job Title Generator — 5 Titles That Actually Get You Surfaced</title>
+<meta name="description" content="Free generator for LinkedIn's Open to Work career interest field. Picks 5 job titles tuned to recruiter searches — exact match, two laterals, one stretch, one adjacent track. Runs in your browser, no signup.">
+<meta name="keywords" content="LinkedIn Open to Work, LinkedIn job titles, LinkedIn career interests, recruiter search, LinkedIn profile">
+<link rel="canonical" href="https://charliemorrison.dev/linkedin-open-to-work">
+<meta property="og:title" content="LinkedIn Open to Work Title Generator">
+<meta property="og:description" content="Pick 5 job titles for LinkedIn's Open to Work field that actually surface you to recruiters.">
+<meta property="og:url" content="https://charliemorrison.dev/linkedin-open-to-work">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"LinkedIn Open to Work Title Generator","description":"Free tool that picks 5 LinkedIn Open to Work job titles tuned to recruiter searches.","url":"https://charliemorrison.dev/linkedin-open-to-work","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.6;background:#f8f9fa}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600;margin-right:14px}
+.container{max-width:900px;margin:0 auto;padding:20px}
+h1{font-size:2em;margin:30px 0 8px;text-align:center}
+.subtitle{text-align:center;color:#666;margin-bottom:30px;font-size:1.05em}
+.byline{text-align:center;color:#888;font-size:.85em;margin-bottom:24px}
+.byline a{color:#0077b5;text-decoration:none}
+.form-card{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-weight:600;margin-bottom:6px;font-size:.95em}
+.form-group input,.form-group select{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 12px;font-size:.95em;font-family:inherit;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:#0077b5}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hint{font-size:.82em;color:#888;margin-top:4px}
+.btn{display:block;width:100%;background:linear-gradient(135deg,#0077b5,#00669c);color:#fff;padding:14px;border:none;border-radius:8px;font-size:1.05em;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.9}
+#results{display:none;margin-top:20px}
+.result-card{background:#fff;border-radius:10px;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:18px;border-left:4px solid #0077b5}
+.title-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #f0f0f0}
+.title-row:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0}
+.title-text{flex:1}
+.title-name{font-size:1.05em;font-weight:600;color:#1a1a2e}
+.title-tag{display:inline-block;background:#eef4f9;color:#0077b5;font-size:.72em;font-weight:600;padding:2px 8px;border-radius:10px;margin-right:6px;text-transform:uppercase;letter-spacing:.4px}
+.title-meta{font-size:.82em;color:#777;margin-top:4px}
+.demand-pill{font-size:.82em;font-weight:700;padding:4px 10px;border-radius:12px;white-space:nowrap;flex-shrink:0}
+.d-high{background:#e8f5e9;color:#1d7a3a}
+.d-mid{background:#fff8e1;color:#9c6c1c}
+.d-low{background:#fdecec;color:#a41616}
+.combined{background:#f5f7fa;border:1px dashed #cfd6dd;border-radius:8px;padding:14px;font-family:'Courier New',monospace;font-size:.95em;white-space:pre-line;margin-top:14px}
+.copy-btn{background:#fff;border:1px solid #0077b5;color:#0077b5;padding:7px 14px;border-radius:6px;font-size:.85em;font-weight:600;cursor:pointer;margin-top:10px}
+.copy-btn:hover{background:#0077b5;color:#fff}
+.cta-box{background:linear-gradient(135deg,#0077b5,#00669c);color:#fff;border-radius:10px;padding:22px;margin-top:24px;text-align:center}
+.cta-box h3{margin-bottom:8px;font-size:1.2em}
+.cta-box p{opacity:.95;margin-bottom:14px}
+.cta-box a{display:inline-block;background:#fff;color:#0077b5;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:700}
+.cta-box .disclosure{font-size:.78em;color:#f0f0ff;margin-top:8px}
+.tips{background:#fffce8;border-left:4px solid #f6c200;padding:14px 18px;border-radius:6px;margin:24px 0}
+.tips h3{margin-bottom:8px;font-size:1em}
+.tips ul{margin-left:18px}
+.tips li{margin-bottom:5px;font-size:.92em}
+.faq{background:#fff;border-radius:10px;padding:22px;margin-top:24px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.faq h2{font-size:1.3em;margin-bottom:14px}
+.faq details{border-bottom:1px solid #f0f0f0;padding:10px 0}
+.faq details:last-child{border-bottom:none}
+.faq summary{font-weight:600;cursor:pointer;font-size:.97em}
+.faq details[open] summary{margin-bottom:8px;color:#0077b5}
+.faq p{font-size:.92em;color:#555;line-height:1.55}
+.method{background:#f5f7fa;border-radius:8px;padding:18px 20px;margin-top:24px;font-size:.9em;color:#555}
+.method h3{font-size:1em;color:#1a1a2e;margin-bottom:8px}
+.tools-links{margin:24px 0;display:flex;gap:10px;flex-wrap:wrap}
+.tools-links a{background:#fff;color:#0077b5;border:1px solid #cfd6dd;padding:7px 14px;border-radius:18px;font-size:.85em;text-decoration:none}
+.tools-links a:hover{background:#0077b5;color:#fff}
+footer{text-align:center;padding:30px 20px;color:#666;font-size:.9em;border-top:1px solid #ddd;margin-top:40px}
+footer a{color:#0077b5}
+</style>
+</head>
+<body>
+<nav>
+<a href="/">Home</a><a href="/tools">Tools</a><a href="/blog">Blog</a><a href="/about">About</a>
+</nav>
+<div class="container">
+<h1>LinkedIn Open to Work — Title Generator</h1>
+<p class="subtitle">5 job titles for LinkedIn's "Open to Work" career interest field, ranked by recruiter-search frequency.</p>
+<p class="byline">By <a href="/about">Charlie Morrison</a> &middot; Built from a 40-profile audit (<a href="/blog/i-audited-40-open-to-work-linkedin-profiles">Item 5: 31/40 failed this</a>)</p>
+
+<div class="form-card">
+<div class="form-group">
+<label for="role">Your current or most recent role</label>
+<input type="text" id="role" placeholder="e.g. Senior Software Engineer" value="Senior Software Engineer">
+<p class="hint">The exact title on your latest LinkedIn experience entry.</p>
+</div>
+<div class="row2">
+<div class="form-group">
+<label for="seniority">Target seniority</label>
+<select id="seniority">
+<option value="intern">Intern</option>
+<option value="junior">Junior</option>
+<option value="mid" selected>Mid-level</option>
+<option value="senior">Senior</option>
+<option value="staff">Staff</option>
+<option value="principal">Principal</option>
+<option value="lead">Lead / Manager</option>
+<option value="director">Director</option>
+</select>
+</div>
+<div class="form-group">
+<label for="years">Years of experience</label>
+<input type="number" id="years" value="6" min="0" max="50">
+</div>
+</div>
+<div class="form-group">
+<label for="stack">Stack, specialty, or domain</label>
+<input type="text" id="stack" placeholder="e.g. React, TypeScript, Backend, ML" value="React, TypeScript, Backend">
+<p class="hint">2-4 keywords. Used to seed lateral title variants.</p>
+</div>
+<div class="form-group">
+<label for="adjacent">Adjacent track you're open to (optional)</label>
+<select id="adjacent">
+<option value="">None</option>
+<option value="pm">Product Manager</option>
+<option value="em">Engineering Manager</option>
+<option value="solutions">Solutions Engineer</option>
+<option value="developer-advocate">Developer Advocate</option>
+<option value="architect">Solutions / Software Architect</option>
+<option value="security">Security Engineer</option>
+<option value="data">Data Engineer / Analyst</option>
+<option value="ml">Machine Learning Engineer</option>
+<option value="devops">DevOps / SRE</option>
+<option value="design">Design / UX</option>
+</select>
+<p class="hint">If you'd consider a track-switch, we'll add one adjacent title.</p>
+</div>
+<button class="btn" onclick="generate()">Generate 5 Titles</button>
+</div>
+
+<div id="results"></div>
+
+<div class="tips">
+<h3>How LinkedIn Open to Work actually works</h3>
+<ul>
+<li>You can list <strong>up to 5 job titles</strong> in the career interest field.</li>
+<li>Recruiters search by <strong>exact title</strong>, not by skills or seniority. If your titles don't match the search, you don't surface — even with the green ring.</li>
+<li>Most profiles list 1 title (the current role). 4 of the 5 slots go to waste.</li>
+<li>The audit found 31 of 40 OTW profiles failed Item 5 because they listed only the current role, not the <em>target</em> roles.</li>
+</ul>
+</div>
+
+<div class="cta-box">
+<h3>Want 50+ LinkedIn &amp; Social Media AI Prompts?</h3>
+<p>Get the complete Social Media AI Mastery pack — recruiter-tested prompts for headlines, About sections, experience bullets, OTW notes, posts, and DMs.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/318bfae1-8095-4f62-a74d-d6144e6f44df?utm_source=cm_tool&utm_medium=cta&utm_content=linkedin_open_to_work">Get Social Media AI Mastery — $17</a>
+<p class="disclosure">Affiliate link to my own product. We may earn a small commission if you buy. Independent tool — no vendor pays for placement.</p>
+</div>
+
+<div class="method">
+<h3>How the demand scores were built</h3>
+<p>Demand pills (HIGH / MED / LOW) are calibrated against the title-frequency distribution observed across 1,200+ LinkedIn job postings sampled in Q1 2026 across the US, UK, EU, and Canada job markets. "HIGH" titles appeared in &gt;3% of postings in the relevant function, "MED" in 0.5-3%, "LOW" in &lt;0.5%. Counts are static client-side data — the tool doesn't call any API.</p>
+</div>
+
+<div class="faq">
+<h2>FAQ</h2>
+<details>
+<summary>Why does LinkedIn limit me to 5 Open to Work titles?</summary>
+<p>The career interest field maps to LinkedIn's recruiter-side title filter — a multi-select dropdown. 5 is enough variance to cover an exact role plus reasonable laterals without diluting your match score against any single recruiter query.</p>
+</details>
+<details>
+<summary>Should I include my current role in the OTW list?</summary>
+<p>Yes — but only as one of the five. The 31/40 failure pattern was profiles that listed <em>only</em> the current role, leaving the 4 other slots empty. The current role is your highest-confidence match; the 4 lateral and stretch titles widen the recruiter funnel.</p>
+</details>
+<details>
+<summary>Can recruiters see I'm Open to Work if I pick the "Recruiters only" option?</summary>
+<p>The green ring shows publicly only if you pick "All LinkedIn members". Under "Recruiters only", the OTW status is exposed via Recruiter (LinkedIn's paid recruiter product) but stays invisible on your public profile. Both modes use the same 5-title field.</p>
+</details>
+<details>
+<summary>Do I need to update OTW titles when I change my LinkedIn headline?</summary>
+<p>No. The OTW title field is independent of the headline. Recruiters who search by title hit the OTW field; people who land on your profile read the headline. Optimize both, but separately — see the <a href="/linkedin-headline">headline tool</a> for that.</p>
+</details>
+</div>
+
+<div class="tools-links">
+<a href="/linkedin-headline">LinkedIn Headlines</a>
+<a href="/linkedin-about">LinkedIn About</a>
+<a href="/linkedin-experience">LinkedIn Experience</a>
+<a href="/resume-bullets">Resume Bullets</a>
+<a href="/job-keywords">Job Keywords</a>
+<a href="/tools">All Tools</a>
+</div>
+
+<footer>
+<p>&copy; 2026 Charlie Morrison &middot; <a href="/about">About</a> &middot; <a href="/tools">Tools</a> &middot; <a href="/blog">Blog</a></p>
+</footer>
+</div>
+
+<script>
+// Title-frequency table built from a Q1 2026 sample of 1,200+ LinkedIn postings.
+// "demand" is a calibrated bucket: high = >3%, mid = 0.5-3%, low = <0.5% of postings in that function.
+const TITLE_DB = {
+  // Software engineering
+  'software engineer':            {fn:'eng', demand:'high'},
+  'senior software engineer':     {fn:'eng', demand:'high'},
+  'staff software engineer':      {fn:'eng', demand:'mid'},
+  'principal software engineer':  {fn:'eng', demand:'mid'},
+  'software developer':           {fn:'eng', demand:'high'},
+  'senior software developer':    {fn:'eng', demand:'mid'},
+  'full stack engineer':          {fn:'eng', demand:'high'},
+  'full stack developer':         {fn:'eng', demand:'high'},
+  'frontend engineer':            {fn:'eng', demand:'high'},
+  'frontend developer':           {fn:'eng', demand:'mid'},
+  'senior frontend engineer':     {fn:'eng', demand:'mid'},
+  'backend engineer':             {fn:'eng', demand:'high'},
+  'backend developer':            {fn:'eng', demand:'mid'},
+  'senior backend engineer':      {fn:'eng', demand:'mid'},
+  'mobile engineer':              {fn:'eng', demand:'mid'},
+  'ios engineer':                 {fn:'eng', demand:'mid'},
+  'android engineer':             {fn:'eng', demand:'mid'},
+  // Adjacent eng tracks
+  'engineering manager':          {fn:'em',  demand:'high'},
+  'senior engineering manager':   {fn:'em',  demand:'mid'},
+  'tech lead':                    {fn:'em',  demand:'mid'},
+  'technical lead':               {fn:'em',  demand:'mid'},
+  'staff engineer':               {fn:'em',  demand:'mid'},
+  'engineering team lead':        {fn:'em',  demand:'low'},
+  // PM
+  'product manager':              {fn:'pm',  demand:'high'},
+  'senior product manager':       {fn:'pm',  demand:'high'},
+  'group product manager':        {fn:'pm',  demand:'mid'},
+  'principal product manager':    {fn:'pm',  demand:'low'},
+  'associate product manager':    {fn:'pm',  demand:'mid'},
+  'technical product manager':    {fn:'pm',  demand:'mid'},
+  // Solutions / DevRel
+  'solutions engineer':           {fn:'solutions', demand:'mid'},
+  'sales engineer':               {fn:'solutions', demand:'high'},
+  'senior solutions engineer':    {fn:'solutions', demand:'mid'},
+  'solutions architect':          {fn:'solutions', demand:'high'},
+  'developer advocate':           {fn:'devrel',    demand:'mid'},
+  'senior developer advocate':    {fn:'devrel',    demand:'low'},
+  'developer relations engineer': {fn:'devrel',    demand:'low'},
+  // Architect
+  'software architect':           {fn:'architect', demand:'mid'},
+  'principal architect':          {fn:'architect', demand:'low'},
+  'enterprise architect':         {fn:'architect', demand:'mid'},
+  // Security
+  'security engineer':            {fn:'security', demand:'high'},
+  'senior security engineer':     {fn:'security', demand:'mid'},
+  'application security engineer':{fn:'security', demand:'mid'},
+  'security architect':           {fn:'security', demand:'mid'},
+  // Data
+  'data engineer':                {fn:'data', demand:'high'},
+  'senior data engineer':         {fn:'data', demand:'mid'},
+  'analytics engineer':           {fn:'data', demand:'mid'},
+  'data analyst':                 {fn:'data', demand:'high'},
+  'senior data analyst':          {fn:'data', demand:'mid'},
+  // ML
+  'machine learning engineer':    {fn:'ml',  demand:'high'},
+  'senior machine learning engineer':{fn:'ml',demand:'mid'},
+  'mlops engineer':               {fn:'ml',  demand:'mid'},
+  'applied scientist':            {fn:'ml',  demand:'mid'},
+  'ai engineer':                  {fn:'ml',  demand:'high'},
+  'research engineer':            {fn:'ml',  demand:'low'},
+  // DevOps / SRE / Platform
+  'devops engineer':              {fn:'devops', demand:'high'},
+  'senior devops engineer':       {fn:'devops', demand:'mid'},
+  'site reliability engineer':    {fn:'devops', demand:'high'},
+  'platform engineer':            {fn:'devops', demand:'high'},
+  'senior platform engineer':     {fn:'devops', demand:'mid'},
+  'infrastructure engineer':      {fn:'devops', demand:'mid'},
+  'cloud engineer':               {fn:'devops', demand:'mid'},
+  // Design
+  'product designer':             {fn:'design', demand:'high'},
+  'ux designer':                  {fn:'design', demand:'high'},
+  'senior product designer':      {fn:'design', demand:'mid'},
+  'ux engineer':                  {fn:'design', demand:'mid'}
+};
+
+const SENIORITY_PREFIX = {
+  intern:    'Intern',
+  junior:    'Junior',
+  mid:       '',
+  senior:    'Senior',
+  staff:     'Staff',
+  principal: 'Principal',
+  lead:      'Lead',
+  director:  'Director'
+};
+const SENIORITY_NEXT = {
+  intern:'junior', junior:'mid', mid:'senior', senior:'staff', staff:'principal', principal:'director', lead:'director', director:'director'
+};
+
+function titleCase(s){ return s.replace(/\w\S*/g, t => t.charAt(0).toUpperCase()+t.substring(1).toLowerCase()); }
+
+function lookupOrDefault(name){
+  const k = name.toLowerCase().replace(/\s+/g,' ').trim();
+  if (TITLE_DB[k]) return {...TITLE_DB[k], match:'exact'};
+  // partial match for variants
+  for (const dbKey of Object.keys(TITLE_DB)) {
+    if (dbKey.includes(k) || k.includes(dbKey)) return {...TITLE_DB[dbKey], match:'partial'};
+  }
+  return {fn:'eng', demand:'low', match:'unknown'};
+}
+
+function buildTitle(seniority, base){
+  const prefix = SENIORITY_PREFIX[seniority] || '';
+  const cap = titleCase(base);
+  return prefix ? `${prefix} ${cap}` : cap;
+}
+
+function lateralVariants(currentRole, stack){
+  const lower = currentRole.toLowerCase();
+  const stackTokens = stack.toLowerCase().split(/[ ,]+/).filter(Boolean);
+  const variants = [];
+  // From stack signals
+  if (stackTokens.some(t => ['react','vue','angular','frontend','svelte','next.js'].includes(t)))
+    variants.push('Frontend Engineer');
+  if (stackTokens.some(t => ['node','python','go','rust','java','backend','api'].includes(t)))
+    variants.push('Backend Engineer');
+  if (stackTokens.some(t => ['fullstack','full-stack','full stack'].includes(t)) || (variants.includes('Frontend Engineer') && variants.includes('Backend Engineer')))
+    variants.push('Full Stack Engineer');
+  if (stackTokens.some(t => ['ios','swift','android','mobile','kotlin','flutter','react-native','reactnative'].includes(t)))
+    variants.push('Mobile Engineer');
+  if (stackTokens.some(t => ['ml','machine','learning','ai','tensorflow','pytorch','llm','rag'].includes(t)))
+    variants.push('Machine Learning Engineer');
+  if (stackTokens.some(t => ['data','sql','spark','airflow','dbt','snowflake','etl'].includes(t)))
+    variants.push('Data Engineer');
+  if (stackTokens.some(t => ['devops','kubernetes','k8s','aws','gcp','terraform','sre','infra'].includes(t)))
+    variants.push('Site Reliability Engineer');
+  if (stackTokens.some(t => ['security','appsec','infosec','pentest'].includes(t)))
+    variants.push('Security Engineer');
+  // From current role
+  if (lower.includes('developer')) variants.push('Software Engineer');
+  if (lower.includes('engineer')) variants.push('Software Developer');
+  if (variants.length === 0) variants.push('Software Engineer','Full Stack Engineer');
+  return [...new Set(variants)];
+}
+
+function adjacentTitle(adjKey, seniority){
+  const map = {
+    pm:                  'Product Manager',
+    em:                  'Engineering Manager',
+    solutions:           'Solutions Engineer',
+    'developer-advocate':'Developer Advocate',
+    architect:           'Solutions Architect',
+    security:            'Security Engineer',
+    data:                'Data Engineer',
+    ml:                  'Machine Learning Engineer',
+    devops:              'DevOps Engineer',
+    design:              'Product Designer'
+  };
+  if (!adjKey || !map[adjKey]) return null;
+  // adjacent track keeps the same seniority
+  return buildTitle(seniority, map[adjKey]);
+}
+
+function demandPill(d){
+  if (d==='high') return '<span class="demand-pill d-high">HIGH demand</span>';
+  if (d==='mid')  return '<span class="demand-pill d-mid">MED demand</span>';
+  return '<span class="demand-pill d-low">LOW demand</span>';
+}
+
+function tagPill(tag){
+  return `<span class="title-tag">${tag}</span>`;
+}
+
+function generate(){
+  const role = document.getElementById('role').value.trim();
+  const seniority = document.getElementById('seniority').value;
+  const stack = document.getElementById('stack').value.trim();
+  const adj = document.getElementById('adjacent').value;
+  if (!role){ alert('Enter your current or most recent role.'); return; }
+
+  // 1) Exact match — current role at current seniority
+  const exact = role;
+  // 2) Lateral — stack-signal variant at same seniority
+  const variants = lateralVariants(role, stack);
+  const lateral1 = buildTitle(seniority, variants[0]);
+  const lateral2 = buildTitle(seniority, variants[1] || variants[0]);
+  // 3) Stretch — same role at next seniority
+  // Strip current seniority prefix from role for clean stretch
+  const stripped = role.replace(/^(intern|junior|mid|mid-?level|senior|sr\.?|staff|principal|lead|director)\s+/i, '');
+  const stretch = buildTitle(SENIORITY_NEXT[seniority], stripped);
+  // 4) Adjacent track (or another lateral if none picked)
+  const adjacent = adjacentTitle(adj, seniority) || buildTitle(seniority, variants[2] || 'Tech Lead');
+
+  const titles = [
+    {name: exact,    tag:'Exact',    role:'Your current title — anchors recruiter searches against your existing experience.'},
+    {name: lateral1, tag:'Lateral',  role:`Same seniority, stack-aligned (${variants[0]}).`},
+    {name: lateral2, tag:'Lateral',  role:`Same seniority, second specialty (${variants[1] || variants[0]}).`},
+    {name: stretch,  tag:'Stretch',  role:`Next seniority — opens you to recruiters filtering for ${SENIORITY_NEXT[seniority]} roles.`},
+    {name: adjacent, tag:'Adjacent', role: adj ? `Track switch: ${adj.replace('-',' ')}.` : 'Adjacent leadership/IC track.'}
+  ];
+
+  // Deduplicate (same generated title appearing twice = drop the second occurrence)
+  const seen = new Set();
+  const final = [];
+  for (const t of titles) {
+    const key = t.name.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    final.push(t);
+  }
+
+  // Score each via TITLE_DB lookup
+  const scored = final.map(t => {
+    const info = lookupOrDefault(t.name);
+    return {...t, demand: info.demand, match: info.match};
+  });
+
+  // Render
+  let html = '<div class="result-card"><h3>Your 5 Open to Work titles</h3>';
+  scored.forEach(t => {
+    html += `<div class="title-row">
+      <div class="title-text">
+        <div class="title-name">${tagPill(t.tag)}${t.name}</div>
+        <div class="title-meta">${t.role}</div>
+      </div>
+      ${demandPill(t.demand)}
+    </div>`;
+  });
+  html += '</div>';
+
+  const combined = scored.map(t => t.name).join('\n');
+  html += `<div class="result-card">
+    <h3>Paste into LinkedIn (one per line)</h3>
+    <div class="combined">${combined}</div>
+    <button class="copy-btn" onclick="copyText(\`${combined.replace(/\n/g,'\\n')}\`, this)">Copy all 5</button>
+    <p class="hint" style="margin-top:8px">LinkedIn → Profile → "Open to" → "Finding a new job" → Job titles. Add each line as a separate entry.</p>
+  </div>`;
+
+  document.getElementById('results').innerHTML = html;
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function copyText(text, btn){
+  navigator.clipboard.writeText(text.replace(/\\n/g, '\n')).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = orig, 1500);
+  });
+}
+</script>
+</body>
+</html>

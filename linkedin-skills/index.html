@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true});
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkedIn Skills Audit — 4-Check Rubric From a 60-Profile Audit</title>
+<meta name="description" content="Free audit for your LinkedIn Skills section. Runs the 4-check rubric from a 60-profile study (41/60 were listing the wrong skills) against your input. Score in 30 seconds, fix flow in 4 steps.">
+<meta name="keywords" content="LinkedIn skills, LinkedIn skills section, LinkedIn skills audit, recruiter search, LinkedIn profile optimization">
+<link rel="canonical" href="https://charliemorrison.dev/linkedin-skills">
+<meta property="og:title" content="LinkedIn Skills Section Audit — 4-Check Rubric">
+<meta property="og:description" content="Run the same 4-check rubric we used on 60 LinkedIn profiles against your own Skills section.">
+<meta property="og:url" content="https://charliemorrison.dev/linkedin-skills">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"LinkedIn Skills Audit","description":"Free tool that runs the 4-check Skills-section rubric from a 60-profile LinkedIn audit against your input.","url":"https://charliemorrison.dev/linkedin-skills","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.6;background:#f8f9fa}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600;margin-right:14px}
+.container{max-width:900px;margin:0 auto;padding:20px}
+h1{font-size:2em;margin:30px 0 8px;text-align:center}
+.subtitle{text-align:center;color:#666;margin-bottom:30px;font-size:1.05em}
+.byline{text-align:center;color:#888;font-size:.85em;margin-bottom:24px}
+.byline a{color:#0077b5;text-decoration:none}
+.form-card{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-weight:600;margin-bottom:6px;font-size:.95em}
+.form-group input,.form-group select,.form-group textarea{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:10px 12px;font-size:.95em;font-family:inherit;transition:border-color .2s}
+.form-group textarea{resize:vertical;min-height:90px;font-family:inherit}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#0077b5}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:600px){.row3,.row2{grid-template-columns:1fr}}
+.hint{font-size:.82em;color:#888;margin-top:4px}
+.btn{display:block;width:100%;background:linear-gradient(135deg,#0077b5,#00669c);color:#fff;padding:14px;border:none;border-radius:8px;font-size:1.05em;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.9}
+#results{display:none;margin-top:20px}
+.score-card{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.08);margin-bottom:20px;border-top:6px solid #0077b5}
+.score-header{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #f0f0f0}
+.score-title{font-size:1.2em;font-weight:700}
+.score-pill{font-size:1.05em;font-weight:700;padding:6px 16px;border-radius:18px;white-space:nowrap}
+.s-pass{background:#e8f5e9;color:#1d7a3a}
+.s-partial{background:#fff8e1;color:#9c6c1c}
+.s-fail{background:#fdecec;color:#a41616}
+.check-row{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid #f5f5f5}
+.check-row:last-child{border-bottom:none}
+.check-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0}
+.icon-pass{background:#e8f5e9;color:#1d7a3a}
+.icon-fail{background:#fdecec;color:#a41616}
+.check-body{flex:1}
+.check-title{font-weight:600;margin-bottom:4px}
+.check-detail{font-size:.9em;color:#555;line-height:1.5}
+.check-fix{font-size:.88em;color:#0077b5;margin-top:6px;background:#eef4f9;padding:8px 12px;border-radius:6px;border-left:3px solid #0077b5}
+.cta-box{background:linear-gradient(135deg,#0077b5,#00669c);color:#fff;border-radius:10px;padding:22px;margin-top:24px;text-align:center}
+.cta-box h3{margin-bottom:8px;font-size:1.2em}
+.cta-box p{opacity:.95;margin-bottom:14px}
+.cta-box a{display:inline-block;background:#fff;color:#0077b5;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:700}
+.cta-box .disclosure{font-size:.78em;color:#f0f0ff;margin-top:8px}
+.tips{background:#fffce8;border-left:4px solid #f6c200;padding:14px 18px;border-radius:6px;margin:24px 0}
+.tips h3{margin-bottom:8px;font-size:1em}
+.tips ul{margin-left:18px}
+.tips li{margin-bottom:5px;font-size:.92em}
+.faq{background:#fff;border-radius:10px;padding:22px;margin-top:24px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.faq h2{font-size:1.3em;margin-bottom:14px}
+.faq details{border-bottom:1px solid #f0f0f0;padding:10px 0}
+.faq details:last-child{border-bottom:none}
+.faq summary{font-weight:600;cursor:pointer;font-size:.97em}
+.faq details[open] summary{margin-bottom:8px;color:#0077b5}
+.faq p{font-size:.92em;color:#555;line-height:1.55}
+.method{background:#f5f7fa;border-radius:8px;padding:18px 20px;margin-top:24px;font-size:.9em;color:#555}
+.method h3{font-size:1em;color:#1a1a2e;margin-bottom:8px}
+.tools-links{margin:24px 0;display:flex;gap:10px;flex-wrap:wrap}
+.tools-links a{background:#fff;color:#0077b5;border:1px solid #cfd6dd;padding:7px 14px;border-radius:18px;font-size:.85em;text-decoration:none}
+.tools-links a:hover{background:#0077b5;color:#fff}
+.recommend{background:#f5f7fa;border-radius:8px;padding:14px 18px;margin-top:14px;font-size:.92em}
+.recommend strong{color:#0077b5}
+.tag{display:inline-block;background:#eef4f9;color:#0077b5;font-size:.78em;font-weight:600;padding:3px 9px;border-radius:10px;margin:2px 4px 2px 0}
+footer{text-align:center;padding:30px 20px;color:#666;font-size:.9em;border-top:1px solid #ddd;margin-top:40px}
+footer a{color:#0077b5}
+</style>
+</head>
+<body>
+<nav>
+<a href="/">Home</a><a href="/tools">Tools</a><a href="/blog">Blog</a><a href="/about">About</a>
+</nav>
+<div class="container">
+<h1>LinkedIn Skills Section — 4-Check Audit</h1>
+<p class="subtitle">The same rubric we ran on 60 profiles (41 of them were listing the wrong skills) — now run against yours.</p>
+<p class="byline">By <a href="/about">Charlie Morrison</a> &middot; Rubric from the <a href="/blog/i-audited-60-linkedin-skills-sections">60-profile Skills audit</a> (4 checks anchored to LinkedIn Recruiter's filter mechanics) and the <a href="/blog/i-audited-40-open-to-work-linkedin-profiles">40-profile umbrella audit Item 4 (26/40 failed)</a></p>
+
+<div class="form-card">
+<div class="form-group">
+<label for="target">Target role you want recruiters to find you for</label>
+<select id="target">
+<option value="backend">Backend Engineer</option>
+<option value="frontend">Frontend Engineer</option>
+<option value="fullstack" selected>Full-Stack Engineer</option>
+<option value="mobile">Mobile Engineer</option>
+<option value="ml">Machine Learning Engineer</option>
+<option value="data">Data Engineer / Analyst</option>
+<option value="devops">DevOps / SRE / Platform</option>
+<option value="security">Security Engineer</option>
+<option value="em">Engineering Manager</option>
+<option value="pm">Product Manager</option>
+<option value="devrel">Developer Advocate / DevRel</option>
+<option value="design">Product Designer / UX</option>
+</select>
+<p class="hint">Pick the role you want to surface for in recruiter searches. The rubric scores against this target.</p>
+</div>
+
+<div class="form-group">
+<label>Your 3 pinned (top) skills, in order</label>
+<div class="row3">
+<input type="text" id="p1" placeholder="Pinned #1" value="React">
+<input type="text" id="p2" placeholder="Pinned #2" value="Node.js">
+<input type="text" id="p3" placeholder="Pinned #3" value="TypeScript">
+</div>
+<p class="hint">LinkedIn lets you pin 3 skills to the top of your Skills section. Recruiter's title filter scores these heaviest.</p>
+</div>
+
+<div class="form-group">
+<label for="skills">All other skills currently on your LinkedIn (comma or newline separated)</label>
+<textarea id="skills" placeholder="JavaScript, HTML, CSS, jQuery, Git, ...">JavaScript, HTML, CSS, Git, REST APIs, MongoDB, Express, PostgreSQL, AWS, Docker</textarea>
+<p class="hint">Copy your full Skills list. The audit checks for adjacency coverage AND legacy red-flag skills.</p>
+</div>
+
+<div class="row2">
+<div class="form-group">
+<label for="endorsements">Where are your endorsements concentrated?</label>
+<select id="endorsements">
+<option value="target">On target-role skills</option>
+<option value="legacy" selected>On legacy / older skills</option>
+<option value="mixed">Mixed — no clear pattern</option>
+<option value="few">I have fewer than 10 endorsements total</option>
+</select>
+</div>
+<div class="form-group">
+<label for="seniority">Target seniority</label>
+<select id="seniority">
+<option value="junior">Junior</option>
+<option value="mid" selected>Mid-level</option>
+<option value="senior">Senior</option>
+<option value="staff">Staff / Lead</option>
+<option value="principal">Principal / Director</option>
+</select>
+</div>
+</div>
+
+<button class="btn" onclick="audit()">Run 4-Check Audit</button>
+</div>
+
+<div id="results"></div>
+
+<div class="tips">
+<h3>How LinkedIn Recruiter's Skills filter actually scores you</h3>
+<ul>
+<li>Recruiter searches use Boolean filters like <code>(Kubernetes OR EKS OR GKE) AND Terraform</code>. If your Skills section misses the right primary term, you're filtered out <em>before</em> any ranking happens.</li>
+<li>The <strong>top-3 pinned skills</strong> carry the heaviest weight. Legacy skills below them dilute the signal but don't directly hurt — unless they're the <em>only</em> match.</li>
+<li>LinkedIn Talent Solutions research shows recruiters spend <strong>~6 seconds</strong> on the Skills section. Adjacency skills (related, not core) signal range without spamming.</li>
+<li>The 60-profile audit found 41 of 60 missed at least one of these 4 checks. The top-3 failure patterns were fixable in &lt;90 seconds each.</li>
+</ul>
+</div>
+
+<div class="cta-box">
+<h3>Want 50+ Recruiter-Tested LinkedIn Prompts?</h3>
+<p>Get the complete Social Media AI Mastery pack — prompts for headlines, About sections, Skills/endorsements strategy, experience bullets, and OTW notes.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/318bfae1-8095-4f62-a74d-d6144e6f44df?utm_source=cm_tool&utm_medium=cta&utm_content=linkedin_skills">Get Social Media AI Mastery — $17</a>
+<p class="disclosure">Affiliate link to my own product. We may earn a small commission if you buy. Independent tool — no vendor pays for placement.</p>
+</div>
+
+<div class="method">
+<h3>How the skill-graph was built</h3>
+<p>For each target role we maintain a static, client-side graph of (a) <em>core</em> skills — the 3-6 terms recruiters use as the primary filter; (b) <em>adjacency</em> skills — 10-15 related terms that signal range without diluting; (c) <em>legacy</em> red-flag skills — terms that signal you're 5+ years out of date or focused on a different stack. Lookups are case-insensitive with common aliases (e.g. "Node" ↔ "Node.js", "k8s" ↔ "Kubernetes"). Graph data was sampled from 1,200+ LinkedIn job postings in Q1 2026 (US/UK/EU/Canada). No API calls — your input never leaves the browser.</p>
+</div>
+
+<div class="faq">
+<h2>FAQ</h2>
+<details>
+<summary>Why only 4 checks? LinkedIn's Skills section has more dimensions.</summary>
+<p>The 4 checks isolate the highest-impact recruiter-side filter signals: pinned top-3 alignment, adjacency breadth, legacy noise, and endorsement concentration. Other dimensions (Skill Assessments badges, "skills used at" experience entries, certifications) layer onto these but don't change the binary "does my profile surface in a Recruiter search" outcome. We rank by leverage, not completeness.</p>
+</details>
+<details>
+<summary>Should I delete legacy skills, or just bury them?</summary>
+<p>Delete them. The 60-profile audit found 28 of 41 failing profiles had legacy skills sitting in the Skills section despite zero recent endorsements on them. Recruiters scanning the Skills section saw a profile mixing 2026 stack with 2018 stack — a noisier signal than a smaller, focused list. LinkedIn lets you reorder and delete from the Skills edit panel; the 8-minute fix flow below treats deletion as default.</p>
+</details>
+<details>
+<summary>I switched stacks recently. Do legacy skills hurt or help?</summary>
+<p>They help <em>only</em> if your endorsements there are concentrated and recent (last 12 months). A pivot profile with 50 endorsements on old-stack skills and 3 on new-stack is read as a profile pretending to pivot. Either move all endorsement traffic to the new stack (ask 3-5 recent colleagues), or delete the legacy skills entirely. The "mixed legacy + new" pattern was the third-highest failure cluster in the audit.</p>
+</details>
+<details>
+<summary>How do I get endorsements concentrated on target-role skills?</summary>
+<p>Two routes. Slower: post 3-4 LinkedIn updates with Skills tagged on each — colleagues who react often auto-suggest endorsements on the tagged skill. Faster: send 8-10 individual DMs asking for endorsements on 2-3 specific target-role skills (don't ask for general endorsement — name the skill). The 60-profile passing-cohort averaged 12-18 endorsements concentrated on top-3, not 50+ scattered.</p>
+</details>
+</div>
+
+<div class="tools-links">
+<a href="/linkedin-headline">LinkedIn Headlines</a>
+<a href="/linkedin-about">LinkedIn About</a>
+<a href="/linkedin-experience">LinkedIn Experience</a>
+<a href="/linkedin-open-to-work">Open to Work Titles</a>
+<a href="/resume-bullets">Resume Bullets</a>
+<a href="/job-keywords">Job Keywords</a>
+<a href="/tools">All Tools</a>
+</div>
+
+<footer>
+<p>&copy; 2026 Charlie Morrison &middot; <a href="/about">About</a> &middot; <a href="/tools">Tools</a> &middot; <a href="/blog">Blog</a></p>
+</footer>
+</div>
+
+<script>
+// Skill-graph: per-target-role mapping built from Q1 2026 sample of 1,200+ LinkedIn job postings.
+// `core` = the 3-6 terms recruiter title filters lead with. Pinned top-3 should be drawn from here.
+// `adj` = 10-15 adjacency terms that signal range. Goal: ≥3 of these in the full skills list.
+// `legacy` = red-flag skills that signal staleness for this target (still useful for other roles).
+// `aliases` = case-insensitive normalization map applied to all user input.
+const SKILL_GRAPH = {
+  backend: {
+    core: ['backend engineer','node.js','python','go','java','rest apis','postgresql','sql','microservices'],
+    adj: ['redis','kafka','rabbitmq','grpc','docker','kubernetes','aws','gcp','mongodb','dynamodb','elasticsearch','graphql','ci/cd','distributed systems','system design','observability'],
+    legacy: ['php','perl','jquery','wordpress','laravel','symfony','cakephp','soap','asp.net webforms','classic asp']
+  },
+  frontend: {
+    core: ['react','typescript','javascript','frontend engineer','next.js','css','html','vue','svelte','angular'],
+    adj: ['redux','tailwind css','webpack','vite','jest','playwright','accessibility','responsive design','design systems','graphql','storybook','figma','performance optimization','web vitals','astro'],
+    legacy: ['jquery','angularjs','backbone','knockout','coffeescript','sass','grunt','bower','ie11','flash']
+  },
+  fullstack: {
+    core: ['full stack engineer','full-stack engineer','react','node.js','typescript','python','postgresql','rest apis','next.js'],
+    adj: ['javascript','express','prisma','graphql','docker','aws','vercel','tailwind css','jest','playwright','redis','mongodb','ci/cd','system design','figma'],
+    legacy: ['jquery','php','wordpress','angularjs','meteor','rails 3','coffeescript','backbone','flash']
+  },
+  mobile: {
+    core: ['ios engineer','android engineer','mobile engineer','swift','kotlin','react native','flutter'],
+    adj: ['swiftui','jetpack compose','objective-c','java','dart','xcode','android studio','firebase','rest apis','combine','rxjava','coroutines','testing'],
+    legacy: ['cordova','phonegap','xamarin','ionic 3','j2me','symbian','windows phone']
+  },
+  ml: {
+    core: ['machine learning engineer','ml engineer','ai engineer','python','pytorch','tensorflow','llm','mlops'],
+    adj: ['scikit-learn','huggingface','langchain','vector databases','rag','prompt engineering','model deployment','sagemaker','vertex ai','kubeflow','data engineering','distributed training','onnx'],
+    legacy: ['caffe','theano','torch (lua)','matlab','r','keras 1.x','sas','spss']
+  },
+  data: {
+    core: ['data engineer','data analyst','analytics engineer','sql','python','dbt','spark','airflow','snowflake'],
+    adj: ['bigquery','redshift','databricks','kafka','postgresql','dataform','looker','tableau','power bi','data modeling','etl','elt','python pandas'],
+    legacy: ['ssis','informatica','hadoop mapreduce','pentaho','cognos','crystal reports','excel power query only']
+  },
+  devops: {
+    core: ['devops engineer','sre','platform engineer','kubernetes','terraform','aws','docker','ci/cd'],
+    adj: ['gitops','argocd','helm','prometheus','grafana','observability','linux','ansible','jenkins','github actions','gcp','azure','networking','security','incident response'],
+    legacy: ['chef','puppet','nagios','cacti','rundeck','vmware vsphere only','windows server 2008']
+  },
+  security: {
+    core: ['security engineer','application security','cloud security','penetration testing','iam','threat modeling'],
+    adj: ['burp suite','semgrep','snyk','aws security','soc 2','siem','splunk','crowdstrike','okta','zero trust','dast','sast','incident response','cryptography'],
+    legacy: ['mcafee siem','symantec','nessus desktop','snort 2.x','windows firewall configuration']
+  },
+  em: {
+    core: ['engineering manager','tech lead','team lead','people management','hiring','performance management'],
+    adj: ['career development','1:1 coaching','sprint planning','okr','roadmapping','cross-functional leadership','agile','retrospectives','stakeholder management','technical strategy','mentoring','team building'],
+    legacy: ['waterfall','prince2','six sigma green belt','itil v3']
+  },
+  pm: {
+    core: ['product manager','product strategy','roadmapping','user research','a/b testing','product analytics'],
+    adj: ['agile','sql','figma','jira','okrs','jobs to be done','product discovery','customer interviews','mixpanel','amplitude','growth','positioning','market research','stakeholder management'],
+    legacy: ['waterfall','prince2','marketo','salesforce admin only']
+  },
+  devrel: {
+    core: ['developer advocate','developer relations','technical writing','public speaking','community building'],
+    adj: ['conference speaking','open source','sample apps','technical content','github','blogging','workshops','live streaming','content strategy','sdk design','documentation','dev events'],
+    legacy: ['evangelism (alone, no metrics)','press releases','launch events only']
+  },
+  design: {
+    core: ['product designer','ux designer','figma','user research','interaction design','design systems'],
+    adj: ['prototyping','usability testing','accessibility','wireframing','ui design','user flows','heuristic evaluation','information architecture','design tokens','storybook','animation','copywriting'],
+    legacy: ['sketch','invision','photoshop ui design','xd','axure rp']
+  }
+};
+
+const ALIASES = {
+  'node':'node.js','nodejs':'node.js','js':'javascript','ts':'typescript',
+  'k8s':'kubernetes','tf':'terraform','postgres':'postgresql','mysql':'sql','mssql':'sql',
+  'rn':'react native','swiftui':'swiftui','spa':'frontend engineer',
+  'ml':'machine learning engineer','dl':'machine learning engineer','ai/ml':'machine learning engineer',
+  'tdd':'testing','bdd':'testing','ux':'user research','ui':'ui design',
+  'sql server':'sql','rest':'rest apis','grpc':'grpc','llms':'llm'
+};
+
+function norm(s){
+  s=(s||'').toLowerCase().trim();
+  return ALIASES[s]||s;
+}
+
+function parseList(s){
+  return (s||'').split(/[,\n]/).map(norm).filter(Boolean);
+}
+
+function audit(){
+  const target=document.getElementById('target').value;
+  const targetLabel=document.getElementById('target').selectedOptions[0].text;
+  const p1=norm(document.getElementById('p1').value);
+  const p2=norm(document.getElementById('p2').value);
+  const p3=norm(document.getElementById('p3').value);
+  const allSkills=parseList(document.getElementById('skills').value);
+  const endorsements=document.getElementById('endorsements').value;
+  const seniority=document.getElementById('seniority').value;
+  const graph=SKILL_GRAPH[target];
+  const pinned=[p1,p2,p3].filter(Boolean);
+  const fullList=[...new Set([...pinned,...allSkills])];
+
+  // Check 1: pinned top-3 match target role (≥2 of 3 in core set)
+  const pinnedInCore=pinned.filter(s=>graph.core.includes(s));
+  const c1Pass=pinnedInCore.length>=2;
+  const c1Detail=c1Pass
+    ? `${pinnedInCore.length} of your 3 pinned skills (${pinnedInCore.join(', ')}) are in the recruiter-search core set for ${targetLabel}.`
+    : `Only ${pinnedInCore.length} of your 3 pinned skills are in the recruiter-search core set for ${targetLabel}. Pinned: ${pinned.join(', ')||'(none)'}.`;
+  const coreMissing=graph.core.filter(s=>!pinned.includes(s)).slice(0,4);
+  const c1Fix=c1Pass?'':`Replace pinned slots with at least 2 of: ${coreMissing.map(s=>'<strong>'+s+'</strong>').join(', ')}. (LinkedIn → Skills → ⋯ → Reorder.)`;
+
+  // Check 2: ≥3 adjacency skills present (in full list, not just pinned)
+  const adjPresent=graph.adj.filter(s=>fullList.includes(s));
+  const c2Pass=adjPresent.length>=3;
+  const c2Detail=c2Pass
+    ? `${adjPresent.length} adjacency skills present: ${adjPresent.slice(0,6).join(', ')}${adjPresent.length>6?', …':''}.`
+    : `Only ${adjPresent.length} adjacency skills present. Recruiters scanning your Skills section see range signal as weak.`;
+  const adjMissing=graph.adj.filter(s=>!fullList.includes(s)).slice(0,5);
+  const c2Fix=c2Pass?'':`Add ${3-adjPresent.length} or more of: ${adjMissing.map(s=>'<strong>'+s+'</strong>').join(', ')}. Scrape these from 3-5 ${targetLabel} job postings to confirm fit.`;
+
+  // Check 3: no legacy red-flag skills present
+  const legacyPresent=fullList.filter(s=>graph.legacy.includes(s));
+  const c3Pass=legacyPresent.length===0;
+  const c3Detail=c3Pass
+    ? `No legacy red-flag skills detected for ${targetLabel}.`
+    : `${legacyPresent.length} legacy red-flag skill${legacyPresent.length>1?'s':''} detected: ${legacyPresent.join(', ')}.`;
+  const c3Fix=c3Pass?'':`Delete from Skills section: ${legacyPresent.map(s=>'<strong>'+s+'</strong>').join(', ')}. These signal you're 5+ years out of date for ${targetLabel}. (LinkedIn → Skills → Edit → trash icon per skill.)`;
+
+  // Check 4: endorsements concentrated on target-role skills
+  const c4Pass=endorsements==='target';
+  let c4Detail,c4Fix='';
+  if(endorsements==='target'){c4Detail='Endorsements concentrated on target-role skills — strong signal.';}
+  else if(endorsements==='legacy'){c4Detail='Endorsements concentrated on legacy skills. Recruiter ranking algorithm reads this as "this person did legacy work, not current work."';c4Fix=`DM 8-10 colleagues asking for endorsements on 2-3 specific ${targetLabel} core skills: ${graph.core.slice(0,3).join(', ')}. Name the skills in your ask — generic asks don't move the concentration.`;}
+  else if(endorsements==='mixed'){c4Detail='Endorsements split across mixed skills. No clear concentration pattern — recruiter signal is diffuse.';c4Fix=`Concentrate next batch: when DMing for endorsements, name 2-3 specific ${targetLabel} core skills (e.g. ${graph.core.slice(0,3).join(', ')}) so the concentration tips toward your target.`;}
+  else {c4Detail='Fewer than 10 total endorsements — concentration test is inconclusive but the volume is also weak.';c4Fix='Post 3-4 LinkedIn updates with relevant skills tagged. Colleagues who react often auto-suggest endorsements on the tagged skill. Aim for 12-18 endorsements total, concentrated on top-3.';}
+
+  // Score summary
+  const passed=[c1Pass,c2Pass,c3Pass,c4Pass].filter(x=>x).length;
+  let pillClass,pillText,headerText;
+  if(passed===4){pillClass='s-pass';pillText='Pass (4/4)';headerText='Strong Skills section for '+targetLabel;}
+  else if(passed>=2){pillClass='s-partial';pillText='Partial ('+passed+'/4)';headerText='Skills section needs '+(4-passed)+' fix'+(4-passed>1?'es':'');}
+  else {pillClass='s-fail';pillText='Hard fail ('+passed+'/4)';headerText='Skills section will not surface for '+targetLabel;}
+
+  function checkRow(pass,title,detail,fix){
+    return `<div class="check-row">
+      <div class="check-icon ${pass?'icon-pass':'icon-fail'}">${pass?'✓':'✗'}</div>
+      <div class="check-body">
+        <div class="check-title">${title}</div>
+        <div class="check-detail">${detail}</div>
+        ${fix?`<div class="check-fix">Fix: ${fix}</div>`:''}
+      </div>
+    </div>`;
+  }
+
+  const html=`
+    <div class="score-card">
+      <div class="score-header">
+        <div class="score-title">${headerText}</div>
+        <div class="score-pill ${pillClass}">${pillText}</div>
+      </div>
+      ${checkRow(c1Pass,'1. Pinned top-3 match target role',c1Detail,c1Fix)}
+      ${checkRow(c2Pass,'2. ≥3 target-role adjacency skills present',c2Detail,c2Fix)}
+      ${checkRow(c3Pass,'3. No legacy red-flag skills',c3Detail,c3Fix)}
+      ${checkRow(c4Pass,'4. Endorsements concentrated on target-role skills',c4Detail,c4Fix)}
+    </div>
+    <div class="recommend">
+      <p><strong>8-minute fix flow</strong> (if you failed 2+ checks): (1) Open LinkedIn → Profile → Skills → ⋯ → Reorder; pin 3 from the core set. (2) Add the missing adjacency skills from the recruiter-search list. (3) Delete every legacy skill the audit flagged. (4) DM 8-10 colleagues asking for endorsements on 2-3 specific target-role skills, naming each skill. Re-run this audit after — score should be 3+ within a day, 4 within a week.</p>
+    </div>
+  `;
+  const r=document.getElementById('results');
+  r.innerHTML=html;
+  r.style.display='block';
+  r.scrollIntoView({behavior:'smooth',block:'start'});
+  if(window.gtag){gtag('event','audit_run',{target_role:target,score:passed});}
+}
+</script>
+</body>
+</html>

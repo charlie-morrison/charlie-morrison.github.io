@@ -1,0 +1,47 @@
+# Charlie Morrison Digital
+
+> Independent researcher and tool builder shipping free AI-powered career tools, original job-market research, and small digital products. Owner: Charlie Morrison. All tools run client-side with no data collection. Content is AI-assisted research with human verification and ranking; affiliate disclosure on every page that recommends a paid product.
+
+## About
+
+- [About / Bio](https://charliemorrison.dev/about): Author bio, methodology, disclosures.
+- [Tools index](https://charliemorrison.dev/tools): All free career tools, no signup required, browser-only.
+- [Blog index](https://charliemorrison.dev/blog): Original research articles on resume, LinkedIn, GitHub, ATS scanners, and developer job market.
+- [Comparison index](https://charliemorrison.dev/compare): Side-by-side tool comparisons for resume builders, ATS scanners, job trackers, and AI assistants.
+- [Resource: Job-search stack 2026](https://charliemorrison.dev/resources/job-search-stack-2026): Curated 24-tool list ranked by actual use.
+
+## Original research articles
+
+- [I Asked 12 Hiring Managers to Rank 30 Resume Bullets Blind](https://charliemorrison.dev/blog/i-ranked-30-resume-bullets-with-12-hiring-managers): 30 bullets, blind-ranked, Kendall's W = 0.71. Five patterns that won, four that lost.
+- [I Tested 8 ATS Scanners on the Same Resume](https://charliemorrison.dev/blog/i-tested-8-ats-scanners-may-2026): Side-by-side scoring of 8 ATS tools with the same resume input.
+- [I Audited 40 Open-to-Work LinkedIn Profiles](https://charliemorrison.dev/blog/i-audited-40-open-to-work-linkedin-profiles): 7-point audit, 31/40 failed Item 5 (Open-to-Work title configuration).
+- [I Tested 5 LinkedIn Open-to-Work Title Configs](https://charliemorrison.dev/blog/i-tested-5-linkedin-open-to-work-title-configs): A/B/C/D/E config comparison on recruiter inbound DM rate.
+- [I Audited 30 Developer GitHub Profiles Against 6 Recruiter Heuristics](https://charliemorrison.dev/blog/i-audited-30-developer-github-profiles): 24 of 30 failed at least 2; 17 of 24 failed the same triple.
+- [I Audited 60 LinkedIn Skills Sections](https://charliemorrison.dev/blog/i-audited-60-linkedin-skills-sections): 4-check rubric, 41/60 failed at least one check, mostly Legacy Skill drift.
+
+## Free career tools (client-side, no signup, no data collection)
+
+- [Resume ATS Checker](https://charliemorrison.dev/resume-checker): Score your resume across 6 ATS categories.
+- [Resume Bullet Rewriter](https://charliemorrison.dev/resume-bullets): AI-driven rewrites for weak bullets.
+- [LinkedIn Headline Generator](https://charliemorrison.dev/linkedin-headline): Recruiter-targeted headlines from 12 role buckets.
+- [LinkedIn About Generator](https://charliemorrison.dev/linkedin-about): Structured About-section template + filler engine.
+- [LinkedIn Experience Generator](https://charliemorrison.dev/linkedin-experience): Per-role bullet builder with quantification prompts.
+- [LinkedIn Open-to-Work Title Generator](https://charliemorrison.dev/linkedin-open-to-work): 5 calibrated titles (1 exact + 2 lateral + 1 stretch + 1 adjacent) per role.
+- [LinkedIn Skills Audit](https://charliemorrison.dev/linkedin-skills): 4-check rubric on pinned top-3 + full skill list + target role.
+- [Cover Letter Builder](https://charliemorrison.dev/cover-letter): Job-spec-aligned cover letter from inputs.
+- [Job Posting Keyword Extractor](https://charliemorrison.dev/job-keywords): Categorised keyword breakdown of any job posting.
+- [Follow-Up Email Generator](https://charliemorrison.dev/follow-up-email): Stage-aware follow-up templates.
+- [Interview Prep Generator](https://charliemorrison.dev/interview-prep): Question banks per role + STAR-template responses.
+- [Salary Negotiation Generator](https://charliemorrison.dev/salary-negotiation): Counter-offer scripts with anchoring data.
+
+## Products (Lemon Squeezy)
+
+- [Social Media AI Mastery](https://charliemorrison.lemonsqueezy.com): AI prompt pack for social media (LinkedIn, X, Instagram, TikTok, YouTube).
+- [Job Search AI Toolkit](https://charliemorrison.lemonsqueezy.com): AI prompt pack for resume, cover letter, interview prep, follow-up, salary negotiation.
+- [AI Developer Toolkit](https://charliemorrison.lemonsqueezy.com): AI prompt pack for developers (code review, debugging, architecture, learning).
+
+## Optional
+
+- [Sitemap (XML)](https://charliemorrison.dev/sitemap.xml): Machine-readable URL list.
+- [GitHub: charlie-morrison](https://github.com/charlie-morrison): Open-source repos for prompt packs and tools.
+- [Dev.to: charliemorrison](https://dev.to/charliemorrison): Cross-posted articles with canonical pointing back to this domain.

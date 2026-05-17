@@ -25,7 +25,7 @@ jobs:
           
           echo "<url><loc>${DOMAIN}/</loc><lastmod>${TODAY}</lastmod><priority>1.0</priority></url>" >> sitemap.xml
           
-          for dir in $(find . -name "index.html" -not -path "./index.html" -not -path "./.git/*" -not -path "./.github/*" | sort); do
+          for dir in $(find . -name "index.html" -not -path "./index.html" -not -path "./.git/*" -not -path "./.github/*" -not -path "./bots-ua/*" | sort); do
             path=$(dirname "$dir" | sed 's|^\./||')
             lastmod=$(git log -1 --format='%ci' -- "$dir" 2>/dev/null | cut -d' ' -f1)
             if [ -z "$lastmod" ]; then

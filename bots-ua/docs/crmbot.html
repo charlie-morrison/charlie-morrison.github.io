@@ -1,127 +1,13 @@
 <!doctype html>
-<html lang="uk">
-<head>
+<html lang="uk"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CRMBot | TG Bots</title>
-<meta name="description" content="Дякуємо за замовлення! CRMBot — це ваша персональна &quot;записна книжка + нагадувач&quot; у Telegram. Тримайте список клієнтів, ставите нагадування, бот сам на">
-<link rel="canonical" href="https://charliemorrison.dev/bots-ua/docs/crmbot.html">
-<link rel="alternate" hreflang="uk" href="https://charliemorrison.dev/bots-ua/docs/crmbot.html">
-<link rel="alternate" hreflang="x-default" href="https://charliemorrison.dev/bots-ua/docs/crmbot.html">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0f0f1e;color:#e7eaf3;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.6;padding:0}
-header{background:#1a1a2e;border-bottom:1px solid #2a2a4e;padding:1rem 1.4rem}
-header a{color:#7aa2f7;text-decoration:none;font-size:.95rem}
-header a:hover{color:#a4b0bf}
-main{max-width:780px;margin:0 auto;padding:2rem 1.4rem 4rem}
-h1{color:#fff;font-size:2rem;margin-bottom:.4rem;line-height:1.2}
-h2{color:#fff;font-size:1.4rem;margin:2rem 0 .8rem;border-bottom:1px solid #2a2a4e;padding-bottom:.4rem}
-h3{color:#fff;font-size:1.1rem;margin:1.4rem 0 .6rem}
-p{margin:.7rem 0;color:#cdd2dc}
-ul,ol{margin:.5rem 0 1rem 1.4rem;color:#cdd2dc}
-li{margin:.3rem 0}
-strong{color:#fff}
-a{color:#7aa2f7;text-decoration:underline;text-underline-offset:3px}
-a:hover{color:#a4b0bf}
-code{background:#1a1a2e;border:1px solid #2a2a4e;padding:.1rem .35rem;border-radius:4px;font-size:.92em;color:#9ece6a}
-pre{background:#1a1a2e;border:1px solid #2a2a4e;padding:.9rem 1rem;border-radius:8px;overflow:auto;margin:.7rem 0}
-pre code{background:none;border:0;padding:0;font-size:.88em}
-blockquote{border-left:3px solid #7aa2f7;background:#16213e;padding:.6rem .9rem;margin:.8rem 0;border-radius:0 8px 8px 0;color:#cdd2dc}
-hr{border:0;border-top:1px solid #2a2a4e;margin:2rem 0}
-footer{max-width:780px;margin:0 auto;padding:1rem 1.4rem 2rem;color:#7b8696;font-size:.85rem;text-align:center}
-footer a{color:#7aa2f7}
-</style>
-</head>
-<body>
-<header>
-<a href="/bots-ua/">← TG Bots</a> · <a href="/bots-ua/docs/">Документація</a>
-</header>
-<main>
-<h1>CRMBot — швидкий старт</h1>
-<p>Дякуємо за замовлення! CRMBot — це ваша персональна "записна книжка + нагадувач" у Telegram. Тримайте список клієнтів, ставите нагадування, бот сам надсилає вам пуш у потрібний час.</p>
-<p>Питання по ходу читання — пишіть @cm_sales_bot, відповість одразу.</p>
-<hr>
-<h2>Як знайти бота</h2>
-<ol>
-<li>Відкрийте Telegram.</li>
-<li>У пошуку введіть <code>@&lt;ваш_бот&gt;</code> (точна адреса в листі підтвердження).</li>
-<li>Натисніть <strong>«Запустити»</strong> з облікового запису, який ви вказали при замовленні.</li>
-</ol>
-<hr>
-<h2>Перші 5 хвилин</h2>
-<h3>1. Додайте першого клієнта</h3>
-<pre><code>/admin
-/addclient
-</code></pre>
-<p>Бот проведе 5 кроками:</p>
-<ol>
-<li><strong>Імʼя</strong> — наприклад <code>Олена Костенко</code></li>
-<li><strong>Телефон</strong> — <code>+380xx...</code> або <code>/skip</code></li>
-<li><strong>@username</strong> — Telegram, якщо знаєте, або <code>/skip</code></li>
-<li><strong>Теги</strong> — через кому, наприклад <code>vip, манікюр, місячний абонемент</code>. Або <code>/skip</code></li>
-<li><strong>Нотатки</strong> — будь-який вільний текст. Або <code>/skip</code></li>
-</ol>
-<p><code>/cancel</code> будь-де — вийти без збереження.</p>
-<h3>2. Поставте нагадування</h3>
-<pre><code>/sched at 14:00 подзвонити Олені про запис
-/sched at 2026-05-12 10:00 манікюр Анна
-/sched 2h перевірити, чи прийшов клієнт
-/sched 30m підтвердити Олена
-/sched cron 0 9 * * 1 ранкова перевірка тижня
-</code></pre>
-<p>Підтримуються 5 форматів:</p>
-<ul>
-<li><strong><code>Xs</code>/<code>Xm</code>/<code>Xh</code>/<code>Xd</code></strong> — через X секунд/хвилин/годин/днів від зараз</li>
-<li><strong><code>at HH:MM</code></strong> — сьогодні в HH:MM (якщо вже минуло — завтра)</li>
-<li><strong><code>at YYYY-MM-DD HH:MM</code></strong> — конкретна дата і час</li>
-<li><strong><code>cron &lt;5-field&gt;</code></strong> — стандартний cron (хв год день міс день_тижня), повторюване</li>
-</ul>
-<p>У вказаний момент бот напише вам у DM з текстом нагадування.</p>
-<hr>
-<h2>Команди адміністратора</h2>
-<ul>
-<li><code>/addclient</code> — додати нового клієнта</li>
-<li><code>/listclients</code> — переглянути всіх клієнтів з тегами і нотатками</li>
-<li><code>/sched &lt;розклад&gt; &lt;текст&gt;</code> — створити нагадування</li>
-<li><code>/listreminders</code> — активні нагадування з ID і часом наступного спрацювання</li>
-<li><code>/cancelreminder &lt;id&gt;</code> — скасувати нагадування за ID</li>
-</ul>
-<blockquote>
-<p>💡 ID нагадування показується в <code>/listreminders</code> поруч з кожним записом. У <code>/cancelreminder 42</code> — це той самий <code>42</code>.</p>
-</blockquote>
-<hr>
-<h2>Як це бачить клієнт</h2>
-<p>CRMBot — <strong>внутрішній інструмент для вас</strong>, не для клієнтів. Якщо клієнт випадково напише вашому боту — він побачить нейтральне <code>Власник звʼяжеться з вами впродовж дня</code>. Адмін-команд клієнт не бачить і не може використати.</p>
-<hr>
-<h2>Часті питання</h2>
-<p><strong>Скільки нагадувань можна поставити одночасно?</strong>
-Технічних обмежень нема — пробували до 1000. Telegram дозволяє ботам надсилати до 30 повідомлень/секунду, тому навіть якщо 100 нагадувань спрацюють у один момент — пройдуть протягом 4 секунд.</p>
-<p><strong>Що буде з нагадуваннями, якщо я перезавантажу бота?</strong>
-Усі активні нагадування зберігаються в базі і виживають рестарти, оновлення сервера, перезавантаження VPS. Якщо момент спрацювання припав на час, коли бот був офлайн (рідкісне) — нагадування надішлеться <strong>відразу при наступному старті</strong>.</p>
-<p><strong>Як перенести базу клієнтів у Excel / Google Sheets?</strong>
-Напишіть нам — зробимо <code>/exportclients</code> як XLSX. Базова експорт-команда вже на roadmap, ETA 2 тижні.</p>
-<p><strong>Чи можна використовувати CRMBot для команди / кількох співробітників?</strong>
-Поточна версія — для одного власника. Якщо потрібен багатокористувацький варіант (директор + 2 адміни бачать одну базу) — це окрема надбудова, $99 разово.</p>
-<p><strong>Чи інтегрується з Google Calendar?</strong>
-Поки ні. Якщо є попит — додамо двосторонню синхронізацію, ETA 1 місяць.</p>
-<p><strong>Я хочу нагадування в певному часовому поясі.</strong>
-Часовий пояс налаштовано при замовленні (за замовчуванням — Europe/Kiev). Якщо потрібно змінити — напишіть нам, оновимо за 5 хв.</p>
-<hr>
-<h2>Підтримка</h2>
-<ul>
-<li>Чат-бот техпідтримки: <strong>@cm_sales_bot</strong> (відповідає одразу)</li>
-<li>Email: <strong>support@charliemorrisongroup.com</strong></li>
-<li>Час реакції менеджера: ≤4 год у робочий час (Пн–Пт 09:00–19:00 за Києвом)</li>
-</ul>
-<hr>
-<h2>Що далі</h2>
-<p>CRMBot — інструмент щоденного користування. Якщо вам зайшло — порекомендуйте знайомим майстрам, репетиторам, коучам, психологам. За кожного приведеного клієнта <strong>−$10 з вашого наступного місяця</strong>. Ваш реферальний код — у листі від менеджера.</p>
-</main>
-<footer>
-Питання? <a href="https://t.me/cm_sales_bot">@cm_sales_bot</a> — відповість одразу. ·
-Замовлення: <a href="https://t.me/cm_saas_signup_bot">@cm_saas_signup_bot</a>
-<br><span style="opacity:.7">Powered by <strong>Charlie Morrison Group</strong></span>
-</footer>
-</body>
-</html>
+<title>CRMBot — швидкий старт — переїхали на botcraftgroup.com</title>
+<link rel="canonical" href="https://botcraftgroup.com/docs/crmbot.html">
+<meta http-equiv="refresh" content="0; url=https://botcraftgroup.com/docs/crmbot.html">
+<meta name="robots" content="noindex, follow">
+<script>window.location.replace("https://botcraftgroup.com/docs/crmbot.html");</script>
+</head><body>
+<h1>Сайт переїхав</h1>
+<p>TG Bots SaaS живе тепер на <a href="https://botcraftgroup.com/docs/crmbot.html">https://botcraftgroup.com/docs/crmbot.html</a>.</p>
+<p>Якщо браузер не редиректить автоматично — клацніть посилання вище.</p>
+</body></html>

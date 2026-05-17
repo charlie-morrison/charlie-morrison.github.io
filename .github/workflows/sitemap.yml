@@ -38,7 +38,7 @@ jobs:
             else
               priority="0.8"
             fi
-            echo "<url><loc>${DOMAIN}/${path}</loc><lastmod>${lastmod}</lastmod><priority>${priority}</priority></url>" >> sitemap.xml
+            echo "<url><loc>${DOMAIN}/${path}/</loc><lastmod>${lastmod}</lastmod><priority>${priority}</priority></url>" >> sitemap.xml
           done
           
           echo '</urlset>' >> sitemap.xml

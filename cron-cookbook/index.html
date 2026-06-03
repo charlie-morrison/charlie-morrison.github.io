@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Cron Cookbook — Production patterns for scheduled AI agents</title>
+<meta name="description" content="Stop debugging silent-died crons. Production patterns plus ready-to-run prompts for scheduled Claude Code / AI agents, from infrastructure running 24/7 for 8+ months. $15 Early Access.">
+<link rel="canonical" href="https://charliemorrison.dev/cron-cookbook/">
+<meta property="og:title" content="Claude Code Cron Cookbook">
+<meta property="og:description" content="Production patterns + ready-to-run prompts for scheduled AI agents. Early Access $15.">
+<meta property="og:type" content="product">
+<meta property="og:url" content="https://charliemorrison.dev/cron-cookbook/">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.7}
+nav{background:#1a1a2e;padding:12px 20px;display:flex;justify-content:space-between;align-items:center}
+nav a{color:#fff;text-decoration:none;font-weight:600}
+nav .links a{margin-left:18px;font-weight:500}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#3a2e5e 100%);color:#fff;padding:70px 20px 60px;text-align:center}
+.hero h1{font-size:2.6em;line-height:1.2;margin-bottom:18px;max-width:780px;margin-left:auto;margin-right:auto}
+.hero p.sub{font-size:1.25em;color:#cfc8e8;max-width:640px;margin:0 auto 30px}
+.btn{display:inline-block;background:#667eea;color:#fff;text-decoration:none;font-weight:700;padding:15px 38px;border-radius:8px;font-size:1.1em;transition:background .2s}
+.btn:hover{background:#7c8df0}
+.price-tag{font-size:.95em;color:#cfc8e8;margin-top:14px}
+.price-tag s{opacity:.6}
+section{max-width:820px;margin:0 auto;padding:48px 20px}
+h2{font-size:1.7em;margin-bottom:22px;color:#1a1a2e}
+.pain{background:#f7f6fc;border-radius:10px;padding:26px 28px;margin-bottom:14px}
+.pain ul{margin:10px 0 0 22px}
+.pain li{margin-bottom:10px;color:#333}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+.card{border:1px solid #e6e3f0;border-radius:10px;padding:22px 24px}
+.card h3{font-size:1.15em;margin-bottom:8px;color:#3a2e5e}
+.card p{color:#555;font-size:.98em}
+.pricing{background:#1a1a2e;color:#fff;border-radius:14px;padding:40px;text-align:center;margin-top:18px}
+.pricing .amount{font-size:3em;font-weight:800;line-height:1}
+.pricing .amount s{font-size:.45em;opacity:.55;font-weight:500;margin-left:10px}
+.pricing p{color:#cfc8e8;margin:14px 0 26px}
+.pricing ul{list-style:none;text-align:left;max-width:440px;margin:0 auto 28px}
+.pricing li{padding:8px 0 8px 30px;position:relative;color:#e8e4f5}
+.pricing li:before{content:"✓";position:absolute;left:0;color:#8ee08e;font-weight:700}
+.note{color:#888;font-size:.9em;margin-top:18px}
+footer{background:#13131f;color:#999;text-align:center;padding:34px 20px;margin-top:20px;font-size:.92em}
+footer a{color:#8c9bf0;text-decoration:none;margin:0 10px}
+@media(max-width:640px){.grid{grid-template-columns:1fr}.hero h1{font-size:2em}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="https://charliemorrison.dev/">charliemorrison.dev</a>
+  <div class="links"><a href="#pricing">Pricing</a><a href="https://charliemorrison.dev/about/">About</a></div>
+</nav>
+
+<div class="hero">
+  <h1>Stop debugging silent-died crons.</h1>
+  <p class="sub">The Claude Code Cron Cookbook — production patterns and ready-to-run prompts for scheduled AI agents, distilled from cron infrastructure running 24/7 for 8+ months.</p>
+  <a class="btn" href="#pricing">Get the Cookbook — $15</a>
+  <div class="price-tag">Early Access · <s>$29</s> $15 launch price · every future update free</div>
+</div>
+
+<section>
+  <h2>If you've scheduled a Claude Code session, you've hit these</h2>
+  <div class="pain">
+    <ul>
+      <li>The session reports <strong>"finished ok"</strong> — but the actual work never happened.</li>
+      <li>A turn ends with prose instead of a tool call, and the session <strong>dies mid-pipeline</strong>.</li>
+      <li>Auth expires at 3am and the whole run is wasted with no recovery.</li>
+      <li>A backgrounded script finishes after the session is already gone — output orphaned.</li>
+      <li>Two scheduled runs collide and clobber each other's state.</li>
+    </ul>
+  </div>
+  <p style="margin-top:18px;color:#444">Every one of these is a real failure mode from running scheduled agents in production. The Cookbook is the playbook for catching them <em>before</em> they cost you a night's work.</p>
+</section>
+
+<section>
+  <h2>What's inside</h2>
+  <div class="grid">
+    <div class="card"><h3>Foundations</h3><p>How scheduled AI agents actually execute, the turn/tool-call contract, and why "task done → stop" is the wrong instinct for a cron window.</p></div>
+    <div class="card"><h3>Resilience patterns</h3><p>Silent-death detection, checkpoint/resume, idempotent uploads, done-markers, and watchdogs that recover instead of just alerting.</p></div>
+    <div class="card"><h3>Ready-to-run prompts</h3><p>Copy-paste prompt scaffolds for recurring jobs — with the guardrails baked in, not bolted on.</p></div>
+    <div class="card"><h3>Anti-patterns &amp; cheat-sheet</h3><p>The traps that quietly kill scheduled runs, plus a one-page reference for wiring up a new job correctly the first time.</p></div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="pricing">
+    <div class="amount">$15<s>$29</s></div>
+    <p>Early Access — one-time payment, no subscription.</p>
+    <ul>
+      <li>14 chapters ready now (~28 pages): Foundations, Resilience, five full prompts</li>
+      <li>Remaining chapters ship through June 2026 — <strong>free</strong> to every early buyer</li>
+      <li>Locks in the complete v1.0 (which will sell for $29)</li>
+      <li>Delivered as a digital download (HTML + PDF + Markdown sources)</li>
+      <li>Single-user license; example code blocks are MIT</li>
+    </ul>
+    <a class="btn" href="mailto:charliemorrison2228@gmail.com?subject=Cron%20Cookbook%20pre-order">Get the Cookbook</a>
+    <div class="note">Checkout is processed securely by Paddle.com, our authorized reseller and Merchant of Record.</div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Charlie Morrison · charliemorrison.dev
+  <div style="margin-top:10px">
+    <a href="https://charliemorrison.dev/cron-cookbook/terms.html">Terms of Service</a>·
+    <a href="https://charliemorrison.dev/cron-cookbook/privacy.html">Privacy Policy</a>·
+    <a href="https://charliemorrison.dev/cron-cookbook/refund.html">Refund Policy</a>·
+    <a href="mailto:charliemorrison2228@gmail.com">Contact</a>
+  </div>
+</footer>
+</body>
+</html>

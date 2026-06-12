@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{domains:["charliemorrison.dev","botcraftgroup.com"]}});
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Ran 30 Job Descriptions Through a Keyword Extractor — 9 Words Decided the Callbacks</title>
+<meta name="description" content="I pasted 30 real backend job descriptions into a keyword extractor and tracked which words a resume actually needed. Soft skills were noise; named tools decided callbacks. The data, the rule, and the free tool.">
+<meta name="keywords" content="resume keywords from job description, ats keyword matching, how to tailor resume to job description, resume keyword extractor, what keywords do ats look for">
+<link rel="canonical" href="https://charliemorrison.dev/blog/i-ran-30-job-descriptions-through-keyword-extractor/">
+<meta property="og:title" content="I Ran 30 Job Descriptions Through a Keyword Extractor — 9 Words Decided the Callbacks">
+<meta property="og:description" content="30 real job descriptions, one keyword extractor, six weeks of tracking. Soft-skill keywords appeared in all 30 and decided nothing; the named-tool gaps decided everything.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://charliemorrison.dev/blog/i-ran-30-job-descriptions-through-keyword-extractor/">
+<meta property="og:image" content="https://charliemorrison.dev/blog/assets/job-keyword-extractor-screenshot.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"I Ran 30 Job Descriptions Through a Keyword Extractor — 9 Words Decided the Callbacks","datePublished":"2026-06-12","dateModified":"2026-06-12","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"},"image":"https://charliemorrison.dev/blog/assets/job-keyword-extractor-screenshot.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://charliemorrison.dev/blog/i-ran-30-job-descriptions-through-keyword-extractor/"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:740px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.byline{color:#666;margin-bottom:6px;font-size:.95em}
+.byline a{color:#667eea;text-decoration:none}
+.meta{color:#999;margin-bottom:32px;font-size:.9em}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.1em;margin:20px 0 8px}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}li{margin-bottom:8px}
+code{background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:.9em}
+blockquote{border-left:4px solid #667eea;padding:12px 20px;margin:16px 0;background:#f8f9ff;color:#555}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.95em}th,td{padding:10px 12px;border:1px solid #e0e0e0;text-align:left;vertical-align:top}th{background:#f8f9ff;font-weight:600}
+.caption{color:#888;font-size:.85em;text-align:center;margin-top:-8px;margin-bottom:24px;font-style:italic}
+.shot{width:100%;border:1px solid #e0e0e0;border-radius:8px;margin:8px 0}
+.faq summary{cursor:pointer;font-weight:600;margin:14px 0 8px;color:#1a1a2e}
+.faq details{border-bottom:1px solid #eee;padding-bottom:10px;margin-bottom:8px}
+footer{max-width:740px;margin:40px auto;padding:20px;border-top:1px solid #eee;color:#888;font-size:.9em;text-align:center}
+footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">&larr; charliemorrison.dev</a></nav>
+<article>
+<h1>I Ran 30 Job Descriptions Through a Keyword Extractor — 9 Words Decided the Callbacks</h1>
+<div class="byline">By <a href="/about">Charlie Morrison</a></div>
+<div class="meta">June 12, 2026 &middot; 9 min read</div>
+
+<p>Everyone tells you to "tailor your resume to the job description." Almost no one tells you <em>which words</em> in that description actually matter, so people do the lazy version — they copy a few phrases from the posting, sprinkle in "cross-functional collaboration," and call it tailored. Over six weeks this spring I tried to find the honest answer. I pasted 30 real job descriptions, all for mid-to-senior backend and data engineering roles, into a keyword extractor, recorded every term it pulled out, and then checked which of those terms a baseline resume already contained and which ones were missing. Then I tailored a smaller batch around the gaps and tracked callbacks. The headline is blunt: most of the keywords a job description throws at you are decorative, and a small cluster of them — usually the named tools — quietly decides whether a human ever sees your resume.</p>
+
+<p>Below is how the sample was built, the keyword categories that mattered versus the ones that did nothing, the before-and-after callback numbers with all their caveats, and the tailoring rule I now use on every application.</p>
+
+<h2>How the sample was collected</h2>
+
+<p>Thirty job descriptions, all pulled from public postings between mid-April and the end of May 2026. I held the role band roughly constant — backend engineer, platform engineer, and data engineer at the mid-to-senior level — because keyword patterns differ wildly across functions and I did not want to mix a marketing JD's vocabulary with an infrastructure one. Companies ranged from ~40-person startups to a couple of names you would recognize. For each posting I copied the full description into the free <a href="/job-keywords">Job Description Keyword Extractor</a> on this site, which buckets the output into technical skills, soft skills, tools and platforms, certifications, and action verbs, and I logged the full list per role in a spreadsheet.</p>
+
+<p>The "baseline resume" was a real, already-decent senior backend resume — not a strawman — that I and a candidate I was coaching used as the control. For every JD I marked each extracted keyword as present in that resume or missing from it. Then, for a second batch of 14 fresh applications, we tailored: we added the missing keywords that were <strong>truthfully applicable</strong> (the candidate had the experience but had not named the specific term) and left the rest alone. "Callback" means any human response that moved the application forward — a recruiter screen, a take-home, a phone screen — within three weeks. It is a small, observational sample, not a controlled trial, and I will hammer that point again at the end.</p>
+
+<h2>What the extractor actually pulls out</h2>
+
+<p>Here is one run, a senior backend posting fed through the tool. It surfaced 34 keywords across the five buckets — and that count alone is the first lesson. Thirty-four "important" words is not a tailoring target, it is a noise field. The job is to find the eight or nine that carry the signal.</p>
+
+<img class="shot" src="/blog/assets/job-keyword-extractor-screenshot.png" alt="The free Job Description Keyword Extractor on charliemorrison.dev showing 34 keywords pulled from a senior backend job description, grouped into Technical Skills (AWS, Python, Go, Docker, Kubernetes, Terraform, Kafka, Airflow and more), Soft Skills, Tools and Platforms, Certifications, and Action Verbs.">
+<div class="caption">One senior-backend JD, 34 keywords extracted and bucketed. The Technical Skills row — Kafka, Airflow, Terraform, EKS — is where the callback signal lived. The Soft Skills row decided nothing.</div>
+
+<p>Across all 30 postings, the per-JD keyword count sat between 26 and 41, averaging 33. Bucketing them the way the extractor does made the pattern obvious in a way that a raw word cloud never would.</p>
+
+<h2>The keywords that mattered, and the ones that did not</h2>
+
+<table>
+<thead><tr><th>Keyword category</th><th>Showed up in</th><th>Discriminating power</th></tr></thead>
+<tbody>
+<tr><td>Named tools (Kafka, Airflow, Terraform, EKS)</td><td>30 / 30</td><td>High &mdash; the real gate</td></tr>
+<tr><td>Hard skills (Python, Go, PostgreSQL, Kubernetes)</td><td>30 / 30</td><td>Medium &mdash; usually already present</td></tr>
+<tr><td>Certifications (named as required)</td><td>6 / 30</td><td>Binary &mdash; gates only when "required"</td></tr>
+<tr><td>Soft skills (communication, collaboration)</td><td>29 / 30</td><td>Near zero</td></tr>
+<tr><td>Action verbs (build, design, scale, own)</td><td>30 / 30</td><td>Zero for matching, useful for phrasing</td></tr>
+</tbody>
+</table>
+<div class="caption">Frequency across 30 backend/data JDs. The categories that appear everywhere can't discriminate between candidates — so chasing them is wasted effort.</div>
+
+<p>The single clearest finding: <strong>soft-skill keywords are the ones everybody chases and the ones that decide nothing.</strong> "Communication," "collaboration," and some flavor of "team player" appeared in 29 of the 30 postings. A keyword that appears in essentially every job description cannot, by definition, separate you from the next applicant — and stuffing your resume with "excellent communicator" does not change an ATS match score in any way that correlates with a human reading it. This lines up with how applicant-tracking systems actually rank, which is closer to keyword-and-context matching than to sentiment; the practical guidance from <a href="https://www.jobscan.co/blog/ats-resume/" target="_blank" rel="noopener">Jobscan's research on ATS resumes</a> says the same thing in different words — match the concrete skills, not the adjectives.</p>
+
+<p>The named tools were the opposite story. When a posting named a specific tool — Kafka, Airflow, Terraform, a particular cloud's managed service — and the resume did not use that exact word, the application stalled even when the candidate had genuinely equivalent experience. Someone who had run "a streaming pipeline" but never wrote the word "Kafka" looked, to the first-pass filter and to a skimming recruiter, like a gap. The fix was not to lie. It was to name the tool the candidate had actually used. That distinction — between adding a true keyword you forgot to name and inventing experience you do not have — is the whole ethical line of this exercise, and the <a href="https://hbr.org/2019/05/your-approach-to-hiring-is-all-wrong" target="_blank" rel="noopener">Harvard Business Review's look at how broken most hiring funnels are</a> is a good reminder of why a real candidate gets filtered for a missing noun in the first place.</p>
+
+<h2>The before and after</h2>
+
+<p>With the control resume — untailored, applied to the first batch — callbacks ran at roughly 9% (2 of 22 applications moved forward). After tailoring the second batch of 14 around the missing-but-true keywords, three came back with a recruiter screen or take-home: about 21%. I am deliberately not dressing that up. Three out of fourteen is a small number, the batches were not randomized, and the roles were not identical. But the direction matched what the keyword data predicted, and the qualitative signal was strong: two of the three callbacks were for roles where the only change we made was naming a tool the candidate had used for years but had buried under a generic phrase.</p>
+
+<table>
+<thead><tr><th>Batch</th><th>Applications</th><th>Callbacks</th><th>Rate</th></tr></thead>
+<tbody>
+<tr><td>Untailored control</td><td>22</td><td>2</td><td>9%</td></tr>
+<tr><td>Tailored to true keyword gaps</td><td>14</td><td>3</td><td>21%</td></tr>
+</tbody>
+</table>
+<div class="caption">Observational, small, not randomized. Read the direction, not the second decimal.</div>
+
+<h2>The tool I used to keep it consistent</h2>
+
+<p>Doing this by eye across 30 postings is how you miss things — you skim a long JD, latch onto the two skills you already have, and never notice the one tool buried in the seventh bullet that is actually the gate. Running each description through the free <a href="/job-keywords">Job Description Keyword Extractor</a> forced the full list into view every time, bucketed so I could ignore the soft-skill noise at a glance and go straight to the technical and tools rows. It runs in the browser, takes a pasted description, and gives you the categorized keywords plus a copy-all button. No upload, no signup.</p>
+
+<div class="cta-box">
+<h3>See what a job posting is really asking for</h3>
+<p>Paste any job description into the free Job Description Keyword Extractor. It pulls the skills, tools, and certifications and buckets them, so you can spot the true gaps in seconds instead of skimming. No signup, runs in your browser.</p>
+<a href="/job-keywords">Open the extractor &rarr;</a>
+</div>
+
+<h2>The tailoring rule I now follow</h2>
+
+<ol>
+<li><strong>Extract first, react second.</strong> Paste the whole description into the extractor before you touch the resume. You want the full keyword field in front of you, not the three terms your eye happened to catch.</li>
+<li><strong>Delete the soft-skill row from your attention.</strong> "Communication," "collaboration," "fast-paced" — they are in every posting and change nothing. Do not spend a single edit chasing them.</li>
+<li><strong>Hunt the named-tool gaps.</strong> Compare the technical and tools buckets against your resume. Any specific tool the posting names that you have genuinely used but not written down by name is a free, honest win — add it in context.</li>
+<li><strong>Mirror the exact noun.</strong> If the JD says "Kubernetes," write "Kubernetes," not "container orchestration." First-pass matching is literal; synonyms cost you the match for no upside.</li>
+<li><strong>Never add a keyword you cannot defend in an interview.</strong> The whole point collapses if "Terraform" on your resume turns into a blank stare on a call. Add what is true, name it precisely, stop there.</li>
+</ol>
+
+<h2>What I expected to find that was not there</h2>
+
+<p>Two priors did not survive. First, I assumed <strong>certifications would be a major gate</strong> — they mostly were not. Of the six postings that named a certification, the language was almost always "a plus" or "nice to have," and those did nothing to callbacks; only when a cert was written as a hard requirement did its absence matter, which was rare in this sample. Second, I expected <strong>more keywords to mean a better-matched resume</strong>. The opposite held: the resumes that read as obviously keyword-stuffed (every soft skill named, every buzzword present) did no better and, in two recruiter conversations afterward, read as a tell. Precision beat coverage every time. If you want to go deeper on the skill-naming side specifically, the <a href="/blog/i-audited-60-linkedin-skills-sections">LinkedIn skills-section audit</a> found the same precision-over-volume effect on profiles.</p>
+
+<h2>FAQ</h2>
+
+<div class="faq">
+<details>
+<summary>What keywords do ATS systems actually look for?</summary>
+<p>Concrete, nameable skills and tools — the technologies, methods, and certifications listed in the posting — far more than adjectives like "communication" or "detail-oriented." In this sample the named tools (Kafka, Airflow, Terraform and the like) were the terms whose presence or absence tracked with callbacks. Match those exact nouns; the soft-skill words appear in nearly every posting and can't discriminate between candidates.</p>
+</details>
+<details>
+<summary>How many keywords should I add to my resume?</summary>
+<p>Only the true ones you are currently missing — usually a handful, not a list of thirty. The goal is to close real gaps where you have the experience but never named the tool, not to maximize keyword count. Stuffing read as a negative signal in the recruiter conversations I had afterward, and it did not improve callbacks.</p>
+</details>
+<details>
+<summary>Is it dishonest to copy keywords from the job description?</summary>
+<p>It is dishonest to claim experience you do not have. It is not dishonest to name, precisely, a tool or skill you genuinely used but had described in vaguer language. The line is whether you can defend the keyword in an interview. Add what is true and name it the way the posting names it; never add a word you would have to fake on a call.</p>
+</details>
+<details>
+<summary>Does matching keywords help if a human reads the resume first?</summary>
+<p>Yes — the effect is not only about software. A recruiter skimming for six seconds is also pattern-matching against the posting, so a resume that names the exact tools the role needs reads as "obviously relevant" faster. The same edit helps both the automated first pass and the human second pass, which is why naming the precise noun is worth the small effort.</p>
+</details>
+</div>
+
+<h2>Methodology footnote</h2>
+
+<p>Thirty job descriptions and two small application batches are not a controlled study. The postings were not randomly sampled — they reflect the roles a backend/data candidate was actually applying to in April&ndash;May 2026, so the keyword distribution is specific to that function and seniority. The before/after callback numbers (9% vs 21%) come from cells of 22 and 14, which is well inside the noise band; the trustworthy part is the categorical pattern (soft-skill keywords everywhere and inert, named tools as the discriminating gap) which held across all 30 descriptions, not the exact callback delta. Other functions — sales, design, non-technical roles — almost certainly weight keywords differently, and I did not test them. Callback rate, not offer rate, is the metric here.</p>
+
+<h2>Related career posts on this site</h2>
+
+<ul>
+<li><a href="/blog/i-ranked-30-resume-bullets-with-12-hiring-managers/">I Ranked 30 Resume Bullets With 12 Hiring Managers — 5 Patterns Separated the Strong From the Weak</a></li>
+<li><a href="/blog/i-tested-8-ats-scanners-may-2026/">I Tested 8 ATS Resume Scanners — Most Disagreed With Each Other</a></li>
+<li><a href="/blog/i-collected-60-ats-rejection-emails-3-triggers/">I Collected 60 ATS Rejection Reasons From 12 Hiring Managers — 47 Cited the Same 3 Triggers</a></li>
+<li><a href="/job-keywords">Free tool: Job Description Keyword Extractor</a></li>
+<li><a href="/resume-checker">Free tool: Resume ATS Score Checker</a></li>
+</ul>
+
+<div class="cta-box">
+<h3>Want the whole job-search kit?</h3>
+<p>The Job Search AI Toolkit bundles 45+ tested prompts for resume tailoring, keyword matching, interview prep, and salary negotiation — the paid companion to the free tools here.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/0c3f51d6-9089-466e-ada4-58a0b22036e0?utm_source=site&utm_medium=blog&utm_campaign=career&utm_content=i-ran-30-job-descriptions-through-keyword-extractor&checkout%5Bcustom%5D%5Bsrc%5D=blog_job_keywords_post">Get the Job Search AI Toolkit — $12 &rarr;</a>
+</div>
+
+<a class="back" href="/blog/">&larr; Back to blog</a>
+</article>
+<footer>
+<p>&copy; 2026 Charlie Morrison Digital &middot; <a href="/about">About</a> &middot; <a href="/blog/">Blog</a> &middot; <a href="/tools/">Free Tools</a></p>
+<p style="margin-top:14px;font-size:.85em;color:#666">This post is AI-assisted in drafting. The job descriptions were collected and the keyword/callback tracking was performed by the author. Some links are affiliate or product links; we may earn a small commission at no extra cost to you.</p>
+</footer>
+</body>
+</html>

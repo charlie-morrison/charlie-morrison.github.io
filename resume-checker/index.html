@@ -17,6 +17,7 @@ gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{
 <meta property="og:url" content="https://charliemorrison.dev/resume-checker/">
 <meta property="og:type" content="website">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Resume ATS Score Checker","description":"Free tool to check your resume's ATS compatibility score and get improvement tips","url":"https://charliemorrison.dev/resume-checker","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is a good ATS resume score?","acceptedAnswer":{"@type":"Answer","text":"On this checker, 75 or above means strong ATS compatibility, 50–74 means it will parse but needs work, and below 50 means the parser is likely dropping or mangling sections. There is no single official ATS score — every vendor weights things differently — so treat any score as a diagnostic of structure, not a verdict."}},{"@type":"Question","name":"Does this ATS checker upload or store my resume?","acceptedAnswer":{"@type":"Answer","text":"No. The whole analysis runs in your browser with JavaScript. Your resume text is never sent to a server, saved, or logged — you can disconnect from the internet after the page loads and it still works."}},{"@type":"Question","name":"How do I make my resume ATS-friendly?","acceptedAnswer":{"@type":"Answer","text":"Use standard section headings (Experience, Education, Skills, Summary), keep it to one or two columns of plain text with no tables or graphics, put email and phone at the top, lead bullets with action verbs, tie achievements to numbers, and mirror the exact keywords from the job description you are targeting."}},{"@type":"Question","name":"Do all companies use an ATS?","acceptedAnswer":{"@type":"Answer","text":"Most mid-to-large employers do, and nearly all Fortune 500 companies. Small businesses and some startups still read resumes by hand, but building for the ATS never hurts a human reader — clean structure and clear headings help both."}},{"@type":"Question","name":"Why do two ATS checkers give my resume different scores?","acceptedAnswer":{"@type":"Answer","text":"Because each tool uses its own parser and its own weighting. When I ran one resume through eight scanners the scores ranged from 54 to 91. Use the score to find structural problems the checker agrees on, not as an absolute grade."}}]}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.6;background:#f8f9fa}
@@ -61,6 +62,18 @@ h1{font-size:2em;margin:30px 0 8px;text-align:center}
 .cta a:hover{opacity:.9}
 footer{text-align:center;padding:30px;color:#888;font-size:.85em}
 footer a{color:#667eea}
+.guide{background:#fff;border-radius:10px;padding:26px 24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:28px}
+.guide h2{font-size:1.35em;margin:22px 0 10px}
+.guide h2:first-child{margin-top:0}
+.guide h3{font-size:1.05em;margin:16px 0 6px}
+.guide p{margin-bottom:12px;color:#333}
+.guide ul{margin:0 0 12px 22px;color:#333}
+.guide li{margin-bottom:6px}
+.guide a{color:#667eea}
+.faq-item{border-top:1px solid #eee;padding:14px 0}
+.faq-item:first-of-type{border-top:none}
+.faq-item strong{display:block;margin-bottom:6px;color:#1a1a2e}
+.faq-item p{margin:0;color:#555}
 </style>
 </head>
 <body>
@@ -106,6 +119,38 @@ footer a{color:#667eea}
 
 <p style="margin-top:24px;text-align:center;color:#666;font-size:.95em">Curious how this tool compares? Read <a href="/blog/i-tested-8-ats-scanners-may-2026" style="color:#667eea">my test of 8 ATS scanners</a> with the same resume — scores ranged 54 to 91, and the one edit that moved every grader.</p>
 </div>
+
+<section class="guide">
+<h2>What an ATS resume score actually measures</h2>
+<p>An Applicant Tracking System (ATS) is the software an employer uses to collect, parse, and rank applications before a human ever opens them. When it parses your resume it pulls your text out of the file, tries to sort it into sections — contact, experience, education, skills — and checks how well it matches the job. If the parser can't find your work history because it's trapped in a table or a two-column graphic layout, that content effectively disappears. This ATS score checker mirrors those parse-and-rank steps so you can see the structural problems before a recruiter's system does, without paying for a scan or handing your resume to a third party.</p>
+
+<h2>How this checker scores your resume</h2>
+<p>The score is built from eight structural signals plus an optional keyword match. Each one maps to something real parsers care about:</p>
+<ul>
+<li><strong>Length</strong> — 300–900 words parses cleanly; far shorter reads as thin, far longer gets truncated.</li>
+<li><strong>Contact info</strong> — a detectable email and phone (and ideally a LinkedIn or GitHub URL) at the top.</li>
+<li><strong>Standard sections</strong> — clear headings like Experience, Education, Skills, Summary that the parser can map roles to.</li>
+<li><strong>Action verbs</strong> — bullets that start with verbs (managed, built, increased) instead of passive duty statements.</li>
+<li><strong>Quantified achievements</strong> — numbers tied to outcomes, not just a list of tasks.</li>
+<li><strong>Formatting</strong> — no exotic characters, tables, or triple tabs that confuse a top-to-bottom, left-to-right reader.</li>
+<li><strong>Page estimate</strong> — one to two pages for most roles.</li>
+<li><strong>Buzzword density</strong> — specific claims beat filler like "synergy" or "best-in-class".</li>
+</ul>
+<p>Paste a job description into the second box and the tool also extracts the most frequent role keywords and bigrams, then shows which ones your resume already contains and which are missing — keyword match is the single factor most ATS platforms weight highest.</p>
+
+<h2>What counts as a good ATS score</h2>
+<p>On this checker, 75 and above means strong compatibility, 50–74 means it will parse but has gaps worth fixing, and under 50 means the parser is probably losing whole sections. Treat that number as a diagnostic, not a grade: there is no universal ATS score. When I ran a single resume through <a href="/blog/i-tested-8-ats-scanners-may-2026">eight different ATS scanners</a> the scores ranged from 54 to 91 for the exact same document. The value is in the checks the tools agree on — a buried timeline, a missing section header, zero metrics — not in chasing any one vendor's number.</p>
+
+<h2>How to raise your score fast</h2>
+<p>The highest-return edits are almost always structural, not stylistic. Move email and phone to the very top. Replace any two-column or table layout with a single column of plain text under standard headings. Turn duty lines into verb-led bullets and attach a number to at least a few of them. Then mirror the exact wording of the target job — if the posting says "stakeholder management," don't write "worked with teams." Recruiters skim, and a <a href="https://www.nngroup.com/articles/how-little-do-users-read/" rel="noopener">reader who barely reads</a> needs the important parts where they expect them; the same clean structure that helps the parser also helps the human. Federal roles are the strictest example — <a href="https://www.usajobs.gov/help/faq/application/documents/resume/what-to-include/" rel="noopener">USAJOBS</a> requires explicit start and end dates and standard sections or the application is rejected outright.</p>
+
+<h2>Frequently asked questions</h2>
+<div class="faq-item"><strong>What is a good ATS resume score?</strong><p>On this checker, 75 or above means strong ATS compatibility, 50–74 means it will parse but needs work, and below 50 means the parser is likely dropping or mangling sections. There is no single official ATS score — every vendor weights things differently — so treat any score as a diagnostic of structure, not a verdict.</p></div>
+<div class="faq-item"><strong>Does this ATS checker upload or store my resume?</strong><p>No. The whole analysis runs in your browser with JavaScript. Your resume text is never sent to a server, saved, or logged — you can disconnect from the internet after the page loads and it still works.</p></div>
+<div class="faq-item"><strong>How do I make my resume ATS-friendly?</strong><p>Use standard section headings (Experience, Education, Skills, Summary), keep it to one or two columns of plain text with no tables or graphics, put email and phone at the top, lead bullets with action verbs, tie achievements to numbers, and mirror the exact keywords from the job description you are targeting.</p></div>
+<div class="faq-item"><strong>Do all companies use an ATS?</strong><p>Most mid-to-large employers do, and nearly all Fortune 500 companies. Small businesses and some startups still read resumes by hand, but building for the ATS never hurts a human reader — clean structure and clear headings help both.</p></div>
+<div class="faq-item"><strong>Why do two ATS checkers give my resume different scores?</strong><p>Because each tool uses its own parser and its own weighting. When I ran one resume through eight scanners the scores ranged from 54 to 91. Use the score to find structural problems the checkers agree on, not as an absolute grade.</p></div>
+</section>
 </div>
 
 <footer>

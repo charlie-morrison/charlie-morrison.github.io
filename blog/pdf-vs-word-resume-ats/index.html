@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{domains:["charliemorrison.dev","botcraftgroup.com"]}});
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF vs Word Resume: Which One Do ATS Systems Read?</title>
+<meta name="description" content="I fed a scrambled two-column PDF resume and a clean Word version to an ATS checker. Both scored 78 — and that identical score is exactly the trap. Here is what actually breaks parsing.">
+<meta name="keywords" content="pdf vs word resume, should a resume be pdf or word, ats resume format, does ats read pdf, resume file format 2026, pdf or docx resume">
+<link rel="canonical" href="https://charliemorrison.dev/blog/pdf-vs-word-resume-ats/">
+<meta property="og:title" content="PDF vs Word Resume: Which One Do ATS Systems Read?">
+<meta property="og:description" content="I ran a scrambled two-column PDF extraction and a clean Word file through the same ATS checker. Both scored 78. The identical score is the whole lesson.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://charliemorrison.dev/blog/pdf-vs-word-resume-ats/">
+<meta property="og:image" content="https://charliemorrison.dev/blog/assets/pdf-column-parse-screenshot.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"PDF vs Word Resume: Which One Do ATS Systems Read?","datePublished":"2026-07-07","dateModified":"2026-07-07","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"},"image":"https://charliemorrison.dev/blog/assets/pdf-column-parse-screenshot.png","mainEntityOfPage":{"@type":"WebPage","@id":"https://charliemorrison.dev/blog/pdf-vs-word-resume-ats/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Should a resume be a PDF or a Word document in 2026?","acceptedAnswer":{"@type":"Answer","text":"Either works with the major systems (Workday, Greenhouse, Lever) as long as the file has a real text layer and a simple layout. When the posting does not specify, send a single-column .docx — it is the safest text layer and avoids the image-only-PDF trap. Always follow the posting's stated format when it names one."}},{"@type":"Question","name":"Do ATS systems actually read PDFs?","acceptedAnswer":{"@type":"Answer","text":"Yes, modern ones read the text layer of a normal PDF fine. The exception is an image-only or scanned PDF (text baked into a picture), which has no extractable text. Export from a text-based source, not a flattened image, and a PDF parses like any other file."}},{"@type":"Question","name":"Why did the scrambled resume still score 78 on your checker?","acceptedAnswer":{"@type":"Answer","text":"Because that checker, like most free ones, searches for keywords, and after a two-column scramble all the words are still in the file, just out of order. It cannot see that dates drifted away from titles or skills detached from roles. A real ATS maps those fields positionally, which is where a column scramble actually costs you."}},{"@type":"Question","name":"What resume layout is safest for an ATS?","acceptedAnswer":{"@type":"Answer","text":"One column, standard section headings (Experience, Education, Skills, Summary), no tables, no text boxes, no graphics, and contact details as plain text at the very top. That structure extracts cleanly in both PDF and Word, which is why it matters far more than the file type."}},{"@type":"Question","name":"How can I check if my resume parses correctly?","acceptedAnswer":{"@type":"Answer","text":"Copy your finished resume and paste it into a plain-text editor or the box on a resume checker. If it reads top to bottom in order, an ATS can read it. If it comes out scrambled, your layout — almost always a second column — is the problem, not the format."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:740px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.byline{color:#666;margin-bottom:6px;font-size:.95em}
+.byline a{color:#667eea;text-decoration:none}
+.meta{color:#999;margin-bottom:32px;font-size:.9em}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.1em;margin:20px 0 8px}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}li{margin-bottom:8px}
+code{background:#f5f5f5;padding:2px 6px;border-radius:4px;font-size:.9em}
+blockquote{border-left:4px solid #667eea;padding:12px 20px;margin:16px 0;background:#f8f9ff;color:#555}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.95em}th,td{padding:10px 12px;border:1px solid #e0e0e0;text-align:left;vertical-align:top}th{background:#f8f9ff;font-weight:600}
+.caption{color:#888;font-size:.85em;text-align:center;margin-top:-8px;margin-bottom:24px;font-style:italic}
+.shot{width:100%;border:1px solid #e0e0e0;border-radius:8px;margin:8px 0}
+.faq summary{cursor:pointer;font-weight:600;margin:14px 0 8px;color:#1a1a2e}
+.faq details{border-bottom:1px solid #eee;padding-bottom:10px;margin-bottom:8px}
+footer{max-width:740px;margin:40px auto;padding:20px;border-top:1px solid #eee;color:#888;font-size:.9em;text-align:center}
+footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">&larr; charliemorrison.dev</a></nav>
+<article>
+<h1>PDF vs Word Resume: Which One Do ATS Systems Read?</h1>
+<div class="byline">By <a href="/about">Charlie Morrison</a></div>
+<div class="meta">July 7, 2026 &middot; 9 min read</div>
+
+<p>If you have read more than two resume guides you have met the argument: <em>send a PDF so the formatting never breaks</em> versus <em>send a Word doc so the robots can read it.</em> Both sides say it with total confidence, and both quote the same vague authority: &ldquo;the ATS.&rdquo; I got tired of the theology, so I ran the test myself. I took one resume, made two versions of what an applicant-tracking system would actually pull out of the file, and fed both to the ATS score checker on this site. The result surprised me, and it changed how I answer this question &mdash; because my own tool gave the two versions the <strong>same score</strong>, and that identical number turned out to be the most useful thing in the whole experiment.</p>
+
+<h2>What the question is really asking</h2>
+
+<p>Here is the part almost every &ldquo;PDF vs Word&rdquo; article skips. An applicant-tracking system does not admire your file. It opens it, rips the <em>text layer</em> out of it, and throws away everything else &mdash; the fonts, the colors, the neat little icons, the layout. Then it tries to sort that raw text into sections it recognizes: contact, experience, education, skills. If you want the full definition of what that software does, the <a href="https://en.wikipedia.org/wiki/Applicant_tracking_system" rel="noopener">Wikipedia entry on applicant tracking systems</a> lays out the parse-and-rank pipeline cleanly. The practical takeaway is that the file extension is almost never the thing that breaks. What breaks is the <strong>order the text comes out in</strong>.</p>
+
+<p>And the single biggest cause of scrambled text is the two-column resume: the pretty template with a slim left rail for skills and contact details and a wide right column for experience. On the screen it looks organized. To a text extractor reading top to bottom, the two columns collapse into each other line by line. Your phone number ends up glued to your job summary. A skill lands in the middle of a bullet about latency. That damage happens the same way whether the file is a PDF or a Word doc &mdash; it is the <em>layout</em>, not the format. PDFs just get the blame because that is where people put their fanciest layouts.</p>
+
+<h2>The test: two extractions, one resume</h2>
+
+<p>I wrote a realistic senior-backend-engineer resume: a summary, one dated role with four achievement bullets, a skills line, and education. Then I made two text versions of it, the way an ATS would see each.</p>
+
+<ul>
+<li><strong>The clean version</strong> &mdash; single column, top to bottom, exactly how a plain Word doc or a simple one-column PDF extracts. Headings sit above their content, bullets stay whole.</li>
+<li><strong>The scrambled version</strong> &mdash; what you get when a two-column PDF is read by vertical position: the left-rail skills and the right-column experience interleave line by line. <code>Redis</code> ends up on the same line as a settlement-latency bullet. This is not me being unfair; it is the standard failure mode of column layouts, and you can reproduce it in ten seconds (I will show you how below).</li>
+</ul>
+
+<p>I pasted each version into the free <a href="/resume-checker">resume ATS checker</a> on this site, with the same job description in the second box, and hit analyze. Here is the scrambled two-column extraction:</p>
+
+<img class="shot" src="/blog/assets/pdf-column-parse-screenshot.png" alt="The Resume ATS Score Checker on charliemorrison.dev analyzing the scrambled two-column extraction. The resume box shows interleaved lines like 'Redis handling 2M transactions per day' and 'Kafka - Reduced settlement latency from 9 seconds.' Despite the scramble, the score reads 78, Strong ATS compatibility, with '4 standard sections detected' and a 57% keyword match.">
+<p class="caption">The scrambled two-column extraction, with skills and bullets fused into each other, still scored 78 and &ldquo;Strong ATS compatibility.&rdquo;</p>
+
+<h2>The surprising result: both scored 78</h2>
+
+<p>The clean version scored <strong>78</strong>. The scrambled version, with contact details welded to sentences and skills scattered through the experience section, also scored <strong>78</strong>. Same &ldquo;4 standard sections detected.&rdquo; Same 57% keyword match. Same &ldquo;Strong ATS compatibility&rdquo; badge. My own tool could not tell the difference between a resume a recruiter could read and one that had been through a paper shredder.</p>
+
+<p>My first instinct was that the checker was broken. It is not. It is doing exactly what most free ATS checkers do, and understanding why is the actual lesson of this post.</p>
+
+<blockquote>A keyword-based checker searches for words. After a two-column scramble, all the words are still in the file &mdash; &ldquo;experience,&rdquo; &ldquo;skills,&rdquo; &ldquo;Python,&rdquo; &ldquo;Kafka&rdquo; &mdash; just in the wrong order. So the checker finds them and reports a healthy score. It never asks the harder question a real ATS asks: <em>which company goes with which title, and which dates go with which job?</em></blockquote>
+
+<p>That harder question is where a column scramble actually hurts you. A real applicant-tracking system does not just count words; it maps fields. When your dates and titles have drifted into the wrong column, the system files &ldquo;2021&ndash;2026&rdquo; under the wrong employer, or fails to associate your skills with any role at all. The recruiter searches for &ldquo;Kafka, 5+ years&rdquo; and you do not surface &mdash; not because the word is missing, but because it is orphaned. A keyword checker, mine included, is blind to that.</p>
+
+<h2>So is PDF or Word actually safer in 2026?</h2>
+
+<p>With the layout myth cleared out, the format question gets a boring, honest answer: <strong>in 2026 the major systems accept both.</strong> Workday, Greenhouse, Lever, and the other big platforms parse <code>.pdf</code> and <code>.docx</code> text layers fine. The old &ldquo;never send a PDF&rdquo; rule dates back to a decade ago when many parsers genuinely choked on PDFs; it has aged into folklore. Harvard&rsquo;s career office, in its <a href="https://ocs.fas.harvard.edu/resumes-cvs-cover-letters" rel="noopener">resume guidance</a>, tells students to keep the document simple and readable rather than fixating on the extension &mdash; because a clean single-column file survives either way.</p>
+
+<p>There are only three real caveats, and none of them is the file type on its own:</p>
+
+<ol>
+<li><strong>Follow the instructions.</strong> If the job posting says &ldquo;.docx only&rdquo; or the application form accepts only Word, send Word. A parser cannot rank a file it refused to accept.</li>
+<li><strong>Never send an image-only or scanned PDF.</strong> If you exported to PDF from a design tool and the text is baked into a picture, there is no text layer to extract &mdash; the ATS gets nothing. This is the one case where &ldquo;PDF&rdquo; genuinely fails, and it fails hard.</li>
+<li><strong>Kill the columns and tables.</strong> Whatever format you pick, use one column, standard headings, no text boxes, and no tables. That single change matters more than PDF-versus-Word ever will.</li>
+</ol>
+
+<p>My default recommendation, when the posting does not specify: send a single-column <code>.docx</code>. It is the safest text layer, it re-opens cleanly on the recruiter&rsquo;s end, and it sidesteps the image-only-PDF trap entirely. If you love your PDF, fine &mdash; just export it from a one-column source and check it before you send.</p>
+
+<h2>Test your own resume in ten seconds</h2>
+
+<p>You do not need a paid scanner to catch the failure that actually matters. You need a plain-text editor. Here is the exact check I use, and it is the practical payoff of the whole experiment:</p>
+
+<ol>
+<li>Open your finished resume &mdash; PDF or Word, does not matter.</li>
+<li>Select all, copy, and paste it into Notepad, TextEdit (in plain-text mode), or any blank text box &mdash; even the resume box on the <a href="/resume-checker">checker</a>.</li>
+<li>Read what lands. If it reads <strong>top to bottom, in order</strong>, with headings above their content and bullets intact, an ATS can read it too.</li>
+<li>If it comes out scrambled (skills fused to bullets, phone number mid-sentence, dates floating), your layout is the problem. Rebuild it in a single column and paste again.</li>
+</ol>
+
+<p>That copy-paste test sees exactly what an extractor sees, and unlike a keyword score it cannot be fooled by a scramble, because you are reading the raw order with your own eyes. It is the one check I would run before sending any resume anywhere. Recruiters, remember, barely read the thing even when it parses perfectly &mdash; Nielsen Norman Group&rsquo;s work on <a href="https://www.nngroup.com/articles/how-users-read-on-the-web/" rel="noopener">how little people actually read on screens</a> is a good reminder that the important lines have to land where a skimming human expects them. A scramble buries them twice: once for the machine, once for the person.</p>
+
+<div class="cta-box">
+<h3>Stop guessing at the format. Fix the whole resume.</h3>
+<p>The file type is the easy part. The Job Search AI Toolkit gives you 100+ prompts for rebuilding bullets into quantified achievements, tightening your summary into one clean column, and prepping the follow-up and interview messages that come next &mdash; the parts that move the score after the parser lets you in.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/0c3f51d6-9089-466e-ada4-58a0b22036e0?utm_source=site&utm_medium=blog&utm_campaign=career&utm_content=pdf-vs-word-resume-ats&checkout%5Bcustom%5D%5Bsrc%5D=blog_pdf_word" rel="nofollow">Get the Job Search AI Toolkit &mdash; $12</a>
+</div>
+
+<h2>The bottom line</h2>
+
+<p>The PDF-versus-Word war is mostly a distraction. When I forced the question through a real tool, the format did not move the score at all &mdash; and even a badly scrambled resume scored &ldquo;Strong,&rdquo; which tells you a keyword score is a smoke detector, not an inspector. The thing that decides whether a machine can route you forward is whether your text extracts in order, and the thing that wrecks that is a multi-column layout, in any format. Pick one column, standard headings, a real text layer. Send <code>.docx</code> when in doubt. Then do the ten-second copy-paste test with your own eyes, because that is the check the free scanners &mdash; mine included &mdash; quietly fail.</p>
+
+<div class="faq">
+<h2>Frequently asked questions</h2>
+<details><summary>Should a resume be a PDF or a Word document in 2026?</summary>
+<p>Either works with the major systems (Workday, Greenhouse, Lever) as long as the file has a real text layer and a simple layout. When the posting does not specify, I send a single-column <code>.docx</code> &mdash; it is the safest text layer and avoids the image-only-PDF trap. Always follow the posting&rsquo;s stated format when it names one.</p></details>
+<details><summary>Do ATS systems actually read PDFs?</summary>
+<p>Yes, modern ones read the text layer of a normal PDF fine. The exception is an image-only or scanned PDF (text baked into a picture), which has no extractable text &mdash; the ATS gets nothing. Export from a text-based source, not a flattened image, and a PDF parses like any other file.</p></details>
+<details><summary>Why did the scrambled resume still score 78 on your checker?</summary>
+<p>Because that checker, like most free ones, searches for keywords, and after a two-column scramble all the words are still in the file, just out of order. It cannot see that dates drifted away from titles or skills detached from roles. A real ATS maps those fields positionally, which is where a column scramble actually costs you. Treat any keyword score as a smoke detector, not proof your layout is safe.</p></details>
+<details><summary>What resume layout is safest for an ATS?</summary>
+<p>One column, standard section headings (Experience, Education, Skills, Summary), no tables, no text boxes, no graphics, and contact details as plain text at the very top. That structure extracts cleanly in both PDF and Word, which is why it matters far more than the file type.</p></details>
+<details><summary>How can I check if my resume parses correctly?</summary>
+<p>Copy your finished resume and paste it into a plain-text editor or the box on a <a href="/resume-checker">resume checker</a>. If it reads top to bottom in order, an ATS can read it. If it comes out scrambled, your layout &mdash; almost always a second column &mdash; is the problem, not the format.</p></details>
+</div>
+
+<p style="margin-top:28px">Related reading: <a href="/blog/i-tested-8-ats-scanners-may-2026">I ran one resume through 8 ATS scanners</a> (same file, scores from 54 to 91) and <a href="/blog/i-collected-60-ats-rejection-emails-3-triggers">I collected 60 ATS rejection emails</a> &mdash; both use the same &ldquo;test the advice, do not repeat it&rdquo; approach as this post. If you are cleaning up the file, the <a href="/resume-checker">resume ATS checker</a> and <a href="/resume-bullets">bullet rewriter</a> are the tools I used to build it.</p>
+
+<a class="back" href="/blog/">&larr; More posts</a>
+</article>
+<footer>
+<p>&copy; 2026 Charlie Morrison &middot; <a href="/about">About</a> &middot; <a href="/blog/">Blog</a> &middot; <a href="/">Free tools</a></p>
+</footer>
+</body>
+</html>

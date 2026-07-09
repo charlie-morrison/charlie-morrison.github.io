@@ -230,12 +230,16 @@ if (isEntry) behavioral = behavioral.concat(pickRandom(behavioralBank.entry, 3))
 
 const techSource = technicalBank[industry] || technicalBank.general;
 let technical = pickRandom(techSource, 4);
-if (skills.length > 0) {
-  technical = technical.map(q => ({
-    q: q.q.replace('[key technology from JD]', skills[0]).replace('[specific feature from JD]', skills.slice(0,2).join(' and ')),
-    tip: q.tip
-  }));
-}
+// extractSkills only returns technologies, never features — so the two placeholders
+// need different phrasing. Always substitute: with no JD the raw brackets would render.
+const techPhrase = skills.length ? skills[0] : "the main technology in this role's stack";
+const featurePhrase = skills.length
+  ? `high-volume ${skills.slice(0,2).join(' and ')} workloads`
+  : 'the core workload described in the job posting';
+technical = technical.map(q => ({
+  q: q.q.replace('[key technology from JD]', techPhrase).replace('[specific feature from JD]', featurePhrase),
+  tip: q.tip
+}));
 
 let situational = pickRandom(situationalBank, 4);
 

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{domains:["charliemorrison.dev","botcraftgroup.com"]}});
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Social Media Content Calendar Generator (2026)</title>
+<meta name="description" content="Generate a 4-week social media content calendar in seconds. Balanced post ideas, hooks, and CTAs for Instagram, TikTok, LinkedIn, X, Facebook and Pinterest. Free, runs in your browser, no signup.">
+<meta name="keywords" content="content calendar generator, social media content calendar, social media planner, post ideas, content plan, instagram content calendar, tiktok content ideas">
+<link rel="canonical" href="https://charliemorrison.dev/content-calendar-generator/">
+<meta property="og:title" content="Free Social Media Content Calendar Generator">
+<meta property="og:description" content="Build a balanced 4-week posting plan with hooks and CTAs for any niche and platform. 100% free, no signup, runs in your browser.">
+<meta property="og:url" content="https://charliemorrison.dev/content-calendar-generator/">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Social Media Content Calendar Generator","description":"Free tool that generates a balanced 4-week social media content calendar with post ideas, hooks and CTAs for any niche and platform","url":"https://charliemorrison.dev/content-calendar-generator","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.6;background:#f8f9fa}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+.container{max-width:900px;margin:0 auto;padding:20px}
+h1{font-size:2em;margin:30px 0 8px;text-align:center}
+.subtitle{text-align:center;color:#666;margin-bottom:30px;font-size:1.05em}
+.input-section{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px}
+.input-section label{display:block;font-weight:600;margin-bottom:6px;font-size:.95em}
+.input-section input,.input-section select,.input-section textarea{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:12px;font-size:.95em;font-family:inherit;transition:border-color .2s;margin-bottom:16px}
+.input-section input:focus,.input-section select:focus,.input-section textarea:focus{outline:none;border-color:#667eea}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:600px){.row,.row3{grid-template-columns:1fr}}
+.btn{display:block;width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:16px;border:none;border-radius:8px;font-size:1.1em;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.9}
+#results{display:none;margin-top:24px}
+.summary{background:linear-gradient(135deg,#667eea15,#764ba215);border:1px solid #667eea40;border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:.95em}
+.summary strong{color:#667eea}
+.mix{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.mix span{font-size:.82em;padding:3px 10px;border-radius:20px;background:#fff;border:1px solid #e0e0e0}
+.week{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:16px}
+.week h3{margin-bottom:14px;font-size:1.15em;color:#1a1a2e;border-bottom:2px solid #f0f0f5;padding-bottom:8px}
+.post{padding:14px;border:1px solid #e8e8f0;border-radius:8px;margin-bottom:10px;position:relative}
+.post:last-child{margin-bottom:0}
+.post .day{font-size:.78em;font-weight:700;color:#764ba2;text-transform:uppercase;letter-spacing:.03em}
+.post .pillar{display:inline-block;font-size:.75em;font-weight:600;padding:2px 9px;border-radius:12px;margin-left:8px;color:#fff}
+.post .idea{font-weight:600;margin:8px 0 6px;padding-right:34px}
+.post .meta{color:#555;font-size:.88em;line-height:1.55}
+.post .meta b{color:#333}
+.copy-btn{position:absolute;top:12px;right:12px;background:none;border:1px solid #ddd;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.8em;color:#888;transition:all .2s}
+.copy-btn:hover{border-color:#667eea;color:#667eea}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.actions button{flex:1;min-width:150px;background:#fff;border:2px solid #667eea;color:#667eea;padding:11px;border-radius:8px;font-weight:600;cursor:pointer;font-size:.92em;transition:all .2s}
+.actions button:hover{background:#667eea;color:#fff}
+.cta{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center;margin-top:16px;border:1px solid #667eea30}
+.cta h3{margin-bottom:8px}
+.cta p{color:#555;margin-bottom:16px}
+.cta a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;transition:opacity .2s}
+.cta a:hover{opacity:.9}
+.cta .small{font-size:.82em;color:#999;margin-top:10px;margin-bottom:0}
+.tools-bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:24px;padding-top:20px;border-top:1px solid #eee}
+.tools-bar a{padding:6px 14px;border:1px solid #ddd;border-radius:20px;text-decoration:none;color:#555;font-size:.85em;transition:all .2s}
+.tools-bar a:hover{border-color:#667eea;color:#667eea}
+.explainer{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:20px;font-size:.95em;color:#444}
+.explainer h2{font-size:1.25em;margin-bottom:12px}
+.explainer h3{font-size:1.05em;margin:16px 0 6px}
+.explainer ul{margin:8px 0 8px 20px}
+.explainer li{margin-bottom:5px}
+footer{text-align:center;padding:30px;color:#888;font-size:.85em}
+</style>
+</head>
+<body>
+<nav><a href="https://charliemorrison.dev">← Charlie Morrison</a></nav>
+<div class="container">
+<h1>Social Media Content Calendar Generator</h1>
+<p class="subtitle">Stop staring at a blank calendar. Get a balanced 4-week posting plan &mdash; ideas, hooks, and CTAs &mdash; for your niche and platform in one click.</p>
+
+<div class="input-section">
+<label for="niche">Your niche / industry *</label>
+<select id="niche">
+<option value="general">General small business</option>
+<option value="fitness">Fitness &amp; wellness coach</option>
+<option value="food">Food, recipes &amp; restaurant</option>
+<option value="beauty">Beauty, skincare &amp; makeup</option>
+<option value="fashion">Fashion &amp; apparel</option>
+<option value="saas">SaaS / tech product</option>
+<option value="coach">Coach / consultant</option>
+<option value="realestate">Real estate agent</option>
+<option value="finance">Personal finance &amp; money</option>
+<option value="travel">Travel &amp; hospitality</option>
+<option value="handmade">Handmade / Etsy / crafts</option>
+<option value="agency">Marketing / creative agency</option>
+</select>
+
+<div class="row3">
+<div>
+<label for="platform">Platform</label>
+<select id="platform">
+<option value="instagram">Instagram</option>
+<option value="tiktok">TikTok</option>
+<option value="linkedin">LinkedIn</option>
+<option value="x">X / Twitter</option>
+<option value="facebook">Facebook</option>
+<option value="pinterest">Pinterest</option>
+</select>
+</div>
+<div>
+<label for="freq">Posts per week</label>
+<select id="freq">
+<option value="3">3 (light)</option>
+<option value="5" selected>5 (steady)</option>
+<option value="7">7 (daily)</option>
+</select>
+</div>
+<div>
+<label for="weeks">Weeks</label>
+<select id="weeks">
+<option value="2">2 weeks</option>
+<option value="4" selected>4 weeks</option>
+</select>
+</div>
+</div>
+
+<label for="brand">Brand / product name (optional &mdash; used in promo posts)</label>
+<input type="text" id="brand" placeholder="e.g. GreenLeaf Studio">
+
+<button class="btn" onclick="generateCalendar()">Generate My Content Calendar</button>
+</div>
+
+<div id="results"></div>
+
+<div class="explainer">
+<h2>How this calendar is built</h2>
+<p>Random posting is why most accounts stall. This tool doesn't just spit out ideas &mdash; it enforces a <b>balanced content mix</b> so you're not accidentally posting five sales pitches in a row (the fastest way to kill reach). Every plan is weighted roughly:</p>
+<ul>
+<li><b>~35% Educate</b> &mdash; teach one useful thing. Builds trust and gets saves/shares.</li>
+<li><b>~20% Engage</b> &mdash; questions, polls, prompts. Feeds the algorithm the comments it rewards.</li>
+<li><b>~15% Behind-the-scenes</b> &mdash; process, story, the messy middle. Humanizes the brand.</li>
+<li><b>~15% Inspire / Social proof</b> &mdash; transformation and real results. Lowers buying resistance.</li>
+<li><b>~15% Promote</b> &mdash; the actual offer. Kept to a minority so it lands when it appears.</li>
+</ul>
+<h3>Every post gives you three things</h3>
+<ul>
+<li>A <b>content idea</b> tailored to your niche.</li>
+<li>A <b>scroll-stopping hook</b> for the first line (the only line that decides if anyone reads the rest).</li>
+<li>A <b>call-to-action</b> and format/hashtag guidance tuned to your chosen platform.</li>
+</ul>
+<p>Everything runs locally in your browser. Nothing is uploaded, nothing is stored. Copy any post, or download the whole plan as CSV and drop it into your scheduler.</p>
+</div>
+
+<div class="tools-bar">
+<a href="https://charliemorrison.dev/social-media-ai/">Social Media AI Mastery</a>
+<a href="https://charliemorrison.dev/linkedin-headline">LinkedIn Headline Generator</a>
+<a href="https://charliemorrison.dev/cover-letter">Cover Letter Generator</a>
+<a href="https://charliemorrison.dev/tools/">All Free Tools</a>
+</div>
+</div>
+<footer>© 2026 Charlie Morrison · All tools run locally in your browser · No data collected</footer>
+
+<script>
+const PILLARS={
+ educate:{name:"Educate",color:"#2563eb"},
+ engage:{name:"Engage",color:"#7c3aed"},
+ bts:{name:"Behind the scenes",color:"#db2777"},
+ promote:{name:"Promote",color:"#ea580c"},
+ inspire:{name:"Inspire",color:"#0d9488"},
+ proof:{name:"Social proof",color:"#ca8a04"}
+};
+// Weighted rotation pattern for a 7-slot week (repeats/trims to freq). Promote kept to a minority.
+const PATTERN=["educate","engage","educate","bts","inspire","promote","proof"];
+
+const NICHES={
+ general:{who:"customers",topics:["choosing the right service","what to look for before you buy","how the process actually works","a common mistake customers make","the question clients forget to ask"],myths:["cheapest is always best","you have to figure it out alone","it takes months to see results"],wins:["saved hours every week","finally got a system that works","stopped second-guessing every decision"],offer:"our service",client:"a recent customer"},
+ fitness:{who:"clients",topics:["proper form on a common exercise","how to actually build a habit that sticks","what to eat before a workout","the recovery mistake that stalls progress","how to train around a busy schedule"],myths:["you need 2 hours in the gym","carbs are the enemy","soreness means it worked"],wins:["dropped the all-or-nothing mindset","trained 4x a week for a month straight","finally hit a lift they'd been stuck on"],offer:"my coaching program",client:"a client"},
+ food:{who:"food lovers",topics:["a 15-minute weeknight recipe","how to meal-prep without hating it","a swap that makes a dish healthier","the tool that changed how I cook","how to plate food so it looks pro"],myths:["healthy food is boring","you need fancy equipment","meal prep means eating the same thing daily"],wins:["cooked at home 5 nights this week","cut their grocery bill in half","stopped ordering takeout on autopilot"],offer:"my recipe pack",client:"a reader"},
+ beauty:{who:"your audience",topics:["a skincare step everyone skips","how to make a look last all day","the ingredient that's overhyped","a 5-minute everyday routine","how to pick shades for your undertone"],myths:["expensive means effective","you need 12 products","natural skin needs no care"],wins:["simplified their routine to 4 steps","finally found a match for their skin","stopped wasting money on trends"],offer:"my product line",client:"a customer"},
+ fashion:{who:"your audience",topics:["how to style one piece three ways","building a capsule wardrobe","the fit detail that changes everything","how to shop your own closet","dressing for your body, not the trend"],myths:["you need a big budget to look good","trends are worth chasing","more clothes means more outfits"],wins:["built outfits from 20 pieces","stopped panic-buying","felt put-together every morning"],offer:"our new drop",client:"a customer"},
+ saas:{who:"users",topics:["a workflow you can automate today","a feature people miss","how to cut a manual task to one click","an integration that saves hours","the setup mistake new users make"],myths:["more tools means more productivity","you need a developer to automate","switching tools is too painful"],wins:["cut a 3-hour task to 10 minutes","onboarded their whole team in a day","killed three spreadsheets"],offer:"our product",client:"a customer team"},
+ coach:{who:"your audience",topics:["a framework you use with every client","the belief that's holding people back","how to know if you're ready for X","a small shift with a big payoff","the question that reframes everything"],myths:["you need to have it all figured out","motivation is what you're missing","progress should be linear"],wins:["landed the promotion they wanted","started the thing they'd delayed for a year","set a boundary that stuck"],offer:"my program",client:"a client"},
+ realestate:{who:"buyers and sellers",topics:["what to fix before you list","how to read a neighbourhood","the closing cost nobody mentions","staging on a small budget","questions to ask at an open house"],myths:["spring is the only time to sell","you must renovate to sell","zestimates are accurate"],wins:["sold above asking in a week","found their first home under budget","avoided a costly inspection surprise"],offer:"a free home valuation",client:"a recent client"},
+ finance:{who:"your audience",topics:["how to build a starter emergency fund","a budgeting method that actually sticks","the fee quietly draining your returns","how to automate your savings","a money mistake I made so you don't"],myths:["you need a high income to invest","budgeting means no fun","debt payoff has to be all-or-nothing"],wins:["saved their first $1,000","automated their whole system","paid off a card months early"],offer:"my money toolkit",client:"a reader"},
+ travel:{who:"travellers",topics:["how to find cheaper flights","a packing system that fits carry-on","an underrated spot in a popular city","how to travel on points","the booking mistake that costs you"],myths:["travel has to be expensive","you need weeks off to go anywhere","planning kills the fun"],wins:["booked a trip for half the usual price","travelled carry-on only for two weeks","used points for a free flight"],offer:"my travel guide",client:"a traveller"},
+ handmade:{who:"your customers",topics:["how a piece is actually made","the material I swear by","how to care for a handmade item","a behind-the-bench day","how to spot real handmade vs mass-made"],myths:["handmade is just overpriced","it's a quick thing to make","you can't customise"],wins:["gifted something no one else has","got a one-of-a-kind piece","supported a maker over a factory"],offer:"my shop",client:"a customer"},
+ agency:{who:"business owners",topics:["a campaign teardown","the metric most brands ignore","how to brief a designer well","a quick win for your funnel","why your last post flopped"],myths:["more ad spend fixes everything","you need to be on every platform","engagement equals revenue"],wins:["doubled their reply rate","cut cost-per-lead in half","finally had a repeatable system"],offer:"a strategy call",client:"a client"}
+};
+
+const HOOKS={
+ educate:["Nobody tells you this about {t}...","The {t} mistake that's quietly costing you.","Save this: {t}, explained simply.","3 things I wish I knew about {t}.","Stop scrolling if you struggle with {t}.","The fastest way to {t} (no fluff)."],
+ engage:["Be honest — what's your biggest struggle with {t}?","{A} or {B}? Drop your pick 👇","Finish this: the hardest part of my week is ___","Unpopular opinion incoming... agree or not?","Quick poll: does this actually work for you?","Tell me I'm not the only one who does this."],
+ bts:["A real day behind the scenes here.","The part of this no one sees.","This is what the messy middle looks like.","Honestly? This week was a grind. Here's why.","Come with me while I actually do this.","Not the highlight reel — the real version."],
+ promote:["I finally made the thing.","Here's exactly who this is for.","This is the shortcut I wish I'd had.","Doors are open — read this first.","The reason {brand} exists in one post.","If you've been waiting, this is your sign."],
+ inspire:["This time last year, this felt impossible.","Your slow progress is still progress.","Small habit. Big difference. Here's proof.","Read this if you're about to quit.","The version of you in 6 months is watching.","One decision changed the whole thing."],
+ proof:["Real result, not a testimonial template.","Screenshot of the week 📸","From stuck to sorted — here's how.","This is why the work is worth it.","Proof it works, from {client}.","Receipts. Because talk is cheap."]
+};
+
+const IDEAS={
+ educate:["Teach one thing about {t}. Keep it to a single takeaway.","Break down {t} into 3 simple steps.","Bust a myth: \"{m}\" — and explain what's actually true.","Show the before/after of {t} with a quick tip.","Answer the question your {who} always ask about {t}."],
+ engage:["Ask your {who}: what's your biggest struggle with {t}?","Run an A/B poll about {t}. Let them vote in comments or the poll sticker.","Post a fill-in-the-blank prompt about their daily reality.","Share a hot take on \"{m}\" and ask if they agree.","Ask {who} to tag someone who needs to see this."],
+ bts:["Show how you actually do {t} — unedited.","Share a real day in the life of running this.","Show a mistake you made this week and the fix.","Take them behind the scenes of {offer}.","Show the tool/setup you rely on for {t}."],
+ promote:["Introduce {offer} — lead with the problem it solves, not features.","Share who {offer} is (and isn't) for.","Post a mini case study, then point to {offer}.","Answer the top objection about {offer}.","Show a sample/preview of {offer} in action."],
+ inspire:["Share a transformation: from \"{m}\" thinking to a real win.","Tell the story of a small habit that led to {w}.","Post an encouraging message for anyone stuck on {t}.","Share your own turning point and what changed.","Remind {who} why they started — tie it to {t}."],
+ proof:["Share how {client} got to: {w}.","Post a real result or screenshot (with permission).","Show a before/after tied to {t}.","Feature a piece of user content or a review.","Share a specific number/outcome from your work."]
+};
+
+const PLATFORM={
+ instagram:{format:["Reel","Carousel","Single image + caption","Story series"],tags:"6–10 tags: mix 2 broad, 4 niche, 2 community",cta:["Save this for later 🔖","Share it with a friend who needs it","Comment a word below 👇","Follow for more like this","Tap the link in bio"],time:"Weekdays 11am–1pm or 7–9pm"},
+ tiktok:{format:["Short video (hook in first 2s)","Talking-head tip","Trend/sound remix","Text-on-screen story"],tags:"3–5 tags: 1 broad, 2 niche, 1–2 trending",cta:["Follow for part 2","Comment your take","Duet this with your answer","Watch till the end"],time:"Weekdays 6–10am or 7–11pm"},
+ linkedin:{format:["Text post (hook + line breaks)","Document/carousel PDF","Short story post","Poll"],tags:"3 professional hashtags, no more",cta:["Agree? Repost to your network","What would you add? 👇","DM me if this is you","Save for your team"],time:"Tue–Thu 8–10am"},
+ x:{format:["Single post","Thread (5–7 posts)","Quote-post with a take","Poll"],tags:"0–2 hashtags max",cta:["Reply with your version","Bookmark this","RT if useful","Follow the thread"],time:"Weekdays 9am or 5–6pm"},
+ facebook:{format:["Text + image","Short video","Link post with context","Question post"],tags:"0–2 hashtags (Facebook doesn't reward them)",cta:["Share to your page","Comment below","Tag a friend","Click to read more"],time:"Weekdays 9am–1pm"},
+ pinterest:{format:["Standing pin (2:3 image)","Idea pin (multi-page)","Infographic pin","Step-by-step pin"],tags:"3–5 keyword hashtags + keyword-rich description",cta:["Save this pin","Click through for the full guide","Follow for more ideas"],time:"Evenings 8–11pm"}
+};
+
+const DAYNAMES=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+// Posting-day slots by frequency (indices into a Mon-Sun week)
+const SLOTS={3:[0,2,4],5:[0,1,2,3,4],7:[0,1,2,3,4,5,6]};
+
+function pick(arr,seed){return arr[Math.abs(seed)%arr.length];}
+function fill(tpl,n,dayGlobal,brand){
+ const t=pick(n.topics,dayGlobal*7+1);
+ const m=pick(n.myths,dayGlobal*3+2);
+ const w=pick(n.wins,dayGlobal*5+3);
+ const A=pick(n.topics,dayGlobal+4), B=pick(n.myths,dayGlobal+9);
+ return tpl.replace(/{t}/g,t).replace(/{m}/g,m).replace(/{w}/g,w)
+  .replace(/{who}/g,n.who).replace(/{offer}/g,n.offer).replace(/{client}/g,n.client)
+  .replace(/{brand}/g,brand||n.offer).replace(/{A}/g,A).replace(/{B}/g,B);
+}
+
+let LAST=null;
+function generateCalendar(){
+ const nicheKey=document.getElementById('niche').value;
+ const platKey=document.getElementById('platform').value;
+ const freq=parseInt(document.getElementById('freq').value,10);
+ const weeks=parseInt(document.getElementById('weeks').value,10);
+ const brand=document.getElementById('brand').value.trim();
+ const n=NICHES[nicheKey], p=PLATFORM[platKey];
+ const slots=SLOTS[freq];
+ const counts={};let rows=[];let html='';
+ let dayGlobal=0;
+ for(let wk=0;wk<weeks;wk++){
+  html+=`<div class="week"><h3>Week ${wk+1}</h3>`;
+  for(let s=0;s<slots.length;s++){
+   const pillarKey=PATTERN[(dayGlobal)%PATTERN.length];
+   counts[pillarKey]=(counts[pillarKey]||0)+1;
+   const P=PILLARS[pillarKey];
+   const idea=fill(pick(IDEAS[pillarKey],dayGlobal*2+s),n,dayGlobal,brand);
+   const hook=fill(pick(HOOKS[pillarKey],dayGlobal*4+s+1),n,dayGlobal,brand);
+   const cta=pick(p.cta,dayGlobal+s);
+   const format=pick(p.format,dayGlobal+s+2);
+   const day=DAYNAMES[slots[s]];
+   const plain=`Week ${wk+1} · ${day} · ${P.name}\nIdea: ${idea}\nHook: "${hook}"\nFormat: ${format} | CTA: ${cta}\nHashtags: ${p.tags}\nBest time: ${p.time}`;
+   rows.push([`Week ${wk+1}`,day,P.name,idea.replace(/"/g,"'"),hook.replace(/"/g,"'"),format,cta,p.tags,p.time]);
+   html+=`<div class="post"><button class="copy-btn" onclick='cp(this)' data-t="${encodeURIComponent(plain)}">Copy</button>`
+    +`<span class="day">Week ${wk+1} · ${day}</span><span class="pillar" style="background:${P.color}">${P.name}</span>`
+    +`<div class="idea">${idea}</div>`
+    +`<div class="meta"><b>Hook:</b> &ldquo;${hook}&rdquo;<br><b>Format:</b> ${format} &nbsp;·&nbsp; <b>CTA:</b> ${cta}<br><b>Hashtags:</b> ${p.tags} &nbsp;·&nbsp; <b>Best time:</b> ${p.time}</div></div>`;
+   dayGlobal++;
+  }
+  html+='</div>';
+ }
+ const total=dayGlobal;
+ let mix='';for(const k in counts){const pct=Math.round(counts[k]/total*100);mix+=`<span style="border-color:${PILLARS[k].color}55"><b style="color:${PILLARS[k].color}">${PILLARS[k].name}</b> ${counts[k]} (${pct}%)</span>`;}
+ const summary=`<div class="summary"><strong>${total} posts</strong> across ${weeks} week${weeks>1?'s':''} for <strong>${document.getElementById('niche').options[document.getElementById('niche').selectedIndex].text}</strong> on <strong>${document.getElementById('platform').options[document.getElementById('platform').selectedIndex].text}</strong>. Balanced content mix:<div class="mix">${mix}</div></div>`;
+ const actions=`<div class="actions"><button onclick="dl()">⬇ Download as CSV</button><button onclick="regen()">🔁 Regenerate ideas</button></div>`;
+ const cta=`<div class="cta"><h3>Want the full 12-month version?</h3><p>This is a 4-week sampler. The <b>2026 Social Media Content Calendar</b> gives you a full year of dated prompts plus <b>110 fill-in-the-blank caption templates</b> across every content pillar &mdash; so you never open a blank calendar again.</p><a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/33a1ec8f-6b1f-49fd-83b6-e8f69577814b?utm_source=charliemorrison.dev&utm_medium=tool&utm_campaign=social-content-calendar&utm_content=content-calendar-generator&checkout%5Bcustom%5D%5Bsrc%5D=content_calendar_generator" target="_blank" rel="noopener">Get the 2026 Calendar + 110 Captions →</a><p class="small">Instant download · $17 one-time · no subscription</p></div>`;
+ LAST={rows,niche:nicheKey,platform:platKey};
+ window._regenSeed=(window._regenSeed||0);
+ const r=document.getElementById('results');
+ r.innerHTML=summary+actions+html+cta;r.style.display='block';
+ r.scrollIntoView({behavior:'smooth',block:'start'});
+ gtag('event','calendar_generated',{niche:nicheKey,platform:platKey,posts:total});
+}
+function regen(){window._regenSeed=(window._regenSeed||0)+1;
+ // nudge variety by rotating the pattern start
+ PATTERN.push(PATTERN.shift());generateCalendar();}
+function cp(btn){const t=decodeURIComponent(btn.getAttribute('data-t'));navigator.clipboard.writeText(t).then(()=>{btn.textContent='Copied ✓';setTimeout(()=>btn.textContent='Copy',1500);});}
+function dl(){if(!LAST)return;const head=["Week","Day","Pillar","Idea","Hook","Format","CTA","Hashtags","Best time"];
+ const csv=[head].concat(LAST.rows).map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+ const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='content-calendar.csv';a.click();
+ gtag('event','calendar_downloaded',{});}
+</script>
+</body>
+</html>

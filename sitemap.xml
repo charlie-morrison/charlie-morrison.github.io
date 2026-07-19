@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://charliemorrison.dev/</loc><lastmod>2026-07-18</lastmod><priority>1.0</priority></url>
+<url><loc>https://charliemorrison.dev/</loc><lastmod>2026-07-19</lastmod><priority>1.0</priority></url>
 <url><loc>https://charliemorrison.dev/about/</loc><lastmod>2026-07-17</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/ai-developer-toolkit/</loc><lastmod>2026-06-07</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/anon-msg/</loc><lastmod>2026-04-23</lastmod><priority>0.8</priority></url>
@@ -78,6 +78,7 @@
 <url><loc>https://charliemorrison.dev/compare/teal-vs-simplify/</loc><lastmod>2026-06-26</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/compare/wonsulting-vs-jobcopilot/</loc><lastmod>2026-06-13</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/compare/zety-vs-novoresume/</loc><lastmod>2026-06-13</lastmod><priority>0.8</priority></url>
+<url><loc>https://charliemorrison.dev/content-calendar-generator/</loc><lastmod>2026-07-19</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/content-creator-toolkit/</loc><lastmod>2026-06-07</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/cover-letter/</loc><lastmod>2026-06-07</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/cron-cookbook/</loc><lastmod>2026-06-03</lastmod><priority>0.8</priority></url>

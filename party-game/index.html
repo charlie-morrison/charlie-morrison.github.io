@@ -5,6 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>🎲 Party Game</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());
+gtag('config','G-SE8T01PLBJ');
+// Attribution: where did this player come from?
+// Telegram deep links pass ?startapp=<payload> through as tgWebAppStartParam;
+// plain-browser visits use ?src=<payload>. Both land in one GA4 dimension.
+(function(){
+  try{
+    var qs=new URLSearchParams(location.search);
+    var src=qs.get('tgWebAppStartParam')||qs.get('startapp')||qs.get('src')||'direct';
+    var inTg=!!(window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initData);
+    gtag('event','party_game_open',{source:src,surface:inTg?'telegram':'browser'});
+  }catch(e){}
+})();
+</script>
 <script src='//libtl.com/sdk.js' data-zone='10917064' data-sdk='show_10917064'></script>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -119,6 +137,7 @@ if (typeof i18n !== 'undefined') {
   document.querySelector('.share-question-btn').textContent = i18n.share;
   document.querySelector('.react-btn.drink').textContent = i18n.iDid;
   document.querySelector('.react-btn.clean').textContent = i18n.notMe;
+  document.querySelector('.back-btn').textContent = i18n.back;
   // Summary screen
   document.querySelector('#summary .summary-card h2').textContent = i18n.sessionTitle;
   document.querySelector('.share-result-btn').textContent = i18n.shareResult;

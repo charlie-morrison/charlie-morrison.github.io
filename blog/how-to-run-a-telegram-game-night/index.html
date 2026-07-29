@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Run a Telegram Game Night in a Group Chat</title>
+<meta name="description" content="I sent 24 live requests to Telegram's API to find what actually breaks a group game night. Poll limits, spoiler reveals, pacing — and the one setting that kills Most Likely To.">
+<meta name="keywords" content="telegram game night, telegram games for group, telegram games to play with friends, telegram poll game, telegram group chat games, telegram poll limits">
+<link rel="canonical" href="https://charliemorrison.dev/blog/how-to-run-a-telegram-game-night/">
+<meta property="og:title" content="How to Run a Telegram Game Night in a Group Chat">
+<meta property="og:description" content="Every list tells you which Telegram games to play. None tell you the chat mechanics that decide whether the round survives. I measured them.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/how-to-run-a-telegram-game-night/telegram-poll-api-probe.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"How to Run a Telegram Game Night in a Group Chat","datePublished":"2026-07-29","dateModified":"2026-07-29","image":"https://charliemorrison.dev/blog/how-to-run-a-telegram-game-night/telegram-poll-api-probe.png","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about/"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How many options can a Telegram poll have?","acceptedAnswer":{"@type":"Answer","text":"Twelve. I tested it directly: a poll with 12 options was created normally, and a poll with 13 was rejected with \"poll can't have more than 12 options\". Many guides still say the limit is 10, which was true of an older version of the API. The question itself is capped at 300 characters and each individual option at 100 characters."}},{"@type":"Question","name":"Why can't I see who voted in my Telegram poll?","acceptedAnswer":{"@type":"Answer","text":"Because Telegram polls are anonymous unless you say otherwise. Anonymity is the default, so a poll you create in a hurry hides the votes. For accusation games like Most Likely To that is fatal — the whole point is seeing who picked whom. Turn anonymity off when you create the poll, and leave it on for confession-style rounds where hiding the vote is what makes people answer honestly."}},{"@type":"Question","name":"Can I schedule game-night messages from a Telegram bot?","acceptedAnswer":{"@type":"Answer","text":"No. The Bot API has no scheduling parameter, and it does not complain if you invent one — I sent a message with a schedule_date one hour in the future and the API returned success while delivering it immediately. Scheduling is a feature of the Telegram apps, not of bots: you compose the message yourself, hold the send button and pick a time."}},{"@type":"Question","name":"Do spoiler tags work inside a Telegram poll question?","acceptedAnswer":{"@type":"Answer","text":"No. Formatting is ignored inside poll questions, so a hidden answer written as ||spoiler|| arrives with the pipe characters visible as ordinary text — the answer is not hidden at all. Spoilers only work in normal messages. Send the poll, then reveal the answer in a separate message with the spoiler applied there."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+.meta a{color:#667eea;text-decoration:none}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+a{color:#667eea}
+code{background:#f1f3f5;padding:2px 6px;border-radius:4px;font-size:.92em}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box.pack{background:linear-gradient(135deg,#f6ad5510,#dd6b2010);border-color:#dd6b20}
+.cta-box.pack h3{color:#c05621}
+.cta-box.pack a{background:linear-gradient(135deg,#f6ad55,#dd6b20)}
+.cta-box.pack .alt a{background:none;color:#c05621}
+.cta-box .alt a{background:none;color:#667eea;padding:0;font-weight:600;display:inline;margin:0}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:12px;border:1px solid #e5e7eb}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.95em}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f8f9fa}
+td.dead{color:#c92a2a;font-weight:600;white-space:nowrap}
+td.live{color:#2b8a3e;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:560px){
+table{font-size:.86em;margin:16px 0}
+th,td{padding:8px 7px}
+td.dead,td.live{white-space:normal}
+h1{font-size:1.6em}
+}
+details{background:#f8f9fa;border-radius:8px;padding:12px 16px;margin-bottom:10px}
+summary{font-weight:600;cursor:pointer}
+.note{background:#fffbea;border-left:4px solid #f0c000;padding:14px 18px;border-radius:8px;margin:24px 0;font-size:.96em}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>How to Run a Telegram Game Night in a Group Chat</h1>
+<div class="meta">July 29, 2026 &middot; 9 min read &middot; by <a href="/about/">Charlie Morrison</a></div>
+
+<p>Every article about Telegram games answers the same question: <em>which</em> games. Truth or Dare, Never Have I Ever, Would You Rather, Most Likely To. Fine: that part is easy, and I've written one of those lists myself.</p>
+
+<p>Nobody writes about the part that actually decides whether your game night survives past round three: <strong>the chat mechanics</strong>. A group chat is not a living room. Nobody takes turns. The person who types fastest answers first and quietly sets the answer everyone else copies. Half the group is reading on a phone under a table. The host, meaning you, is trying to run a game in a medium that has no concept of "whose turn it is".</p>
+
+<p>Telegram has real tools for this: polls, quiz polls, spoiler text, pinned messages, self-closing rounds. Most of what's written about them is copied from other articles, and a fair amount of it is simply out of date. So rather than trust it, I sent <strong>24 live requests to Telegram's own API</strong>: real polls, real spoilers, real pins, and I wrote down exactly what came back.</p>
+
+<p>Seven of the 24 failed. Two of them "succeeded" while doing something other than what I asked, which is worse, because those are the two you ship to your friends without noticing.</p>
+
+<h2>How I tested it</h2>
+
+<p>I run a party game on Telegram, so the questions weren't hypothetical: I wanted to know which of these mechanics I could rely on when a group of eight people is mid-round and impatient.</p>
+
+<p>The method was deliberately boring. Each mechanic became one request to <a href="https://core.telegram.org/bots/api#sendpoll" rel="nofollow">Telegram's Bot API</a>, using <code>sendPoll</code>, <code>sendMessage</code> and <code>pinChatMessage</code>, with one variable changed at a time: a poll question at 300 characters and then at 301, an option at 100 and then at 101, a quiz with a correct answer and then without one. Whatever the API returned, success or error, went straight into a results file. The screenshot below is generated from that file, not typed by hand.</p>
+
+<figure>
+<img src="telegram-poll-api-probe.png" alt="Results table of 24 live requests to the Telegram Bot API, showing which game-night mechanics were accepted and which were rejected, with the API's own error messages">
+<figcaption>All 24 requests. Green rows were accepted; red rows carry Telegram's own error text. The two red rows with code 200 are the dangerous ones.</figcaption>
+</figure>
+
+<p>One thing I could not test, and won't pretend otherwise: the per-group rate limit. My test account is restricted from creating new groups, so the requests went to a one-to-one chat with my bot, where 22 back-to-back messages went through in 6.1 seconds without a single block. That number does not transfer to a group. Telegram's own <a href="https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this" rel="nofollow">bot FAQ</a> puts the guidance at roughly 20 messages per minute in the same group, and everything I say about pacing below follows their figure, not mine.</p>
+
+<h2>The five things that break a round</h2>
+
+<h3>1. The 100-character option cap hits the exact game you most want to poll</h3>
+
+<p>A poll question can be 300 characters. Each option can only be 100. I got <code>poll options length must not exceed 100</code> at 101 characters, and success at exactly 100.</p>
+
+<p>That sounds generous until you look at what you're actually pasting. I ran all 265 prompts from my own game pack through those two limits. Zero exceeded the question cap. Twenty exceeded the option cap, and <strong>19 of those 20 were Would You Rather</strong>.</p>
+
+<p>Which makes sense once you see it. A Would You Rather line is already a question <em>plus</em> its two answers glued together: "Would you rather have unlimited money but no free time, or unlimited free time but just enough money?" runs to 138 characters. Paste that whole line as an option and Telegram rejects it. Would You Rather is the game that maps most naturally onto a poll, and it's the one whose text most reliably breaks the poll.</p>
+
+<p>The fix is a split, not an edit. The dilemma goes in the poll <em>question</em> (300 characters, so it always fits; my longest was 101). The two halves become the two options: "Money, no time" / "Time, no money". When I re-ran the same 30 Would You Rather prompts that way, <strong>all 30 fit</strong>, without cutting a single word.</p>
+
+<div class="note"><strong>Host shortcut:</strong> if a prompt is too long to be an option, it was never an option. It was a question with the answers written into it. Split it, don't trim it.</div>
+
+<h3>2. The option limit is 12, not the 10 you'll read everywhere</h3>
+
+<p>Twelve options were accepted and created normally. Thirteen came back <code>poll can't have more than 12 options</code>. A lot of current advice still says ten, which was true of an earlier version of the API and quietly stopped being true.</p>
+
+<p>This matters for exactly one thing, and it's the most popular game in the genre: Most Likely To. You want one option per player, so the group can vote for each other. Twelve options means a group of up to twelve fits in a single poll. At thirteen people you either split the vote across two polls, which fractures it, or drop the poll and take answers as replies.</p>
+
+<h3>3. Quiz mode demands a right answer, so it's wrong for opinion games</h3>
+
+<p>A quiz poll without a designated correct option is rejected: <code>correct quiz option list must be non-empty</code>. With one, it works, and you can attach an explanation that pops up after the vote.</p>
+
+<p>So quiz mode is for trivia, where there genuinely is a correct answer, and the explanation slot is the best feature nobody uses: it lets the poll teach instead of just scoring. For anything with no right answer (Would You Rather, Most Likely To, Never Have I Ever) you want a regular poll. Reach for quiz mode there and Telegram forces you to declare one of your friends' opinions officially correct.</p>
+
+<h3>4. Polls are anonymous by default, which silently kills Most Likely To</h3>
+
+<p>Anonymity is the default, and that default is exactly backwards for half these games.</p>
+
+<p>Never Have I Ever wants anonymity. People answer honestly precisely because nobody sees who tapped "I have". Most Likely To wants the opposite: the accusation <em>is</em> the game. "Most likely to reply at 3am: Ann, Bo, Cy" is only funny if you can see that four people voted for Bo. Run it anonymously and you get a bar chart, which nobody laughs at.</p>
+
+<p>Turning anonymity off is one toggle when you create the poll, and it's the single highest-value decision in the whole session. My rule: <strong>confessions anonymous, accusations public.</strong></p>
+
+<h3>5. Two requests that succeed while doing the wrong thing</h3>
+
+<p>These are the two red rows carrying code 200, and they're the reason I ran this test at all. An outright rejection you notice immediately, a silent substitution you ship.</p>
+
+<p><strong>Spoiler formatting is ignored inside a poll question.</strong> Telegram <a href="https://telegram.org/blog/reactions-spoilers-translations" rel="nofollow">introduced spoiler text in 2021</a>, and it's the mechanic that finally makes hidden-answer games work in a chat: the answer sits there covered until someone taps it. Write a poll question as <code>Guess: ||Bo||</code> expecting the name to be hidden, and the API returns success, then delivers the question with the pipes visible as ordinary characters. The answer isn't hidden. It's printed, in a slightly uglier font, to everyone.</p>
+
+<p>Spoilers only work in ordinary messages. So the pattern is two messages, not one: poll first, reveal second, spoiler applied to the reveal.</p>
+
+<p><strong>Bots cannot schedule anything.</strong> I sent a message with a scheduling timestamp one hour in the future. The API said success and delivered it instantly. My "scheduled" message arrived 3,599 seconds before its own schedule. There is no scheduling parameter for bots; the API just ignores what it doesn't recognise instead of telling you.</p>
+
+<p>Scheduling does exist, in the Telegram app, on your side: compose the message, hold the send button, pick a time. That's how you have the rules card land in the group at 20:00 without being awake for it. It is not something you can automate through a bot, and if a tool promises you that, it is doing something else.</p>
+
+<h2>Two mechanics worth adding on purpose</h2>
+
+<p><strong>Self-closing rounds.</strong> A poll can carry an open period. I set 30 seconds and it was created with a 30-second life. This is the closest Telegram gets to a turn timer. It ends the round for you, so the game doesn't die of one person "answering later", and it applies pressure that makes answers funnier.</p>
+
+<p><strong>Pin the rules, then edit the pin.</strong> Pinning worked, and so did editing the text of an already-sent message. Together those are a live scoreboard: pin one message at the start, edit it as the night goes, and anyone arriving late reads the current state instead of scrolling. Editing a pin doesn't re-notify the group, so it's cheap to update often.</p>
+
+<p>One thing the API will not do is protect you from a broken round. A poll with a <em>single</em> option was accepted without complaint: a poll nobody can meaningfully vote in, delivered with a cheerful success code. Telegram checks lengths and counts. It does not check whether your game makes sense.</p>
+
+<h2>The host protocol this adds up to</h2>
+
+<p>Strip out the API detail and what's left is a short list of things a host does, all of which exist because the medium has no turns:</p>
+
+<ul>
+<li><strong>Name one host per session.</strong> Not a rotation, not a democracy. One person sends the prompts and closes the rounds, because otherwise two people post round four simultaneously and the thread splits.</li>
+<li><strong>Pin the rules, including the pace.</strong> "One round every ten minutes, replies by reply-thread." Half the failures aren't disagreement, they're people guessing at the tempo.</li>
+<li><strong>Poll first, talk second.</strong> A poll captures everyone's answer before the loudest voice anchors it. In an open-text round the first reply becomes the template for every reply after it.</li>
+<li><strong>Two passes each, then the round closes.</strong> The single rule that keeps quiet people in the game. It caps the extroverts without singling anyone out.</li>
+<li><strong>Space the sends.</strong> Around 20 messages per minute to one group, per Telegram's guidance. Twelve prompts fired back to back is also just unreadable.</li>
+<li><strong>Spoiler the reveals.</strong> Separate message, spoiler applied there, never in the poll question.</li>
+</ul>
+
+<p>None of this is clever. It's just the set of things that turn out to be load-bearing once you stop assuming a group chat behaves like a room.</p>
+
+<div class="cta-box">
+<h3>Try the free game first</h3>
+<p>Truth or Dare, Never Have I Ever and Would You Rather, with 151 questions per language, English and Ukrainian, no signup and no backend that can be switched off. Open it in the chat and start a round.</p>
+<a href="https://t.me/charlie_party_bot/partygame?startapp=hostguide">Open the Party Game</a>
+<span class="alt">No Telegram? It runs in a browser too: <a href="https://charliemorrison.dev/party-game/?src=hostguide">charliemorrison.dev/party-game</a></span>
+</div>
+
+<div class="cta-box pack">
+<h3>Want the rounds already built for polls?</h3>
+<p><strong>The Telegram Party Pack</strong> is the version of this with the work done: 255 prompts across six games, each written to fit inside Telegram's limits, plus poll-ready files where the Would You Rather dilemmas are already split into question and options, the exact split this test says you need. Includes the host guide: pinned rules, pacing, spoiler reveals and keeping a round legible when replies arrive out of order.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=how-to-run-a-telegram-game-night">Get the pack — $9.99</a>
+<span class="alt">The game above stays free, no signup.</span>
+</div>
+
+<h2>FAQ</h2>
+
+<details><summary>How many options can a Telegram poll have?</summary>
+<p>Twelve. Tested directly: 12 options were created normally, 13 came back <code>poll can't have more than 12 options</code>. Plenty of guides still say ten, which was true of an older API version. The question is capped at 300 characters and each option at 100.</p></details>
+
+<details><summary>Why can't I see who voted in my Telegram poll?</summary>
+<p>Because polls are anonymous unless you say otherwise, and most people never change it. For accusation games like Most Likely To that's fatal, because seeing who picked whom is the game. Turn anonymity off for those, leave it on for confession-style rounds where hiding the vote is what makes people honest.</p></details>
+
+<details><summary>Can I schedule game-night messages from a bot?</summary>
+<p>No. The Bot API has no scheduling parameter and doesn't complain if you invent one. My message with a timestamp an hour ahead was delivered immediately with a success code. Scheduling lives in the Telegram apps: compose, hold send, pick a time.</p></details>
+
+<details><summary>Do spoiler tags work inside a poll question?</summary>
+<p>No. Formatting is ignored in poll questions, so <code>||spoiler||</code> arrives with the pipes visible and nothing hidden. Send the poll, then reveal the answer in a separate message with the spoiler applied there.</p></details>
+
+<details><summary>Which games work best as polls, and which as plain messages?</summary>
+<p>Polls suit anything with fixed choices: Would You Rather (split into question and options), Most Likely To (one option per player, up to twelve), Never Have I Ever (two options, kept anonymous). Plain messages suit anything open-ended, such as Truth or Dare, Story Chain and Paranoia, where the answer is written, not chosen, and the spoiler reveal does the work.</p></details>
+
+<h2>Related reading</h2>
+<ul>
+<li><a href="/blog/best-telegram-party-games-2026/">Best Telegram party games and bots in 2026</a>: which games to play, if you're still choosing.</li>
+<li><a href="/blog/i-messaged-18-telegram-game-bots/">I messaged 18 "best" Telegram game bots — 7 never replied</a>: why I stopped recommending bots you can't verify.</li>
+<li><a href="/blog/telegram-tech-quiz-game-2026/">The Telegram tech quiz game</a>: quiz mode used the way this test says it should be.</li>
+</ul>
+
+<a class="back" href="/blog/">&larr; Back to the blog</a>
+</article>
+<footer>
+<p>&copy; 2026 Charlie Morrison Digital &middot; <a href="/about/">About</a> &middot; <a href="/blog/">Blog</a> &middot; <a href="/tools/">Free tools</a></p>
+</footer>
+</body>
+</html>

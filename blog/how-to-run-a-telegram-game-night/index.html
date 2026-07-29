@@ -92,7 +92,7 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 
 <p>A poll question can be 300 characters. Each option can only be 100. I got <code>poll options length must not exceed 100</code> at 101 characters, and success at exactly 100.</p>
 
-<p>That sounds generous until you look at what you're actually pasting. I ran all 265 prompts from my own game pack through those two limits. Zero exceeded the question cap. Twenty exceeded the option cap, and <strong>19 of those 20 were Would You Rather</strong>.</p>
+<p>That sounds generous until you look at what you're actually pasting. I ran all 255 prompts from my own game pack through those two limits. Zero exceeded the question cap. Twenty exceeded the option cap, and <strong>19 of those 20 were Would You Rather</strong>.</p>
 
 <p>Which makes sense once you see it. A Would You Rather line is already a question <em>plus</em> its two answers glued together: "Would you rather have unlimited money but no free time, or unlimited free time but just enough money?" runs to 138 characters. Paste that whole line as an option and Telegram rejects it. Would You Rather is the game that maps most naturally onto a poll, and it's the one whose text most reliably breaks the poll.</p>
 

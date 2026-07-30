@@ -328,3 +328,43 @@ h1 { font-size: 2em; margin: 20px 0 4px; }
   cursor: pointer;
 }
 .menu-btn:active { border-color: var(--btn); color: var(--btn); }
+
+/* --- Paid pack CTA on the session summary (English UI, 20+ rounds) --------
+   Deliberately quieter than the play buttons: it sits below the actions and
+   uses an outlined card, so "keep playing" stays the primary path. */
+.pack-cta {
+  display: none;
+  margin-top: 22px;
+  padding: 16px;
+  border: 1.5px solid var(--btn);
+  border-radius: 14px;
+  background: var(--secondary-bg);
+  text-align: left;
+}
+.pack-cta.visible { display: block; }
+
+.pack-cta-title {
+  font-size: 1.05em;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.pack-cta-body {
+  font-size: 0.88em;
+  line-height: 1.45;
+  color: var(--hint);
+  margin-bottom: 14px;
+}
+.pack-cta-btn {
+  width: 100%;
+  background: var(--btn);
+  color: var(--btn-text);
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.pack-cta-btn:active { transform: scale(0.97); }

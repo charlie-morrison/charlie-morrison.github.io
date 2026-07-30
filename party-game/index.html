@@ -116,6 +116,12 @@ gtag('config','G-SE8T01PLBJ');
         <button class="play-again-btn" onclick="continueGame()">🎲 Продовжити гру</button>
         <button class="menu-btn" onclick="showMenu()">← В меню</button>
       </div>
+      <!-- Paid pack CTA: English UI only, revealed after 20 rounds (see app.js) -->
+      <div id="pack-cta" class="pack-cta">
+        <div class="pack-cta-title">Running out of questions?</div>
+        <div class="pack-cta-body">255 more prompts written for a group chat, not a living room — sent as polls so the first answer can't anchor everyone, with spoiler reveals and reply threads.</div>
+        <button class="pack-cta-btn" onclick="openPack()">Get the Party Pack — $9.99</button>
+      </div>
     </div>
   </div>
 </div>
@@ -140,6 +146,12 @@ if (typeof i18n !== 'undefined') {
   document.querySelector('.back-btn').textContent = i18n.back;
   // Summary screen
   document.querySelector('#summary .summary-card h2').textContent = i18n.sessionTitle;
+  // Stat labels: the strings existed in i18n but were never applied, so an
+  // English player saw Cyrillic labels under their own numbers.
+  const statLabels = [i18n.questions, i18n.truths, i18n.dares, i18n.nevers, i18n.choices];
+  document.querySelectorAll('#summary .stat-label').forEach((el, i) => {
+    if (statLabels[i]) el.textContent = statLabels[i];
+  });
   document.querySelector('.share-result-btn').textContent = i18n.shareResult;
   document.querySelector('.play-again-btn').textContent = i18n.continueGame;
   document.querySelector('.menu-btn').textContent = i18n.toMenu;

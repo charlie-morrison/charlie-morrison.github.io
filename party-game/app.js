@@ -45,6 +45,7 @@ let usedIndices = {};
 let sessionStats = { total: 0, truth: 0, dare: 0, never: 0, rather: 0, drinks: 0, clean: 0 };
 const SUMMARY_INTERVAL = 10;
 const SHARE_NUDGE_INTERVAL = 5;
+let lastSummaryAt = 0;   // guards the summary gate (see nextQuestion)
 let nudgeDismissed = false;
 
 function pick(arr, mode) {
@@ -71,6 +72,7 @@ function showMenu() {
 function startGame(mode) {
   currentMode = mode;
   questionCount = 0;
+  lastSummaryAt = 0;
   showScreen('game');
   if (tg) {
     tg.BackButton.show();
@@ -109,8 +111,13 @@ function dismissNudge() {
 }
 
 function nextQuestion() {
-  // Show summary every N questions
-  if (questionCount > 0 && questionCount % SUMMARY_INTERVAL === 0) {
+  // Show summary every N questions.
+  // lastSummaryAt is what makes this fire ONCE per interval. Without it the
+  // gate stays true at the same questionCount, so "Continue" re-entered this
+  // function and bounced straight back to the summary — the game dead-ended
+  // at question 10 and no later round, ad or nudge was ever reachable.
+  if (questionCount > 0 && questionCount % SUMMARY_INTERVAL === 0 && lastSummaryAt !== questionCount) {
+    lastSummaryAt = questionCount;
     showSummary();
     return;
   }
@@ -203,8 +210,36 @@ function showSummary() {
   const titleIdx = Math.min(Math.floor(sessionStats.total / SUMMARY_INTERVAL) - 1, i18n.funTitles.length - 1);
   document.getElementById('summary-title').textContent = i18n.funTitles[titleIdx];
 
+  maybeShowPackCta();
+
   showScreen('summary');
   if (tg) tg.HapticFeedback?.notificationOccurred('success');
+}
+
+// Paid pack CTA — only after the player has actually played a while.
+// First summary (10 rounds) stays clean; from the second one on, someone who
+// has burned 20 questions is the one who genuinely runs out of material.
+const PACK_CTA_AFTER = 20;
+let packCtaSeen = false;
+
+function maybeShowPackCta() {
+  const box = document.getElementById('pack-cta');
+  if (!box) return;
+  // The pack ships in English only. Showing it on the Ukrainian UI would sell a
+  // product the buyer can't use — the exact content/product mismatch we log about.
+  if (!isEn || sessionStats.total < PACK_CTA_AFTER) { box.classList.remove('visible'); return; }
+  box.classList.add('visible');
+  if (!packCtaSeen) {
+    packCtaSeen = true;
+    try { gtag('event', 'pack_cta_view', { rounds: sessionStats.total, surface: tg ? 'telegram' : 'browser' }); } catch (e) {}
+  }
+}
+
+function openPack() {
+  const url = 'https://charliemorrison.lemonsqueezy.com/checkout/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98'
+            + '?utm_source=miniapp&utm_medium=summary&utm_campaign=telegram&utm_content=party_game';
+  try { gtag('event', 'pack_cta_click', { rounds: sessionStats.total, surface: tg ? 'telegram' : 'browser' }); } catch (e) {}
+  if (tg?.openLink) tg.openLink(url); else window.open(url, '_blank');
 }
 
 function continueGame() {

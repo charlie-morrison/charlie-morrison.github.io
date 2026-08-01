@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>13 Telegram Bots on a $4.17 VPS: The Real RAM Numbers</title>
+<meta name="description" content="I measured every Telegram bot on my 1 GB VPS. All 13 use 185 MB together — and a single unrelated daemon used more than all of them. Real numbers, not estimates.">
+<meta name="keywords" content="telegram bot hosting, telegram bot ram usage, cheap vps telegram bot, python-telegram-bot memory, host telegram bot 1gb">
+<link rel="canonical" href="https://charliemorrison.dev/blog/13-telegram-bots-1gb-vps/">
+<meta property="og:title" content="13 Telegram Bots on a $4.17 VPS: The Real RAM Numbers">
+<meta property="og:description" content="Everyone guesses at Telegram bot hosting costs. I measured mine: 13 bots, 185 MB total, 45 days uptime — and the biggest memory hog wasn't a bot at all.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/13-telegram-bots-1gb-vps/vps-13-telegram-bots-ram.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"13 Telegram Bots on a $4.17 VPS: The Real RAM Numbers","datePublished":"2026-08-01","dateModified":"2026-08-01","image":"https://charliemorrison.dev/blog/13-telegram-bots-1gb-vps/vps-13-telegram-bots-ram.png","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about/"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much RAM does a Telegram bot need?","acceptedAnswer":{"@type":"Answer","text":"On my server a long-polling Python bot settles between 3 MB and 21 MB of resident memory, averaging 14.2 MB across 13 running bots. The variation comes from what the bot imports rather than how many users it has: a bot pulling in an HTTP client, a database driver and a media library costs several times more than one that only answers text commands."}},{"@type":"Question","name":"Can you run multiple Telegram bots on one 1 GB VPS?","acceptedAnswer":{"@type":"Answer","text":"Yes. Thirteen bots on my 1 GB box use 185 MB of resident memory in total, which is well under a fifth of the machine. Memory is rarely the constraint people expect. The practical limits are CPU during simultaneous bursts on a single core, and the memory used by everything that is not a bot."}},{"@type":"Question","name":"Does each Telegram bot need its own server?","acceptedAnswer":{"@type":"Answer","text":"No. Each bot needs its own process and its own token, but they share one machine comfortably. Giving each bot a separate systemd service on one host keeps them isolated enough that one crashing does not take down the others, without paying for separate servers."}},{"@type":"Question","name":"Is long polling or a webhook cheaper for a Telegram bot?","acceptedAnswer":{"@type":"Answer","text":"Long polling is cheaper to run and far simpler, because it needs no public HTTPS endpoint, no certificate and no reverse proxy. It costs one idle connection per bot. Webhooks make sense when you have many bots or high message volume and already run a web server, since one endpoint can then serve every bot."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+.meta a{color:#667eea;text-decoration:none}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+a{color:#667eea}
+code{background:#f1f3f5;padding:2px 6px;border-radius:4px;font-size:.92em}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box.pack{background:linear-gradient(135deg,#f6ad5510,#dd6b2010);border-color:#dd6b20}
+.cta-box.pack h3{color:#c05621}
+.cta-box.pack a{background:linear-gradient(135deg,#f6ad55,#dd6b20)}
+.cta-box.pack .alt a{background:none;color:#c05621}
+.cta-box .alt a{background:none;color:#667eea;padding:0;font-weight:600;display:inline;margin:0}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:12px;border:1px solid #e5e7eb}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.95em}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f8f9fa}
+td.dead{color:#c92a2a;font-weight:600;white-space:nowrap}
+td.live{color:#2b8a3e;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:560px){
+table{font-size:.86em;margin:16px 0}
+th,td{padding:8px 7px}
+td.dead,td.live{white-space:normal}
+h1{font-size:1.6em}
+}
+details{background:#f8f9fa;border-radius:8px;padding:12px 16px;margin-bottom:10px}
+summary{font-weight:600;cursor:pointer}
+.note{background:#fffbea;border-left:4px solid #f0c000;padding:14px 18px;border-radius:8px;margin:24px 0;font-size:.96em}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>13 Telegram Bots on a $4.17 VPS: The Real RAM Numbers</h1>
+<div class="meta">August 1, 2026 &middot; 9 min read &middot; by <a href="/about/">Charlie Morrison</a></div>
+
+<p>Every thread about hosting a Telegram bot answers the same question with the same shrug. <em>How much server do I need?</em> &mdash; "not much", "a small VPS is fine", "1 GB is plenty". Nobody posts numbers. So people either overbuy a 4 GB instance for a bot that answers six commands, or they pick the cheapest box on the market and spend a weekend wondering whether it will fall over.</p>
+
+<p>I have thirteen Telegram bots running right now on a single 1 GB, 1&nbsp;vCPU VPS that costs <strong>$4.17 a month</strong>. Some are mine, some are client work, one is a staging copy. Instead of guessing, I measured every one of them. Here is what a Telegram bot actually costs in memory, what the real ceiling turned out to be, and the thing on my box that quietly used more RAM than all thirteen bots combined.</p>
+
+<figure>
+<img src="vps-13-telegram-bots-ram.png" alt="Terminal output showing free -m, uptime and per-service resident memory for 13 active Telegram bot systemd units on a 1 GB VPS, totalling 185 MB">
+<figcaption>Live readings from the box, 1 August 2026. Client bot names replaced with generic labels; every number is unedited.</figcaption>
+</figure>
+
+<h2>What is actually on the machine</h2>
+
+<p>The host is a 1 vCPU / 1 GB / 24 GB NVMe instance. Linux reports 961 MB usable after firmware reservations, which is the number worth planning against &mdash; not the 1024 you paid for. Thirteen <code>tg-*</code> systemd services are active: a media-downloader bot, seven demo and sales bots for a Telegram SaaS product, four client bots, and one staging duplicate.</p>
+
+<p>All of them are Python, all use long polling rather than webhooks, and each one is a separate systemd unit with its own token and its own process. That last detail matters more than it sounds like it should, and I will come back to it.</p>
+
+<h2>What a Telegram bot really costs in RAM</h2>
+
+<p>Reading resident set size straight out of <code>/proc/&lt;pid&gt;/status</code> for each service's main PID:</p>
+
+<div class="tw">
+<table>
+<tr><th>Bot</th><th>Resident memory</th><th>What it does</th></tr>
+<tr><td>Media downloader</td><td class="dead">21.0 MB</td><td>Fetches and returns media files</td></tr>
+<tr><td>SaaS demo &times;5</td><td>16.6&ndash;17.8 MB</td><td>Full menu, database, payments</td></tr>
+<tr><td>Sales / signup bots</td><td>16.5 MB</td><td>Forms, notifications</td></tr>
+<tr><td>Client bot A</td><td>16.2 MB</td><td>Team workflows</td></tr>
+<tr><td>Client bot B</td><td>10.1 MB</td><td>Command-driven</td></tr>
+<tr><td>Client bot C</td><td>9.9 MB</td><td>Command-driven</td></tr>
+<tr><td>Client bot D</td><td>7.4 MB</td><td>File uploads</td></tr>
+<tr><td>Client D staging</td><td class="live">3.2 MB</td><td>Idle duplicate</td></tr>
+</table>
+</div>
+
+<p><strong>Thirteen bots, 185.0 MB total, averaging 14.2 MB each.</strong> The whole fleet fits in under a fifth of a 1 GB machine.</p>
+
+<p>The spread is the interesting part. The lightest bot uses 3.2 MB and the heaviest uses 21.0 MB &mdash; a 6.5&times; range &mdash; and that gap has almost nothing to do with how many users each one serves. The staging bot at 3.2 MB and the client bot at 7.4 MB run the same framework as the 17 MB SaaS bots. What separates them is <em>what they import</em>.</p>
+
+<p>A bot that only parses text commands loads the Telegram library and little else. A bot that pulls in an HTTP client, a database driver, an image library and a payments SDK pays for every one of those at startup, whether a user ever triggers that code path or not. Python's memory floor is set at import time, not at request time. If you want a cheaper bot, the lever is your dependency list, not your user count.</p>
+
+<div class="note">
+<strong>One honest caveat about these numbers.</strong> RSS counts shared memory pages once per process. Thirteen Python processes on the same host share a lot &mdash; the interpreter itself, libc, and any identical library versions &mdash; so summing RSS <em>overstates</em> the true combined footprint. The real figure is somewhat below 185 MB. I am quoting the pessimistic number deliberately: if you plan against it you will not be surprised, and it is the number you can reproduce yourself in one command. <a href="https://docs.kernel.org/filesystems/proc.html" rel="nofollow">The kernel's proc documentation</a> spells out what each field does and does not include.
+</div>
+
+<h2>The biggest memory consumer was not a bot</h2>
+
+<p>This is the part that changed how I think about small hosts. Sorting every process on the box by memory, the top entry is not a Telegram bot at all:</p>
+
+<div class="tw">
+<table>
+<tr><th>Process</th><th>Resident memory</th></tr>
+<tr><td class="dead">warp-svc (networking daemon)</td><td class="dead">162.8 MB</td></tr>
+<tr><td>node</td><td>74.6 MB</td></tr>
+<tr><td>systemd-journal</td><td>49.0 MB</td></tr>
+<tr><td class="live">All 13 Telegram bots combined</td><td class="live">185.0 MB</td></tr>
+</table>
+</div>
+
+<p>A single networking daemon I installed once and forgot about uses 162.8 MB &mdash; roughly <strong>88% of what all thirteen bots use together</strong>, and about eleven average bots' worth of memory. Add <code>node</code> and the journal and the non-bot overhead comfortably exceeds the entire fleet.</p>
+
+<p>So the mental model most people bring to this is backwards. When someone asks "can my 1 GB VPS handle another bot?", the honest answer is that one more bot costs about 14 MB and is almost never the problem. The thing to audit is everything on the box that <em>is not</em> a bot: the monitoring agent, the VPN client, the container runtime, the log daemon with no retention limit. That is where a 1 GB machine actually goes.</p>
+
+<h2>The real ceiling is not memory</h2>
+
+<p>Here is the number I am not going to dress up. The box shows 687 MB of RAM in use and <strong>1041 MB of swap in use</strong>. It is over-committed, and it has been for a while.</p>
+
+<p>It has also been up for 45 days with a load average of 0.52, 0.17, 0.05, and the media bot has recorded zero restarts. Nothing is falling over. What that combination means is that a pile of memory has been paged out to disk and is simply never touched again &mdash; idle bots holding startup allocations they will not read a second time. On NVMe, that is a reasonable trade rather than a crisis, and it is exactly the behaviour Linux is supposed to produce.</p>
+
+<p>But it does define the actual limit. When the constraint arrives, it will show up as latency, not as an out-of-memory kill: a bot whose pages have been swapped out takes a beat longer to answer the first message after a quiet spell. On one vCPU, the thing to watch is several bots waking simultaneously &mdash; a shared burst is a CPU and paging problem, never a headline RAM problem.</p>
+
+<p>Two practical consequences I would apply to any small box:</p>
+
+<ul>
+<li><strong>Cap the journal.</strong> An uncapped systemd journal grows until it owns real memory and real disk. Setting a size limit is a one-line change and buys back more than a bot's worth.</li>
+<li><strong>Set per-service memory limits.</strong> systemd will do this for you with <code>MemoryMax=</code> in the unit file, so one leaking bot degrades itself instead of the twelve next to it. The options are documented in <a href="https://www.freedesktop.org/software/systemd/man/systemd.resource-control.html" rel="nofollow">systemd's resource-control manual</a>.</li>
+</ul>
+
+<h2>One process per bot, and why it is worth it</h2>
+
+<p>Thirteen separate services is not the most efficient arrangement available. I could run several bots in one process and share an interpreter, saving maybe 100 MB of the 185.</p>
+
+<p>I do not, and the reason is that the 100 MB is not the scarce resource &mdash; my attention is. When a client bot crashes on a bad update, it crashes alone. systemd restarts that one unit, the other twelve never notice, and the journal tells me exactly which one it was. Sharing a process to save memory I am not short of would trade a resource I have for a failure mode I would have to debug at two in the morning.</p>
+
+<p>The same reasoning drives long polling over webhooks. Webhooks are more efficient at scale and need one HTTPS endpoint rather than thirteen open connections. But they also need a public certificate, a reverse proxy and a working DNS record before a single message is delivered &mdash; and every one of those is a thing that can break independently. Long polling, described in the <a href="https://core.telegram.org/bots/api#getupdates" rel="nofollow">official Telegram Bot API documentation</a>, needs none of it: the bot dials out, so it works behind any firewall and needs no inbound access at all. At my volume that trade is obvious. Past a few hundred messages a second it flips, and <a href="https://docs.python-telegram-bot.org/" rel="nofollow">python-telegram-bot's documentation</a> covers both modes if you need to switch.</p>
+
+<h2>Measure your own box in one command</h2>
+
+<p>Nothing above required special tooling. To get the same table for your own server:</p>
+
+<p><code>systemctl list-units 'tg-*' --state=active --no-legend --plain</code> gives you the running units; for each one, <code>systemctl show -p MainPID --value &lt;unit&gt;</code> gives the PID, and <code>grep VmRSS /proc/&lt;pid&gt;/status</code> gives the memory. Then run <code>ps -eo rss,comm --sort=-rss | head</code> &mdash; that second command is the one that matters, because it is what showed me the 162.8 MB daemon I would never have suspected.</p>
+
+<p>If you are sizing a box before you build anything: budget about 15 MB per bot, then add up everything else you intend to install, and let the second number drive the decision. On this evidence a 1 GB instance holds well over thirty typical bots on memory alone. It will run out of CPU, patience, or forgotten background daemons long before it runs out of RAM.</p>
+
+<div class="cta-box">
+<h3>See a Mini App that needs no server at all</h3>
+<p>The cheapest bot to host is the one with no backend. My party game ships its logic inside the page Telegram opens &mdash; 151 questions per language, English and Ukrainian, no signup, nothing to switch off.</p>
+<a href="https://t.me/charlie_party_bot/partygame?startapp=vpsram">Open the Party Game</a>
+<span class="alt">No Telegram? It runs in a browser too: <a href="https://charliemorrison.dev/party-game/?src=vpsram">charliemorrison.dev/party-game</a></span>
+</div>
+
+<div class="cta-box pack">
+<h3>Not here to run a server?</h3>
+<p>If you landed on this because you wanted a game night rather than a hosting bill, <strong>The Telegram Party Pack</strong> skips the infrastructure entirely: 255 prompts across six games, rewritten for a group chat, plus a host guide covering polls, spoiler reveals and keeping a round legible when replies arrive out of order. Files you own &mdash; no server, no uptime, nothing to maintain.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=13-telegram-bots-1gb-vps">Get the pack &mdash; $9.99</a>
+<span class="alt">The Mini App above stays free, no signup. <a href="/telegram-party-pack/">See what's in the pack</a> before you buy.</span>
+</div>
+
+<h2>FAQ</h2>
+
+<details><summary>How much RAM does a Telegram bot need?</summary>
+<p>On this server a long-polling Python bot settles between 3 MB and 21 MB resident, averaging 14.2 MB across 13 bots. The variation tracks what the bot imports rather than how many users it has &mdash; an HTTP client, a database driver and a media library cost more at startup than any amount of traffic does at runtime.</p></details>
+
+<details><summary>Can I run multiple Telegram bots on one 1 GB VPS?</summary>
+<p>Yes. Thirteen bots here use 185 MB in total, under a fifth of the machine. Memory is rarely the binding constraint &mdash; a single vCPU during simultaneous bursts, and non-bot daemons, both bite first.</p></details>
+
+<details><summary>Does each bot need its own server?</summary>
+<p>No. Each needs its own process and token, but one host handles many. A separate systemd service per bot on one machine gives you crash isolation without paying for separate servers.</p></details>
+
+<details><summary>Long polling or webhooks?</summary>
+<p>Long polling is cheaper and much simpler: no public endpoint, no certificate, no reverse proxy, and it works behind any firewall because the bot dials out. Webhooks win when you have high volume and already run a web server. At thirteen low-traffic bots, polling is not close to being the bottleneck.</p></details>
+
+<h2>Related reading</h2>
+<ul>
+<li><a href="/blog/best-telegram-download-bots-2026/">Best Telegram download bots in 2026</a> &mdash; the media bot at the top of that memory table, and what it actually does.</li>
+<li><a href="/blog/i-messaged-18-telegram-game-bots/">I messaged 18 "best" Telegram game bots &mdash; 7 never replied</a> &mdash; what happens when nobody pays the $4.17.</li>
+<li><a href="/bots/">All the bots and Mini Apps I run</a> &mdash; including the ones I retired, marked as retired.</li>
+</ul>
+
+<a class="back" href="/blog/">&larr; Back to the blog</a>
+</article>
+<footer>
+<p>&copy; 2026 Charlie Morrison Digital &middot; <a href="/about/">About</a> &middot; <a href="/blog/">Blog</a> &middot; <a href="/tools/">Free tools</a></p>
+</footer>
+</body>
+</html>

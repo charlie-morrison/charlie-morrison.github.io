@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{domains:["charliemorrison.dev","botcraftgroup.com"]}});
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram Game Night Planner: Free Paste-Ready Script</title>
+<meta name="description" content="Build a timed Telegram group-chat game night in one click. Truth or Dare, Never Have I Ever, Would You Rather and more, as copy-paste blocks with poll options and spoiler tags. Free, no signup.">
+<meta name="keywords" content="telegram games for group, telegram games to play with friends, telegram party games, never have i ever telegram, telegram group chat games, game night script">
+<link rel="canonical" href="https://charliemorrison.dev/telegram-game-night-planner/">
+<meta property="og:title" content="Telegram Game Night Planner — Free Paste-Ready Script">
+<meta property="og:description" content="A timed game-night plan for a Telegram group chat: rounds, host lines, poll blocks and spoiler-tag reveals you can paste straight into the chat. Free, no signup.">
+<meta property="og:url" content="https://charliemorrison.dev/telegram-game-night-planner/">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Telegram Game Night Planner","description":"Free tool that builds a timed Telegram group-chat game night as paste-ready blocks with poll options and spoiler-tag reveals","url":"https://charliemorrison.dev/telegram-game-night-planner","applicationCategory":"EntertainmentApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.6;background:#f8f9fa}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+.container{max-width:900px;margin:0 auto;padding:20px}
+h1{font-size:2em;margin:30px 0 8px;text-align:center}
+.subtitle{text-align:center;color:#666;margin-bottom:30px;font-size:1.05em}
+.input-section{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px}
+.input-section label{display:block;font-weight:600;margin-bottom:6px;font-size:.95em}
+.input-section select{width:100%;border:2px solid #e0e0e0;border-radius:8px;padding:12px;font-size:.95em;font-family:inherit;margin-bottom:16px;background:#fff}
+.input-section select:focus{outline:none;border-color:#667eea}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:600px){.row3{grid-template-columns:1fr}}
+.btn{display:block;width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:16px;border:none;border-radius:8px;font-size:1.1em;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.9}
+#results{display:none;margin-top:24px}
+.summary{background:linear-gradient(135deg,#667eea15,#764ba215);border:1px solid #667eea40;border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:.95em}
+.summary strong{color:#667eea}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.actions button{flex:1;min-width:150px;background:#fff;border:2px solid #667eea;color:#667eea;padding:11px;border-radius:8px;font-weight:600;cursor:pointer;font-size:.92em;transition:all .2s}
+.actions button:hover{background:#667eea;color:#fff}
+.round{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:16px;position:relative}
+.round h3{margin-bottom:4px;font-size:1.15em;border-bottom:2px solid #f0f0f5;padding-bottom:8px;padding-right:70px}
+.round .slot{font-size:.78em;font-weight:700;color:#764ba2;text-transform:uppercase;letter-spacing:.03em}
+.round .why{color:#555;font-size:.88em;margin:10px 0 12px}
+.paste{background:#0f1420;color:#e6edf3;border-radius:8px;padding:14px 16px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em;line-height:1.65;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}
+.copy-btn{position:absolute;top:18px;right:16px;background:none;border:1px solid #ddd;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.8em;color:#888;transition:all .2s}
+.copy-btn:hover{border-color:#667eea;color:#667eea}
+.cta{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center;margin-top:16px;border:1px solid #667eea30}
+.cta h3{margin-bottom:8px}
+.cta p{color:#555;margin-bottom:16px}
+.cta a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;transition:opacity .2s}
+.cta a:hover{opacity:.9}
+.cta .small{font-size:.82em;color:#999;margin-top:10px;margin-bottom:0}
+.cta .small a{background:none;color:#667eea;padding:0;font-weight:600;text-decoration:underline}
+.tools-bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:24px;padding-top:20px;border-top:1px solid #eee}
+.tools-bar a{padding:6px 14px;border:1px solid #ddd;border-radius:20px;text-decoration:none;color:#555;font-size:.85em;transition:all .2s}
+.tools-bar a:hover{border-color:#667eea;color:#667eea}
+.explainer{background:#fff;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-top:20px;font-size:.95em;color:#444}
+.explainer h2{font-size:1.25em;margin-bottom:12px}
+.explainer h3{font-size:1.05em;margin:16px 0 6px}
+.explainer ul{margin:8px 0 8px 20px}
+.explainer li{margin-bottom:5px}
+footer{text-align:center;padding:30px;color:#888;font-size:.85em}
+</style>
+</head>
+<body>
+<nav><a href="https://charliemorrison.dev">&larr; Charlie Morrison</a></nav>
+<div class="container">
+<h1>Telegram Game Night Planner</h1>
+<p class="subtitle">A group chat is not a living room. This builds a timed game night for one &mdash; rounds, host lines, poll blocks and spoiler-tag reveals, ready to paste into Telegram.</p>
+
+<div class="input-section">
+<div class="row3">
+<div>
+<label for="size">How many people?</label>
+<select id="size">
+<option value="small">4&ndash;6 &mdash; everyone knows everyone</option>
+<option value="mid" selected>7&ndash;12 &mdash; the usual group chat</option>
+<option value="big">13+ &mdash; big, half of them lurk</option>
+</select>
+</div>
+<div>
+<label for="vibe">How spicy?</label>
+<select id="vibe">
+<option value="chill" selected>Chill &mdash; work friends, family chat</option>
+<option value="spicy">Spicy &mdash; close friends, late night</option>
+</select>
+</div>
+<div>
+<label for="len">How long?</label>
+<select id="len">
+<option value="30">30 minutes</option>
+<option value="60" selected>60 minutes</option>
+<option value="90">90 minutes</option>
+</select>
+</div>
+</div>
+<button class="btn" onclick="buildNight()">Build my game night &rarr;</button>
+</div>
+
+<div id="results"></div>
+
+<div class="explainer">
+<h2>Why a chat game night needs a script at all</h2>
+<p>In a room, a game runs itself: someone asks, everyone hears it, the next person goes. A Telegram group has none of that. People answer forty minutes apart, two replies land at once and cancel each other out, and the first answer anchors everyone who reads after it. The three fixes below are what this planner bakes into every block it gives you.</p>
+<h3>1. Use polls when the first answer would spoil the rest</h3>
+<p>Would You Rather and Most Likely To are ruined the moment one person types their pick &mdash; everyone after them is voting on a suggestion, not a choice. Telegram's built-in poll (anonymous by default) collects everyone independently and reveals the split at once. Every poll round here comes with the question and its options already separated, so you paste the question into the poll composer and the options into the option fields.</p>
+<h3>2. Use spoiler tags for reveals</h3>
+<p>Wrapping text in <code>||double pipes||</code> hides it behind a tap in Telegram. That is what makes Paranoia work in text: the question is public, the name is hidden, and only people who choose to tap see it. Without it the round is just gossip with extra steps.</p>
+<h3>3. Name a host and pin the rules</h3>
+<p>Someone has to post the next round. A chat game with no named host dies at round two, every time. Pin the rules message so latecomers can catch up without asking, and say the pace out loud &mdash; "one round every ten minutes, answer whenever you see it" &mdash; so people who are cooking dinner do not think they have missed it.</p>
+<h3>What you get here, and what you do not</h3>
+<p>This planner draws on a free subset of <b>89 prompts</b> across the six games. The paid pack is the same structure with <b>255 prompts</b>, a full host guide, and copy-paste blocks for every round in a PDF. Nothing here expires and nothing asks for an email &mdash; the tool runs entirely in your browser.</p>
+</div>
+
+<div class="tools-bar">
+<a href="https://charliemorrison.dev/party-game/">Party Game Mini App</a>
+<a href="https://charliemorrison.dev/blog/best-telegram-party-games-2026/">Best Telegram party games</a>
+<a href="https://charliemorrison.dev/blog/how-to-run-a-telegram-game-night/">How to run a game night</a>
+<a href="https://charliemorrison.dev/telegram-party-pack/">The Telegram Party Pack</a>
+<a href="https://charliemorrison.dev/tools/">All free tools</a>
+</div>
+</div>
+<footer>&copy; 2026 Charlie Morrison &middot; This tool runs locally in your browser &middot; No data collected</footer>
+
+<script>
+const BANK = {"truths": ["What's the last thing you searched for that you'd be embarrassed to read out loud?", "Which app do you open first in the morning, honestly?", "What's a food combination you love that everyone else finds disgusting?", "What's the pettiest reason you've ever stopped talking to someone?", "What's the longest you've gone without washing a specific item of clothing you still wear?", "Which one of your own habits would annoy you most in someone else?", "What's a compliment you've received that you think about way too often?", "What's the most money you've spent on something you used exactly once?", "What's something you changed your mind about completely in the last two years?", "What do you think people consistently get wrong about you?"], "truths_spicy": ["What's the biggest lie you've told someone in this group chat?", "Who in this chat would you swap lives with for a week, and what would you do first?", "What's something you've done that you'd genuinely never tell your parents?", "Who was the last person you stalked on social media, and how far back did you scroll?", "What's the most irrational reason you've ever disliked someone on sight?", "Have you ever pretended to be busy specifically to avoid someone in this chat?", "What's a decision you made that you're still quietly not sure about?", "When did you last feel genuinely proud of yourself, and did you tell anyone?", "What's a fear you have that you know is irrational but can't shake?", "What would you do differently if you knew nobody would judge you for it?"], "dares": ["Send the 7th photo in your camera roll. No explanation, no context.", "Post a voice message singing the chorus of the last song you played.", "Screenshot your most recent Notes app entry and send it.", "Send a selfie doing your best impression of someone else in this chat.", "Post your screen time for yesterday. All of it.", "Send the last photo you took, even if it's a receipt.", "Text your most recent contact 'I need to tell you something' and screenshot the reply.", "Change your profile photo to whatever the person above you picks, for one hour."], "dares_spicy": ["Send a screenshot of your most recent conversation, top message blurred only.", "Let the group pick one contact — send them a genuine compliment right now and screenshot it.", "Post your search history from the last hour.", "Send a voice note confessing something small you've never told this chat.", "Write a two-line poem about the last person who messaged this chat.", "Describe your job to the group using only emoji. First to guess correctly gets a free skip.", "Rename this chat to whatever you want. It stays for one round.", "Send a voice note pitching a terrible business idea as if you mean it."], "nhie": ["Never have I ever left a shop empty-handed because an assistant asked if I needed help.", "Never have I ever pretended to know a song's lyrics in front of someone.", "Never have I ever taken a photo of my food before eating it.", "Never have I ever fallen asleep during a film everyone said was a masterpiece.", "Never have I ever walked into a glass door.", "Never have I ever waved at someone who was waving at the person behind me.", "Never have I ever bought something purely because it was on sale.", "Never have I ever pretended my phone was ringing to escape a conversation.", "Never have I ever forgotten someone's name mid-introduction.", "Never have I ever eaten something that fell on the floor and said nothing."], "nhie_spicy": ["Never have I ever read a message I wasn't supposed to see.", "Never have I ever cancelled on someone and then posted a story from somewhere else.", "Never have I ever screenshotted a chat to send to another chat.", "Never have I ever pretended to lose a message I'd actually read.", "Never have I ever kept following someone purely to keep track of them.", "Never have I ever let someone else take the blame for something I did.", "Never have I ever lied about my plans to get out of seeing a friend.", "Never have I ever said 'no worries' while very much having worries.", "Never have I ever gone through someone's photos further back than I'd admit.", "Never have I ever kept a secret from someone in this chat about someone in this chat."], "wyr": [["Would you rather have your search history public or your camera roll public?", "Search history", "Camera roll"], ["Would you rather always have to say what you're thinking or never speak again?", "Always say it", "Never speak"], ["Would you rather lose the ability to lie or the ability to keep a secret?", "Can't lie", "Can't keep secrets"], ["Would you rather be 10 minutes late to everything or 20 minutes early to everything?", "Always late", "Always early"], ["Would you rather have unlimited money but no free time, or unlimited free time but just enough money?", "Money, no time", "Time, just enough"], ["Would you rather know how you die or when you die?", "How", "When"], ["Would you rather never use social media again or never watch another film?", "No social media", "No films"], ["Would you rather have every conversation recorded or every thought displayed for one second?", "Recorded", "Displayed"], ["Would you rather be famous for something embarrassing or unknown for something great?", "Famous, embarrassing", "Unknown, great"], ["Would you rather always be slightly too hot or slightly too cold?", "Too hot", "Too cold"]], "mlt": ["…be late to their own wedding?", "…get famous by accident?", "…leave the group chat dramatically and come back an hour later?", "…survive the longest without their phone?", "…text an ex at 3am?", "…become a millionaire and tell nobody?", "…get caught singing in the car by a stranger?", "…move abroad on a week's notice?", "…forget their own birthday?", "…get into an argument with a stranger online and win?"], "paranoia": ["Who in this chat would you call first in an emergency?", "Who here is most likely to keep a secret forever?", "Who would you least want to be stuck in traffic with?", "Who gives the best advice in this group?", "Who is most likely to become the most successful?", "Who would win in an argument against everyone else here?", "Who here is the worst at replying to messages?", "Who would you trust to plan your birthday?"], "story": ["The group chat was created for one very specific reason, and nobody has mentioned it since…", "At 4:07am, everyone in this chat received the same message from an unknown number…", "The package arrived addressed to all of us, and none of us had ordered anything…", "It started as a normal Tuesday, until the lift stopped between floors…", "Nobody remembers who suggested the trip, and now the tickets are non-refundable…"]};
+const BUY = "https://charliemorrison.lemonsqueezy.com/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&utm_medium=tool&utm_campaign=telegram&utm_content=telegram-game-night-planner";
+let LAST = null, SEED = 0;
+
+function pick(arr, n, seed){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){const j=(Math.floor(Math.sin(seed*9301+i*49297)*233280)%(i+1)+i+1)%(i+1);const t=a[i];a[i]=a[j];a[j]=t;}
+  return a.slice(0, n);
+}
+
+function roundsFor(len){
+  if(len==="30") return ["open","nhie","wyr","close"];
+  if(len==="90") return ["open","truth","nhie","wyr","mlt","paranoia","story","close"];
+  return ["open","truth","nhie","wyr","mlt","close"];
+}
+
+function build(kind, seed, size, vibe){
+  const many = size==="big", few = size==="small";
+  const n = many ? 3 : 4;
+  switch(kind){
+    case "open": return {
+      title:"Open the night",
+      why:"Pin this message. It is the whole reason latecomers do not derail round two by asking what is going on.",
+      text:"🎲 Game night starts now.\n\nRules, so nobody has to ask:\n• I'm hosting — I post each round, you answer whenever you see it.\n• One round roughly every "+(few?"8":"10")+" minutes. No rush, no penalty for being late to a round.\n• Polls are anonymous. Everything else is not.\n• Anyone can tap out of a round without explaining.\n\nReact 👍 when you're in."
+    };
+    case "truth": {
+      const sp = vibe==="spicy";
+      const qs = pick(sp?BANK.truths_spicy:BANK.truths, n, seed+1), ds = pick(sp?BANK.dares_spicy:BANK.dares, 2, seed+2);
+      return {title:"Round 1 — Truth or Dare",
+        why:"Dares are written to be doable alone with a phone in two minutes, because nobody is in the same room.",
+        text:"🔥 Round 1 — Truth or Dare\n\nReply with TRUTH or DARE, then I'll send yours. Or just pick one below and answer it yourself.\n\nTruths:\n"+qs.map((q,i)=>(i+1)+". "+q).join("\n")+"\n\nDares:\n"+ds.map((d,i)=>(i+1)+". "+d).join("\n")};
+    }
+    case "nhie": {
+      const qs = pick(vibe==="spicy"?BANK.nhie_spicy:BANK.nhie, many?4:5, seed+3);
+      return {title:"Round 2 — Never Have I Ever",
+        why:"Ten fingers do not survive a group chat. Counting down from a number in your own message is what replaces them.",
+        text:"🙈 Round 2 — Never Have I Ever\n\nEveryone starts at 5 points. If you HAVE done it, drop a point. Post your running score after each one.\n\n"+qs.map((q,i)=>(i+1)+". "+q).join("\n")+"\n\nLowest score at the end has lived the most. Post your final number."};
+    }
+    case "wyr": {
+      const qs = pick(BANK.wyr, many?3:3, seed+4);
+      return {title:"Round 3 — Would You Rather (polls)",
+        why:"Paste each question into Telegram's poll composer with the two options below it. A typed answer here would anchor everyone reading after it.",
+        text:"⚖️ Round 3 — Would You Rather\n\nThree polls, vote in all of them, then argue in the replies.\n\n"+qs.map((q,i)=>"POLL "+(i+1)+"\nQuestion: "+q[0]+"\nOption A: "+q[1]+"\nOption B: "+q[2]).join("\n\n")};
+    }
+    case "mlt": {
+      const qs = pick(BANK.mlt, many?3:4, seed+5);
+      return {title:"Round 4 — Most Likely To (polls)",
+        why:"Make the poll options the names of people in the chat. Anonymous voting is the only reason this stays funny.",
+        text:"👉 Round 4 — Most Likely To\n\nEach one is a poll — options are everyone's names. Anonymous, so vote honestly.\n\n"+qs.map((q,i)=>"POLL "+(i+1)+"\nQuestion: Who is most likely to "+q.replace(/^…/,"")).join("\n\n")};
+    }
+    case "paranoia": {
+      const qs = pick(BANK.paranoia, 3, seed+6);
+      return {title:"Round 5 — Paranoia",
+        why:"The spoiler tags are the game. Question public, answer hidden, and only people who choose to look find out.",
+        text:"🫢 Round 5 — Paranoia\n\nI ask, you answer with a name wrapped in spoiler tags: ||like this||. Only people who tap will see it.\n\n"+qs.map((q,i)=>(i+1)+". "+q).join("\n")+"\n\nFormat your reply as: 3 — ||Name||"};
+    }
+    case "story": {
+      const s = pick(BANK.story, 1, seed+7)[0];
+      return {title:"Round 6 — Story Chain",
+        why:"Reply-threading is what keeps this readable. Without it the story and the commentary become the same wall of text.",
+        text:"📖 Round 6 — Story Chain\n\nOne sentence each. Always REPLY to the last sentence, never post loose — otherwise the story and the jokes get tangled.\n\nOpening line:\n\""+s+"\"\n\nGo. Two passes each, then whoever is last has to end it."};
+    }
+    case "close": return {
+      title:"Close it out",
+      why:"Ending deliberately is what makes people show up next time. A night that fizzles reads as a night that flopped.",
+      text:"🏁 That's the night.\n\nPost your Never Have I Ever score if you haven't.\n\nBest answer of the night goes to: (say a name, I'll tally)\n\nSame time next week? React 👍 / 👎"
+    };
+  }
+}
+
+function buildNight(){
+  const size=document.getElementById('size').value;
+  const vibe=document.getElementById('vibe').value;
+  const len=document.getElementById('len').value;
+  const kinds=roundsFor(len);
+  const per = Math.floor(parseInt(len)/kinds.length);
+  const blocks=kinds.map((k,i)=>{
+    const b=build(k, SEED+i*13, size, vibe);
+    b.slot = (i*per)+"–"+((i+1)*per)+" min";
+    return b;
+  });
+  const sizeLabel={small:"4–6 people",mid:"7–12 people",big:"13+ people"}[size];
+  const summary='<div class="summary"><strong>'+len+'-minute night</strong> for <strong>'+sizeLabel+'</strong>, '+
+    (vibe==="spicy"?"spicy":"chill")+' — '+blocks.length+' blocks, paste them in order. '+
+    (vibe==="spicy"?"Spicy picks lean personal; swap any prompt you would not want pinned.":"Chill picks are safe for a work or family chat.")+'</div>';
+  const actions='<div class="actions"><button onclick="copyAll()">📋 Copy the whole script</button><button onclick="regen()">🔁 Different prompts</button></div>';
+  const html=blocks.map((b,i)=>
+    '<div class="round"><button class="copy-btn" onclick="cp(this)" data-t="'+encodeURIComponent(b.text)+'">Copy</button>'+
+    '<div class="slot">'+b.slot+'</div><h3>'+b.title+'</h3>'+
+    '<div class="why">'+b.why+'</div><div class="paste">'+esc(b.text)+'</div></div>').join('');
+  const cta='<div class="cta"><h3>Hosting this more than once?</h3>'+
+    '<p>This planner uses a free subset — 89 prompts. <b>The Telegram Party Pack</b> is 255 prompts across the same six games, plus a host guide for a full 60-minute night and copy-paste blocks for every round, as a PDF you keep.</p>'+
+    '<a href="'+BUY+'" onclick="gtag(\'event\',\'pack_click\',{from:\'planner\'})">Get the pack — $9.99</a>'+
+    '<p class="small">Prefer to just play? The <a href="https://charliemorrison.dev/party-game/?src=planner">free Mini App</a> runs Truth or Dare, Never Have I Ever and Would You Rather with no signup.</p></div>';
+  LAST=blocks;
+  const r=document.getElementById('results');
+  r.innerHTML=summary+actions+html+cta;
+  r.style.display='block';
+  r.scrollIntoView({behavior:'smooth',block:'start'});
+  gtag('event','night_built',{size:size,vibe:vibe,len:len});
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function regen(){SEED+=7;buildNight();}
+function cp(btn){const t=decodeURIComponent(btn.getAttribute('data-t'));
+  navigator.clipboard.writeText(t).then(()=>{btn.textContent='Copied ✓';setTimeout(()=>btn.textContent='Copy',1500);});}
+function copyAll(){if(!LAST)return;
+  const all=LAST.map(b=>'— '+b.title+' ('+b.slot+') —\n\n'+b.text).join('\n\n\n');
+  navigator.clipboard.writeText(all).then(()=>{gtag('event','script_copied',{});});}
+</script>
+</body>
+</html>

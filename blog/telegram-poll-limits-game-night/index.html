@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Tested Telegram's Poll Limits: What Breaks a Quiz Night</title>
+<meta name="description" content="12 options, 100 characters each, no bold or spoilers anywhere — and timers that get silently rounded instead of refused. Measured against the live API, not the docs.">
+<meta name="keywords" content="telegram poll limit, telegram poll max options, telegram quiz bot, telegram game night, sendpoll api">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-poll-limits-game-night/">
+<meta property="og:title" content="I Tested Telegram's Poll Limits: What Breaks a Quiz Night">
+<meta property="og:description" content="I sent deliberately-broken polls at Telegram until it said no. 12 options, 100 characters per option, no formatting at all — and one timer behaviour nobody warns you about.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-poll-limits-game-night/telegram-poll-limits.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"I Tested Telegram's Poll Limits: What Breaks a Quiz Night","datePublished":"2026-08-03","dateModified":"2026-08-03","image":"https://charliemorrison.dev/blog/telegram-poll-limits-game-night/telegram-poll-limits.png","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about/"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How many options can a Telegram poll have?","acceptedAnswer":{"@type":"Answer","text":"Twelve. A thirteenth option is refused outright with the error \"poll can't have more than 12 options\". One option is also accepted, which is useful as a single-button prompt but is rarely what you want in a game. For a round where everyone votes for a person, twelve is the real cap on your group size."}},{"@type":"Question","name":"How long can a Telegram poll option be?","acceptedAnswer":{"@type":"Answer","text":"100 characters per option, and the question itself can run to 300. The limit counts characters rather than bytes: an option of 100 emoji is 400 bytes on the wire and is accepted, while 101 emoji is refused with the same length error as 101 letters."}},{"@type":"Question","name":"Can you put bold text or a spoiler in a Telegram poll?","acceptedAnswer":{"@type":"Answer","text":"No. Poll options carry no formatting entities at all — markup such as **bold** or a spoiler tag is stored and displayed verbatim, as literal characters. The question field accepts a parse mode but only for custom emoji, so bold sent as MarkdownV2 comes back stripped with an empty entity list. Put the hidden text in a normal message and use the poll only for the vote."}},{"@type":"Question","name":"How long can a Telegram poll stay open?","acceptedAnswer":{"@type":"Answer","text":"Between 5 seconds and 2,628,000 seconds, which is 30 days. Values outside that range are not rejected — they are silently rounded to the nearest allowed one, so a 4-second timer becomes 5 seconds without any warning. If you send an open_period and a close_date together, which the documentation says you cannot, the request is still accepted and the open_period wins."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+.meta a{color:#667eea;text-decoration:none}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+a{color:#667eea}
+code{background:#f1f3f5;padding:2px 6px;border-radius:4px;font-size:.92em}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box.pack{background:linear-gradient(135deg,#f6ad5510,#dd6b2010);border-color:#dd6b20}
+.cta-box.pack h3{color:#c05621}
+.cta-box.pack a{background:linear-gradient(135deg,#f6ad55,#dd6b20)}
+.cta-box .alt a{background:none;color:#667eea;padding:0;font-weight:600;display:inline;margin:0}
+.cta-box.pack .alt a{background:none;color:#c05621}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:12px;border:1px solid #e5e7eb}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.95em}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f8f9fa}
+td.dead{color:#c92a2a;font-weight:600;white-space:nowrap}
+td.live{color:#2b8a3e;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:560px){
+table{font-size:.86em;margin:16px 0}
+th,td{padding:8px 7px}
+td.dead,td.live{white-space:normal}
+h1{font-size:1.6em}
+}
+details{background:#f8f9fa;border-radius:8px;padding:12px 16px;margin-bottom:10px}
+summary{font-weight:600;cursor:pointer}
+.note{background:#fffbea;border-left:4px solid #f0c000;padding:14px 18px;border-radius:8px;margin:24px 0;font-size:.96em}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>I Tested Telegram's Poll Limits: What Breaks a Quiz Night</h1>
+<div class="meta">August 3, 2026 &middot; 9 min read &middot; by <a href="/about/">Charlie Morrison</a></div>
+
+<p>A game night in a group chat lives or dies on polls. They are the only mechanic Telegram gives you where twelve people can answer at once without the first reply telling everyone else what to think. Every round I have ever run &mdash; who is lying, which answer is right, who gets the dare &mdash; ends in a poll.</p>
+
+<p>So it is worth knowing exactly where a poll stops working. Not the theory: the point where the API says no, and the more annoying point where it says yes and quietly does something else. I spent an evening sending deliberately-broken polls at Telegram until it complained, then read every poll back a second way to see what a person in the chat would actually get.</p>
+
+<p>Some of it matches <a href="https://core.telegram.org/bots/api#sendpoll" rel="nofollow">the official <code>sendPoll</code> reference</a>. Three things do not, and one of those three has silently ruined a round for me before I understood it.</p>
+
+<figure>
+<img src="telegram-poll-limits.png" alt="Terminal output from three scripts probing the Telegram sendPoll API: length and option-count limits, timer clamping behaviour, and poll text read back over MTProto showing empty entity lists">
+<figcaption>Unedited output from the three probe scripts, 3 August 2026. Every number in this post comes from these runs.</figcaption>
+</figure>
+
+<h2>How I tested it</h2>
+
+<p>Three passes, because one was not enough to catch my own mistakes.</p>
+
+<p>The first pass sends polls at the boundary of every documented limit &mdash; a 300-character question and a 301-character one, twelve options and thirteen, and so on &mdash; and records the exact accept or reject. The second pass re-sends the interesting cases and reads what Telegram <em>echoes back</em> in the response, because "accepted" and "sent as I asked" turn out to be different things. The third pass reads the same polls back over the client protocol with a normal user account, which is the closest I can get to seeing what a member of the group sees without asking anyone to look over my shoulder.</p>
+
+<p>That third pass exists because of a habit I had to learn the hard way: an exit code of zero tells you the request left the building, not that the thing arrived intact.</p>
+
+<h2>The hard walls</h2>
+
+<p>These are the limits that produce a clean, immediate error. You will never hit them by accident with a short question, and you will hit all of them the moment you paste in something you wrote in a document.</p>
+
+<div class="tw">
+<table>
+<tr><th>What</th><th>Limit</th><th>What happens past it</th></tr>
+<tr><td>Question</td><td class="live">300 characters</td><td class="dead">poll question length must not exceed 300</td></tr>
+<tr><td>Options per poll</td><td class="live">12</td><td class="dead">poll can't have more than 12 options</td></tr>
+<tr><td>Text per option</td><td class="live">100 characters</td><td class="dead">poll options length must not exceed 100</td></tr>
+<tr><td>Quiz explanation</td><td class="live">200 characters</td><td class="dead">message is too long</td></tr>
+<tr><td>Empty option</td><td class="live">not allowed</td><td class="dead">text must be non-empty</td></tr>
+<tr><td>Two identical options</td><td class="live">allowed</td><td>accepted without complaint</td></tr>
+</table>
+</div>
+
+<p>Twelve is the number that shapes a game night more than any other. A round where everybody votes for a person &mdash; who is most likely to lose their phone, who is bluffing &mdash; caps out at a group of twelve, because each player needs their own option. Past that you are splitting the room into two polls and reconciling the counts by hand, which is exactly as fun as it sounds. If your group runs bigger than twelve, design the round as a vote on <em>answers</em>, not on <em>people</em>.</p>
+
+<p>One hundred characters per option sounds generous until you write a Would You Rather. "Always have to say everything on your mind out loud, even in meetings" is 70. The version with the funny qualifier on the end is 118, and it is refused. The workaround is not to shorten the joke &mdash; it is to put the full text in the message above the poll and keep the options to the two short labels people are choosing between.</p>
+
+<h2>The character cap counts characters, not bytes</h2>
+
+<p>This one I expected to go the other way. An option of 100 dice emoji is 400 bytes on the wire, and it is accepted. One hundred and one of them is refused with the same error as 101 letters.</p>
+
+<p>So the cap is counted in characters as a person would count them, not in the storage a string takes up. That matters for anyone writing prompts with emoji in them, and doubly for anyone writing them in a language whose characters are multi-byte by default &mdash; a Ukrainian or Greek option gets the same 100 characters as an English one, not half as many. <a href="https://www.unicode.org/faq/utf_bom.html" rel="nofollow">The Unicode consortium's own FAQ</a> is the reference for why those two counts differ so much in the first place.</p>
+
+<h2>Timers get rounded, not refused</h2>
+
+<p>Here is the behaviour that costs you a round. A poll can carry a countdown &mdash; <code>open_period</code> &mdash; and the allowed range is 5 seconds to 2,628,000 seconds, which is 30 days.</p>
+
+<p>Send something outside that range and Telegram does not reject it. It <strong>silently rounds it into range and tells you nothing</strong>:</p>
+
+<ul>
+<li>Ask for a 4-second timer, get 5 seconds.</li>
+<li>Ask for 2,628,001 seconds, get 2,628,000.</li>
+</ul>
+
+<p>The response comes back <code>ok: true</code> with the corrected number sitting in it, which is easy to miss if you are only checking that the call succeeded. And the corrected timer is real: I sent a poll asking for 4 seconds, waited nine, and tried to close it manually. Telegram refused &mdash; <em>poll can't be stopped</em> &mdash; because it had already closed itself on schedule.</p>
+
+<p>The same forgiving-to-a-fault behaviour shows up in a second place. The documentation says <code>open_period</code> and <code>close_date</code> cannot be used together. Send both anyway and the request is accepted; the <code>open_period</code> wins and the <code>close_date</code> you specified is overwritten. I asked for a 60-second timer and a close time ten minutes out, and got a poll that closed in 60 seconds.</p>
+
+<div class="note">
+<strong>Why this bites in practice.</strong> Timed rounds are where hosts reach for these values, usually by computing them from something &mdash; "close this when the round ends", "give them a third of the remaining time". Arithmetic that lands on 3 or 4 seconds silently becomes 5, and arithmetic that produces both a period and a date silently drops one of them. Nothing errors, nothing logs, and the round just runs on a timer you did not choose. Print the value Telegram echoes back, not the one you sent.
+</div>
+
+<h2>There is no bold, no italics and no spoiler inside a poll</h2>
+
+<p>Poll options carry no formatting at all. Not "limited formatting" &mdash; none. I sent three options containing a spoiler tag, a bold marker and an HTML bold tag, then read the poll back over the client protocol. All three came back as literal text, with an empty entity list on every one of them.</p>
+
+<p>The question field is only slightly better: it accepts a parse mode, but <a href="https://core.telegram.org/bots/api#sendpoll" rel="nofollow">the reference</a> restricts it to custom emoji entities. I sent a question as MarkdownV2 bold; the asterisks were consumed and the text arrived plain, with no bold and no entities. Not an error &mdash; just quietly unformatted.</p>
+
+<p>For a game night this rules out the trick everyone reaches for first: hiding the answer behind a spoiler tag inside the poll. <code>||like this||</code> in an option is displayed exactly as those characters, answer and all. What works instead is a two-part round &mdash; the hidden text goes in a normal message, where spoiler formatting is fully supported, and the poll below it carries only the plain-text choices. It is one extra message and it is the difference between a reveal and a leak.</p>
+
+<h2>Quiz mode: one correct answer, whatever the field name suggests</h2>
+
+<p>Quiz polls &mdash; the mode <a href="https://telegram.org/blog/polls-2-0-vmq" rel="nofollow">Telegram introduced with Polls 2.0</a> &mdash; mark one option right and can show an explanation when someone picks wrong. The parameter is now named in the plural, <code>correct_option_ids</code>, which reads like an invitation to mark two answers correct.</p>
+
+<p>It is not. Passing two ids is refused with <code>QUIZ_CORRECT_ANSWERS_TOO_MUCH</code>. The older singular parameter still works and comes back echoed in both the singular and plural fields, so nothing you already wrote is broken &mdash; but a quiz round with two acceptable answers has to be built as two separate questions.</p>
+
+<p>Two smaller findings from the same pass. A quiz without a correct answer is refused outright (<em>correct quiz option list must be non-empty</em>), so you cannot use quiz mode purely for its nicer layout. And the explanation is documented as allowing at most two line breaks &mdash; I sent three and it was accepted, which is the one place the API turned out to be more permissive than its own description rather than less.</p>
+
+<h2>Four switches worth knowing before your next round</h2>
+
+<p>While checking the limits I went through the full parameter list, and a few of the newer ones solve group-chat problems I had been solving by hand:</p>
+
+<ul>
+<li><strong><code>hide_results_until_closes</code></strong> &mdash; nobody sees the tally until the poll closes. This is the native fix for the single biggest problem with voting in a group: the first three votes anchor everyone who comes later.</li>
+<li><strong><code>shuffle_options</code></strong> &mdash; each person sees the options in a different order, which kills "the answer is always the long one" pattern-matching in a quiz.</li>
+<li><strong><code>allows_revoting</code></strong> &mdash; on by default for regular polls, off by default for quizzes. If your round is scored, turn it off explicitly and stop arguing about who changed their vote.</li>
+<li><strong><code>allow_adding_options</code></strong> &mdash; lets players add their own answers, which is a genuinely good "make up a lie" round. It refuses to work on an anonymous poll: pair it with public voting or you get <code>ANONYMOUS_OPEN_INVALID</code>.</li>
+</ul>
+
+<p>An honest caveat on the first two: Telegram accepts both flags, but neither appears in the poll object it sends back, and neither showed up when I read the poll over the client protocol either. So I can confirm they are accepted &mdash; I cannot confirm from the response alone that they took effect. Set them, then look at the poll in the chat before you build a round around them.</p>
+
+<div class="cta-box">
+<h3>Want the run sheet instead of the API?</h3>
+<p>The free <strong>Telegram Game Night Planner</strong> builds a timed game night as paste-ready blocks &mdash; rounds, host lines, and poll questions with the options already separated so you can send them straight into a group chat. No signup, runs in your browser.</p>
+<a href="/telegram-game-night-planner/?src=poll-limits">Build a game night &rarr;</a>
+<span class="alt">Everything above is baked into the blocks it gives you &mdash; short options, plain text, no spoiler tags where they will not render.</span>
+</div>
+
+<h2>What I actually changed after this</h2>
+
+<p>Four rules, all of them the direct consequence of a probe above:</p>
+
+<ol>
+<li><strong>Options stay short and plain.</strong> The long version of the prompt goes in the message; the poll gets the two or three word labels. This sidesteps the 100-character wall entirely and reads better on a phone.</li>
+<li><strong>Nothing hidden ever goes in an option.</strong> Spoilers live in a normal message above the poll, because inside one they are just punctuation.</li>
+<li><strong>Twelve is the room size for person-voting rounds.</strong> Bigger group, different round design &mdash; vote on the answer, not the player.</li>
+<li><strong>Read back the timer.</strong> If a round is timed, use the number Telegram returns, not the one that was sent. It is the only way to notice a clamp.</li>
+</ol>
+
+<p>None of this is exotic. It is the difference between a round that lands and a round where somebody says "wait, I can see the answer" &mdash; which, in a group chat, is the whole game.</p>
+
+<div class="cta-box pack">
+<h3>Running a whole night, not a single round?</h3>
+<p>The <strong>Telegram Party Pack</strong> is the hosted version of everything above: 255 prompts across six games, a host guide for a 60-minute night in a group chat, and the poll, spoiler and threading mechanics laid out per round so nothing leaks and nothing anchors. Copy-paste blocks, PDF included.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-poll-limits-game-night">Get the pack &mdash; $9.99</a>
+<span class="alt">The planner above stays free. <a href="/telegram-party-pack/">See what is in the pack</a> before you buy.</span>
+</div>
+
+<h2>FAQ</h2>
+
+<details><summary>How many options can a Telegram poll have?</summary>
+<p>Twelve. The thirteenth is refused with "poll can't have more than 12 options". A single-option poll is also accepted, which is occasionally useful as a one-button prompt. For any round where each player needs their own option, twelve is your real group-size cap.</p></details>
+
+<details><summary>How long can a poll option be?</summary>
+<p>100 characters per option, 300 for the question, 200 for a quiz explanation. The count is per character, not per byte &mdash; 100 emoji weigh 400 bytes and still pass, while 101 of anything fails.</p></details>
+
+<details><summary>Can I use bold or a spoiler in a poll?</summary>
+<p>No. Options carry no formatting entities at all, so markup appears verbatim. The question accepts a parse mode but only for custom emoji &mdash; bold sent as MarkdownV2 arrives stripped. Put hidden text in a regular message and use the poll only for the vote.</p></details>
+
+<details><summary>How long can a poll stay open?</summary>
+<p>From 5 seconds to 30 days. Anything outside that is rounded into range without an error, so a 4-second timer quietly becomes 5. Sending an <code>open_period</code> and a <code>close_date</code> together is also accepted despite the documentation, and the <code>open_period</code> is the one that wins.</p></details>
+
+<h2>Related reading</h2>
+<ul>
+<li><a href="/blog/best-telegram-party-games-2026/">The best Telegram party games in 2026</a> &mdash; the rounds these polls are actually for.</li>
+<li><a href="/blog/how-to-run-a-telegram-game-night/">How to run a Telegram game night</a> &mdash; the host side: pacing, pinned rules, and keeping a round readable when replies land out of order.</li>
+<li><a href="/blog/13-telegram-bots-1gb-vps/">13 Telegram bots on a $4.17 VPS</a> &mdash; if you would rather have a bot send these polls for you, here is what that costs to host.</li>
+</ul>
+
+<a class="back" href="/blog/">&larr; Back to the blog</a>
+</article>
+<footer>
+<p>&copy; 2026 Charlie Morrison Digital &middot; <a href="/about/">About</a> &middot; <a href="/blog/">Blog</a> &middot; <a href="/tools/">Free tools</a></p>
+</footer>
+</body>
+</html>

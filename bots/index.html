@@ -55,6 +55,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .stat-label{font-size:.8rem;color:#667}
 @media(max-width:500px){.hero h1{font-size:1.6rem}.bot-header{flex-wrap:wrap}.bot-tag{margin-left:0}.pricing-row{flex-direction:column;gap:.5rem}}
 </style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Charlie Bots — free Telegram bots and Mini Apps","url":"https://charliemorrison.dev/bots/","description":"Every Telegram bot and Mini App I run, live and retired, with what each one does and what happened to the ones that were shut down.","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about/"},"dateModified":"2026-08-03","mainEntity":{"@type":"ItemList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"SoftwareApplication","name":"Media Downloader","applicationCategory":"UtilitiesApplication","operatingSystem":"Telegram","url":"https://t.me/charlie_dl_bot","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}},{"@type":"ListItem","position":2,"item":{"@type":"SoftwareApplication","name":"Party Game","applicationCategory":"GameApplication","operatingSystem":"Telegram","url":"https://charliemorrison.dev/party-game/","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}}]}}</script>
 </head>
 <body>
 
@@ -66,6 +67,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="stat"><div class="stat-num">8+</div><div class="stat-label">platforms</div></div>
 <div class="stat"><div class="stat-num">2</div><div class="stat-label">live</div></div>
 </div>
+</div>
+
+<div class="guides" style="padding-top:1.2rem">
+<p style="color:#aab;font-size:.95rem;margin-bottom:.8rem">Everything on this page is something I built and run myself, on <a href="/blog/13-telegram-bots-1gb-vps/">one $4.17-a-month server</a>. Two are live and maintained. Two are retired, and they are still listed here with the reason — a directory that only shows its winners is not much use to anyone deciding what to build.</p>
+<p style="color:#8899aa;font-size:.9rem;margin-bottom:0">Last updated 3 August 2026 by <a href="/about/">Charlie Morrison</a>.</p>
 </div>
 
 <div class="bots">
@@ -157,9 +163,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <span>The quiz side: AI, crypto and dev questions, no install.</span></li>
 <li><a href="/blog/anonymous-message-apps-telegram-2026/">Anonymous Message Apps for Telegram (NGL Alternatives)</a>
 <span>Why the anonymous bot above was retired, and what people use instead.</span></li>
+<li><a href="/blog/telegram-poll-limits-game-night/">I Tested Telegram's Poll Limits: What Breaks a Quiz Night</a>
+<span>12 options, 100 characters, no formatting inside a poll — measured against the live API.</span></li>
+<li><a href="/telegram-game-night-planner/">Telegram Game Night Planner</a>
+<span>Free tool: builds a timed run sheet with the poll and spoiler blocks already formatted for a group chat.</span></li>
 <li><a href="/telegram-party-pack/">The Telegram Party Pack — 255 group-chat prompts</a>
 <span>The paid pack that extends the Party Game above when the built-in questions run out.</span></li>
 </ul>
+</div>
+
+<div class="guides">
+<h2>What happened to the two retired bots</h2>
+<p>Both the anonymous-message bot and the order bot were shut down in May 2026 for the same reason: they worked, and almost nobody used them. Between them they cost nothing to keep running &mdash; a Telegram bot idles at roughly 3&ndash;21&nbsp;MB of memory, so the server bill would not have noticed either way. What they cost was attention: every live bot is a thing that can break at 3am, and two of them were breaking for an audience of nobody.</p>
+<p>That is the honest version of a pattern I later measured from the other side. When I <a href="/blog/i-messaged-18-telegram-game-bots/">messaged 18 bots from the &ldquo;best Telegram bots&rdquo; listicles</a>, seven never replied at all &mdash; abandoned exactly like these two, just without anyone saying so on the page. Leaving a dead bot listed as live is the default behaviour in this ecosystem. Marking it retired takes one line.</p>
 </div>
 
 <div class="footer">

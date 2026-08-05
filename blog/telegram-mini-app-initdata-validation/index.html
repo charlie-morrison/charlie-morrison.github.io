@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Forged Telegram initData: What Passes Validation</title>
+<meta name="description" content="One field added in Bot API 8.0 breaks the validator every tutorial still shows, including a popular Python library. Measured with 16 forged payloads.">
+<meta name="keywords" content="telegram mini app initdata, validate initdata, telegram webapp hash, aiogram check_webapp_signature, telegram mini app auth">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-mini-app-initdata-validation/">
+<meta property="og:title" content="I Forged Telegram initData: What Passes Validation">
+<meta property="og:description" content="Sixteen forged Mini App payloads through eight validators. One extra field silently breaks the check everyone copies, and a two-year-old payload still passes.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-mini-app-initdata-validation/telegram-initdata-lab.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"I Forged Telegram Mini App initData: What Passes Validation","datePublished":"2026-08-05","dateModified":"2026-08-05","image":"https://charliemorrison.dev/blog/telegram-mini-app-initdata-validation/telegram-initdata-lab.png","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about/"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which fields are excluded when you validate Telegram Mini App initData?","acceptedAnswer":{"@type":"Answer","text":"Two: hash and signature. Every other received field goes into the data-check-string, sorted alphabetically, joined with line feeds. The signature field was added in Bot API 8.0 for third-party validation, and a validator written before that release excludes only hash — which quietly folds signature into the hashed string and rejects a payload Telegram considers valid."}},{"@type":"Question","name":"Does a valid initData hash mean the data is fresh?","acceptedAnswer":{"@type":"Answer","text":"No. The hash proves the payload was signed with your bot token and has not been edited since. It says nothing about when. A payload signed two years ago still validates today, so a captured string can be replayed forever unless you compare auth_date against your own clock and reject anything older than your chosen window — commonly 24 hours, and much shorter for anything that moves money."}},{"@type":"Question","name":"Why does my initData validation fail even though the data looks correct?","acceptedAnswer":{"@type":"Answer","text":"Almost always because the bytes you hash are not the bytes Telegram hashed. The three common causes: parsing the user field as JSON and re-serialising it before hashing, building the data-check-string in the order the fields arrived instead of alphabetical order, and forgetting to exclude the signature field. All three produce the same unhelpful symptom — a hash mismatch on data that is genuinely authentic."}},{"@type":"Question","name":"Is the Mini App hash the same as the Telegram Login Widget hash?","acceptedAnswer":{"@type":"Answer","text":"No, and they look identical on the wire. The Login Widget derives its secret as a plain SHA-256 of the bot token. A Mini App derives it as HMAC-SHA256 of the token keyed with the literal string WebAppData. Payloads signed under one scheme fail under the other in both directions, so copying a Login Widget snippet into a Mini App backend produces a validator that rejects every legitimate user."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+.meta a{color:#667eea;text-decoration:none}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+a{color:#667eea}
+code{background:#f1f3f5;padding:2px 6px;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:0 0 20px;font-size:.9em;line-height:1.6}
+pre code{background:none;color:inherit;padding:0}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box.pack{background:linear-gradient(135deg,#f6ad5510,#dd6b2010);border-color:#dd6b20}
+.cta-box.pack h3{color:#c05621}
+.cta-box.pack a{background:linear-gradient(135deg,#f6ad55,#dd6b20)}
+.cta-box .alt a{background:none;color:#667eea;padding:0;font-weight:600;display:inline;margin:0}
+.cta-box.pack .alt a{background:none;color:#c05621}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:12px;border:1px solid #e5e7eb}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.95em}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f8f9fa}
+td.dead{color:#c92a2a;font-weight:600;white-space:nowrap}
+td.live{color:#2b8a3e;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:560px){
+table{font-size:.86em;margin:16px 0}
+th,td{padding:8px 7px}
+td.dead,td.live{white-space:normal}
+h1{font-size:1.6em}
+pre{font-size:.82em}
+}
+.note{background:#fffbea;border-left:4px solid #f0c000;padding:14px 18px;border-radius:8px;margin:24px 0;font-size:.96em}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>I Forged Telegram Mini App initData: What Passes Validation</h1>
+<p class="meta">August 5, 2026 · 8 min read · by <a href="/about/">Charlie Morrison</a></p>
+
+<p>A Mini App is the one part of a Telegram bot where the browser talks to your server directly, and the browser is not a place you get to trust. Everything your backend knows about who is on the other end arrives in a single query string called <code>initData</code>, handed over by the Telegram client. Whether that string is worth anything comes down to one field in it: <code>hash</code>.</p>
+
+<p>Get the check right and an attacker cannot pretend to be another user. Get it subtly wrong and you land in one of two places: a backend that rejects every honest visitor, or one that happily accepts a payload someone captured months ago. Both are quiet failures. Neither shows up as an exception.</p>
+
+<p>So I built the payloads myself. Sixteen of them, signed with a real bot token, deliberately broken one property at a time, then run through eight validator variants including one from a library plenty of production bots depend on. The results are below, and two of them surprised me.</p>
+
+<figure>
+  <img src="telegram-initdata-lab.png" alt="Terminal output: a matrix of forged Telegram Mini App initData payloads against eight validators, showing which combinations pass and which fail">
+  <figcaption>Unedited output from <code>initdata_lab.py</code>, 5 August 2026. Every claim in this post comes from this run.</figcaption>
+</figure>
+
+<h2>How I tested it</h2>
+
+<p>The lab does not send anything to Telegram. It forges <code>initData</code> locally, signing each payload with the token of a throwaway bot (never one serving real users), and then asks each validator whether it believes the result. The only network call in the whole script is <code>getMe</code>, and it exists purely to prove the token is a live one rather than a plausible-looking string I typed.</p>
+
+<p>Working from the forging side rather than the receiving side is the point. Anyone can write a validator that says yes to the one payload they have on hand. What you actually want to know is the shape of the boundary: which near-misses it lets through, and which honest payloads it turns away. You cannot see that without generating both.</p>
+
+<p>One thing I did <em>not</em> do: capture a payload from a live Telegram client. Every payload here is constructed to the algorithm as <a href="https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app">Telegram documents it</a>: hash over all fields except <code>hash</code> and <code>signature</code>, sorted alphabetically, joined with line feeds, keyed by <code>HMAC_SHA256(bot_token, "WebAppData")</code>. Where a result depends on how real clients behave rather than on the spec, I say so.</p>
+
+<h2>Two schemes that look exactly alike</h2>
+
+<p>Telegram has two of these signed-payload mechanisms, and they are not compatible.</p>
+
+<p>The older one belongs to the Login Widget, the "Log in with Telegram" button on websites. Its secret key is a plain SHA-256 of the bot token. The Mini App scheme takes the same token and runs it through HMAC-SHA256 keyed with the literal string <code>WebAppData</code>. Same token, same hex-looking output, entirely different secret.</p>
+
+<pre><code># Mini App: the token is the MESSAGE, "WebAppData" is the KEY
+secret = hmac.new(b"WebAppData", token.encode(), hashlib.sha256).digest()
+
+# Login Widget: the secret is just the hash of the token
+secret = hashlib.sha256(token.encode()).digest()</code></pre>
+
+<p>In the lab, a correct Mini App payload fails Login Widget validation and a Login Widget payload fails Mini App validation. Both directions, no exceptions. The two lines above are the difference, and I have watched a search for "telegram validate hash python" return the wrong one of them near the top more than once. If your Mini App rejects every single user on day one and the hash logic <em>looks</em> textbook, this is the first thing to check. The argument order in that first line is the whole bug.</p>
+
+<h2>The field that breaks the validator everyone copies</h2>
+
+<p>Here is the one worth the post.</p>
+
+<p>Bot API 8.0 added a <code>signature</code> field to <code>initData</code>. It is an Ed25519 signature from Telegram itself, and its purpose is to let a third party (someone who does not hold your bot token) verify that a payload really came from Telegram. Useful addition. It also changed the input to the check every existing backend was already running, because <code>signature</code> arrives as just another field in the query string, and the data-check-string is built from <em>all received fields</em> except two: <code>hash</code> and <code>signature</code>.</p>
+
+<p>A validator written before that release excludes only <code>hash</code>. Feed it a payload containing <code>signature</code> and it dutifully folds that field into the string it hashes, a string Telegram never hashed. The hash does not match. The payload is authentic. The user is rejected.</p>
+
+<p>I ran that exact pair through <a href="https://docs.aiogram.dev/en/latest/utils/web_app.html">aiogram</a>, one of the most widely used Python frameworks for Telegram bots, at version 3.27.0:</p>
+
+<div class="tw"><table>
+<tr><th>Payload</th><th><code>check_webapp_signature</code></th></tr>
+<tr><td>No <code>signature</code> field</td><td class="live">PASS</td></tr>
+<tr><td>With <code>signature</code> field</td><td class="dead">FAIL</td></tr>
+<tr><td>Signed two years ago</td><td class="live">PASS</td></tr>
+</table></div>
+
+<p>The relevant line in its source is <code>hash_ = parsed_data.pop("hash")</code>, and nothing pops <code>signature</code>. I checked the published source for the current release, 3.30.0, and it reads the same way. There is a closed issue in that project about using constant-time comparison in this very function, so the code has had security eyes on it; the <code>signature</code> exclusion is simply a newer requirement than the function itself.</p>
+
+<p class="note"><strong>What I can and cannot claim here.</strong> I measured that this library rejects a payload built to the documented algorithm when that payload carries a <code>signature</code> field. I did not capture initData from a live client for this post, so I cannot tell you what share of real traffic includes the field today. If you run a Mini App on this library, that is a ten-minute experiment worth doing on your own logs — log the raw query string on a validation failure and look for <code>signature=</code> in it before you go hunting anywhere else.</p>
+
+<p>The fix is one line, and it is worth writing defensively even if your framework handles it:</p>
+
+<pre><code>parsed.pop("hash", None)
+parsed.pop("signature", None)          # Bot API 8.0+, or your hash will never match
+dcs = "\n".join(f"{k}={v}" for k, v in sorted(parsed.items()))</code></pre>
+
+<h2>A valid hash tells you nothing about when</h2>
+
+<p>This is the failure that runs the other way, and it is the one I would lose sleep over.</p>
+
+<p>I signed a payload with an <code>auth_date</code> two years in the past. Pure signature check: <strong>PASS</strong>. Of course it does. HMAC has no opinion about clocks. It attests that these bytes were signed with this token and have not been edited since, and that is the entire claim.</p>
+
+<p>Which means a captured <code>initData</code> string is a bearer token with no expiry. Anything that leaks one (a log line, an error report, a URL that ends up in a referrer header, a screenshot in a support ticket) has leaked a permanent impersonation of that user. The library check above returns <code>True</code> on my two-year-old payload too, and that is not a bug in the library: nothing in the spec asks it to know your session policy.</p>
+
+<p>The clock is yours to add:</p>
+
+<pre><code>if time.time() - int(parsed["auth_date"]) &gt; 86400:   # 24h, tighten as needed
+    raise ValueError("initData too old")</code></pre>
+
+<p>Twenty-four hours is the common default and is fine for a game or a planner. For anything touching money or account changes, minutes. Issue your own short-lived session token immediately after the first successful validation, so the long-lived string stops travelling with every request. The <a href="https://docs.telegram-mini-apps.com/platform/init-data">community platform documentation</a> makes the same recommendation, and it is the single highest-value line of code in this whole post.</p>
+
+<h2>Three ways to break your own hash</h2>
+
+<p>The rest of the matrix is the boring, expensive category: honest payloads your own code turns away. All three produce the identical symptom, a mismatch on genuine data, and none of them tell you which one you hit.</p>
+
+<p><strong>Re-serialising the JSON.</strong> The <code>user</code> field is a JSON blob inside the query string. Parse it, then serialise it back before hashing, and Python's default <code>json.dumps</code> adds a space after every colon and comma. Different bytes, different hash, <strong>FAIL</strong>. Hash the raw string exactly as received; decode it afterwards, for your own use, never before the check.</p>
+
+<p><strong>Insertion order instead of alphabetical.</strong> Build the data-check-string in the order the fields happened to arrive and you get a <strong>FAIL</strong> that looks like a crypto problem and is really a <code>sorted()</code> problem. It is easy to miss because a lot of test payloads are alphabetical by accident.</p>
+
+<p><strong>Case.</strong> Upper-case the received hex digest and the comparison fails. To a person, <code>AB</code> and <code>ab</code> are the same digest; to a byte comparison they are not. Normalise before comparing if there is any chance of a proxy or a client library touching the string.</p>
+
+<p>Two controls in the matrix behaved exactly as they should, which is the reassuring half of the exercise: editing the user id after signing fails, and validating with a different bot's token fails. The hash does the job it claims to do. Everything above is about the code wrapped around it.</p>
+
+<h2>The timing probe, and an honest null result</h2>
+
+<p>Comparing digests with <code>==</code> is the textbook timing-attack example, so I measured it rather than repeating the received wisdom: 60,000 comparisons each, one pair differing in the first character, one in the last.</p>
+
+<p>The spread came out at roughly 205 to 217 nanoseconds for <code>==</code> and 267 to 269 for <code>hmac.compare_digest</code>, and the difference between "differs at the start" and "differs at the end" was smaller than the run-to-run noise on this machine. No usable signal at this scale, from a local loop with no network in the way.</p>
+
+<p>Use <code>compare_digest</code> anyway. Not because I demonstrated an exploit, because I did not, but because it costs about sixty nanoseconds, removes an entire class of argument, and my inability to measure a leak from a laptop with the scheduler in the way is not evidence that nobody can measure one. The nice property of a cheap correct default is that you never have to be right about the threat model.</p>
+
+<h2>A validator that survives contact with Bot API 8.0</h2>
+
+<ol>
+<li>Hash the <strong>raw</strong> values from the query string. Never decode-and-re-encode before hashing.</li>
+<li>Exclude <strong>both</strong> <code>hash</code> and <code>signature</code>. Explicitly, in your own code, even if the framework claims to.</li>
+<li>Sort alphabetically, join with <code>\n</code>. Not the arrival order.</li>
+<li>Derive the secret as <code>HMAC_SHA256(token, "WebAppData")</code>. The token is the message. It is not the Login Widget scheme.</li>
+<li>Compare with <code>hmac.compare_digest</code>, after normalising case.</li>
+<li>Check <code>auth_date</code> against your clock and reject anything stale. Nothing upstream does this for you.</li>
+<li>Swap the validated payload for your own short-lived session token, so the permanent string stops riding along on every request.</li>
+</ol>
+
+<p>Six of those seven are one line each. The seventh is an afternoon, and it is the one that decides whether a leaked log file is an incident or a shrug.</p>
+
+<div class="cta-box">
+  <h3>Running a Mini App for something more fun than auth?</h3>
+  <p>My free planner builds a Telegram game night (rounds, timings, poll structure) in about a minute, no signup.</p>
+  <a href="/telegram-game-night-planner/?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-mini-app-initdata-validation">Build a game night &rarr;</a>
+  <span class="alt">Or read <a href="/blog/how-to-run-a-telegram-game-night/">how to run one end to end</a>.</span>
+</div>
+
+<h2>Where this leaves the third-party path</h2>
+
+<p>The <code>signature</code> field is not only an obstacle. It is what makes it possible for a service that does <em>not</em> hold your bot token to verify a payload came from Telegram, using Telegram's published Ed25519 public keys, with the data-check-string prefixed by <code>&lt;bot_id&gt;:WebAppData</code>. If you are building anything multi-tenant (a platform hosting other people's Mini Apps, an analytics endpoint, a shared backend), that is the check you want, precisely because it does not require collecting everyone's tokens.</p>
+
+<p>I did not test that path here: forging a valid Ed25519 signature would require Telegram's private key, which is rather the point of it, so nothing in my lab can honestly speak to it. What the lab does show is that the field's arrival quietly changed the older check, and that the change is invisible until an honest user is standing outside your door.</p>
+
+<div class="cta-box pack">
+  <h3>Telegram Party Pack</h3>
+  <p>60 ready-to-run rounds, poll-ready and tested on real game nights, for when you would rather host than debug.</p>
+  <a href="https://charliemorrison.lemonsqueezy.com/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-mini-app-initdata-validation">Get the pack &mdash; $9.99</a>
+  <span class="alt"><a href="/telegram-party-pack/">See what is in the pack</a></span>
+</div>
+
+<h2>More from the Telegram build log</h2>
+<ul>
+<li><a href="/blog/telegram-poll-limits-game-night/">I tested Telegram's poll limits</a>: twelve options, and one timer behaviour that closes your round early.</li>
+<li><a href="/blog/13-telegram-bots-1gb-vps/">13 Telegram bots on a $4.17 VPS</a>: the real RAM numbers, measured.</li>
+<li><a href="/blog/i-messaged-18-telegram-game-bots/">I messaged 18 Telegram game bots</a>: how many were still alive.</li>
+</ul>
+
+<a class="back" href="/blog/">&larr; Back to the blog</a>
+</article>
+<footer>
+  <p><a href="/about/">About</a> · <a href="/blog/">Blog</a> · <a href="/tools/">Free tools</a></p>
+  <p>&copy; 2026 Charlie Morrison Digital</p>
+</footer>
+</body>
+</html>

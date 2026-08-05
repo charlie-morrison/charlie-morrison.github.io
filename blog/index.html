@@ -20,6 +20,12 @@ gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{
 <div class="container">
 <h1>Blog</h1>
 <div class="post">
+<h2><a href="/blog/telegram-mini-app-initdata-validation/">I Forged Telegram Mini App initData: What Passes Validation</a></h2>
+<div class="meta">August 5, 2026</div>
+<p>A Mini App trusts one field to tell it who is on the other end, so I forged sixteen payloads with a real bot token and ran them through eight validators. One field added in Bot API 8.0 quietly breaks the check every tutorial still shows, including the one in a widely used Python framework, and a payload signed two years ago still passes everywhere unless you check the clock yourself.</p>
+<a href="/blog/telegram-mini-app-initdata-validation/" class="read-more">Read more &rarr;</a>
+</div>
+<div class="post">
 <h2><a href="/blog/telegram-poll-limits-game-night/">I Tested Telegram's Poll Limits: What Breaks a Quiz Night</a></h2>
 <div class="meta">August 3, 2026</div>
 <p>Polls are the engine of a game night in a group chat, so I spent an evening sending deliberately-broken ones at Telegram until it said no. 12 options, 100 characters each, 300 for the question — plus three behaviours the docs do not prepare you for: timers silently rounded instead of refused, no formatting of any kind inside a poll, and a plural "correct answers" field that still only takes one.</p>

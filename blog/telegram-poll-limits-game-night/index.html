@@ -179,10 +179,10 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 <p>None of this is exotic. It is the difference between a round that lands and a round where somebody says "wait, I can see the answer" &mdash; which, in a group chat, is the whole game.</p>
 
 <div class="cta-box pack">
-<h3>Running a whole night, not a single round?</h3>
-<p>The <strong>Telegram Party Pack</strong> is the hosted version of everything above: 255 prompts across six games, a host guide for a 60-minute night in a group chat, and the poll, spoiler and threading mechanics laid out per round so nothing leaks and nothing anchors. Copy-paste blocks, PDF included.</p>
-<a href="https://charliemorrison.lemonsqueezy.com/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-poll-limits-game-night">Get the pack &mdash; $9.99</a>
-<span class="alt">The planner above stays free. <a href="/telegram-party-pack/">See what is in the pack</a> before you buy.</span>
+<h3>Building the bot that sends these polls?</h3>
+<p><strong>Telegram in Production</strong> ships the limits above as working code: <code>check_poll</code> and <code>build_poll</code> raise on the hard walls <em>and</em> on the three payloads Telegram accepts and then quietly rewrites, which are the ones that bite in production. With it come an <code>initData</code> validator that survives Bot API 8.0 (Python and Node), a systemd unit linter for the two failure modes that cost me weeks of silent breakage, and a one-page pre-ship checklist. 44 tests, no dependencies, runnable straight from the zip.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-poll-limits-game-night">Get the pack &mdash; $19</a>
+<span class="alt">The planner above stays free. Hosting a night rather than writing one? <a href="/telegram-party-pack/">The party pack</a> is the other end.</span>
 </div>
 
 <h2>FAQ</h2>

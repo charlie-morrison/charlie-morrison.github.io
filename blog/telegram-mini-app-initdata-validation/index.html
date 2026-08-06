@@ -189,10 +189,10 @@ dcs = "\n".join(f"{k}={v}" for k, v in sorted(parsed.items()))</code></pre>
 <p>I did not test that path here: forging a valid Ed25519 signature would require Telegram's private key, which is rather the point of it, so nothing in my lab can honestly speak to it. What the lab does show is that the field's arrival quietly changed the older check, and that the change is invisible until an honest user is standing outside your door.</p>
 
 <div class="cta-box pack">
-  <h3>Telegram Party Pack</h3>
-  <p>60 ready-to-run rounds, poll-ready and tested on real game nights, for when you would rather host than debug.</p>
-  <a href="https://charliemorrison.lemonsqueezy.com/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-mini-app-initdata-validation">Get the pack &mdash; $9.99</a>
-  <span class="alt"><a href="/telegram-party-pack/">See what is in the pack</a></span>
+  <h3>Telegram in Production &mdash; the parts that bite you</h3>
+  <p>The validator from this post, finished: Python <em>and</em> Node, no dependencies, <code>signature</code> excluded, <code>auth_date</code> enforced, constant-time compare that returns 401 instead of throwing on a hostile hash. Plus poll payloads Telegram will not silently rewrite, a systemd unit linter for the two failure modes that cost me weeks, and a one-page pre-ship checklist. 44 tests you can run from the zip.</p>
+  <a href="https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-mini-app-initdata-validation">Get the pack &mdash; $19</a>
+  <span class="alt">Every claim in it was measured first and published here. The lab script above stays free.</span>
 </div>
 
 <h2>More from the Telegram build log</h2>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram Bot File Size Limits: The Exact Byte Cutoffs</title>
+<meta name="description" content="The docs say 20 MB and 50 MB. Both are binary, exact to the byte, and the upload cap counts your HTTP headers. Measured against a live bot, boundary by boundary.">
+<meta name="keywords" content="telegram bot file size limit, telegram bot 50mb limit, getfile file is too big, telegram bot download large file, telegram local bot api server">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-bot-api-file-size-limits/">
+<meta property="og:title" content="Telegram Bot File Size Limits: The Exact Byte Cutoffs">
+<meta property="og:description" content="A bot can send 50 MiB but only download 20 MiB. I measured both boundaries to the byte, and the upload cap turned out to count multipart headers.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-bot-api-file-size-limits/telegram-file-limits.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Telegram Bot File Size Limits: The Exact Byte Cutoffs","datePublished":"2026-08-07","dateModified":"2026-08-07","image":"https://charliemorrison.dev/blog/telegram-bot-api-file-size-limits/telegram-file-limits.png","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about/"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the maximum file size a Telegram bot can download?","acceptedAnswer":{"@type":"Answer","text":"Exactly 20 MiB, which is 20,971,520 bytes. Measured against a live bot, a file of 20,971,520 bytes returns a working getFile path and a file of 20,971,521 bytes returns 400 Bad Request: file is too big. The documented figure of 20 MB is binary, not decimal, so a 20,000,000-byte file is comfortably inside the limit."}},{"@type":"Question","name":"Why can my Telegram bot send a 50 MB file but not download a 30 MB one?","acceptedAnswer":{"@type":"Answer","text":"Because the send and receive limits are different numbers on the default Bot API: 50 MiB up, 20 MiB down. The asymmetry is deliberate and it is the single most common wall for media bots, because a user can forward your bot a 30 MiB video that your bot is then permanently unable to retrieve. The file exists, the file_id is valid, and getFile still refuses."}},{"@type":"Question","name":"Why does a large sendDocument upload fail with no error message?","acceptedAnswer":{"@type":"Answer","text":"Because Telegram does not answer an over-limit upload with a JSON error. It drops the TLS connection mid-request, which surfaces in client libraries as a transport exception such as SSLEOFError or a connection reset rather than an API error code. Code that retries on network errors but gives up on 4xx will therefore retry an impossible upload forever."}},{"@type":"Question","name":"Does the 50 MiB upload limit apply to the file or the whole request?","acceptedAnswer":{"@type":"Answer","text":"To the whole HTTP request body. In a measured test, a file of 52,428,450 bytes sent with 350 bytes of multipart boundaries and headers succeeded at exactly 52,428,800 bytes of body, and one additional byte failed. The practical consequence is that your usable file size is 50 MiB minus whatever your HTTP library's multipart encoding adds, which varies between libraries."}},{"@type":"Question","name":"How do you send files larger than 50 MB with a Telegram bot?","acceptedAnswer":{"@type":"Answer","text":"Run your own local Bot API server, which Telegram publishes as open source. It raises uploads to 2000 MB, removes the download limit entirely, and returns a local file path instead of requiring a download at all. The trade-off is that you now operate a service with real disk and memory requirements rather than calling a hosted endpoint."}}]}</script>
+<style>
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+a{color:#667eea}
+code{background:#f1f3f5;padding:2px 6px;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:0 0 20px;font-size:.9em;line-height:1.6}
+pre code{background:none;color:inherit;padding:0}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box.pack{background:linear-gradient(135deg,#f6ad5510,#dd6b2010);border-color:#dd6b20}
+.cta-box.pack h3{color:#c05621}
+.cta-box.pack a{background:linear-gradient(135deg,#f6ad55,#dd6b20)}
+.cta-box .alt a{background:none;color:#667eea;padding:0;font-weight:600;display:inline;margin:0}
+.cta-box.pack .alt a{background:none;color:#c05621}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:12px;border:1px solid #e5e7eb}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.95em}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f8f9fa}
+td.dead{color:#c92a2a;font-weight:600;white-space:nowrap}
+td.live{color:#2b8a3e;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:560px){
+table{font-size:.86em;margin:16px 0}
+th,td{padding:8px 7px}
+td.dead,td.live{white-space:normal}
+h1{font-size:1.6em}
+pre{font-size:.82em}
+}
+.note{background:#fffbea;border-left:4px solid #f0c000;padding:14px 18px;border-radius:8px;margin:24px 0;font-size:.96em}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>Telegram Bot File Size Limits: The Exact Byte Cutoffs</h1>
+<p class="meta">August 7, 2026 · 9 min read · by <a href="/about/">Charlie Morrison</a></p>
+
+<p>The first time a Telegram bot of mine hit a file limit, the symptom made no sense. The bot could send a 40 MB video to a user without complaint. When the same user forwarded a 25 MB video back, the bot could see it, log its size, and read its <code>file_id</code> &mdash; and then could not download it. Not slowly. Not with a retry. At all, permanently.</p>
+
+<p>That is not a bug in anyone's code. It is the shape of the Bot API: the number governing what a bot may send and the number governing what it may fetch are different numbers, and the gap between them is where media bots go to die.</p>
+
+<p>The official figures are <a href="https://core.telegram.org/bots/api#sending-files">20 MB down and 50 MB up</a>. What the docs do not say is which megabyte they mean, what the limit is actually measured against, or what happens at the boundary. I wanted all three, so I measured them against a live bot, one byte at a time.</p>
+
+<figure>
+  <img src="telegram-file-limits.png" alt="Terminal output showing Telegram Bot API file size probes: 20,971,520 bytes downloads successfully, 20,971,521 bytes returns 400 file is too big, and uploads above 52,428,800 bytes of request body fail with SSLEOFError">
+  <figcaption>Unedited output from the probe, 7 August 2026. Every number in this post comes from this run.</figcaption>
+</figure>
+
+<h2>How I tested it</h2>
+
+<p>The probe generates files of a target size filled with <code>os.urandom</code>, so nothing on the path can compress them into a smaller request than I asked for. Each file goes up through <code>sendDocument</code> as <code>multipart/form-data</code> against a real bot token &mdash; a throwaway bot, never one serving users &mdash; and the response is recorded verbatim, including the HTTP status and any transport-level exception.</p>
+
+<p>For anything that uploads successfully, the probe immediately calls <code>getFile</code> on the returned <code>file_id</code> to see whether the same bot can fetch back the thing it just sent. Every message the probe creates is deleted with <code>deleteMessage</code> at the end of the run, so the test leaves no residue in the chat.</p>
+
+<p>Two deliberate choices are worth stating. I sized files in binary units rather than round decimal numbers, because the entire question is which unit Telegram means. And I tested the byte immediately either side of each candidate boundary, because a limit you have only bracketed to the nearest megabyte is a limit you have not actually found.</p>
+
+<h2>The download cap is exactly 20 MiB</h2>
+
+<p>This one is clean, and it is exact:</p>
+
+<table>
+<thead><tr><th>File size</th><th>In words</th><th>getFile result</th></tr></thead>
+<tbody>
+<tr><td>20,000,000 B</td><td>20 MB decimal</td><td class="live">OK</td></tr>
+<tr><td>20,971,520 B</td><td>20 MiB</td><td class="live">OK</td></tr>
+<tr><td>20,971,521 B</td><td>20 MiB + 1 byte</td><td class="dead">400 &mdash; file is too big</td></tr>
+</tbody>
+</table>
+
+<p>The cutoff is 20,971,520 bytes, to the byte. The documented &ldquo;20 MB&rdquo; is binary. That gap matters more than it looks: a file of 20,000,000 bytes is genuinely 20 MB in the decimal sense and it downloads fine, so anyone who built their guard rail at <code>size &gt; 20_000_000</code> is rejecting almost a megabyte of files that would have worked.</p>
+
+<p>The failure itself is well behaved. You get an ordinary JSON response, <code>ok: false</code>, error code 400, description <code>Bad Request: file is too big</code>. It is easy to detect and easy to branch on. Remember this, because the other limit does not extend you the same courtesy.</p>
+
+<h2>The upload cap counts your HTTP headers</h2>
+
+<p>The upload side did not behave like a file-size limit at all, and working out why took the most interesting hour of the night.</p>
+
+<p>A 49 MiB file (51,380,224 bytes) uploaded fine. A 50 MiB file failed. So far, so unremarkable. But then <em>50 MiB minus one byte</em> also failed &mdash; and a limit that rejects one byte under its own round number is not a limit on the file.</p>
+
+<p>The obvious suspect was the multipart envelope. A <code>multipart/form-data</code> body is not just the file: it carries a boundary string, a content-disposition header per field, the <code>chat_id</code>, the trailing boundary. In my encoder that came to exactly 350 bytes. If Telegram caps the <em>request body</em> at 50 MiB rather than the file, then the largest file I can send is 52,428,800 &minus; 350 = 52,428,450 bytes.</p>
+
+<p>That is a falsifiable prediction with a one-byte resolution, so I ran it:</p>
+
+<table>
+<thead><tr><th>File size</th><th>Request body</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td>51,904,512 B</td><td>49.5 MiB + 350 B</td><td class="live">OK</td></tr>
+<tr><td>52,428,450 B</td><td>exactly 52,428,800 B</td><td class="live">OK</td></tr>
+<tr><td>52,428,451 B</td><td>52,428,801 B</td><td class="dead">connection dropped</td></tr>
+<tr><td>52,428,800 B</td><td>52,429,150 B</td><td class="dead">connection dropped</td></tr>
+</tbody>
+</table>
+
+<p>Exactly as predicted, on the nose. <strong>The cap is 52,428,800 bytes of HTTP request body, not of file.</strong></p>
+
+<p>The practical consequence is mildly annoying: your real maximum file size depends on your HTTP client. A library with longer boundary strings, or one that sends extra form fields such as <code>caption</code> or <code>reply_markup</code>, eats further into the allowance. There is no single &ldquo;maximum file size&rdquo; you can hard-code and trust across libraries &mdash; which is presumably why the docs round it to &ldquo;50 MB&rdquo; and leave it there.</p>
+
+<p>If you want a number to actually use: stay under 52,400,000 bytes and you have roughly 28 KB of headroom for envelope overhead, which is more than any sane multipart encoder will spend.</p>
+
+<h2>An over-limit upload does not return an error</h2>
+
+<p>This is the finding I would most want to know before shipping, and it is invisible from the documentation.</p>
+
+<p>When the body exceeds 50 MiB, Telegram does not respond with <code>413</code>, or a JSON error, or anything at all. It drops the TLS connection roughly 30 seconds into the upload. In Python that surfaces as:</p>
+
+<pre><code>URLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2406)'))</code></pre>
+
+<p>It reproduced identically on all four over-limit attempts, at a consistent ~30 seconds, while a <em>successful</em> 49.5 MiB upload took 44.5 seconds. So this is not a timeout &mdash; the server cuts the connection well before the point at which a legitimate, larger transfer would still have been happily in flight.</p>
+
+<div class="note">
+<p><strong>Why this specific failure mode is dangerous.</strong> Almost every HTTP retry policy treats 4xx as permanent and connection errors as transient. This failure is a connection error that is <em>permanent</em>. A bot with sensible retry logic will therefore re-upload an impossible file forever &mdash; burning bandwidth on a 50 MiB body every attempt, with nothing in the logs but an intermittent-looking network exception. Guard on file size before you send; do not wait for the API to tell you, because it will not.</p>
+</div>
+
+<h2>The asymmetry is the actual problem</h2>
+
+<p>Put the two limits side by side and the design becomes clear:</p>
+
+<table>
+<thead><tr><th>Direction</th><th>Limit</th><th>At the boundary</th></tr></thead>
+<tbody>
+<tr><td>Bot sends (multipart)</td><td>52,428,800 B of request body</td><td class="dead">TLS connection dropped</td></tr>
+<tr><td>Bot sends (by URL)</td><td>20 MB, 5 MB for photos</td><td class="dead">400</td></tr>
+<tr><td>Bot downloads</td><td>20,971,520 B</td><td class="dead">400 &mdash; file is too big</td></tr>
+</tbody>
+</table>
+
+<p>A bot may hand out files two and a half times larger than it is allowed to pick up. For most bots this never surfaces, because they only ever send things they generated themselves. For anything that processes what users send it &mdash; a converter, a downloader, a backup bot, an OCR bot &mdash; it is the wall you hit in week one.</p>
+
+<p>And it is a hard wall. When a user forwards a 30 MiB video, your bot receives a perfectly valid update. The <code>file_id</code> is real. <code>file_size</code> is populated and tells you exactly how big it is. Everything looks retrievable. <code>getFile</code> then returns 400, and no amount of retrying, re-requesting, or waiting changes that. The bytes exist on Telegram's servers and your bot simply has no method that will hand them over.</p>
+
+<p>The one mercy: because <code>file_size</code> arrives in the update <em>before</em> you attempt anything, you can detect this instantly and tell the user something true. A bot that replies &ldquo;that file is 30 MB and I can only fetch 20 MB&rdquo; is infinitely better than one that says &ldquo;processing&rdquo; and then goes quiet.</p>
+
+<h2>What to do about it</h2>
+
+<p><strong>Run a local Bot API server.</strong> Telegram publishes the server as open source at <a href="https://github.com/tdlib/telegram-bot-api">tdlib/telegram-bot-api</a>, and it is the only real fix. It lifts uploads to 2000 MB and removes the download limit entirely; better still, it returns an absolute local file path in <code>file_path</code>, so for a bot on the same machine there is no download step at all. The cost is that you now run a stateful service that wants real disk and real memory &mdash; which is a genuine consideration if, like me, you are running bots on a 1 GB VPS.</p>
+
+<p><strong>Check <code>file_size</code> before you do anything else.</strong> One comparison against 20,971,520, and a clear message to the user. This is the highest-value four lines in any media bot.</p>
+
+<p><strong>Do not build the guard at 20,000,000 or 50,000,000.</strong> Both are wrong in the same direction, and both quietly reject files that work.</p>
+
+<p><strong>Treat over-limit uploads as permanent, in code.</strong> Since the API will not classify them for you, your own size check has to. Otherwise your retry policy does the classifying, and it will get it wrong.</p>
+
+<div class="cta-box">
+  <h3>Building on Telegram for something lighter?</h3>
+  <p>My free planner lays out a Telegram game night &mdash; rounds, timings, poll structure &mdash; in about a minute, no signup.</p>
+  <a href="/telegram-game-night-planner/?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-bot-api-file-size-limits">Build a game night &rarr;</a>
+  <span class="alt">Or read <a href="/blog/how-to-run-a-telegram-game-night/">how to run one end to end</a>.</span>
+</div>
+
+<h2>What I did not test</h2>
+
+<p>Three honest gaps. I did not test a local Bot API server's 2000 MB ceiling &mdash; that needs a server I would have to stand up and feed 2 GB through, and I am not going to claim a number I have not seen. I did not test the URL-upload path (<code>sendDocument</code> with an <code>http://</code> URL instead of bytes), where the docs quote a lower 20 MB limit that I have taken on faith rather than measured. And every number here comes from one bot, on one network path, from Europe.</p>
+
+<p>On that last point I am fairly relaxed, for one reason: the 350-byte overhead prediction landed exactly. A network artefact does not reproduce a byte-precise boundary you calculated in advance from the structure of your own request body. That the prediction held is much stronger evidence than the four failures on their own.</p>
+
+<h2>The short version</h2>
+
+<ul>
+<li><strong>Download:</strong> 20,971,520 bytes, exactly. One more byte gives a clean <code>400 file is too big</code>.</li>
+<li><strong>Upload:</strong> 52,428,800 bytes of <em>request body</em>, multipart headers included. Budget ~52,400,000 for the file.</li>
+<li><strong>Both are binary.</strong> 20,000,000 and 50,000,000 are both inside their respective limits.</li>
+<li><strong>Over-limit uploads drop the connection</strong> instead of erroring. Guard on size yourself.</li>
+<li><strong>You can send 2.5&times; what you can fetch.</strong> Check <code>file_size</code> on arrival and say so plainly.</li>
+</ul>
+
+<div class="cta-box pack">
+  <h3>Telegram in Production &mdash; the parts that bite you</h3>
+  <p>The size guard from this post, finished: the exact constants, a pre-send check that fails loudly instead of retrying forever, and the on-arrival <code>file_size</code> reply that saves your users a silent wait. Plus an initData validator with <code>signature</code> excluded and <code>auth_date</code> enforced, poll payloads Telegram will not silently rewrite, and a systemd unit linter for the two failure modes that cost me weeks. 44 tests you can run from the zip.</p>
+  <a href="https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-bot-api-file-size-limits">Get the pack &mdash; $19</a>
+  <span class="alt">Every claim in it was measured first and published here.</span>
+</div>
+
+<h2>More from the Telegram build log</h2>
+<ul>
+<li><a href="/blog/telegram-mini-app-initdata-validation/">I forged Telegram initData</a>: which payloads pass validation, and the field that broke every old validator.</li>
+<li><a href="/blog/telegram-poll-limits-game-night/">I tested Telegram's poll limits</a>: twelve options, and one timer behaviour that closes your round early.</li>
+<li><a href="/blog/13-telegram-bots-1gb-vps/">13 Telegram bots on a $4.17 VPS</a>: the real RAM numbers, measured.</li>
+</ul>
+
+<a class="back" href="/blog/">&larr; Back to the blog</a>
+</article>
+<footer>
+  <p><a href="/about/">About</a> · <a href="/blog/">Blog</a> · <a href="/tools/">Free tools</a></p>
+  <p>&copy; 2026 Charlie Morrison Digital</p>
+</footer>
+</body>
+</html>

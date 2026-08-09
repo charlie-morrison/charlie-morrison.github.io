@@ -33,10 +33,11 @@
   th { background:#f7f8fa; font-size:13px; font-weight:600; color:#3d434e; }
   td.num, th.num { text-align:right; white-space:nowrap; }
   td.idx, th.idx { text-align:center; color:var(--muted); width:38px; }
-  .c-qty { width:80px; } .c-price { width:120px; } .c-sum { width:130px; }
+  .c-unit { width:56px; } .c-qty { width:70px; } .c-price { width:110px; } .c-sum { width:120px; }
   .c-del { width:28px; border:0; background:none; }
   .rowdel { border:0; background:none; color:#b6bac2; cursor:pointer; padding:0 4px; font-size:18px; line-height:1; }
   .rowdel:hover { color:#c0392b; }
+  .count { margin:10px 2px 0; font-size:14px; }
   .totals { margin-top:14px; margin-left:auto; width:min(340px,100%); }
   .totals div { display:flex; justify-content:space-between; padding:4px 0; }
   .totals .big { font-size:18px; font-weight:700; border-top:1px solid var(--line); padding-top:8px; margin-top:4px; }
@@ -54,7 +55,7 @@
     .grid label { margin-top:8px; }
     th, td { padding:6px 5px; font-size:14px; }
     td.idx, th.idx { width:24px; }
-    .c-qty { width:40px; } .c-price { width:66px; } .c-sum { width:78px; }
+    .c-unit { width:32px; } .c-qty { width:34px; } .c-price { width:62px; } .c-sum { width:74px; }
     .c-del { width:22px; }
     .title { font-size:20px; }
   }
@@ -66,6 +67,13 @@
     .sheet { border:0; padding:0; border-radius:0; }
     [contenteditable]:empty::before { content:""; }
     table, tr, td, th { page-break-inside:avoid; }
+    /* компактніше, щоб рахунок на кілька позицій лишався на одній сторінці */
+    h2.sec { margin:16px 0 6px; }
+    .title { margin-top:16px; }
+    .count { margin-top:8px; }
+    .totals { margin-top:10px; }
+    .purpose { margin-top:16px; }
+    .sign { margin-top:26px; page-break-inside:avoid; }
   }
 </style>
 </head>
@@ -107,6 +115,7 @@
         <tr>
           <th class="idx">№</th>
           <th>Найменування</th>
+          <th class="c-unit">Од.</th>
           <th class="num c-qty">К-сть</th>
           <th class="num c-price">Ціна, грн</th>
           <th class="num c-sum">Сума, грн</th>
@@ -116,6 +125,7 @@
       <tbody id="rows"></tbody>
     </table>
     <p class="hint">Ціну пишіть таку, яку платить покупець — з ПДВ. Податок рахується всередині суми.</p>
+    <p class="count" id="t_count"></p>
 
     <div class="totals">
       <div><span>Разом</span><span id="t_total">0,00</span></div>
@@ -222,11 +232,13 @@
     tr.innerHTML =
       '<td class="idx"></td>' +
       '<td><div contenteditable data-f="name" data-ph="Найменування товару"></div></td>' +
+      '<td class="c-unit"><div contenteditable data-f="unit"></div></td>' +
       '<td class="num"><div contenteditable data-f="qty"></div></td>' +
       '<td class="num"><div contenteditable data-f="price" data-ph="0,00"></div></td>' +
       '<td class="num c-sum" data-f="sum">0,00</td>' +
       '<td class="c-del"><button class="rowdel" type="button" title="Прибрати">&times;</button></td>';
     tr.querySelector('[data-f="name"]').textContent = data.name || "";
+    tr.querySelector('[data-f="unit"]').textContent = data.unit || "шт";
     tr.querySelector('[data-f="qty"]').textContent = data.qty || "1";
     tr.querySelector('[data-f="price"]').textContent = data.price || "";
     tr.querySelector(".rowdel").addEventListener("click", function () {
@@ -250,6 +262,9 @@
       tr.querySelector('[data-f="sum"]').textContent = money(sum);
     });
 
+    document.getElementById("t_count").textContent = i
+      ? "Усього найменувань " + i + ", на суму " + money(total) + " грн"
+      : "";
     document.getElementById("t_total").textContent = money(total);
     document.getElementById("t_vat").textContent = money(total / 6);
     document.getElementById("t_pay").textContent = money(total);

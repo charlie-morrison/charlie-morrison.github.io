@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Рахунок на оплату</title>
+<style>
+  :root { --ink:#16181d; --muted:#6b7280; --line:#d8dbe0; --bg:#f4f5f7; --accent:#1f4fd8; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:16px/1.55 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; }
+  .wrap { max-width:900px; margin:0 auto; padding:24px 16px 64px; }
+  .bar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:18px; }
+  .bar h1 { font-size:20px; margin:0 auto 0 0; font-weight:600; }
+  button { font:inherit; padding:9px 16px; border-radius:8px; border:1px solid var(--line);
+           background:#fff; cursor:pointer; }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+  button:hover { filter:brightness(0.97); }
+  .sheet { background:#fff; border:1px solid var(--line); border-radius:10px; padding:32px 34px; }
+  .hint { color:var(--muted); font-size:13px; margin:14px 2px 0; }
+  h2.sec { font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted);
+           margin:26px 0 8px; font-weight:600; }
+  .grid { display:grid; grid-template-columns:190px 1fr; gap:6px 14px; align-items:baseline; }
+  .grid label { color:var(--muted); font-size:14px; }
+  [contenteditable] { outline:none; border-bottom:1px dashed transparent; min-width:2ch; }
+  [contenteditable]:hover { border-bottom-color:var(--line); }
+  [contenteditable]:focus { border-bottom-color:var(--accent); background:#f7f9ff; }
+  [contenteditable]:empty::before { content:attr(data-ph); color:#b6bac2; }
+  .title { font-size:24px; font-weight:700; margin:22px 0 2px; }
+  table { width:100%; border-collapse:collapse; margin-top:6px; }
+  th, td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:#f7f8fa; font-size:13px; font-weight:600; color:#3d434e; }
+  td.num, th.num { text-align:right; white-space:nowrap; }
+  td.idx, th.idx { text-align:center; color:var(--muted); width:38px; }
+  .c-qty { width:80px; } .c-price { width:120px; } .c-sum { width:130px; }
+  .c-del { width:28px; border:0; background:none; }
+  .rowdel { border:0; background:none; color:#b6bac2; cursor:pointer; padding:0 4px; font-size:18px; line-height:1; }
+  .rowdel:hover { color:#c0392b; }
+  .totals { margin-top:14px; margin-left:auto; width:min(340px,100%); }
+  .totals div { display:flex; justify-content:space-between; padding:4px 0; }
+  .totals .big { font-size:18px; font-weight:700; border-top:1px solid var(--line); padding-top:8px; margin-top:4px; }
+  .words { margin-top:10px; font-style:italic; }
+  .purpose { margin-top:22px; padding:12px 14px; background:#f7f8fa; border:1px solid var(--line); border-radius:8px; }
+  .purpose b { display:block; font-size:13px; color:var(--muted); font-weight:600;
+               text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+  .sign { margin-top:40px; display:flex; justify-content:space-between; gap:30px; }
+  .sign div { flex:1; }
+  .sign .line { border-bottom:1px solid var(--ink); height:34px; }
+  .sign small { color:var(--muted); font-size:12px; }
+  @media (max-width:640px) {
+    .sheet { padding:20px 16px; }
+    .grid { grid-template-columns:1fr; gap:2px; }
+    .grid label { margin-top:8px; }
+    th, td { padding:6px 5px; font-size:14px; }
+    td.idx, th.idx { width:24px; }
+    .c-qty { width:40px; } .c-price { width:66px; } .c-sum { width:78px; }
+    .c-del { width:22px; }
+    .title { font-size:20px; }
+  }
+  @media print {
+    @page { size:A4; margin:14mm; }
+    body { background:#fff; }
+    .wrap { max-width:none; padding:0; }
+    .bar, .hint, .rowdel, .addrow { display:none !important; }
+    .sheet { border:0; padding:0; border-radius:0; }
+    [contenteditable]:empty::before { content:""; }
+    table, tr, td, th { page-break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar">
+    <h1>Рахунок на оплату</h1>
+    <button class="addrow" type="button" id="add">+ рядок</button>
+    <button type="button" id="reset">Очистити</button>
+    <button class="primary" type="button" id="print">Зберегти в PDF</button>
+  </div>
+
+  <div class="sheet" id="sheet">
+
+    <h2 class="sec">Постачальник</h2>
+    <div class="grid">
+      <label>Назва</label>        <div contenteditable data-k="s_name" data-ph="ТОВ «...»"></div>
+      <label>Код ЄДРПОУ</label>   <div contenteditable data-k="s_edrpou" data-ph="00000000"></div>
+      <label>Рахунок IBAN</label> <div contenteditable data-k="s_iban" data-ph="UA00 0000 0000 0000 0000 0000 0000"></div>
+      <label>Банк</label>         <div contenteditable data-k="s_bank" data-ph="АТ «...»"></div>
+      <label>Свідоцтво ПДВ</label><div contenteditable data-k="s_vat" data-ph="—"></div>
+      <label>Адреса</label>       <div contenteditable data-k="s_addr" data-ph="—"></div>
+      <label>Телефон, пошта</label><div contenteditable data-k="s_contact" data-ph="—"></div>
+    </div>
+
+    <div class="title">Рахунок №<span contenteditable data-k="inv_no" data-ph="1"></span>
+      від <span contenteditable data-k="inv_date" data-ph="01.01.2026"></span></div>
+
+    <h2 class="sec">Покупець</h2>
+    <div class="grid">
+      <label>Найменування</label> <div contenteditable data-k="b_name" data-ph="Прізвище Ім'я"></div>
+      <label>Телефон, адреса</label><div contenteditable data-k="b_contact" data-ph="—"></div>
+    </div>
+
+    <h2 class="sec">Товари</h2>
+    <table>
+      <thead>
+        <tr>
+          <th class="idx">№</th>
+          <th>Найменування</th>
+          <th class="num c-qty">К-сть</th>
+          <th class="num c-price">Ціна, грн</th>
+          <th class="num c-sum">Сума, грн</th>
+          <th class="c-del"></th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="hint">Ціну пишіть таку, яку платить покупець — з ПДВ. Податок рахується всередині суми.</p>
+
+    <div class="totals">
+      <div><span>Разом</span><span id="t_total">0,00</span></div>
+      <div><span>У тому числі ПДВ 20%</span><span id="t_vat">0,00</span></div>
+      <div class="big"><span>До сплати</span><span id="t_pay">0,00</span></div>
+    </div>
+    <div class="words" id="t_words"></div>
+
+    <div class="purpose">
+      <b>Призначення платежу</b>
+      <span id="purpose"></span>
+    </div>
+
+    <div class="sign">
+      <div><div class="line"></div><small>Керівник</small></div>
+      <div><div class="line"></div><small>Головний бухгалтер</small></div>
+    </div>
+
+  </div>
+
+  <p class="hint">
+    Сторінка працює у вашому браузері. Реквізити зберігаються тільки тут, на цьому пристрої,
+    і нікуди не передаються. «Зберегти в PDF» відкриває звичайне вікно друку — виберіть
+    «Зберегти як PDF».
+  </p>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORE = "rakhunok.v1";
+  var SELLER = ["s_name","s_edrpou","s_iban","s_bank","s_vat","s_addr","s_contact"];
+
+  /* ---------- money ---------- */
+
+  function money(n) {
+    return n.toFixed(2).replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+
+  function parseNum(s) {
+    var v = parseFloat(String(s).replace(/\s| /g, "").replace(",", "."));
+    return isFinite(v) ? v : 0;
+  }
+
+  /* ---------- сума прописом ---------- */
+
+  var ONES = ["", "один", "два", "три", "чотири", "п'ять", "шість", "сім", "вісім", "дев'ять"];
+  var ONES_F = ["", "одна", "дві", "три", "чотири", "п'ять", "шість", "сім", "вісім", "дев'ять"];
+  var TEENS = ["десять","одинадцять","дванадцять","тринадцять","чотирнадцять",
+               "п'ятнадцять","шістнадцять","сімнадцять","вісімнадцять","дев'ятнадцять"];
+  var TENS = ["","","двадцять","тридцять","сорок","п'ятдесят","шістдесят",
+              "сімдесят","вісімдесят","дев'яносто"];
+  var HUNDREDS = ["","сто","двісті","триста","чотириста","п'ятсот",
+                  "шістсот","сімсот","вісімсот","дев'ятсот"];
+
+  function plural(n, one, few, many) {
+    var d10 = n % 10, d100 = n % 100;
+    if (d10 === 1 && d100 !== 11) return one;
+    if (d10 >= 2 && d10 <= 4 && (d100 < 12 || d100 > 14)) return few;
+    return many;
+  }
+
+  function triad(n, feminine) {
+    var out = [], ones = feminine ? ONES_F : ONES;
+    if (n >= 100) { out.push(HUNDREDS[Math.floor(n / 100)]); n %= 100; }
+    if (n >= 10 && n < 20) { out.push(TEENS[n - 10]); n = 0; }
+    if (n >= 20) { out.push(TENS[Math.floor(n / 10)]); n %= 10; }
+    if (n > 0) out.push(ones[n]);
+    return out.join(" ");
+  }
+
+  function inWords(amount) {
+    var whole = Math.floor(amount + 1e-9);
+    var kop = Math.round((amount - whole) * 100);
+    if (kop === 100) { kop = 0; whole += 1; }
+
+    var parts = [];
+    var mil = Math.floor(whole / 1000000);
+    var thou = Math.floor(whole / 1000) % 1000;
+    var rest = whole % 1000;
+
+    if (mil) parts.push(triad(mil, false), plural(mil, "мільйон", "мільйони", "мільйонів"));
+    if (thou) parts.push(triad(thou, true), plural(thou, "тисяча", "тисячі", "тисяч"));
+    if (rest || !whole) parts.push(triad(rest, false));
+
+    var words = parts.join(" ").replace(/\s+/g, " ").trim();
+    if (!words) words = "нуль";
+    words = words.charAt(0).toUpperCase() + words.slice(1);
+
+    return words + " " + plural(whole, "гривня", "гривні", "гривень") +
+           " " + (kop < 10 ? "0" + kop : kop) + " " +
+           plural(kop, "копійка", "копійки", "копійок");
+  }
+
+  /* ---------- rows ---------- */
+
+  var rows = document.getElementById("rows");
+
+  function addRow(data) {
+    data = data || {};
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td class="idx"></td>' +
+      '<td><div contenteditable data-f="name" data-ph="Найменування товару"></div></td>' +
+      '<td class="num"><div contenteditable data-f="qty"></div></td>' +
+      '<td class="num"><div contenteditable data-f="price" data-ph="0,00"></div></td>' +
+      '<td class="num c-sum" data-f="sum">0,00</td>' +
+      '<td class="c-del"><button class="rowdel" type="button" title="Прибрати">&times;</button></td>';
+    tr.querySelector('[data-f="name"]').textContent = data.name || "";
+    tr.querySelector('[data-f="qty"]').textContent = data.qty || "1";
+    tr.querySelector('[data-f="price"]').textContent = data.price || "";
+    tr.querySelector(".rowdel").addEventListener("click", function () {
+      tr.remove();
+      if (!rows.children.length) addRow();
+      recalc();
+    });
+    rows.appendChild(tr);
+    recalc();
+    return tr;
+  }
+
+  function recalc() {
+    var total = 0, i = 0;
+    Array.prototype.forEach.call(rows.children, function (tr) {
+      tr.querySelector(".idx").textContent = ++i;
+      var qty = parseNum(tr.querySelector('[data-f="qty"]').textContent);
+      var price = parseNum(tr.querySelector('[data-f="price"]').textContent);
+      var sum = qty * price;
+      total += sum;
+      tr.querySelector('[data-f="sum"]').textContent = money(sum);
+    });
+
+    document.getElementById("t_total").textContent = money(total);
+    document.getElementById("t_vat").textContent = money(total / 6);
+    document.getElementById("t_pay").textContent = money(total);
+    document.getElementById("t_words").textContent = total ? inWords(total) : "";
+
+    var no = txt("inv_no") || "___";
+    var dt = txt("inv_date") || "___";
+    var vat = txt("s_vat")
+      ? ", у т.ч. ПДВ 20% — " + money(total / 6) + " грн"
+      : "";
+    document.getElementById("purpose").textContent =
+      "Оплата за рахунком №" + no + " від " + dt + vat;
+    save();
+  }
+
+  /* ---------- storage ---------- */
+
+  function field(k) { return document.querySelector('[data-k="' + k + '"]'); }
+  function txt(k) { var el = field(k); return el ? el.textContent.trim() : ""; }
+
+  function save() {
+    try {
+      var data = {};
+      SELLER.forEach(function (k) { data[k] = txt(k); });
+      localStorage.setItem(STORE, JSON.stringify(data));
+    } catch (e) { /* приватний режим — просто не зберігаємо */ }
+  }
+
+  function load() {
+    var data = null;
+
+    // одноразове посилання: #s=<base64 json>. Фрагмент не йде на сервер.
+    var hash = location.hash || "";
+    if (hash.indexOf("s=") === 1) {
+      try {
+        var bin = atob(hash.slice(3).replace(/-/g, "+").replace(/_/g, "/"));
+        var bytes = new Uint8Array(bin.length);
+        for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        data = JSON.parse(new TextDecoder("utf-8").decode(bytes));
+      } catch (e) { data = null; }
+      history.replaceState(null, "", location.pathname);
+    }
+
+    if (!data) {
+      try { data = JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { data = null; }
+    }
+
+    if (data) {
+      SELLER.forEach(function (k) {
+        if (typeof data[k] === "string" && field(k)) field(k).textContent = data[k];
+      });
+    }
+  }
+
+  /* ---------- init ---------- */
+
+  function today() {
+    var d = new Date(), p = function (n) { return n < 10 ? "0" + n : "" + n; };
+    return p(d.getDate()) + "." + p(d.getMonth() + 1) + "." + d.getFullYear();
+  }
+
+  load();
+  if (!txt("inv_date")) field("inv_date").textContent = today();
+  addRow();
+
+  document.getElementById("sheet").addEventListener("input", recalc);
+  document.getElementById("add").addEventListener("click", function () { addRow(); });
+  document.getElementById("print").addEventListener("click", function () { window.print(); });
+  document.getElementById("reset").addEventListener("click", function () {
+    ["inv_no", "b_name", "b_contact"].forEach(function (k) {
+      if (field(k)) field(k).textContent = "";
+    });
+    field("inv_date").textContent = today();
+    rows.innerHTML = "";
+    addRow();
+  });
+
+  recalc();
+})();
+</script>
+</body>
+</html>

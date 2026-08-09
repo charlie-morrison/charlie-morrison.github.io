@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram Bot Production Pack — Code + 26-Point Checklist</title>
+<meta name="description" content="Five things that pass testing and fail live in a Telegram bot — initData, poll payloads, systemd, file limits — fixed in dependency-free code. 55 tests, $19.">
+<meta name="keywords" content="telegram bot production, telegram mini app initdata validation, telegram bot file size limit, sendpoll limits, telegram bot systemd, telegram bot checklist">
+<link rel="canonical" href="https://charliemorrison.dev/telegram-prod-pack/">
+<meta property="og:title" content="Telegram Bot Production Pack — Code + 26-Point Checklist">
+<meta property="og:description" content="The handful of places a Telegram bot or Mini App works in testing and then fails in production, each fixed in dependency-free code and each backed by a live measurement. 55 tests, $19.">
+<meta property="og:url" content="https://charliemorrison.dev/telegram-prod-pack/">
+<meta property="og:type" content="product">
+<meta property="og:image" content="https://charliemorrison.dev/telegram-prod-pack/cover.png">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-SE8T01PLBJ');
+</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Telegram in Production — the parts that bite you","image":"https://charliemorrison.dev/telegram-prod-pack/cover.png","description":"Five production failure modes for Telegram bots and Mini Apps — initData validation, sendPoll payloads, systemd deployment, file-size limits, plus a 26-point pre-ship checklist — fixed in dependency-free Python and Node with 55 tests. Every limit measured against the live Bot API.","brand":{"@type":"Brand","name":"Charlie Morrison Digital"},"offers":{"@type":"Offer","price":"19.00","priceCurrency":"USD","url":"https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&utm_medium=product&utm_campaign=telegram&utm_content=telegram-prod-pack","availability":"https://schema.org/InStock"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is this a bot boilerplate or starter template?","acceptedAnswer":{"@type":"Answer","text":"No, and deliberately not — see the first section. Free skeletons already do setup better. This is what goes wrong afterwards."}},{"@type":"Question","name":"What does it need to run?","acceptedAnswer":{"@type":"Answer","text":"Python 3 for four modules, Node for the second initData implementation. No framework, no dependencies, no test runner: python3 test_telegram_files.py and it runs."}},{"@type":"Question","name":"Does it work with aiogram, python-telegram-bot or grammY?","acceptedAnswer":{"@type":"Answer","text":"Yes. Plain functions with no framework coupling — call them from whatever you already use, or before your library sends the request."}},{"@type":"Question","name":"What is in the download?","acceptedAnswer":{"@type":"Answer","text":"A 40 KB ZIP: four code modules with their tests, the 26-point pre-ship checklist, a README per module, and the licence."}},{"@type":"Question","name":"Can I use it in client work?","acceptedAnswer":{"@type":"Answer","text":"Yes, including commercial work. The one restriction is that you may not resell the pack itself."}},{"@type":"Question","name":"What if I find something wrong in it?","acceptedAnswer":{"@type":"Answer","text":"Email charliemorrison2228@gmail.com. A correction with a reproduction is worth more to me than a kind review, and corrections ship as a free update."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.65}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+.wrap{max-width:800px;margin:40px auto;padding:0 20px}
+.tag{display:inline-block;background:#f0f0ff;color:#667eea;padding:4px 14px;border-radius:12px;font-size:.85em;margin-bottom:16px}
+h1{font-size:2.1em;margin-bottom:12px;line-height:1.25}
+.desc{font-size:1.15em;color:#555;margin-bottom:24px}
+.cover{width:100%;height:auto;border:1px solid #e6e6ef;border-radius:12px;margin:8px 0 28px;display:block}
+.price{font-size:2em;font-weight:700;color:#764ba2;margin-bottom:8px}
+.pricenote{color:#777;font-size:.92em;margin-bottom:20px}
+.buy{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:16px 40px;border-radius:8px;text-decoration:none;font-weight:700;font-size:1.15em}
+.buy:hover{opacity:.9}
+section{margin:44px 0}
+h2{font-size:1.5em;margin-bottom:14px}
+h3{font-size:1.1em;margin:22px 0 6px}
+p{margin-bottom:14px}
+ul{margin:0 0 14px 22px}
+li{padding:4px 0}
+.mods{list-style:none;margin-left:0}
+.mods li{padding:13px 0;border-bottom:1px solid #eee}
+.mods b{color:#1a1a2e;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.mods span{color:#764ba2;font-weight:700}
+.shot{width:100%;height:auto;border:1px solid #e6e6ef;border-radius:10px;margin:6px 0 10px;display:block}
+.cap{color:#777;font-size:.9em;margin-bottom:0}
+.receipt{background:#fafaff;border:1px solid #e6e6ef;border-radius:12px;padding:22px 24px}
+.receipt p:last-child{margin-bottom:0}
+.faq dt{font-weight:700;margin-top:18px}
+.faq dd{margin:6px 0 0 0;color:#555}
+.free{background:#f3fbf6;border:1px solid #cdeadb;border-radius:12px;padding:20px}
+.free a{color:#1f8b56;font-weight:700}
+.limits{background:#fffaf3;border:1px solid #f0e0c8;border-radius:12px;padding:20px 24px}
+.limits p:last-child{margin-bottom:0}
+code{background:#f4f4f8;padding:1px 5px;border-radius:4px;font-size:.92em;overflow-wrap:anywhere}
+a{color:#667eea}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+
+<div class="wrap">
+<span class="tag">Telegram</span>
+<h1>Telegram in Production &mdash; the parts that bite you</h1>
+<p class="desc">Not a boilerplate. The five places a Telegram bot or Mini App works perfectly in testing and then fails in front of real users &mdash; each one fixed in dependency-free code, each one backed by a measurement you can read for free before you buy anything.</p>
+
+<img class="cover" src="cover.png" alt="Telegram in Production pack — five modules: initData auth, poll payloads, systemd linter, pre-ship checklist, file limits. Python + Node, no dependencies, 55 tests." width="1600" height="1200">
+
+<div class="price">$19</div>
+<p class="pricenote">Instant download &middot; 40 KB ZIP, Python + Node, no dependencies &middot; commercial use allowed</p>
+<a class="buy" href="https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&amp;utm_medium=product&amp;utm_campaign=telegram&amp;utm_content=telegram-prod-pack">Get the pack &mdash; $19</a>
+
+<section>
+<h2>Why this is not another starter template</h2>
+<p>Search for a Telegram bot boilerplate and you will find a dozen good ones, free, doing project setup better than anything anybody sells. Buying that would be silly, so this pack does not compete with it.</p>
+<p>It handles the other end of the job. Your bot works. The Mini App opens. Then someone forwards a 30 MiB video and the bot goes silent, or a poll comes back with a timer you did not ask for, or the unit file that ran fine by hand crash-loops for thirty-four hours under systemd because <code>Environment=</code> spelled a variable differently from your code. Each of those is a specific, findable behaviour of the platform &mdash; and each one costs a weekend to discover from the inside.</p>
+</section>
+
+<section>
+<h2>What's inside</h2>
+<ul class="mods">
+<li><b>01-initdata-auth</b> &mdash; <span>22 tests</span><br>Mini App <code>initData</code> validation that survives Bot API 8.0: excludes <code>signature</code> as well as <code>hash</code>, hashes raw values, enforces <code>auth_date</code>. Python and Node, same behaviour in both. The field that breaks every validator copied from a 2023 blog post.</li>
+<li><b>02-poll-limits</b> &mdash; <span>12 tests</span><br>The hard walls <code>sendPoll</code> refuses, and &mdash; the reason the module exists &mdash; the three things it <em>accepts</em> and then silently changes. Ask for a 4-second timer and get 5, with <code>ok: true</code> and no warning.</li>
+<li><b>03-deploy-1gb</b> &mdash; <span>10 tests</span><br>A commented systemd unit template plus <code>preflight_unit.py</code>, which lints a unit for the two failure modes that cost me weeks: a relative <code>ExecStart</code> under systemd's empty PATH, and <code>Environment=</code> names that do not match what the code actually reads.</li>
+<li><b>04-preflight</b> &mdash; <span>26 items</span><br>One page to run down before going live. Every item names the command that proves it, rather than the feeling that it is probably fine.</li>
+<li><b>05-file-limits</b> &mdash; <span>11 tests</span><br>The exact download and upload boundaries, an encoder that refuses to build a body Telegram would cut, and the retry guard for the over-limit upload that returns <em>no error at all</em>.</li>
+</ul>
+<p>Plus a README per module explaining what breaks, why, and what the code does about it &mdash; and, in each one, an explicit note on what was <em>not</em> measured.</p>
+</section>
+
+<section>
+<h2>What "measured" means here</h2>
+<div class="receipt">
+<p>Every limit in the pack was probed against the live Bot API, one byte or one character either side of the boundary, before it was written down. The strongest example is the one I would want to see if I were buying:</p>
+<p>Telegram's upload wall is not on your file, it is on the whole HTTP request body &mdash; 52,428,799 bytes of body was cut exactly like 52,428,800 was, which is not how a file-size limit behaves. So the largest file you can send is the cap minus whatever <em>your</em> multipart encoder wraps around it. For the probe's exact field set that overhead computes to <strong>350 bytes</strong>, predicting a maximum of <strong>52,428,450</strong>. Sent live: 52,428,450 accepted, 52,428,451 cut. Exact to the byte.</p>
+<p>That is a prediction made in advance from the structure of the request and then confirmed, not a number read off a documentation page &mdash; and it is what <code>test_overhead_reproduces_the_measured_350_bytes</code> pins in the test suite, so it stays true.</p>
+</div>
+</section>
+
+<section>
+<h2>55 tests, and you can run them before you trust any of it</h2>
+<p>No test framework, no dependencies, nothing to install. This is a clean extract of the zip a buyer downloads, not the working tree it was built in:</p>
+<img class="shot" src="tests.png" alt="Terminal output: all five test suites from a clean extract of telegram-prod-pack-v1.1.zip, 55 tests passing" width="1080" height="857">
+<p class="cap">Run from <code>telegram-prod-pack-v1.1.zip</code>, sha256 <code>eadfd85a&hellip;</code>, on 2026-08-08.</p>
+</section>
+
+<section class="free">
+<h2 style="margin-bottom:8px">Read the measurements first &mdash; they are free</h2>
+<p>Each module has a write-up behind it, published here before the pack existed. Read them, take the numbers, and only buy if you would rather have the finished code than write it yourself:</p>
+<ul style="margin-bottom:0">
+<li><a href="/blog/telegram-mini-app-initdata-validation/">I forged Telegram Mini App initData</a> &mdash; which payloads pass validation, and the field that broke every old validator</li>
+<li><a href="/blog/telegram-poll-limits-game-night/">I tested Telegram's poll limits</a> &mdash; the walls, and the three silent rewrites</li>
+<li><a href="/blog/13-telegram-bots-1gb-vps/">13 Telegram bots on a $4.17 VPS</a> &mdash; measured memory, and the two systemd traps</li>
+<li><a href="/blog/telegram-bot-api-file-size-limits/">Telegram's file size limits, measured to the byte</a> &mdash; where the 350-byte prediction above comes from</li>
+</ul>
+</section>
+
+<section>
+<h2>The asymmetry worth knowing even if you never buy this</h2>
+<p>A bot can <strong>send 2.5&times; what it can fetch</strong>. <code>getFile</code> serves 20,971,520 bytes &mdash; 20 MiB exactly, so a guard written as <code>size &gt; 20_000_000</code> turns away nearly a megabyte of files that work fine. Above that ceiling the update is still valid, the <code>file_id</code> is still real and <code>file_size</code> is populated, so nothing in your code looks wrong; the file simply never arrives.</p>
+<p>Worse, an over-limit <em>upload</em> does not come back as a <code>413</code>. Telegram drops the TLS connection about thirty seconds in, so your client raises a transport error &mdash; and the retry policy almost everyone writes ("give up on 4xx, retry transport errors") will re-send an impossible body forever, logging what looks like an intermittent network fault. That one is in the pack because it is the kind of bug you do not find by reading; you find it in a billing statement.</p>
+<p>The parameter reference for all of this is the <a href="https://core.telegram.org/bots/api#sendpoll" rel="nofollow noopener" target="_blank">official Bot API documentation</a>, and the higher ceilings mentioned below come from the <a href="https://github.com/tdlib/telegram-bot-api" rel="nofollow noopener" target="_blank">local Bot API server</a> project.</p>
+</section>
+
+<section class="limits">
+<h2 style="margin-bottom:8px">What this pack does not cover</h2>
+<p>Stating this here rather than after you have paid. The measurements behind the pack ran one bot over one network path against the <em>cloud</em> Bot API. A self-hosted Bot API server raises the file ceilings substantially and none of that was measured. The upload-by-URL path, where Telegram fetches the file itself, was not probed either. The aiogram finding in module 01 concerns versions 3.27.0 and 3.30.0 and may well be patched by the time you read this &mdash; the module ships the correct implementation, which is correct either way.</p>
+<p>There is also no payments module, no database layer and no hosting. It is four small code modules and a checklist, not a framework.</p>
+</section>
+
+<section class="faq">
+<h2>Questions</h2>
+<dl>
+<dt>Is this a bot boilerplate or starter template?</dt>
+<dd>No, and deliberately not &mdash; see the first section. Free skeletons already do setup better. This is what goes wrong afterwards.</dd>
+<dt>What does it need to run?</dt>
+<dd>Python 3 for four modules, Node for the second <code>initData</code> implementation. No framework, no dependencies, no test runner: <code>python3 test_telegram_files.py</code> and it runs.</dd>
+<dt>Does it work with aiogram, python-telegram-bot or grammY?</dt>
+<dd>Yes. Plain functions with no framework coupling &mdash; call them from whatever you already use, or before your library sends the request.</dd>
+<dt>What is in the download?</dt>
+<dd>A 40 KB ZIP: four code modules with their tests, the 26-point pre-ship checklist, a README per module, and the licence.</dd>
+<dt>Can I use it in client work?</dt>
+<dd>Yes, including commercial work. The one restriction is that you may not resell the pack itself.</dd>
+<dt>What if I find something wrong in it?</dt>
+<dd>Email <a href="mailto:charliemorrison2228@gmail.com">charliemorrison2228@gmail.com</a>. A correction with a reproduction is worth more to me than a kind review, and corrections ship as a free update.</dd>
+</dl>
+</section>
+
+<section>
+<h2>Also on the Telegram side of this site</h2>
+<ul>
+<li><a href="/bots/">The bots I run</a>: what each one does and what it cost to keep alive</li>
+<li><a href="/telegram-party-pack/">The Telegram Party Pack</a>: the other end of the catalogue &mdash; 255 group-chat prompts, no code involved</li>
+<li><a href="/blog/">The build log</a>: everything measured along the way</li>
+</ul>
+</section>
+
+<p style="color:#777;font-size:.92em">Built and written by <a href="/about">Charlie Morrison</a>. Test counts on this page come from running the shipped zip, not from memory.</p>
+
+<a href="/" class="back">&larr; Browse all products</a>
+</div>
+
+<footer>
+<p>&copy; 2026 Charlie Morrison Digital.</p>
+<p style="margin-top:8px"><a href="/tools/">Free Tools</a> &middot; <a href="/blog/">Blog</a> &middot; <a href="https://charliemorrison.lemonsqueezy.com">Store</a></p>
+</footer>
+</body>
+</html>

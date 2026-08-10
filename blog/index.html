@@ -20,6 +20,12 @@ gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{
 <div class="container">
 <h1>Blog</h1>
 <div class="post">
+<h2><a href="/blog/telegram-4096-character-limit/">Telegram's 4096 Limit Isn't Characters: I Measured It</a></h2>
+<div class="meta">August 10, 2026</div>
+<p>Everyone repeats that Telegram counts UTF-16, so an emoji costs two. I sent 4,096 emoji in one message &mdash; 8,192 UTF-16 units, 16 KB &mdash; and it went through. The cap counts Unicode code points; the entity offsets in the very same reply count UTF-16. Two units in one <code>Message</code>, which is why the folklore never dies.</p>
+<a href="/blog/telegram-4096-character-limit/" class="read-more">Read more &rarr;</a>
+</div>
+<div class="post">
 <h2><a href="/blog/telegram-bot-api-file-size-limits/">Telegram Bot File Size Limits: The Exact Byte Cutoffs</a></h2>
 <div class="meta">August 7, 2026</div>
 <p>The docs say 20 MB down and 50 MB up. Measured against a live bot, both turn out to be binary and exact to the byte &mdash; and the upload cap counts your multipart headers, not just the file. The failure modes differ too: an oversized download returns a clean 400, while an oversized upload just drops the TLS connection and returns nothing at all.</p>

@@ -198,6 +198,7 @@ dcs = "\n".join(f"{k}={v}" for k, v in sorted(parsed.items()))</code></pre>
 <h2>More from the Telegram build log</h2>
 <ul>
 <li><a href="/blog/telegram-bot-api-file-size-limits/">Telegram's file size limits, to the byte</a>: 20 MiB down, 50 MiB up, and an upload failure that returns no error at all.</li>
+<li><a href="/blog/telegram-4096-character-limit/">Telegram's 4096 limit is not characters</a>: the cap counts code points, the entity offsets count UTF-16, and 4,096 emoji fit in one message.</li>
 <li><a href="/blog/telegram-poll-limits-game-night/">I tested Telegram's poll limits</a>: twelve options, and one timer behaviour that closes your round early.</li>
 <li><a href="/blog/13-telegram-bots-1gb-vps/">13 Telegram bots on a $4.17 VPS</a>: the real RAM numbers, measured.</li>
 <li><a href="/blog/i-messaged-18-telegram-game-bots/">I messaged 18 Telegram game bots</a>: how many were still alive.</li>

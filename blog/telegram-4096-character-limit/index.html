@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram's 4096 Limit Isn't Characters: I Measured It</title>
+<meta name="description" content="Everyone says Telegram counts UTF-16, so budget two units per emoji. I sent 4,096 emoji in one message and it went through. The cap and the entity offsets use different units.">
+<meta name="keywords" content="telegram message length limit, telegram 4096 characters, message is too long telegram, telegram caption 1024 limit, telegram entity offset utf-16">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-4096-character-limit/">
+<meta property="og:title" content="Telegram's 4096 Limit Isn't Characters: I Measured It">
+<meta property="og:description" content="A message of 4,096 emoji is 16 KB and 8,192 UTF-16 units, and Telegram accepts it. The length cap counts code points; entity offsets count UTF-16. Two units, one Message object.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-4096-character-limit/telegram-message-length-limit.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Telegram's 4096 Limit Isn't Characters: I Measured It","datePublished":"2026-08-10","dateModified":"2026-08-10","image":"https://charliemorrison.dev/blog/telegram-4096-character-limit/telegram-message-length-limit.png","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about/"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What unit is Telegram's 4096 message limit counted in?","acceptedAnswer":{"@type":"Answer","text":"Unicode code points. Measured against a live bot, 4,096 code points is accepted and 4,097 is rejected with 400 Bad Request: message is too long, regardless of how those code points encode. A message of 4,096 emoji is 8,192 UTF-16 code units and 16,384 bytes of UTF-8, and it sends without complaint."}},{"@type":"Question","name":"Does an emoji count as two characters in a Telegram message?","acceptedAnswer":{"@type":"Answer","text":"Not against the length cap. A non-BMP emoji is one code point, and the cap counts code points, so it costs one. It does count as two in entity offsets, which are measured in UTF-16 code units. That is why the advice to budget two units per emoji is half right: it applies to formatting offsets, not to the 4096 limit."}},{"@type":"Question","name":"Is len(text) a correct check for the Telegram message limit in Python?","acceptedAnswer":{"@type":"Answer","text":"Yes. Python's len returns the number of Unicode code points, which is exactly the unit the cap uses, so len(text) <= 4096 matched every measured outcome. Guards written against UTF-16 length or UTF-8 byte length both reject messages that Telegram accepts."}},{"@type":"Question","name":"Does the same rule apply to the 1024 caption limit?","acceptedAnswer":{"@type":"Answer","text":"Yes. Captions cap at 1,024 code points and behave identically: 1,024 emoji is accepted at 2,048 UTF-16 units, and 1,025 is rejected with 400 Bad Request: message caption is too long. The error text differs from the sendMessage one, which is useful when you are reading logs."}}]}</script>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+a{color:#667eea}
+code{background:#f1f3f5;padding:2px 6px;border-radius:4px;font-size:.92em;overflow-wrap:anywhere}
+pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:0 0 20px;font-size:.9em;line-height:1.6}
+pre code{background:none;color:inherit;padding:0}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box.pack{background:linear-gradient(135deg,#f6ad5510,#dd6b2010);border-color:#dd6b20}
+.cta-box.pack h3{color:#c05621}
+.cta-box.pack a{background:linear-gradient(135deg,#f6ad55,#dd6b20)}
+.cta-box .alt a{background:none;color:#667eea;padding:0;font-weight:600;display:inline;margin:0}
+.cta-box.pack .alt a{background:none;color:#c05621}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:12px;border:1px solid #e5e7eb}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.95em}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f8f9fa}
+td.dead{color:#c92a2a;font-weight:600;white-space:nowrap}
+td.live{color:#2b8a3e;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+dl.faq{margin:20px 0}
+dl.faq dt{font-weight:600;color:#1a1a2e;margin-top:18px}
+dl.faq dd{margin:6px 0 0;color:#333}
+@media(max-width:560px){
+table{font-size:.86em;margin:16px 0}
+th,td{padding:8px 7px}
+td.dead,td.live{white-space:normal}
+h1{font-size:1.6em}
+pre{font-size:.82em}
+}
+.note{background:#fffbea;border-left:4px solid #f0c000;padding:14px 18px;border-radius:8px;margin:24px 0;font-size:.96em}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>Telegram's 4096 Limit Isn't Characters: I Measured It</h1>
+<p class="meta">August 10, 2026 · 8 min read · by <a href="/about/">Charlie Morrison</a></p>
+
+<p>If you have ever asked how long a Telegram message can be, you have met the same answer twice: 4096 characters, and by the way Telegram counts UTF-16, so an emoji costs two. It is repeated in library issues, in Stack Overflow answers, and in the defensive splitters people paste into their bots, usually as a chunk size of 2000 or 4000 chosen with a shrug for safety.</p>
+
+<p>I write a lot of bot code that emits long, emoji-heavy status blocks, and that folklore was costing me splits I did not think I needed. So I stopped guessing and asked the API directly: send messages one unit either side of the boundary, in four different alphabets, and see which measurement predicts what the server does.</p>
+
+<p>The answer is that the number 4096 is real and exact, and that the unit almost everybody names is the wrong one. Worse, the UTF-16 rule <em>is</em> true, of a different field, in the same reply. A single <code>Message</code> object mixes two units, which is precisely why the folklore has survived so long: everyone is half right.</p>
+
+<figure>
+  <img src="telegram-message-length-limit.png" alt="Terminal output of the probe: ascii, cyrillic, emoji and combining-character messages at 4096 and 4097 code points, showing that code points predict every accept or reject while UTF-16 length does not, and that entity offsets use offset 2 after a single emoji">
+  <figcaption>Unedited output from the probe, 10 August 2026. Every number in this post comes from this run.</figcaption>
+</figure>
+
+<h2>How I tested it</h2>
+
+<p>The probe builds strings out of four deliberately different characters and sends each through <a href="https://core.telegram.org/bots/api#sendmessage"><code>sendMessage</code></a> against a real bot token (a throwaway bot, never one serving users), recording the HTTP status and the exact <code>description</code> Telegram returns. Every message it manages to send is deleted with <code>deleteMessage</code> in the same breath, so the run leaves nothing behind in the chat.</p>
+
+<p>The four characters are chosen so that the candidate units disagree with each other:</p>
+
+<ul>
+<li><code>a</code> &mdash; 1 code point, 1 UTF-16 unit, 1 byte. All three units agree, so this only finds the number.</li>
+<li><code>я</code> &mdash; 1 code point, 1 UTF-16 unit, <strong>2 bytes</strong>. Separates bytes from the rest.</li>
+<li>😀 (U+1F600) &mdash; 1 code point, <strong>2 UTF-16 units</strong>, 4 bytes. Separates code points from UTF-16.</li>
+<li><code>e</code> + combining acute (U+0301) &mdash; <strong>2 code points</strong>, 2 UTF-16 units, 3 bytes, and <strong>one thing you can see</strong>. Separates all of them from "visible characters".</li>
+</ul>
+
+<p>Then the only discipline that matters: test the unit immediately either side of every candidate boundary. A limit you have bracketed to the nearest hundred is a limit you have not found.</p>
+
+<h2>The number is 4096. The unit is code points.</h2>
+
+<p>ASCII gives the number straight away. 4,096 characters go through; 4,097 come back as a clean <code>400 Bad Request: message is too long</code>. No truncation, no silent trim &mdash; a real error you can catch.</p>
+
+<p>Cyrillic kills the bytes hypothesis. 4,096 Cyrillic characters are <strong>8,192 bytes</strong> of UTF-8, twice the ASCII payload, and Telegram accepts them; 4,097 fails. So whatever is being counted, it is not the size of what goes on the wire.</p>
+
+<p>The emoji case is the one that surprised me. If the cap counted UTF-16 code units, 2,049 emoji &mdash; 4,098 units &mdash; would be rejected. It was accepted. So I pushed until it broke, and the boundary sits exactly where a code-point counter would put it:</p>
+
+<pre><code>emoji x4096   code pts 4096   UTF-16 8192   bytes 16384   -&gt; OK
+emoji x4097   code pts 4097   UTF-16 8194   bytes 16388   -&gt; 400 message is too long</code></pre>
+
+<p>Read that again, because it is the whole post. <strong>A single Telegram message can carry 4,096 emoji, 16 KB of UTF-8 and 8,192 UTF-16 code units, and the server takes it.</strong> I echoed the accepted message back out of the API response and compared it to what I sent: identical, character for character. Nothing was truncated on the way through.</p>
+
+<p>The mixed case pins it from the other side. <code>a</code> &times; 4,095 followed by one emoji is 4,096 code points and 4,097 UTF-16 units: accepted. Add one more <code>a</code> and it is 4,097 code points: rejected. Across every probe I ran, "code points &le; 4096" predicted the outcome every single time. "UTF-16 units &le; 4096" did not.</p>
+
+<h2>But the UTF-16 rule is real &mdash; for offsets</h2>
+
+<p>Here is why the folklore refuses to die. In the same JSON reply that just accepted 8,192 UTF-16 units, the formatting entities are indexed in UTF-16.</p>
+
+<p>Send one emoji followed by bold text and read the entity Telegram hands back:</p>
+
+<pre><code>😀*bold*     -&gt;  {"offset": 2, "length": 4, "type": "bold"}
+😀😀😀*bold*  -&gt;  {"offset": 6, "length": 4, "type": "bold"}</code></pre>
+
+<p>One emoji, and the bold run starts at offset <strong>2</strong>. Three emoji, offset <strong>6</strong>. If offsets were code points those numbers would be 1 and 3. Telegram documents this (<a href="https://core.telegram.org/api/entities">entity offsets are specified in UTF-16 code units</a>) and it is correct, and it has been quietly transplanted onto the length cap by a thousand summarised answers.</p>
+
+<p>So both halves of the folklore are true of something. They are just true of different fields:</p>
+
+<div class="tw">
+<table>
+<tr><th>Field</th><th>Unit</th><th>Python equivalent</th></tr>
+<tr><td>4096 text cap / 1024 caption cap</td><td class="live">Unicode code points</td><td><code>len(text)</code></td></tr>
+<tr><td><code>entities[].offset</code> and <code>.length</code></td><td class="dead">UTF-16 code units</td><td><code>len(text.encode('utf-16-le')) // 2</code></td></tr>
+</table>
+</div>
+
+<p>If you have ever sliced a message at an entity offset with plain Python indexing and watched the bold run land one character to the left for every emoji before it, that table is the bug.</p>
+
+<h2>Visible characters are not the unit either</h2>
+
+<p>The combining-mark probe closes the last escape route. <code>e</code> + U+0301 renders as a single é, but it is two code points. Send 2,048 of them, which is 2,048 things a human can see and 4,096 code points, and it is accepted. Send 2,049 and it fails at 4,098.</p>
+
+<p>So a user can paste 2,049 visible characters into your bot and be told their message is too long, and they will be right and the error will also be right. If you show a live character counter in a Mini App, this is the case that makes it disagree with the server. Any counter built on grapheme clusters, or on <code>String.length</code> in JavaScript (which is UTF-16), will be wrong in one direction or the other for exactly these inputs.</p>
+
+<h2>Captions: same rule, different number, different error string</h2>
+
+<p>Captions cap at 1,024 and behave identically. 1,024 emoji, or 2,048 UTF-16 units, are accepted; 1,025 are rejected. Worth noting for log-grepping: the error text is not the same one <code>sendMessage</code> returns.</p>
+
+<pre><code>sendMessage  -&gt; 400 Bad Request: message is too long
+sendPhoto    -&gt; 400 Bad Request: message caption is too long</code></pre>
+
+<div class="note">
+<strong>A pleasant contrast with the file limits.</strong> When I <a href="/blog/telegram-bot-api-file-size-limits/">measured the file size boundaries</a>, an over-limit upload got no error at all &mdash; Telegram dropped the TLS connection ~30 seconds in and left the caller holding a transport exception. Text is the well-behaved case: you get a real 400, immediately, with a description worth logging.
+</div>
+
+<h2>What this means in code</h2>
+
+<p><strong>In Python, the naive guard is the correct guard.</strong> <code>len(text) &lt;= 4096</code> matched every outcome I measured. This is the rare case where the obvious thing is right and the clever thing, re-encoding to UTF-16 to "be safe", is what makes you wrong.</p>
+
+<p><strong>In JavaScript, the naive guard is the wrong one.</strong> <code>str.length</code> is <a href="https://www.unicode.org/faq/utf_bom.html">UTF-16 code units</a>, so an emoji reads as 2 and your Mini App will refuse a message the server would have accepted. Count code points instead: <code>[...str].length</code>, which iterates by code point and gives 1 per emoji.</p>
+
+<p><strong>Stop halving your chunk size for emoji.</strong> If you split long output at 2,000 "to be safe with unicode", you are sending twice the messages you need to, at twice the flood-limit risk, for a hazard that does not exist. Split at 4,096 code points.</p>
+
+<p><strong>Never index a string by an entity offset directly.</strong> Convert first: encode to <code>utf-16-le</code>, slice by <code>offset * 2</code> and <code>length * 2</code>, decode back. Anything else is correct only until someone types an emoji.</p>
+
+<div class="cta-box">
+  <h3>Building on Telegram for something lighter?</h3>
+  <p>My free planner lays out a Telegram game night &mdash; rounds, timings, poll structure &mdash; in about a minute, no signup.</p>
+  <a href="/telegram-game-night-planner/?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-4096-character-limit">Build a game night &rarr;</a>
+  <span class="alt">Or read <a href="/blog/how-to-run-a-telegram-game-night/">how to run one end to end</a>.</span>
+</div>
+
+<h2>What I did not test</h2>
+
+<p>Three honest gaps. I did not test whether the same code-point rule holds on the MTProto client APIs &mdash; TDLib and the user-account layer are a different code path where the UTF-16 convention is far more visible, so I would not assume my result transfers. I did not test <code>editMessageText</code>, only <code>sendMessage</code> and <code>sendPhoto</code>; I would expect the same cap but I have not seen it. And I did not probe the entity-count limit, which is a separate ceiling that bites long formatted messages before the length cap does.</p>
+
+<p>Everything here comes from one bot on one network path. I am comfortable with that for this particular claim, because the result is not a statistical trend &mdash; it is a boundary that lands on an exact power of two from four directions at once, with a one-unit failure on the far side of each. Encoding a message differently changed its byte length fourfold and moved the boundary not at all.</p>
+
+<h2>The short version</h2>
+
+<ul>
+<li><strong>The cap is 4,096 Unicode code points</strong>, exactly. 4,097 gives <code>400 message is too long</code>.</li>
+<li><strong>Not bytes:</strong> 4,096 Cyrillic characters are 8,192 bytes and go through fine.</li>
+<li><strong>Not UTF-16:</strong> 4,096 emoji are 8,192 UTF-16 units and 16 KB, and go through fine.</li>
+<li><strong>Not visible characters:</strong> 2,049 combining-accent é's are 4,098 code points and are rejected.</li>
+<li><strong>Entity offsets <em>are</em> UTF-16.</strong> Two units in one <code>Message</code>. Convert before slicing.</li>
+<li><strong>Captions: same rule at 1,024</strong>, with a distinct error string.</li>
+</ul>
+
+<h2>Questions I had before I measured</h2>
+
+<dl class="faq">
+<dt>What unit is Telegram's 4096 message limit counted in?</dt>
+<dd>Unicode code points. Measured against a live bot, 4,096 code points is accepted and 4,097 is rejected with 400 Bad Request: message is too long, regardless of how those code points encode. A message of 4,096 emoji is 8,192 UTF-16 code units and 16,384 bytes of UTF-8, and it sends without complaint.</dd>
+<dt>Does an emoji count as two characters in a Telegram message?</dt>
+<dd>Not against the length cap. A non-BMP emoji is one code point, and the cap counts code points, so it costs one. It does count as two in entity offsets, which are measured in UTF-16 code units. That is why the advice to budget two units per emoji is half right: it applies to formatting offsets, not to the 4096 limit.</dd>
+<dt>Is len(text) a correct check for the Telegram message limit in Python?</dt>
+<dd>Yes. Python's len returns the number of Unicode code points, which is exactly the unit the cap uses, so len(text) &lt;= 4096 matched every measured outcome. Guards written against UTF-16 length or UTF-8 byte length both reject messages that Telegram accepts.</dd>
+<dt>Does the same rule apply to the 1024 caption limit?</dt>
+<dd>Yes. Captions cap at 1,024 code points and behave identically: 1,024 emoji is accepted at 2,048 UTF-16 units, and 1,025 is rejected with 400 Bad Request: message caption is too long. The error text differs from the sendMessage one, which is useful when you are reading logs.</dd>
+</dl>
+
+<div class="cta-box pack">
+  <h3>Telegram in Production &mdash; the parts that bite you</h3>
+  <p>The guards from this post, finished: a length check in the unit the server actually uses, an entity-offset slicer that survives emoji, and a splitter that stops halving your chunks for no reason. Plus the file-size guard that fails loudly instead of retrying forever, an initData validator with <code>signature</code> excluded and <code>auth_date</code> enforced, poll payloads Telegram will not silently rewrite, and a systemd unit linter for the two failure modes that cost me weeks. 55 tests you can run from the zip.</p>
+  <a href="https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-4096-character-limit">Get the pack &mdash; $19</a>
+  <span class="alt"><a href="/telegram-prod-pack/">What is in the pack</a>, module by module. Every claim in it was measured first and published here.</span>
+</div>
+
+<h2>More from the Telegram build log</h2>
+<ul>
+<li><a href="/blog/telegram-bot-api-file-size-limits/">Telegram bot file size limits</a>: 20 MiB down, 50 MiB up, both exact to the byte &mdash; and the upload cap counts your HTTP headers.</li>
+<li><a href="/blog/telegram-mini-app-initdata-validation/">I forged Telegram initData</a>: which payloads pass validation, and the field that broke every old validator.</li>
+<li><a href="/blog/telegram-poll-limits-game-night/">I tested Telegram's poll limits</a>: twelve options, and one timer behaviour that closes your round early.</li>
+</ul>
+
+<a class="back" href="/blog/">&larr; Back to the blog</a>
+</article>
+<footer>
+  <p><a href="/about/">About</a> · <a href="/blog/">Blog</a> · <a href="/tools/">Free tools</a></p>
+  <p>&copy; 2026 Charlie Morrison Digital</p>
+</footer>
+</body>
+</html>

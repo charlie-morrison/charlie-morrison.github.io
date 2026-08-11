@@ -35,7 +35,8 @@ figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
 .app-card h3{margin-top:0;color:#6c5ce7}
 .app-card.dead{border-left-color:#d63031}
 .app-card.dead h3{color:#d63031}
-.comparison{width:100%;border-collapse:collapse;margin:20px 0}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0}
+.comparison{width:100%;min-width:560px;border-collapse:collapse;margin:0}
 .comparison th,.comparison td{padding:10px 14px;border:1px solid #e0e0e0;text-align:left}
 .comparison th{background:#f0f0f5;font-weight:600}
 .comparison tr:hover{background:#f8f8fc}
@@ -74,6 +75,7 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 
 <h2>Results</h2>
 
+<div class="table-wrap">
 <table class="comparison">
 <tr><th>Handle</th><th>Result</th><th>What came back</th></tr>
 <tr><td>@GPTAnonymousBot</td><td>&#9989; replied</td><td>&ldquo;Welcome to Anonymous Bot!&rdquo; &mdash; send and receive anonymous messages</td></tr>
@@ -88,6 +90,7 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 <tr><td>@TokumeiChatto</td><td>&#10060; gone</td><td>Username does not resolve</td></tr>
 <tr><td>@AnonSpaceBot</td><td>&#9888;&#65039; inconclusive</td><td><code>PeerFloodError</code> &mdash; my account was rate-limited, so this is a result about me</td></tr>
 </table>
+</div>
 
 <div class="note">
 <p><strong>Why the amber row matters more than it looks.</strong> <code>PeerFloodError</code> is Telegram throttling <em>my</em> account for messaging too many new bots in a row &mdash; it says nothing about @AnonSpaceBot. Scoring it as &ldquo;dead&rdquo; would have made a better headline (4 of 11 works nicely) and been false. It reproduced identically on the second pass, which is the tell: a failure that repeats at exactly the same point regardless of the target is usually yours, not the world's. So of the ten handles I can speak about, four work.</p>

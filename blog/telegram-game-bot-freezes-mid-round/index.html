@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Your Telegram Game Bot Freezes Mid-Round (Measured)</title>
+<meta name="description" content="The docs say &quot;short bursts&quot; are allowed without saying how short. I pushed one bot until it broke: 100 operations per chat, then a 10-second flood wait. Edits count too.">
+<meta name="keywords" content="Telegram bot rate limit, Telegram 429 retry_after, editMessageText limit, Telegram game bot freezes, Telegram bot flood wait, Telegram countdown bot">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-game-bot-freezes-mid-round/">
+<meta property="og:title" content="Why Your Telegram Game Bot Freezes Mid-Round (Measured)">
+<meta property="og:description" content="Telegram allows &quot;short bursts&quot; over the one-message-per-second rule but never says how short. I measured it: about 100 operations in a chat, then a 10-second silence — and edits spend the same allowance.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-game-bot-freezes-mid-round/rate-limit-probe.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Why Your Telegram Game Bot Freezes Mid-Round (Measured)","datePublished":"2026-08-12","dateModified":"2026-08-12","image":"https://charliemorrison.dev/blog/telegram-game-bot-freezes-mid-round/rate-limit-probe.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why does a Telegram game bot go silent for a few seconds mid-round?","acceptedAnswer":{"@type":"Answer","text":"It has hit a flood wait. Telegram allows a burst of activity in one chat and then returns HTTP 429 with a retry_after value. In my runs on 12 August 2026 the wall arrived after about 100 operations in a private chat and the retry_after values were 8 to 12 seconds. The bot is not crashed; it is being told to wait."}},{"@type":"Question","name":"Can a Telegram bot run a live countdown by editing one message?","acceptedAnswer":{"@type":"Answer","text":"Yes. I edited a single message once per second for 120 seconds and all 120 edits succeeded with no throttling at all. I also edited one message 200 times back to back at 3.37 edits per second with zero 429s, so there is no low per-message edit cap to worry about."}},{"@type":"Question","name":"Do edits count against the Telegram bot rate limit?","acceptedAnswer":{"@type":"Answer","text":"Yes, and against the same allowance as sending. Starting fresh, editMessageText survived about 97 calls before a 429. When I spent 60 calls on sendMessage first, only 39 edits got through before the same wall — 99 operations in total either way. Sends and edits draw on one shared per-chat budget."}},{"@type":"Question","name":"What does 'message is not modified' mean?","acceptedAnswer":{"@type":"Answer","text":"It is a 400 error returned when an edit would produce exactly the same text and reply markup that the message already has. A countdown that rounds to whole seconds and renders the same string twice will hit it. The fix is to make sure every edit changes something, or to skip the call when the rendered text is unchanged."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:10px;border:1px solid #e0e0e0}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+code{background:#f4f4f8;padding:2px 6px;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:20px 0;font-size:.9em;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+.cta-box{background:linear-gradient(135deg,#6c5ce710,#a29bfe10);border:2px solid #6c5ce7;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#6c5ce7}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0}
+.comparison{width:100%;min-width:560px;border-collapse:collapse;margin:0}
+.comparison th,.comparison td{padding:10px 14px;border:1px solid #e0e0e0;text-align:left}
+.comparison th{background:#f0f0f5;font-weight:600}
+.comparison tr:hover{background:#f8f8fc}
+.note{background:#fff9e6;border-left:4px solid #f0a500;border-radius:8px;padding:16px 20px;margin:24px 0}
+.note p:last-child{margin-bottom:0}
+.back{display:inline-block;margin-top:32px;color:#6c5ce7;text-decoration:none}
+.faq{margin:20px 0}
+.faq details{margin-bottom:12px;padding:12px;background:#f8f9fa;border-radius:8px}
+.faq summary{font-weight:600;cursor:pointer;color:#333}
+.faq p{margin-top:8px;margin-bottom:0}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#6c5ce7;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>Why Your Telegram Game Bot Freezes Mid-Round (Measured)</h1>
+<div class="meta">By Charlie Morrison &middot; August 12, 2026 &middot; 9 min read</div>
+
+<p>You are four rounds into a quiz. Everyone is answering fast, the bot is keeping up, and then it just&hellip; stops. Ten seconds of nothing. Somebody types &ldquo;?&rdquo;. Somebody else says the bot is broken. Then it comes back to life as if nothing happened and the round continues.</p>
+
+<p>The bot did not crash and your host did not run out of memory. Telegram told it to sit in the corner for a few seconds, and it did.</p>
+
+<p>Telegram is unusually honest about this in its <a href="https://core.telegram.org/bots/faq" rel="noopener">official bot FAQ</a>: &ldquo;In a single chat, avoid sending more than one message per second. We may allow short bursts that go over this limit, but eventually you'll begin receiving 429 errors.&rdquo; That is accurate and it is also unusable, because the entire question when your game stalls is <em>how short is a short burst</em>. Nobody publishes the number.</p>
+
+<p>So on 12 August 2026 I pushed one of my own bots until it broke, and wrote down where the wall is.</p>
+
+<h2>The short version</h2>
+
+<ul>
+<li>A single chat absorbed <strong>about 100 operations</strong> before returning HTTP 429, at which point Telegram asked for a wait of <strong>8 to 12 seconds</strong>.</li>
+<li><strong>Edits spend the same allowance as sends.</strong> Sixty messages followed by edits gave me only 39 edits before the wall. Ninety-nine operations either way.</li>
+<li>The documented &ldquo;one message per second&rdquo; is a guideline, not a gate. I sent 30 messages in 5.8 seconds, five times the stated rate, with <strong>zero</strong> throttling.</li>
+<li>A <strong>live countdown works fine</strong>: one edit per second for two minutes, 120 out of 120 successful, nothing throttled.</li>
+<li>Before Telegram rejects you it <strong>parks</strong> you. Individual calls stretched from 220&nbsp;ms to over 7 seconds while still succeeding. That is the &ldquo;the bot feels sluggish&rdquo; phase, and it arrives before the silence.</li>
+</ul>
+
+<h2>How I measured it</h2>
+
+<p>One bot, one private chat, one script hammering the <a href="https://core.telegram.org/bots/api#editmessagetext" rel="noopener">Bot API</a> over plain HTTPS with no library in between, so nothing could quietly retry or rate-limit on my behalf. The bot is a retired party-game bot of mine with no users left to annoy. Every message the probe sent was deleted afterwards, 258 of them.</p>
+
+<p>Each probe ran twice in spirit: once serially, where the request round-trip itself paces you, and once with 30 concurrent workers, where nothing paces you but Telegram. The serial runs answer &ldquo;can a normal bot loop do this?&rdquo;. The concurrent runs answer &ldquo;where is the wall?&rdquo;. Both matter, and they give completely different impressions of the same API, which is exactly why the folklore is such a mess.</p>
+
+<figure>
+<img src="rate-limit-probe.png" alt="Terminal output of the rate limit probe: serial sends and edits pass with no throttling, 30 concurrent workers hit HTTP 429 after about 100 operations with retry_after of 10 to 12 seconds, and 60 sends followed by 39 edits reach the same wall" loading="lazy">
+<figcaption>Every row is from the real runs. Green passed, red hit the wall, amber is the shared-allowance test.</figcaption>
+</figure>
+
+<h2>The one-message-per-second rule is not a gate</h2>
+
+<p>The first thing I tested was the rule everyone quotes. Thirty messages, one after another, as fast as the round-trip allowed: <strong>30 succeeded in 5.82 seconds</strong>, a sustained 5.16 messages per second, median response 189&nbsp;ms, not a single 429.</p>
+
+<p>Then 200 edits of one message, back to back: <strong>200 out of 200 succeeded</strong> in 59.3 seconds, 3.37 edits per second, median 223&nbsp;ms. No throttling, and no sign of a per-message edit cap: a message that has been edited 200 times edits just as happily as a fresh one.</p>
+
+<p>So if you write the obvious loop, in the obvious way, on a normal connection, you will never see the documented limit. This is precisely why so many bot authors believe rate limits are a myth right up until the evening it matters.</p>
+
+<h2>The wall: about 100 operations, then ten seconds of nothing</h2>
+
+<p>Serial calls cannot find the ceiling because the round trip is the bottleneck. So I threw 30 concurrent workers at the same chat.</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Probe</th><th>Calls</th><th>Succeeded</th><th>429</th><th>What Telegram asked for</th></tr>
+<tr><td><code>sendMessage</code>, serial</td><td>30</td><td>30</td><td>0</td><td>none</td></tr>
+<tr><td><code>editMessageText</code>, serial, one message</td><td>200</td><td>200</td><td>0</td><td>none</td></tr>
+<tr><td><code>editMessageReplyMarkup</code>, serial</td><td>40</td><td>40</td><td>0</td><td>none</td></tr>
+<tr><td><code>sendMessage</code>, 30 workers</td><td>150</td><td>100</td><td>50</td><td><code>retry_after</code> 10&ndash;11&nbsp;s</td></tr>
+<tr><td><code>editMessageText</code>, 30 workers</td><td>150</td><td>99</td><td>51</td><td><code>retry_after</code> 11&ndash;12&nbsp;s</td></tr>
+<tr><td>60 sends, then edits</td><td>150</td><td>130</td><td>20</td><td><code>retry_after</code> 8&nbsp;s</td></tr>
+<tr><td><code>editMessageText</code>, 1/second, 120&nbsp;s</td><td>120</td><td>120</td><td>0</td><td>none</td></tr>
+</table>
+</div>
+
+<p>The sending run got <strong>100 messages through and then hit the wall</strong>, 15.3 seconds in. The edit run got <strong>97 edits through</strong> before its first 429. Two different methods, the same neighbourhood: roughly a hundred operations, then a forced pause of about ten seconds.</p>
+
+<p>The 429 body is the useful part. Telegram does not just refuse. It tells you exactly how long to wait:</p>
+
+<pre><code>{"ok": false, "error_code": 429,
+ "description": "Too Many Requests: retry after 10",
+ "parameters": {"retry_after": 10}}</code></pre>
+
+<p>Which means a well-written bot never needs to guess. Read <code>parameters.retry_after</code>, sleep for that long, carry on. The established libraries will do this for you if you let them. python-telegram-bot ships an <a href="https://docs.python-telegram-bot.org/en/stable/telegram.ext.aioratelimiter.html" rel="noopener">AIORateLimiter</a> that both paces outgoing calls and retries on 429. The single most common reason a game bot behaves badly under load is that someone disabled that and hand-rolled a retry loop with a fixed one-second sleep.</p>
+
+<h2>It slows you down before it stops you</h2>
+
+<p>The detail I did not expect: the throttle is not binary. With 12 concurrent workers I never saw a single 429, but I also never got more than about 7 successful operations per second no matter how many workers I added. The median call still returned in 279&nbsp;ms, while the slowest call in the same batch took <strong>7.4 seconds</strong> and then succeeded.</p>
+
+<p>Telegram was holding requests open rather than rejecting them. In practice that means there are two failure modes, and players experience them differently. First the bot gets mushy: answers arrive a beat late, the countdown skips a number, someone says &ldquo;lag&rdquo;. Only if you keep pushing does it go properly silent for ten seconds. If you only handle the 429 you have handled the second one and not the first.</p>
+
+<h2>Edits come out of the same purse</h2>
+
+<p>This is the finding I would actually want if I were building a game bot, and I have not seen it written down anywhere.</p>
+
+<p>A game bot does two things at once: it announces what happened (<code>sendMessage</code>) and it keeps a live scoreboard or timer up to date (<code>editMessageText</code>). It is tempting to assume editing is cheap, since you are not creating anything, just updating a message that already exists.</p>
+
+<p>It is not cheap. After a full cooldown I spent 60 calls on plain sends, all successful, and then immediately started editing. The edits died after <strong>39</strong> of them. Sixty plus thirty-nine is <strong>99</strong>, the same wall the pure-edit run hit at 97, and the pure-send run hit at 100.</p>
+
+<div class="note">
+<p><strong>The practical reading:</strong> budget roughly a hundred <em>operations</em> per chat per burst, not a hundred messages plus a hundred edits. A round that posts 20 results and refreshes a scoreboard 80 times has already spent the lot. This is also why animating a scoreboard is a genuinely expensive design decision, even though it looks like the polite, low-noise one.</p>
+</div>
+
+<h2>Yes, you can run a live countdown</h2>
+
+<p>The reassuring result. I edited one message once per second for two minutes, the way a round timer would: <strong>120 calls, 120 successes, zero throttling</strong>, an achieved rate of 1.01 per second. A one-second countdown is comfortably within budget and always was. The 3.37/s serial run says you have roughly three times that headroom before it becomes interesting.</p>
+
+<p>There is one trap, and it is a good one:</p>
+
+<pre><code>400 Bad Request: message is not modified: specified new message
+content and reply markup are exactly the same as a current content
+and reply markup of the message</code></pre>
+
+<p>Telegram refuses an edit that would change nothing. That sounds harmless until you notice how countdowns are usually written: compute the seconds remaining, round to a whole number, render &ldquo;30 seconds left&rdquo;, edit. Run that loop slightly faster than once per second, or let one call take 400&nbsp;ms longer than usual, and two consecutive ticks render the same string, and you get a 400 in the middle of a working countdown. Naive error handling then retries it, which produces the same string again.</p>
+
+<p>Either check whether the rendered text differs before calling, or make each edit unique. Do not paper over it by catching every 400 and ignoring it, because that swallows the real errors too.</p>
+
+<h2>Polls play by different rules</h2>
+
+<p>Since quiz bots live on polls, I checked what editing means for them:</p>
+
+<ul>
+<li><code>editMessageText</code> on a poll message fails with <code>400 Bad Request: there is no text in the message to edit</code>. A poll is not a text message with buttons, so there is no question to rewrite, and you cannot fix a typo in a live poll.</li>
+<li><code>editMessageReplyMarkup</code> on the same poll <strong>succeeds</strong>. You can attach or change an inline keyboard around a poll even though you cannot touch the poll itself.</li>
+<li><a href="https://core.telegram.org/bots/api#stoppoll" rel="noopener"><code>stopPoll</code></a> works once and returns the final <code>Poll</code> object with <code>is_closed: true</code> and the vote counts. Calling it a second time returns <code>400 Bad Request: poll can't be stopped</code>. If your round-end handler can fire twice (a timer and a last vote arriving together, say), treat that error as &ldquo;already closed&rdquo;, not as a failure.</li>
+</ul>
+
+<h2>If you are hosting the game night, not writing the bot</h2>
+
+<p>Three things worth knowing when it happens to you:</p>
+
+<ol>
+<li><strong>A ten-second silence after a flurry is a flood wait, not a crash.</strong> Wait it out before restarting anything. Restarting mid-wait usually makes it worse, because the bot comes back and immediately re-sends whatever it thinks it owes everyone.</li>
+<li><strong>Rapid-fire formats are the expensive ones.</strong> Buzzer rounds where twelve people all press a button in the same two seconds spend the allowance fastest. Turn-based formats barely touch it.</li>
+<li><strong>The stall is per chat.</strong> If the bot is playing in two groups it will not usually stall in both at once &mdash; which, if you are trying to work out whether the bot is down or throttled, is a quick thing to check.</li>
+</ol>
+
+<div class="cta-box">
+<h3>Want a game night that cannot rate-limit?</h3>
+<p>Our party game Mini App runs inside Telegram: Truth or Dare, Never Have I Ever, Would You Rather. Free, no install.</p>
+<a href="https://t.me/charlie_party_bot/partygame?startapp=ratelimit">Open the free Mini App</a>
+</div>
+
+<h2>What I did not test</h2>
+
+<p>Everything above was measured in a <strong>private chat</strong>. Telegram's own FAQ gives a different and much lower figure for groups, no more than 20 messages per minute, and I could not verify it tonight, because the account I run these probes from is currently restricted from creating new groups and I was not going to run a flood test in somebody else's. So treat the hundred-operation number as a per-private-chat measurement, and assume a group is stricter, not looser, until somebody measures it.</p>
+
+<p>I also did not test the paid tier. The same FAQ notes that bots can pay for broadcast headroom: up to 1,000 messages per second at 0.1 Stars per message beyond the free 30/s, with a 100,000-Star balance required to switch it on. That is a mass-notification feature, not a game-night one; no party bot is going to need it.</p>
+
+<h2>The rules I would actually code to</h2>
+
+<ol>
+<li>Budget <strong>~100 operations per chat</strong> per burst, counting sends and edits together.</li>
+<li>Pace steady work at <strong>5 operations per second or under</strong> in one chat; nothing in my runs objected below that.</li>
+<li>Always honour <code>parameters.retry_after</code> on a 429. Never sleep a fixed second and retry.</li>
+<li>Watch your own <strong>latency</strong>, not just your error rate. Requests stretching past a second are the early warning.</li>
+<li>Make every edit change something, or skip the call.</li>
+<li>Treat <code>poll can't be stopped</code> as idempotent success.</li>
+</ol>
+
+<p>None of that is exotic. But it is the difference between a quiz night that runs and one that pauses for ten seconds every fourth round while twelve people type &ldquo;?&rdquo; into the group.</p>
+
+<h2>FAQ</h2>
+
+<div class="faq">
+<details><summary>Why does a Telegram game bot go silent for a few seconds mid-round?</summary>
+<p>It has hit a flood wait. Telegram allows a burst of activity in one chat and then returns HTTP 429 with a <code>retry_after</code> value. In my runs the wall arrived after about 100 operations in a private chat, with <code>retry_after</code> values of 8 to 12 seconds. The bot is not crashed, it is being told to wait.</p></details>
+<details><summary>Can a Telegram bot run a live countdown by editing one message?</summary>
+<p>Yes. One edit per second for 120 seconds gave 120 successes and no throttling, and 200 back-to-back edits of a single message at 3.37/s also passed cleanly. There is no low per-message edit cap to design around.</p></details>
+<details><summary>Do edits count against the rate limit?</summary>
+<p>Yes, against the same allowance as sending. Fresh, <code>editMessageText</code> survived about 97 calls. After spending 60 calls on <code>sendMessage</code> first, only 39 edits got through, 99 operations in total either way.</p></details>
+<details><summary>What does &ldquo;message is not modified&rdquo; mean?</summary>
+<p>A 400 error returned when an edit would produce exactly the same text and reply markup the message already has. Countdowns that round to whole seconds hit it when two ticks render the same string. Check before you call, or make each edit unique.</p></details>
+</div>
+
+<h2>Related tests on this blog</h2>
+
+<ul>
+<li><a href="/blog/telegram-poll-limits-game-night/">Telegram poll limits</a>, the other set of numbers a quiz bot runs into.</li>
+<li><a href="/blog/i-messaged-18-telegram-game-bots/">I messaged 18 &ldquo;best&rdquo; Telegram game bots</a>: seven never replied.</li>
+<li><a href="/blog/how-to-run-a-telegram-game-night/">How to run a Telegram game night</a>, stalls and all.</li>
+<li><a href="/blog/best-telegram-party-games-2026/">Best Telegram party games and bots in 2026</a>.</li>
+<li><a href="/blog/telegram-4096-character-limit/">Telegram's 4,096-character limit is not characters</a>: same method, different boundary.</li>
+<li><a href="/bots/">All our Telegram bots and Mini Apps</a>.</li>
+</ul>
+
+<div class="cta-box">
+<h3>Telegram Party Pack &mdash; 255 group-chat prompts</h3>
+<p>Truth or Dare, Never Have I Ever, Would You Rather, Most Likely To, Paranoia and Story Chain, written out so your game night does not depend on a bot staying inside its rate limit.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-game-bot-freezes-mid-round">Get the pack</a>
+</div>
+
+<a class="back" href="/blog/">&larr; Back to Blog</a>
+</article>
+
+<footer>
+<p>&copy; 2026 <a href="/">Charlie Morrison Digital</a></p>
+<p style="margin-top:8px"><a href="https://t.me/charliemorrison">Telegram</a> &middot; <a href="https://x.com/CharlieMor6296">X</a> &middot; <a href="https://charliemorrison.dev/bots/">Telegram Bots</a></p>
+</footer>
+</body>
+</html>

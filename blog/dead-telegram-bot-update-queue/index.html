@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Dead Telegram Bot Still Has a Mailbox (22 Unread)</title>
+<meta name="description" content="I switched a Telegram bot off in May. Seventy-seven days later its queue held 22 updates and four people pressing Start. How to read it without a server.">
+<meta name="keywords" content="Telegram getUpdates without offset, pending_update_count, read Telegram bot updates offline, setMyDescription offline, Telegram bot sunset, dead Telegram bot queue">
+<link rel="canonical" href="https://charliemorrison.dev/blog/dead-telegram-bot-update-queue/">
+<meta property="og:title" content="Your Dead Telegram Bot Still Has a Mailbox (22 Unread)">
+<meta property="og:description" content="A bot I sunset in May had 22 updates waiting on Telegram's servers, four of them real people pressing Start. Reading that queue costs nothing and consumes nothing.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/dead-telegram-bot-update-queue/dead-bot-queue.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Your Dead Telegram Bot Still Has a Mailbox (22 Unread)","datePublished":"2026-08-14","dateModified":"2026-08-14","image":"https://charliemorrison.dev/blog/dead-telegram-bot-update-queue/dead-bot-queue.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can I read a Telegram bot's messages if the bot is not running?","acceptedAnswer":{"@type":"Answer","text":"Yes, for the last 24 hours. Telegram stores incoming updates until the bot receives them and discards them after 24 hours. Call getUpdates with the bot token and no offset and you get everything still in the window, without consuming it."}},{"@type":"Question","name":"Does calling getUpdates delete the updates?","acceptedAnswer":{"@type":"Answer","text":"Only if you pass an offset. Updates with identifiers lower than the offset are forgotten. With no offset, repeated calls return the same queue. I verified this by calling twice and getting 22 both times."}},{"@type":"Question","name":"How long does Telegram keep updates for a bot that never collects them?","acceptedAnswer":{"@type":"Answer","text":"No longer than 24 hours, per the Bot API documentation. Older updates roll off permanently and cannot be recovered."}},{"@type":"Question","name":"Can I change a bot's description while the bot is offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. setMyDescription, setMyShortDescription, setMyName and setMyCommands are all authenticated by the token and handled by Telegram, not by your server. The description is shown in an empty chat with the bot, which is exactly the screen a new visitor sees before pressing Start."}},{"@type":"Question","name":"Why does everyone see my bot's description in the wrong language?","acceptedAnswer":{"@type":"Answer","text":"Because the entry you set with no language_code is the fallback for every user whose language has no specific entry. Set the default to your widest audience and add per-language variants on top."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:10px;border:1px solid #e0e0e0}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+code{background:#f4f4f8;padding:2px 6px;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:20px 0;font-size:.9em;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+blockquote{border-left:4px solid #6c5ce7;background:#f8f8fc;padding:12px 18px;margin:20px 0;color:#444;font-style:italic}
+blockquote p:last-child{margin-bottom:0}
+.cta-box{background:linear-gradient(135deg,#6c5ce710,#a29bfe10);border:2px solid #6c5ce7;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#6c5ce7}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box .alt a{background:none;color:#6c5ce7;padding:0;font-weight:600;display:inline;margin:0}
+.note{background:#fff9e6;border-left:4px solid #f0a500;border-radius:8px;padding:16px 20px;margin:24px 0}
+.note p:last-child{margin-bottom:0}
+.back{display:inline-block;margin-top:32px;color:#6c5ce7;text-decoration:none}
+.faq{margin:20px 0}
+.faq details{margin-bottom:12px;padding:12px;background:#f8f9fa;border-radius:8px}
+.faq summary{font-weight:600;cursor:pointer;color:#333}
+.faq p{margin-top:8px;margin-bottom:0}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#6c5ce7;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>Your Dead Telegram Bot Still Has a Mailbox</h1>
+<div class="meta">By Charlie Morrison &middot; August 14, 2026 &middot; 8 min read</div>
+
+<p>I switched a Telegram bot off in May. Nobody was using it: 21 users, zero games played in four weeks, and it was sitting on a 1&nbsp;GB VPS next to four bots that people actually use. So I stopped the service, disabled the unit, wrote the sunset line in my services file, and moved on. Textbook cleanup.</p>
+
+<p>Seventy-seven days later I went to check something unrelated and found twenty-two unread messages waiting for it.</p>
+
+<p>Not in a database. Not in a log I forgot to rotate. On Telegram's servers, in the queue the bot never came back to collect, and four of them were real people who had opened the bot that day and pressed Start.</p>
+
+<h2>The thing nobody tells you about turning a bot off</h2>
+
+<p>There are exactly two ways a bot receives anything: it polls with <code>getUpdates</code>, or Telegram pushes to a webhook. The <a href="https://core.telegram.org/bots/api" rel="noopener">Bot API reference</a> is explicit about what happens when neither is running:</p>
+
+<blockquote><p>Incoming updates are stored on the server until the bot receives them either way, but they will not be kept longer than 24 hours.</p></blockquote>
+
+<p>Read that again with a dead bot in mind. <em>Stored until the bot receives them.</em> A bot with no poller and no webhook never receives anything, so the queue simply fills up and rolls forward, discarding whatever turns 24 hours old. It is a mailbox with a one-day memory that nobody is emptying.</p>
+
+<p>And here is the part that makes it useful rather than merely tidy: you can read that mailbox without turning the bot back on, and without consuming it.</p>
+
+<p>The token still works. The token is not tied to your server at all. It authenticates you to Telegram, so every method that does not require a running bot process still answers: <code>getMe</code>, <code>getWebhookInfo</code>, <code>getUpdates</code>, and the entire family of profile methods. Your server being off is irrelevant to all of them.</p>
+
+<h2>What I actually found</h2>
+
+<p>Two commands, no infrastructure:</p>
+
+<pre><code>curl -s "https://api.telegram.org/bot&lt;TOKEN&gt;/getWebhookInfo"
+curl -s "https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates?limit=100&amp;timeout=0"</code></pre>
+
+<p><code>getWebhookInfo</code> came back with an empty <code>url</code>, so no webhook, and this:</p>
+
+<pre><code>"pending_update_count": 22</code></pre>
+
+<p>That number is the whole story in one field. Twenty-two things had arrived and nothing had picked them up.</p>
+
+<figure>
+<img src="dead-bot-queue.png" alt="Terminal output showing getWebhookInfo with pending_update_count 22 and no webhook, then a classified dump of the queue: four private slash-start commands in green, sixteen new_chat_members group events in grey, and a second getUpdates call still returning 22" loading="lazy">
+<figcaption>Every row is from the real read on 13 August. Green is a real person in a private chat; grey is group-membership noise.</figcaption>
+</figure>
+
+<p><code>getUpdates</code> then told me what they were. The honest breakdown matters, because the headline number is mostly noise and I nearly fooled myself with it:</p>
+
+<ul>
+<li>16 <code>new_chat_members</code> events from two supergroups the bot still silently belongs to. These are not people knocking on my bot's door. They are strangers joining group chats that happen to contain a mute robot, and my bot gets told about every single one. Pure noise, and it is 73% of the queue.</li>
+<li>2 stray events: a video chat starting and ending in one of those same groups.</li>
+<li>4 private <code>/start</code> commands. Four different people, in a private chat with the bot, pressing the button that says Start.</li>
+</ul>
+
+<p>Those four are the signal. Their <code>language_code</code> values were <code>en</code>, <code>en</code>, <code>en</code>, <code>ru</code>. All four got silence.</p>
+
+<p>I read the queue again exactly one day later, before publishing this, because a single window is an anecdote and I did not want to build a post on one. The second window held five updates and one <code>/start</code>, a Russian speaker, mid-afternoon. So the two days I have sampled read four, then one.</p>
+
+<p>That is a much less dramatic number and it is the one I am going to quote. Five Start presses across two days, against a website that earns roughly one Google click a day. The bot I switched off still gets more people knocking than the site I keep publishing into, but by something like two to one, not the four to one the first night suggested. Which is exactly why the second read happened before the post did.</p>
+
+<h2>Reading is not receiving</h2>
+
+<p>The thing that makes this a technique rather than a one-off curiosity is that the read is non-destructive, and that is not obvious from the method name.</p>
+
+<p><code>getUpdates</code> only advances the queue when you pass an <code>offset</code>. The <a href="https://docs.python-telegram-bot.org/en/stable/telegram.bot.html" rel="noopener">python-telegram-bot reference</a> spells out the same contract the raw API does: identifiers lower than <code>offset</code> are forgotten, and that is the only thing that forgets them. Call it with no offset and you get a copy.</p>
+
+<p>I proved it the boring way. I called it twice and counted:</p>
+
+<pre><code>$ curl -s ".../getUpdates?limit=100&amp;timeout=0" | jq '.result | length'
+22
+$ curl -s ".../getUpdates?limit=100&amp;timeout=0" | jq '.result | length'
+22</code></pre>
+
+<p>Still twenty-two. So you can check a dead bot's mailbox as often as you like, and, this is the part I care about, so can the next person, or the next session, or a nightly script. Consume it once by accident and you have destroyed the only record that this demand exists, and everyone after you reads a confident zero.</p>
+
+<p>That asymmetry is worth being paranoid about. The safe read costs nothing. The unsafe read is silent and permanent.</p>
+
+<div class="cta-box">
+<h3>The bot may be off, but the game still runs</h3>
+<p>Our party game Mini App is a static page Telegram opens for you: Truth or Dare, Never Have I Ever, Would You Rather. No backend, nothing to sunset. Free, no install.</p>
+<a href="https://t.me/charlie_party_bot/partygame?startapp=deadqueue">Open the free Mini App</a>
+<span class="alt">Not on Telegram right now? <a href="https://charliemorrison.dev/party-game/?src=deadqueue">Play in your browser &rarr;</a></span>
+</div>
+
+<h2>The uncomfortable part: I sunset it on bad evidence</h2>
+
+<p>My kill decision was &ldquo;21 users, 0 games in four weeks&rdquo;. That was true. It was also measured entirely from <em>inside</em> the bot: its own database, its own handlers, its own idea of what a user is. When I stopped the process, the measuring instrument stopped with it.</p>
+
+<p>So the sunset was not a decision that traffic had ended. It was a decision to stop looking, and those feel identical afterwards. Every day since, the queue has been filling and clearing itself, unread, while my notes said the demand was zero.</p>
+
+<div class="note">
+<p>I want to be careful about how far that goes, because it is easy to over-claim here and I nearly did. What I measured is four Start presses in one 24-hour window, then one in the next. That is all the retention gives me. It is not a trend, it is not seventy-seven days of data, and I have no way to recover the days that already rolled off. The gap between those two readings is the whole argument for not publishing off a single night: had I shipped this yesterday the headline would have been four a day, and today would already have made a liar of it.</p>
+</div>
+
+<p>The only honest move is to read it on a schedule, which is what I now do. A small script reads without an offset and appends the classified counts to a file, so that in a month there is a real line instead of two dots.</p>
+
+<h2>What to do when the backend is off and the door is still open</h2>
+
+<p>Here is the second half, and it is the half that changed something rather than just measuring it.</p>
+
+<p>A bot with no server can still talk to visitors, because part of what a visitor sees is stored on Telegram's side, not yours. <code>setMyDescription</code> changes the text that, in the API's own words, &ldquo;is shown in the chat with the bot if the chat is empty&rdquo;, which is precisely the screen those four people were looking at before they pressed Start. Same for <code>setMyShortDescription</code> on the profile card, <code>setMyName</code>, and <code>setMyCommands</code> for the menu.</p>
+
+<p>Mine were all wrong in the same direction. The description was Ukrainian-only, written when the bot was aimed at a Ukrainian audience, and because I had never set a language-specific variant, Telegram was serving that Ukrainian text as the fallback to <em>everyone</em>, including the three English speakers in that first queue. The command menu advertised ten slash commands, every one of them handled by a process that has not run since May. The short description ended with an instruction: add me to a group and type <code>/play</code>. That command is the single most reliably broken thing about the entire bot, and it was the last thing a visitor read before trying it.</p>
+
+<p>Meanwhile the one part that does work, a Mini App, which is just a static page Telegram opens for you and needs no backend at all, was mentioned nowhere.</p>
+
+<p>Four calls fixed all of it, and none of them required the bot to be running:</p>
+
+<ol>
+<li><code>setMyShortDescription</code> and <code>setMyDescription</code> with no <code>language_code</code>, which is the fallback everybody gets, rewritten in English and pointing at the Open App button.</li>
+<li>The same two with <code>language_code=uk</code>, keeping the original Ukrainian for the audience it was written for. This is the bit people miss. The default is not &ldquo;English&rdquo;, the default is &ldquo;whatever you set with no language code&rdquo;, and if that is Ukrainian then Ukrainian is what a German visitor sees.</li>
+<li><code>setMyCommands</code> with an empty array, in both the default and the <code>uk</code> variant. A menu of ten dead commands is worse than no menu, because it converts a dead end into a dead end the user blames themselves for.</li>
+</ol>
+
+<p>Then I checked it the only way that counts, by loading the public <code>t.me</code> page as an anonymous visitor and reading what it served. The English card was live. Not &ldquo;the API returned <code>ok: true</code>&rdquo;, which it had already done eight times without telling me anything about what a human sees.</p>
+
+<h2>The checklist</h2>
+
+<p>If you have ever turned a Telegram bot off, this is fifteen minutes:</p>
+
+<ol>
+<li><strong>Find the token.</strong> It still works. If it doesn't, that is its own answer.</li>
+<li><strong><code>getWebhookInfo</code></strong> and read <code>pending_update_count</code>. Zero means nobody is knocking. Anything else means read on.</li>
+<li><strong><code>getUpdates</code> with no offset, ever.</strong> Count <em>private</em> messages and commands separately from group membership events, or the noise will flatter you by a factor of five.</li>
+<li><strong>Look at <code>language_code</code></strong> on those private senders. It tells you who is actually finding you, which is very often not who you built it for.</li>
+<li><strong>Fix the door whether or not you restart the backend.</strong> Description, short description, commands, per-language variants. It costs nothing and it works while the server is off.</li>
+<li><strong>Verify on the public page, not in the API response.</strong></li>
+</ol>
+
+<p>And if the mailbox turns out to be full, sit with that before you delete the project. A bot that quietly collects Start presses for seventy-seven days is not a failed product. It is a distribution channel you already own and stopped answering.</p>
+
+<h2>FAQ</h2>
+
+<div class="faq">
+<details><summary>Can I read a Telegram bot's messages if the bot is not running?</summary>
+<p>Yes, for the last 24 hours. Telegram stores incoming updates until the bot receives them and discards them after 24 hours. Call <code>getUpdates</code> with the bot token and no offset and you get everything still in the window, without consuming it.</p></details>
+<details><summary>Does calling getUpdates delete the updates?</summary>
+<p>Only if you pass an <code>offset</code>. Updates with identifiers lower than the offset are forgotten. With no offset, repeated calls return the same queue. I verified this by calling twice and getting 22 both times.</p></details>
+<details><summary>How long does Telegram keep updates for a bot that never collects them?</summary>
+<p>No longer than 24 hours, per the Bot API documentation. Older updates roll off permanently and cannot be recovered.</p></details>
+<details><summary>Can I change a bot's description while the bot is offline?</summary>
+<p>Yes. <code>setMyDescription</code>, <code>setMyShortDescription</code>, <code>setMyName</code> and <code>setMyCommands</code> are all authenticated by the token and handled by Telegram, not by your server. The description is shown in an empty chat with the bot, which is exactly the screen a new visitor sees before pressing Start.</p></details>
+<details><summary>Why does everyone see my bot's description in the wrong language?</summary>
+<p>Because the entry you set with no <code>language_code</code> is the fallback for every user whose language has no specific entry. Set the default to your widest audience and add per-language variants on top.</p></details>
+</div>
+
+<h2>Related tests on this blog</h2>
+
+<ul>
+<li><a href="/blog/telegram-game-bot-freezes-mid-round/">Why your Telegram game bot freezes mid-round</a>: the rate limit, measured the same way.</li>
+<li><a href="/blog/i-messaged-18-telegram-game-bots/">I messaged 18 &ldquo;best&rdquo; Telegram game bots</a>: seven never replied. This post is what that silence looks like from the owner's side.</li>
+<li><a href="/blog/anonymous-message-apps-telegram-2026/">Anonymous message apps for Telegram</a>: another set of bots that stopped answering.</li>
+<li><a href="/blog/telegram-mini-app-initdata-validation/">Validating Telegram Mini App initData</a>: the half of a bot that keeps working with no server.</li>
+<li><a href="/bots/">All our Telegram bots and Mini Apps</a>.</li>
+</ul>
+
+<div class="cta-box">
+<h3>Telegram Party Pack &mdash; 255 group-chat prompts</h3>
+<p>Truth or Dare, Never Have I Ever, Would You Rather, Most Likely To, Paranoia and Story Chain, written out so your game night does not depend on anybody's bot still being switched on.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=dead-telegram-bot-update-queue">Get the pack</a>
+</div>
+
+<a class="back" href="/blog/">&larr; Back to Blog</a>
+</article>
+
+<footer>
+<p>&copy; 2026 <a href="/">Charlie Morrison Digital</a></p>
+<p style="margin-top:8px"><a href="https://t.me/charliemorrison">Telegram</a> &middot; <a href="https://x.com/CharlieMor6296">X</a> &middot; <a href="https://charliemorrison.dev/bots/">Telegram Bots</a></p>
+</footer>
+</body>
+</html>

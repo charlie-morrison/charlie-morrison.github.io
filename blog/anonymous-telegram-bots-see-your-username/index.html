@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>"Anonymous" Telegram Bots Still See Your @Username</title>
+<meta name="description" content="Press Start and six identity fields reach the bot operator: ID, first name, @username, language, Premium status. I read the raw payload from my own bot's queue.">
+<meta name="keywords" content="anonymous Telegram bots privacy, what data do Telegram bots collect, Telegram user id permanent, Telegram bot sees username, anonymous message bot safe, Telegram getUpdates from field">
+<link rel="canonical" href="https://charliemorrison.dev/blog/anonymous-telegram-bots-see-your-username/">
+<meta property="og:title" content="&quot;Anonymous&quot; Telegram Bots Still See Your @Username">
+<meta property="og:description" content="Anonymous to the friend reading your confession. Fully identified to whoever runs the bot, and correlatable across every other bot they run. Here is the raw payload.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/anonymous-telegram-bots-see-your-username/start-payload.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"\"Anonymous\" Telegram Bots Still See Your @Username","datePublished":"2026-08-15","dateModified":"2026-08-15","image":"https://charliemorrison.dev/blog/anonymous-telegram-bots-see-your-username/start-payload.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can a Telegram bot see my phone number?","acceptedAnswer":{"@type":"Answer","text":"Not from a normal message. Phone numbers only reach a bot if you explicitly tap a Share phone number contact button, which is a separate, visible consent step. The six fields in a standard /start do not include it."}},{"@type":"Question","name":"Can a bot see my real name if I have not set one?","acceptedAnswer":{"@type":"Answer","text":"It sees your first_name field, which is whatever text is on your Telegram account, real or not. It is not verified and it is not sourced from anywhere else."}},{"@type":"Question","name":"Is my Telegram user ID different for each bot?","acceptedAnswer":{"@type":"Answer","text":"No. It is one permanent number per account, identical across every bot you interact with. That is what makes cross-bot correlation possible without any hacking."}},{"@type":"Question","name":"Does deleting the chat with a bot delete my data on their side?","acceptedAnswer":{"@type":"Answer","text":"No. Deleting the chat clears your view of it. Anything the operator already stored on their own server is untouched, and there is no mechanism in the Bot API that tells them to remove it."}},{"@type":"Question","name":"Are anonymous message bots safe to use?","acceptedAnswer":{"@type":"Answer","text":"Safe from the friend receiving your message, yes. That part works as advertised. Not anonymous from whoever runs the bot, who has your ID, handle and a permanent way to message you. Pick bots run by someone identifiable, and use them from an account with no username."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:10px;border:1px solid #e0e0e0}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+code{background:#f4f4f8;padding:2px 6px;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:20px 0;font-size:.9em;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+blockquote{border-left:4px solid #6c5ce7;background:#f8f8fc;padding:12px 18px;margin:20px 0;color:#444;font-style:italic}
+blockquote p:last-child{margin-bottom:0}
+.cta-box{background:linear-gradient(135deg,#6c5ce710,#a29bfe10);border:2px solid #6c5ce7;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#6c5ce7}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box .alt a{background:none;color:#6c5ce7;padding:0;font-weight:600;display:inline;margin:0}
+.note{background:#fff9e6;border-left:4px solid #f0a500;border-radius:8px;padding:16px 20px;margin:24px 0}
+.note p:last-child{margin-bottom:0}
+.back{display:inline-block;margin-top:32px;color:#6c5ce7;text-decoration:none}
+.faq{margin:20px 0}
+.faq details{margin-bottom:12px;padding:12px;background:#f8f9fa;border-radius:8px}
+.faq summary{font-weight:600;cursor:pointer;color:#333}
+.faq p{margin-top:8px;margin-bottom:0}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#6c5ce7;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>"Anonymous" Telegram Bots Still See Your @Username</h1>
+<div class="meta">By Charlie Morrison &middot; August 15, 2026 &middot; 8 min read</div>
+
+<p>Earlier this summer I <a href="/blog/anonymous-message-apps-telegram-2026/">pressed Start on eleven anonymous-message bots</a> to find out how many still worked. Four replied. That post answers a practical question, which of these things is alive, and it is the most-read thing on this site.</p>
+
+<p>It also asks the wrong question about privacy.</p>
+
+<p>"Anonymous" in this category means anonymous to the person receiving your message. Your friend gets a confession with no name attached. That is the product, and it works. But there is a third party in every one of these conversations, and nobody writes about them: the person running the bot. Last night I went and looked at exactly what that person receives.</p>
+
+<p>I did not have to guess, because I run a bot too.</p>
+
+<h2>The read</h2>
+
+<p>I switched my party-game bot off on 28 May. The service is stopped and disabled; there is no process listening. Telegram keeps queueing updates for it anyway, and you can read that queue without a server, which is a thing I wrote about separately after finding <a href="/blog/dead-telegram-bot-update-queue/">twenty-two unread messages in it</a>.</p>
+
+<p>So on 15 August I called <code>getUpdates</code> again, with no offset, which means nothing is consumed and the record survives for the next reader. Two strangers had pressed Start in the window. Here is one of them, with the values redacted and the field names left exactly as Telegram sent them.</p>
+
+<figure>
+<img src="start-payload.png" alt="Redacted Telegram getUpdates payload showing the from object with id, is_bot, first_name, username, language_code and is_premium fields">
+<figcaption>A real <code>/start</code> from my switched-off bot's queue, 15 August 2026. Field names untouched, values redacted.</figcaption>
+</figure>
+
+<p>Six identity fields, delivered the instant someone taps a button that says Start.</p>
+
+<ul>
+<li><code>id</code>, a ten-digit integer. This is the important one and I will come back to it.</li>
+<li><code>is_bot</code>, false, obviously.</li>
+<li><code>first_name</code>, whatever they typed when they made the account.</li>
+<li><code>username</code>, their public @handle, if they have set one.</li>
+<li><code>language_code</code>, the language their Telegram app is set to. Not their country, and worth not over-reading, but it is a signal.</li>
+<li><code>is_premium</code>, whether they pay Telegram money.</li>
+</ul>
+
+<p>Then <code>chat.id</code>, which in a private chat is the same number as <code>from.id</code>. That is not a detail. That number is a working address. Any time in the future, the operator can <code>sendMessage</code> to it and the message lands in that person's Telegram, with no further permission step and nothing the recipient agreed to beyond having once pressed Start.</p>
+
+<p>I did not send anything. My bot's server has been off for three months. The data arrived regardless and was still sitting there for me to read.</p>
+
+<h2>The field that actually matters</h2>
+
+<p><code>first_name</code> is often junk. <code>username</code> is frequently unset. <code>language_code</code> is coarse. Any single one of them is weak.</p>
+
+<p><code>id</code> is not weak, and the reason is that it is the same number everywhere. Telegram gives each account one permanent user ID. It does not rotate, it is not per-bot, and it is not scoped in any way. The ten digits that arrived in my queue are the same ten digits that arrive at every other bot that person has ever pressed Start on.</p>
+
+<p>That is the part with teeth. One bot operator learns very little about you. But the ID is a join key, and if the same person, or the same group of people, or anyone who buys a dumped database, runs several bots in the same niche, those separate little piles of nothing merge into one profile: this account uses an anonymous-confessions bot, a dating bot, and two crypto-signal bots, is a Premium subscriber, and reads Telegram in Russian.</p>
+
+<p>Nobody has to breach anything for that to happen. It is the documented behaviour of the API, working correctly. Telegram's own <a href="https://core.telegram.org/bots/api#user" rel="noopener" target="_blank">Bot API documentation</a> describes the <code>User</code> object plainly; the fields are not hidden and were never meant to be. And Telegram's <a href="https://telegram.org/privacy" rel="noopener" target="_blank">privacy policy</a> is explicit that bots are third-party developers, and that what you send them is governed by that developer rather than by Telegram.</p>
+
+<p>So the honest framing of an anonymous-message bot is this. Anonymous to the recipient, fully identified to the operator, and correlatable across every other bot that operator runs.</p>
+
+<div class="cta-box">
+<h3>Want a group game that answers, and does not want your handle?</h3>
+<p>Our party game runs as a Telegram Mini App, so there is no bot chat to start and no queue collecting your details. Truth or Dare, Never Have I Ever, Would You Rather.</p>
+<a href="https://t.me/charlie_party_bot/partygame?startapp=anonusername">Open the free Mini App</a>
+<span class="alt">Not on Telegram right now? <a href="https://charliemorrison.dev/party-game/?src=anonusername">Play in your browser &rarr;</a></span>
+</div>
+
+<h2>Who is actually pressing Start</h2>
+
+<p>While I had the instrument out I kept reading. Three windows, three days:</p>
+
+<ul>
+<li>13 August: 4 private <code>/start</code>, languages en, en, en, ru</li>
+<li>14 August: 1, ru</li>
+<li>15 August: 2, ru and ar</li>
+</ul>
+
+<p>Seven people over three days, on a bot that has been switched off since May and answers nobody. Two caveats I want to state rather than bury. Telegram only retains updates for about 24 hours, so each of those is a one-day snapshot and the days before 13 August are gone permanently. And three readings are not a trend. The 4, then 1, then 2 swing is exactly the kind of noise that makes a single day's number worthless.</p>
+
+<p>But the languages are the interesting part, and they line up with the payload story. Four of the seven were not English speakers. Every one of them was handed the same six fields, and none of them saw so much as an error message in return.</p>
+
+<h2>What you can actually do about it</h2>
+
+<p>Realistic list, in order of how much it buys you.</p>
+
+<p><strong>Remove your @username, or use bots from an account that has none.</strong> Of the six fields, this is the only one that is genuinely optional and genuinely identifying. A <code>username</code> is a public handle that ties the bot session to your presence in groups, to search, and to anywhere you have posted your @, including outside Telegram. <code>first_name</code> you can set to anything. <code>id</code> you cannot change. <code>username</code> you can simply not have, and it is the single biggest reduction available.</p>
+
+<p><strong>Understand that a second account is the only real reset.</strong> Since the ID is permanent and per-account, the only way to break the join key is a different account with a different number. That is a real answer, not a trick.</p>
+
+<p><strong>Do not expect Telegram's privacy settings to help here.</strong> The settings that control who sees your phone number, your last-seen time, or who can forward your messages govern your visibility to other users. They do not sit between you and a bot you deliberately started. Pressing Start is the consent, and it is all-or-nothing.</p>
+
+<p><strong>Judge the operator, since you cannot hide from them.</strong> Does the bot have a stated privacy policy? A named person or company behind it? A working support contact? For the <a href="/blog/i-messaged-18-telegram-game-bots/">eighteen game bots I messaged</a> and the eleven anonymous ones, the bots that had gone silent were also, unsurprisingly, the ones with nobody home to ask. A bot that is abandoned is not a bot that deleted your data. Mine is proof: switched off in May, still collecting.</p>
+
+<p><strong>If you run one of these, the bar is low and most people miss it.</strong> Do not store <code>from</code> wholesale because it was convenient. You need the ID to route a reply. You almost never need <code>first_name</code>, <code>username</code> and <code>is_premium</code> in a database, and every one you keep is a liability with no upside. When I saved my own queue readings to disk I stripped IDs, usernames and names out of the stored copy. Not because anyone asked, but because there is no reason to hoard them, and the version of me in six months should not be able to look them up either.</p>
+
+<h2>Try it on your own bot</h2>
+
+<p>The whole check takes a minute and needs no server. Make a bot with BotFather if you do not have one, then press Start on it from your normal account and read what came back:</p>
+
+<pre><code>curl -s "https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates" \
+  | jq '.result[].message.from'</code></pre>
+
+<p>Leave the offset out. With no offset the queue is not consumed, so you can run it repeatedly and it returns the same thing. I confirmed that by calling twice and getting an identical count both times. Pass an <code>offset</code> and you permanently discard everything below it, which is worth knowing before you experiment on a bot whose queue you care about.</p>
+
+<p>Whatever prints is what every bot you have ever started already has.</p>
+
+<div class="note">
+<p>A note on what is in the screenshot above: the field names are exactly as Telegram sent them, and every value is redacted. The people in my queue pressed Start on a game bot, not on a blog post, and republishing their IDs to make a point about hoarding IDs would be its own answer to the question.</p>
+</div>
+
+<h2>The point</h2>
+
+<p>This is not a Telegram scandal and I am not going to dress it up as one. The API is documented, the behaviour is deliberate, and it is the same trade every platform makes when it lets third parties build things. Bots need to know who is talking to them or they cannot answer.</p>
+
+<p>The gap is between that and the word "anonymous" sitting on the tin. People install these expecting the anonymity to be general when it is specifically, narrowly, anonymity from one direction, and the direction it does not cover is the one with a database.</p>
+
+<p>Drop your @username. That is the practical takeaway and it costs you nothing.</p>
+
+<h2>FAQ</h2>
+
+<div class="faq">
+<details><summary>Can a Telegram bot see my phone number?</summary>
+<p>Not from a normal message. Phone numbers only reach a bot if you explicitly tap a "Share phone number" contact button, which is a separate, visible consent step. The six fields in a standard <code>/start</code> do not include it.</p></details>
+
+<details><summary>Can a bot see my real name if I have not set one?</summary>
+<p>It sees your <code>first_name</code> field, which is whatever text is on your Telegram account, real or not. It is not verified and it is not sourced from anywhere else.</p></details>
+
+<details><summary>Is my Telegram user ID different for each bot?</summary>
+<p>No. It is one permanent number per account, identical across every bot you interact with. That is what makes cross-bot correlation possible without any hacking.</p></details>
+
+<details><summary>Does deleting the chat with a bot delete my data on their side?</summary>
+<p>No. Deleting the chat clears your view of it. Anything the operator already stored on their own server is untouched, and there is no mechanism in the Bot API that tells them to remove it.</p></details>
+
+<details><summary>Are anonymous message bots safe to use?</summary>
+<p>Safe from the friend receiving your message, yes. That part works as advertised. Not anonymous from whoever runs the bot, who has your ID, handle and a permanent way to message you. Pick bots run by someone identifiable, and use them from an account with no @username.</p></details>
+</div>
+
+<div class="cta-box">
+<h3>Telegram Party Pack &mdash; 255 group-chat prompts</h3>
+<p>Truth or Dare, Never Have I Ever, Would You Rather, Most Likely To, Paranoia and Story Chain, written out so your game night does not depend on any bot at all.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=anonymous-telegram-bots-see-your-username">Get the pack</a>
+</div>
+
+<p><a class="back" href="/blog/">&larr; More Telegram write-ups</a> &middot; <a class="back" href="/bots/">Our bots</a> &middot; <a class="back" href="/blog/best-telegram-party-games-2026/">Best Telegram party games</a></p>
+
+</article>
+<footer>&copy; 2026 <a href="/">Charlie Morrison Digital</a> &middot; <a href="/about/">About</a></footer>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram Inline Keyboard Limits, Measured: 1000 Buttons OK</title>
+<meta name="description" content="The Bot API accepted 1000 buttons in one row and 2000 rows. The only size limit it enforces is callback_data at 64 bytes. Measured live, probe script included.">
+<meta name="keywords" content="telegram inline keyboard max buttons per row, callback_data 64 bytes limit, BUTTON_DATA_INVALID, telegram bot api validation, reply_markup limits, telegram bot api chat not found">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-bot-api-validates-before-chat-exists/">
+<meta property="og:title" content="Telegram Inline Keyboard Limits, Measured: 1000 Buttons OK">
+<meta property="og:description" content="Half of Telegram's Bot API errors arrive before it checks your chat exists. That makes one layer testable with no chat at all. Here is the boundary, measured.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-bot-api-validates-before-chat-exists/validation-layers.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Telegram Inline Keyboard Limits, Measured: 1000 Buttons OK","datePublished":"2026-08-17","dateModified":"2026-08-17","image":"https://charliemorrison.dev/blog/telegram-bot-api-validates-before-chat-exists/validation-layers.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the maximum number of buttons per row in a Telegram inline keyboard?","acceptedAnswer":{"@type":"Answer","text":"The Bot API does not enforce one. A row of 1000 buttons was accepted in testing, as were 2000 rows. The widely repeated limit of 8 buttons per row is a rendering convention for narrow screens, not a server rule."}},{"@type":"Question","name":"What is the callback_data size limit?","acceptedAnswer":{"@type":"Answer","text":"64 bytes, and it is enforced exactly. Bisecting the boundary live, 64 bytes was accepted and 65 bytes was rejected with BUTTON_DATA_INVALID."}},{"@type":"Question","name":"Why does Telegram return chat not found instead of telling me my keyboard is wrong?","acceptedAnswer":{"@type":"Answer","text":"Because size and length checks run after the chat is resolved. Only structural parse errors, such as a button with no action or an empty message text, are returned before Telegram looks for the chat."}},{"@type":"Question","name":"Can I validate a Telegram inline keyboard without sending a message to anyone?","acceptedAnswer":{"@type":"Answer","text":"Partly. Structural errors can be checked by sending to a chat ID that does not exist, using a bot token and no chat. Size limits cannot, because those checks only run after the chat resolves."}},{"@type":"Question","name":"Does Telegram accept a button with an empty label?","acceptedAnswer":{"@type":"Answer","text":"Yes. An empty button text is accepted and delivered. It renders as a thin strip and still fires its callback_data when tapped, so this check has to live in your own code."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:10px;border:1px solid #e0e0e0}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+code{background:#f4f4f8;padding:2px 6px;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:20px 0;font-size:.9em;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+blockquote{border-left:4px solid #6c5ce7;background:#f8f8fc;padding:12px 18px;margin:20px 0;color:#444;font-style:italic}
+blockquote p:last-child{margin-bottom:0}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0}
+.comparison{width:100%;min-width:420px;border-collapse:collapse;margin:0}
+.comparison th,.comparison td{padding:10px 14px;border:1px solid #e0e0e0;text-align:left}
+.comparison th{background:#f0f0f5;font-weight:600}
+.comparison tr:hover{background:#f8f8fc}
+.cta-box{background:linear-gradient(135deg,#6c5ce710,#a29bfe10);border:2px solid #6c5ce7;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#6c5ce7}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box .alt a{background:none;color:#6c5ce7;padding:0;font-weight:600;display:inline;margin:0}
+.note{background:#fff9e6;border-left:4px solid #f0a500;border-radius:8px;padding:16px 20px;margin:24px 0}
+.note p:last-child{margin-bottom:0}
+.back{display:inline-block;margin-top:32px;color:#6c5ce7;text-decoration:none}
+.faq{margin:20px 0}
+.faq details{margin-bottom:12px;padding:12px;background:#f8f9fa;border-radius:8px}
+.faq summary{font-weight:600;cursor:pointer;color:#333}
+.faq p{margin-top:8px;margin-bottom:0}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#6c5ce7;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>Half of Telegram's Bot API Errors Arrive Before It Checks Your Chat Exists</h1>
+<div class="meta">By Charlie Morrison &middot; August 17, 2026 &middot; 8 min read</div>
+
+<p>I found this by making a mistake. I was probing inline keyboard limits against the Bot API and I did not want to spam a real conversation while doing it, so I sent the first test to <code>chat_id=1</code>, a chat that does not exist, expecting Telegram to reject everything with the same useless line and force me to find a real chat.</p>
+
+<p>That is what happened, for most of the cases. But two of them came back with a real answer:</p>
+
+<pre><code>button with no callback_data  -&gt;  Bad Request: can't parse InlineKeyboardButton:
+                                  Text buttons are unallowed in the inline keyboard
+text=""                       -&gt;  Bad Request: message text is empty
+callback_data 65 bytes        -&gt;  Bad Request: chat not found
+1000 buttons in one row       -&gt;  Bad Request: chat not found</code></pre>
+
+<p>Telegram had told me my keyboard was malformed without ever resolving the chat I claimed to be sending it to. So there are two validation layers in there, they run in a fixed order, and the boundary between them is worth knowing if you write bots, because one of those layers is testable from a machine with no chat and no test user.</p>
+
+<p>I spent the evening mapping the boundary. Here is what the API actually does.</p>
+
+<h2>The setup</h2>
+
+<p>One throwaway bot (<code>@cm_demo_order_bot</code>, a demo, nothing in production), eight <code>sendMessage</code> calls, sent twice: once to <code>chat_id=1</code>, once to a real private chat. Anything that landed in the real chat was deleted straight after, so the comparison is clean. Then a bisection pass to find the exact numbers where the API flips from accept to reject.</p>
+
+<p>The probe is about ninety lines and does not depend on anything beyond the standard library. Every verdict quoted below came out of one run of it on 17 August 2026.</p>
+
+<figure>
+<img src="validation-layers.png" alt="Terminal output showing which Telegram Bot API errors return before the chat is resolved and which return after">
+<figcaption>The same eight cases, sent to a nonexistent chat and then to a real one.</figcaption>
+</figure>
+
+<h2>Layer one: parse errors, no chat required</h2>
+
+<p>Two of the eight cases answered before Telegram looked for the chat.</p>
+
+<p>A button carrying neither <code>callback_data</code> nor <code>url</code> returns <em>"can't parse InlineKeyboardButton: Text buttons are unallowed in the inline keyboard"</em>. An empty <code>text</code> returns <em>"message text is empty"</em>. Both arrive against a chat ID that has never existed.</p>
+
+<p>What these two have in common is that neither requires Telegram to know anything about the recipient. The request is structurally wrong on its face. A button with no action is not a button, an empty message is not a message, and the server can say so while parsing the request body.</p>
+
+<p>That makes them cheap to assert against in a test suite. If your bot builds keyboards from data, and you want to know that the builder never emits a button without an action, you can ask Telegram itself instead of reimplementing its rules in a validator that drifts out of date. You need a bot token. You do not need a chat, a test user, or anyone's consent to receive junk messages.</p>
+
+<h2>Layer two: limits, chat first</h2>
+
+<p>The other six cases were invisible from <code>chat_id=1</code>. Oversized <code>callback_data</code>, a thousand buttons in one row, an empty button label, a message one character over the documented cap: all six came back as <em>"chat not found"</em>, which tells you nothing about the payload.</p>
+
+<p>Send the identical six to a real chat and they separate immediately:</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>case</th><th>real chat</th></tr>
+<tr><td><code>callback_data</code> 64 bytes</td><td>accepted</td></tr>
+<tr><td><code>callback_data</code> 65 bytes</td><td><code>BUTTON_DATA_INVALID</code></td></tr>
+<tr><td>1000 buttons in one row</td><td>accepted</td></tr>
+<tr><td>2000 rows</td><td>accepted</td></tr>
+<tr><td>button label <code>""</code></td><td>accepted</td></tr>
+<tr><td><code>inline_keyboard: []</code></td><td>accepted</td></tr>
+<tr><td>text 4097 characters</td><td><em>message is too long</em></td></tr>
+</table>
+</div>
+
+<p>So the order is: parse the request, resolve the chat, then check sizes. If you were hoping to validate payload limits without touching a conversation, you cannot. That half needs a real chat, and if you are testing at any volume it needs to be a chat you own, because every accepted case is a message that gets delivered before you delete it.</p>
+
+<p>There is a second tell in that table worth pointing at. <code>BUTTON_DATA_INVALID</code> is shouted in the uppercase constant style of the underlying MTProto layer, while the parse-layer errors are written as English sentences. Two error vocabularies, arriving in a fixed order, from what looks like two different pieces of code. The behaviour I measured is consistent with the shape of the error strings.</p>
+
+<h2>The one size limit the server actually enforces</h2>
+
+<p><code>callback_data</code> is documented as 1 to 64 bytes. I bisected it rather than trusting the number: 64 accepted, 65 rejected, and the rejection is that same <code>BUTTON_DATA_INVALID</code>. The documentation is exactly right, which is worth saying plainly because the next paragraph is about a number that is not in the documentation at all and is repeated everywhere anyway.</p>
+
+<p>I then went looking for the ceiling on keyboard size and did not find one.</p>
+
+<p>Thirty buttons in a row: accepted. A hundred: accepted. A thousand buttons in a single row: accepted. A hundred rows: accepted. Five hundred: accepted. Two thousand rows of one button each: accepted. An <code>inline_keyboard</code> of <code>[]</code>, a keyboard with no buttons in it at all: accepted, and the message arrives with no markup attached.</p>
+
+<p>If you have written Telegram bots you have probably read that the limit is eight buttons per row, or ten, or that you must keep the whole keyboard under some count. I have read it too. As an API rule it is not true. The server took every keyboard I built up to two thousand by one thousand without complaint.</p>
+
+<p>The reason the folklore exists is that those keyboards are unusable, not invalid. Telegram's clients wrap and squeeze buttons to fit the width they have, so a row of twelve renders as a wall of unreadable stubs and a row of a thousand renders as something you scroll past forever. Eight per row is good advice about how phones display things. It has been repeated for long enough to become a rule people believe the API is enforcing, and it is not enforcing it.</p>
+
+<p>That distinction matters when you are debugging. If your keyboard is not appearing, the API is not silently rejecting it for being too big. Look somewhere else: a parse error you are not logging, a <code>chat not found</code> you are treating as a network blip, or a client that is rendering exactly what you asked for.</p>
+
+<h2>The empty label is the one I would guard against</h2>
+
+<p>Of everything in the results, the case I would actually put a check on before shipping is the button with an empty <code>text</code>.</p>
+
+<p>Telegram accepts it. The message goes out. What arrives is a button that renders as a thin strip of nothing, still tappable, still firing its <code>callback_data</code> at your bot when someone hits it. Nothing in the response tells you anything is wrong, because from the API's point of view nothing is.</p>
+
+<p>That is the shape of bug that gets past tests. A label built from user data, or a translation lookup that misses, or a truncation that trims to zero, and your keyboard ships with a hole in it that no error message will ever mention. It is exactly the class of thing I wrote about when a <a href="/blog/dead-telegram-bot-update-queue/">bot's update queue kept collecting messages months after I turned the service off</a>: the API doing precisely what it was told, quietly, while the operator assumes silence means nothing happened.</p>
+
+<p>Same for the empty keyboard. <code>inline_keyboard: []</code> is accepted and produces a message with no buttons, so a builder that returns an empty list on a bad branch will never raise. It will just ship a message that does nothing, forever, until a human notices.</p>
+
+<div class="cta-box">
+<h3>Telegram in Production &mdash; the parts that bite you</h3>
+<p>The five places a bot passes your tests and fails in front of real users: initData validation, poll payloads Telegram silently rewrites, systemd units that start and quietly do nothing, file-size limits, and the rate limit that stalls a round. Dependency-free Python and Node, 55 tests you can run from the zip, plus a 26-point pre-ship checklist.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-bot-api-validates-before-chat-exists">Get the pack &mdash; $19</a>
+<span class="alt"><a href="/telegram-prod-pack/">What is in the pack</a>, module by module. Every claim in it was measured first and published here.</span>
+</div>
+
+<h2>What I would do with this</h2>
+
+<p>Three practical things came out of the evening.</p>
+
+<p><strong>Assert the parse layer in CI, cheaply.</strong> Structural mistakes in keyboard construction can be checked against the live API with a token and no chat. It is a real network call, so it is not a unit test, but it is a very cheap contract test against the only authority that matters, and it will not drift when Telegram changes its mind.</p>
+
+<p><strong>Never test limits against a chat you do not own.</strong> Half the failure modes only surface after the chat resolves, and every passing case is a delivered message. Use your own account or a throwaway. Also keep the pace down: <a href="/blog/telegram-game-bot-freezes-mid-round/">I measured the burst allowance on a single chat at roughly a hundred operations</a> before the rate limiter starts pushing back, and edits spend from the same allowance as sends.</p>
+
+<p><strong>Validate button labels yourself, because Telegram will not.</strong> An empty label and an empty keyboard are both legal. If either is reachable from your code, the check has to live in your code.</p>
+
+<h2>Limits of this measurement</h2>
+
+<p>One bot, one evening, one account, the public Bot API. I did not test a local Bot API server, which is documented to relax several limits and could plausibly differ here too. I did not find the ceiling on keyboard size, I found that it is above two thousand rows and above a thousand buttons per row, which is far past anything a sane interface would build. And behaviour like validation order is an implementation detail, not a documented contract. It could change on any Tuesday, without a changelog entry, precisely because it was never promised.</p>
+
+<p>That is why the probe is a script and not a paragraph of notes. When something here stops being true, re-running it takes a minute and the answer comes from Telegram rather than from this post.</p>
+
+<p>The documented parts are documented well, for what it is worth. The <a href="https://core.telegram.org/bots/api#inlinekeyboardbutton" rel="nofollow">InlineKeyboardButton reference</a> states the 64-byte <code>callback_data</code> bound and the rule that a button must carry exactly one optional action field, and both of those held exactly as written. The <a href="https://core.telegram.org/bots/api#sendmessage" rel="nofollow">sendMessage reference</a> gives the 4096-character text cap, and 4097 characters is where it broke. Everything in this post that surprised me lives in the space the documentation does not describe: the order the checks run in, and how much the server will accept when nobody wrote a number down.</p>
+
+<div class="faq">
+<h2>FAQ</h2>
+<details><summary>What is the maximum number of buttons per row in a Telegram inline keyboard?</summary>
+<p>The Bot API does not enforce one. A row of 1000 buttons was accepted in testing, as were 2000 rows. The widely repeated limit of 8 buttons per row is a rendering convention for narrow screens, not a server rule.</p></details>
+<details><summary>What is the callback_data size limit?</summary>
+<p>64 bytes, and it is enforced exactly. Bisecting the boundary live, 64 bytes was accepted and 65 bytes was rejected with <code>BUTTON_DATA_INVALID</code>.</p></details>
+<details><summary>Why does Telegram return "chat not found" instead of telling me my keyboard is wrong?</summary>
+<p>Because size and length checks run after the chat is resolved. Only structural parse errors, such as a button with no action or an empty message text, are returned before Telegram looks for the chat.</p></details>
+<details><summary>Can I validate a Telegram inline keyboard without sending a message to anyone?</summary>
+<p>Partly. Structural errors can be checked by sending to a chat ID that does not exist, using a bot token and no chat. Size limits cannot, because those checks only run after the chat resolves.</p></details>
+<details><summary>Does Telegram accept a button with an empty label?</summary>
+<p>Yes. An empty button text is accepted and delivered. It renders as a thin strip and still fires its <code>callback_data</code> when tapped, so this check has to live in your own code.</p></details>
+</div>
+
+<p>More measurements from the same bot: <a href="/blog/i-messaged-18-telegram-game-bots/">what eighteen game bots actually reply</a>, and <a href="/blog/anonymous-telegram-bots-see-your-username/">what an "anonymous" bot operator receives when you press Start</a>.</p>
+
+<a class="back" href="/blog/">&larr; Back to Blog</a>
+</article>
+<footer>&copy; 2026 Charlie Morrison Digital &middot; <a href="/about/">About</a> &middot; <a href="/blog/">Blog</a></footer>
+</body>
+</html>

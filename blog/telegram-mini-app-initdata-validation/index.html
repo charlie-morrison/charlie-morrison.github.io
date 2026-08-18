@@ -188,6 +188,13 @@ dcs = "\n".join(f"{k}={v}" for k, v in sorted(parsed.items()))</code></pre>
 
 <p>I did not test that path here: forging a valid Ed25519 signature would require Telegram's private key, which is rather the point of it, so nothing in my lab can honestly speak to it. What the lab does show is that the field's arrival quietly changed the older check, and that the change is invisible until an honest user is standing outside your door.</p>
 
+<div class="cta-box">
+  <h3>The measured limits, on three pages &mdash; free</h3>
+  <p>The same treatment as this post, applied to the rest of the API: 4096 counted in code points rather than bytes, a download cap that is binary and not decimal, <code>callback_data</code> at 64 bytes, the &ldquo;max 8 buttons per row&rdquo; rule that does not exist on the server, and a poll <code>open_period</code> silently clamped instead of refused. Each number bisected against the live API, none copied from the docs.</p>
+  <a href="https://charliemorrison.lemonsqueezy.com/buy/707684e3-4f9d-481f-bd96-9f04387c4fae?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-mini-app-initdata-validation">Get the cheat-sheet &mdash; free</a>
+  <span class="alt">Email only, so I can send you the file. Nothing to pay.</span>
+</div>
+
 <div class="cta-box pack">
   <h3>Telegram in Production &mdash; the parts that bite you</h3>
   <p>The validator from this post, finished: Python <em>and</em> Node, no dependencies, <code>signature</code> excluded, <code>auth_date</code> enforced, constant-time compare that returns 401 instead of throwing on a hostile hash. Plus poll payloads Telegram will not silently rewrite, a systemd unit linter for the two failure modes that cost me weeks, and a one-page pre-ship checklist. 55 tests you can run from the zip.</p>

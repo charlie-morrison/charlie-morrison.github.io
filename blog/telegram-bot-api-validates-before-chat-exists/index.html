@@ -142,6 +142,13 @@ callback_data 65 bytes        -&gt;  Bad Request: chat not found
 <p>Same for the empty keyboard. <code>inline_keyboard: []</code> is accepted and produces a message with no buttons, so a builder that returns an empty list on a bad branch will never raise. It will just ship a message that does nothing, forever, until a human notices.</p>
 
 <div class="cta-box">
+  <h3>The measured limits, on three pages &mdash; free</h3>
+  <p>Every number from this post plus the rest of what I have bisected against the live API: the 4096 counting unit, the download cap that is binary and not decimal, the poll <code>open_period</code> Telegram clamps without telling you, and the two-layer validation order above. Measured, not copied from the docs. One PDF, no upsell inside it.</p>
+  <a href="https://charliemorrison.lemonsqueezy.com/buy/707684e3-4f9d-481f-bd96-9f04387c4fae?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-bot-api-validates-before-chat-exists">Get the cheat-sheet &mdash; free</a>
+  <span class="alt">Email only, so I can send you the file. Nothing to pay.</span>
+</div>
+
+<div class="cta-box pack">
 <h3>Telegram in Production &mdash; the parts that bite you</h3>
 <p>The five places a bot passes your tests and fails in front of real users: initData validation, poll payloads Telegram silently rewrites, systemd units that start and quietly do nothing, file-size limits, and the rate limit that stalls a round. Dependency-free Python and Node, 55 tests you can run from the zip, plus a 26-point pre-ship checklist.</p>
 <a href="https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-bot-api-validates-before-chat-exists">Get the pack &mdash; $19</a>

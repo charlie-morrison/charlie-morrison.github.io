@@ -170,6 +170,13 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 <p><strong>Treat over-limit uploads as permanent, in code.</strong> Since the API will not classify them for you, your own size check has to. Otherwise your retry policy does the classifying, and it will get it wrong.</p>
 
 <div class="cta-box">
+  <h3>The measured limits, on three pages &mdash; free</h3>
+  <p>The 20 MiB / 50 MB numbers from this post, plus the rest of what I have bisected against the live API: 4096 counted in code points, <code>callback_data</code> at 64 bytes, the &ldquo;max 8 buttons per row&rdquo; rule that does not exist, and a poll <code>open_period</code> that is silently clamped instead of refused. Measured, not copied from the docs.</p>
+  <a href="https://charliemorrison.lemonsqueezy.com/buy/707684e3-4f9d-481f-bd96-9f04387c4fae?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-bot-api-file-size-limits">Get the cheat-sheet &mdash; free</a>
+  <span class="alt">Email only, so I can send you the file. Nothing to pay.</span>
+</div>
+
+<div class="cta-box">
   <h3>Building on Telegram for something lighter?</h3>
   <p>My free planner lays out a Telegram game night &mdash; rounds, timings, poll structure &mdash; in about a minute, no signup.</p>
   <a href="/telegram-game-night-planner/?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-bot-api-file-size-limits">Build a game night &rarr;</a>

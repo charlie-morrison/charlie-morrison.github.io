@@ -112,10 +112,10 @@ a[b   Can't find end of TextUrl entity at byte offset 1</code></pre>
 
 <p>Second pass, same eighteen characters, this time paired: <code>a_b_c</code>, <code>a*b*c</code>, <code>a.b.c</code>, and so on.</p>
 
+<p>Fourteen of them behave exactly as they did alone, returning a 400 whether they appear once or twice: <code>[</code> <code>]</code> <code>(</code> <code>)</code> <code>&gt;</code> <code>#</code> <code>+</code> <code>-</code> <code>=</code> <code>|</code> <code>{</code> <code>}</code> <code>.</code> <code>!</code>. The other four do not, and they are the finding:</p>
 <div class="table-wrap">
 <table class="comparison">
-<tr><th>Characters</th><th>Paired and unescaped</th><th>What arrives</th></tr>
-<tr><td><code>[</code> <code>]</code> <code>(</code> <code>)</code> <code>&gt;</code> <code>#</code> <code>+</code> <code>-</code> <code>=</code> <code>|</code> <code>{</code> <code>}</code> <code>.</code> <code>!</code></td><td>400 Bad Request</td><td>nothing &mdash; the send fails</td></tr>
+<tr><th>Character</th><th>Paired and unescaped</th><th>What arrives</th></tr>
 <tr><td><code>_</code></td><td>accepted</td><td><code>abc</code> &mdash; italic, underscores gone</td></tr>
 <tr><td><code>*</code></td><td>accepted</td><td><code>abc</code> &mdash; bold, asterisks gone</td></tr>
 <tr><td><code>~</code></td><td>accepted</td><td><code>abc</code> &mdash; strikethrough, tildes gone</td></tr>

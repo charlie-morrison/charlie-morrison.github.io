@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram MarkdownV2 Escaping: All 18 Characters Tested</title>
+<meta name="description" content="Fourteen of MarkdownV2's reserved characters fail with a 400. Four are accepted and delete themselves from your message. Measured live, probe script included.">
+<meta name="keywords" content="telegram markdownv2 escape characters, can't parse entities telegram, character is reserved and must be escaped, telegram bot parse_mode, markdownv2 vs html telegram, escape_markdown telegram">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-markdownv2-escaping-tested/">
+<meta property="og:title" content="Telegram MarkdownV2 Escaping: All 18 Characters Tested">
+<meta property="og:description" content="The docs say all 18 reserved characters must be escaped. Only four of them can corrupt a message without telling you. Here is which four, and why.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-markdownv2-escaping-tested/markdownv2-escape.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Telegram MarkdownV2 Escaping: All 18 Characters Tested","datePublished":"2026-08-19","dateModified":"2026-08-19","image":"https://charliemorrison.dev/blog/telegram-markdownv2-escaping-tested/markdownv2-escape.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which characters must be escaped in Telegram MarkdownV2?","acceptedAnswer":{"@type":"Answer","text":"All eighteen listed in the Bot API docs: _ * [ ] ( ) ~ ` > # + - = | { } . and !. Tested one at a time, every single one returns a 400 when it appears unescaped in plain text, so the documentation is accurate on this point."}},{"@type":"Question","name":"Why does my Telegram message lose characters instead of returning an error?","acceptedAnswer":{"@type":"Answer","text":"Because four of the reserved characters open a formatting entity that a second occurrence closes: underscore, asterisk, tilde and backtick. A string containing two of the same character is valid markup, so the API accepts it and both delimiters are consumed as formatting rather than delivered as text."}},{"@type":"Question","name":"Is HTML parse mode safer than MarkdownV2 for Telegram bots?","acceptedAnswer":{"@type":"Answer","text":"For untrusted text, yes. In testing, HTML mode had one fatal character, the less-than sign, while an unescaped ampersand was accepted and rendered literally. MarkdownV2 has eighteen reserved characters, four of which fail silently. HTML also maps onto the standard library escaper in most languages."}},{"@type":"Question","name":"What breaks when I migrate from Markdown to MarkdownV2?","acceptedAnswer":{"@type":"Answer","text":"Fourteen characters that were harmless in legacy Markdown become fatal. In the same test, legacy Markdown rejected only underscore, asterisk, opening bracket and backtick; the remaining fourteen passed through untouched. Those fourteen are exactly what starts returning 400 after the switch."}},{"@type":"Question","name":"Can I test Telegram parse errors without sending a message to a real chat?","acceptedAnswer":{"@type":"Answer","text":"Yes. Parse errors are returned before Telegram resolves the chat, so sending to a chat ID that does not exist still produces the real parse error. A valid string sent to the same bogus chat returns chat not found instead, which is how you tell the two layers apart."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:10px;border:1px solid #e0e0e0}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+code{background:#f4f4f8;padding:2px 6px;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:20px 0;font-size:.9em;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+blockquote{border-left:4px solid #6c5ce7;background:#f8f8fc;padding:12px 18px;margin:20px 0;color:#444;font-style:italic}
+blockquote p:last-child{margin-bottom:0}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0}
+.comparison{width:100%;min-width:420px;border-collapse:collapse;margin:0}
+.comparison th,.comparison td{padding:10px 14px;border:1px solid #e0e0e0;text-align:left}
+.comparison th{background:#f0f0f5;font-weight:600}
+.comparison tr:hover{background:#f8f8fc}
+.cta-box{background:linear-gradient(135deg,#6c5ce710,#a29bfe10);border:2px solid #6c5ce7;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#6c5ce7}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box .alt a{background:none;color:#6c5ce7;padding:0;font-weight:600;display:inline;margin:0}
+.note{background:#fff9e6;border-left:4px solid #f0a500;border-radius:8px;padding:16px 20px;margin:24px 0}
+.note p:last-child{margin-bottom:0}
+.back{display:inline-block;margin-top:32px;color:#6c5ce7;text-decoration:none}
+.faq{margin:20px 0}
+.faq details{margin-bottom:12px;padding:12px;background:#f8f9fa;border-radius:8px}
+.faq summary{font-weight:600;cursor:pointer;color:#333}
+.faq p{margin-top:8px;margin-bottom:0}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#6c5ce7;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>Four Telegram Characters Do Not Break Your Message. They Delete It.</h1>
+<div class="meta">By Charlie Morrison &middot; August 19, 2026 &middot; 9 min read</div>
+
+<p>The Bot API documentation has one sentence about MarkdownV2 that every bot developer has read and nobody has tested: eighteen characters "must be escaped with the preceding character <code>\</code>". It lists them, it moves on, and it treats all eighteen as the same kind of problem.</p>
+
+<p>They are not the same kind of problem. I sent 126 live <code>sendMessage</code> calls at the API to find out where the differences are, and the split that came back is the one that actually decides whether a bug reaches your users:</p>
+
+<ul>
+  <li><strong>Fourteen of the eighteen fail with a 400.</strong> Loud, logged, impossible to miss.</li>
+  <li><strong>Four of them are accepted</strong> when the string contains two of the same character, and both characters are silently removed from the message that gets delivered.</li>
+</ul>
+
+<p>A 400 is a bad afternoon. A message that sends successfully with pieces missing is a bug that survives your tests, your staging bot and your logs, and shows up as a support ticket six weeks later about a user whose name renders wrong.</p>
+
+<figure>
+  <img src="markdownv2-escape.png" alt="Terminal output from a live Telegram Bot API probe: all 18 reserved characters return 400 when unpaired; when paired, 14 still error while underscore, asterisk, tilde and backtick are accepted and vanish from the rendered text">
+  <figcaption>Verbatim output from the probe. One occurrence of a reserved character always fails; two occurrences fail for fourteen of them and disappear for four.</figcaption>
+</figure>
+
+<h2>The setup, and why it needed almost no chat</h2>
+
+<p>Two days ago, while measuring inline keyboard limits, I found that <a href="/blog/telegram-bot-api-validates-before-chat-exists/">the Bot API answers structural errors before it checks whether your chat exists</a>. That turned out to apply to parse errors too, and it makes this kind of probing much cheaper than it sounds.</p>
+
+<pre><code>$ sendMessage chat_id=1 parse_mode=MarkdownV2 text="a.b"
+   Bad Request: can't parse entities: Character '.' is reserved
+                and must be escaped with the preceding character '\'
+
+$ sendMessage chat_id=1 parse_mode=MarkdownV2 text="a\.b"
+   Bad Request: chat not found
+
+$ sendMessage chat_id=1                      text="a.b"
+   Bad Request: chat not found</code></pre>
+
+<p>Chat <code>1</code> does not exist. Telegram parses the text first anyway, and only reaches for the chat once the markup is valid. So the second and third lines, both "chat not found", are the control: they prove the request got past the parser. Any string you want to check for parse validity can be checked with a bot token and no conversation at all.</p>
+
+<p>The part I <em>did</em> need a real chat for is the interesting part. When a message is accepted, the API response contains the message object, and <code>result.text</code> holds the visible text with all formatting stripped out. Comparing that string to the string I meant to send is what exposes the silent cases. I used my own account as the target and deleted every accepted message immediately after reading it back.</p>
+
+<h2>One occurrence: the docs are exactly right</h2>
+
+<p>First pass, one character at a time, in the middle of otherwise boring text: <code>a_b</code>, <code>a*b</code>, <code>a.b</code>, and so on through all eighteen.</p>
+
+<p>All eighteen returned a 400. No exceptions, no partial credit. If you have been carrying a vague suspicion that half of that list is defensive over-documentation, drop it: <code>_ * [ ] ( ) ~ ` &gt; # + - = | { } . !</code> is a complete and accurate list of what breaks a MarkdownV2 message on its own.</p>
+
+<p>Most of them come back with the same generic line, naming the character. Two do not, and the difference is a small gift when you are debugging:</p>
+
+<pre><code>a]b   Character ']' is reserved and must be escaped with the preceding character '\'
+a[b   Can't find end of TextUrl entity at byte offset 1</code></pre>
+
+<p>An opening bracket does not report itself as reserved, because to the parser it is not junk. It is the start of a link that never got finished. The error names the entity it was building and gives you the byte offset where it started. That is the fastest debugging signal in the whole format, and it only appears for characters that open something.</p>
+
+<h2>Two occurrences: fourteen still fail, four disappear</h2>
+
+<p>The single-character test is the test everyone runs, and it is the test that hides the problem. Real strings do not contain one underscore. Usernames, filenames, package versions and search queries contain two, three, five.</p>
+
+<p>Second pass, same eighteen characters, this time paired: <code>a_b_c</code>, <code>a*b*c</code>, <code>a.b.c</code>, and so on.</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Characters</th><th>Paired and unescaped</th><th>What arrives</th></tr>
+<tr><td><code>[ ] ( ) &gt; # + - = | { } . !</code></td><td>400 Bad Request</td><td>nothing &mdash; the send fails</td></tr>
+<tr><td><code>_</code></td><td>accepted</td><td><code>abc</code> &mdash; italic, underscores gone</td></tr>
+<tr><td><code>*</code></td><td>accepted</td><td><code>abc</code> &mdash; bold, asterisks gone</td></tr>
+<tr><td><code>~</code></td><td>accepted</td><td><code>abc</code> &mdash; strikethrough, tildes gone</td></tr>
+<tr><td><code>`</code></td><td>accepted</td><td><code>abc</code> &mdash; code, backticks gone</td></tr>
+</table>
+</div>
+
+<p>The four are not a random subset. They are precisely the delimiters that have a <em>closing</em> form: italic, bold, strikethrough and inline code all open and close with the same character. Two of them in a row is not a mistake to the parser, it is a complete, well-formed entity. The API has nothing to complain about, so it does not complain &mdash; it does what the markup says, consumes both delimiters, and delivers the remainder.</p>
+
+<p>Everything else on the list is either structural (brackets and parentheses build links, and an unfinished link is an error) or purely reserved, a character with no entity behind it at all, which can only ever be a mistake, which is why the parser can reject it with confidence.</p>
+
+<p>So the rule underneath the docs' flat list is this: <strong>a reserved character that can close itself will be obeyed rather than reported.</strong></p>
+
+<h2>Where this actually bites</h2>
+
+<p>Nowhere in your own copy. You control your own strings, and you notice a missing asterisk in a template on the first run.</p>
+
+<p>It bites at the join between your template and somebody else's data. A few real shapes:</p>
+
+<ul>
+  <li><code>anna_marie_k</code>, a Telegram username with two underscores. Delivered as <code>annamariek</code> in italics. Now your bot has told a user their handle wrong, and if it also stored what it displayed, wrong in your database.</li>
+  <li><code>report_2026_final.pdf</code> &mdash; a filename echoed back in a confirmation. Two underscores, both eaten.</li>
+  <li><code>**important**</code> &mdash; a user who pasted Markdown into your bot. Renders bold, both pairs gone.</li>
+  <li>Search results, product titles, error strings pulled from another service &mdash; anything you did not write yourself.</li>
+</ul>
+
+<p>The failure mode is asymmetric in the worst direction. The fourteen loud characters are far more common in ordinary text than the four quiet ones (a full stop appears in almost every sentence), so the loud ones are what you hit first in development. You will fix it, conclude that unescaped text throws errors, and ship. The quiet four are rare enough to survive to production and common enough to get there eventually.</p>
+
+<h2>The migration trap: legacy Markdown to MarkdownV2</h2>
+
+<p>I ran the same eighteen characters through the deprecated <code>Markdown</code> parse mode for comparison, and the gap is bigger than "V2 is stricter" suggests.</p>
+
+<p>Legacy Markdown rejected exactly four: <code>_</code>, <code>*</code>, <code>[</code> and <code>`</code>. The other fourteen, including the full stop, the hyphen, the exclamation mark and the plus sign, passed straight through and rendered literally.</p>
+
+<p>That is what makes the upgrade nastier than a version bump. Code that ran clean for years on legacy Markdown has fourteen new fatal characters the moment you change the string <code>Markdown</code> to <code>MarkdownV2</code>, and they are the <em>ordinary</em> ones. The first message with a date in it starts failing. Telegram's own <a href="https://core.telegram.org/bots/api#formatting-options" rel="noopener">formatting options reference</a> flags V1 as deprecated, but the practical cost of moving is not in the docs: it is a bulk audit of every string you have ever passed to <code>sendMessage</code>.</p>
+
+<h2>Inside code spans and links, the rules genuinely are narrower</h2>
+
+<p>The docs claim that inside <code>code</code> and <code>pre</code> blocks only the backtick and the backslash need escaping, and that inside a link's <code>(...)</code> only the closing parenthesis and the backslash do. Both claims held on every character I tested:</p>
+
+<ul>
+  <li><strong>Code span and pre block.</strong> Seventeen of the eighteen were accepted and rendered verbatim. Only the backtick failed, which it must, since it terminates the span.</li>
+  <li><strong>Link URL.</strong> Seventeen accepted, only <code>)</code> failed. Full stops and hyphens inside a URL need nothing, which is a relief given what URLs look like.</li>
+</ul>
+
+<p>One thing the docs mention that is worth seeing rather than reading: the backslash inside a code span is consumed, not displayed. <code>`a\b`</code> arrives as <code>ab</code>. If you are formatting Windows paths or regular expressions inside code spans, that is the fifth character on the silent list.</p>
+
+<p>A smaller detail, offered because it contradicted my own guess: a lone trailing backslash, <code>ab\</code>, is not treated as an incomplete escape sequence. It is accepted and rendered literally as <code>ab\</code>. I had assumed an error, wrote the assumption into the test as the expected value, and the run told me I was wrong.</p>
+
+<h2>HTML mode has one fatal character instead of eighteen</h2>
+
+<p>Telegram supports three parse modes, and the comparison is not close for untrusted input.</p>
+
+<pre><code>parse_mode=HTML   "if a &lt; b then"      400  Unsupported start tag ""
+parse_mode=HTML   "use &lt;b&gt; for bold"   400  Can't find end tag corresponding to...
+parse_mode=HTML   "Tom &amp; Jerry"        ACCEPTED  ->  "Tom &amp; Jerry"</code></pre>
+
+<p>Only the less-than sign is genuinely fatal. The ampersand, which every HTML escaping guide treats as mandatory, was accepted and rendered literally because Telegram's parser only cares when it begins a recognised entity. Escaping it is still correct, since <code>&amp;lt;</code> in user text would otherwise decode into a literal <code>&lt;</code>, but the blast radius is one character wide instead of eighteen.</p>
+
+<p>And HTML mode has the advantage that matters more than the character count: your language already ships the escaper. Python's <code>html.escape</code>, Go's <code>html.EscapeString</code>, Java's <code>StringEscapeUtils</code>. All of them are older than your bot and none of them have a bug in them. For MarkdownV2 you are writing that function yourself, or trusting a helper such as <a href="https://docs.python-telegram-bot.org/en/stable/telegram.helpers.html" rel="noopener">python-telegram-bot's <code>escape_markdown</code></a>, which takes a <code>version=2</code> argument that is easy to forget and defaults to the legacy list.</p>
+
+<h2>What I do now</h2>
+
+<p>Three rules, in the order they save time:</p>
+
+<ol>
+  <li><strong>Never interpolate untrusted text into a parse mode.</strong> If the string came from a user, an API or a filesystem, it goes out with no <code>parse_mode</code> at all, or escaped by a function. Never by hand, never "it's just a name".</li>
+  <li><strong>Prefer HTML for anything with variables in it.</strong> One fatal character, and a standard-library escaper you did not write.</li>
+  <li><strong>If you need MarkdownV2, escape all eighteen, always.</strong> Not the ones you think will appear. The failure of the selective approach is invisible, which is precisely why it is not worth the saved keystrokes.</li>
+</ol>
+
+<p>The whole escaper is one line, and the test that proves it is one call:</p>
+
+<pre><code>RESERVED = r"_*[]()~`&gt;#+-=|{}.!"
+
+def esc(s):
+    return "".join("\\" + c if c in RESERVED else c for c in s)
+
+# sent:      Anna_Marie (dev) v2.0-beta! 50% off #1
+# raw:       400  Character '(' is reserved and must be escaped
+# escaped:   ACCEPTED  ->  Anna_Marie (dev) v2.0-beta! 50% off #1</code></pre>
+
+<p>That test string has five of the loud characters and one of the quiet ones. Raw, it fails on the first parenthesis and never reaches the underscore. Escaped, every character survives. Verify by reading <code>result.text</code> back from the response rather than by eyeballing the chat. The response is the only witness that tells you what was actually stored, and it is the same discipline that catches the four silent characters in the first place.</p>
+
+<div class="note">
+<p><strong>If you run this yourself, use a chat you own.</strong> Every accepted case is a delivered message, and there were 126 of them. I sent them to my own account and deleted each one after reading the response. Keep the pace down as well: <a href="/blog/telegram-game-bot-freezes-mid-round/">the burst allowance on a single chat is around a hundred operations</a> before the rate limiter pushes back, and deletes spend from the same budget as sends.</p>
+</div>
+
+<div class="cta-box pack">
+<h3>Telegram in Production</h3>
+<p>The measured limits, the failure modes and the boilerplate that survives them: escaping, rate limits, update queues and webhook handling, in one pack.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-markdownv2-escaping-tested">Get the pack &mdash; $19</a>
+</div>
+
+<h2>The probe</h2>
+
+<p>The script is stdlib-only Python and takes a bot token and a chat ID. It runs the eighteen characters through seven contexts, then the paired pass, then the backslash cases, and prints the roll-up you see in the screenshot. Point it at a demo bot, not a production one.</p>
+
+<pre><code>python3 tg-markdownv2-escape-probe.py --chat &lt;your own chat id&gt;
+
+UNESCAPED in plain MarkdownV2:
+  hard 400 error  : 18   _*[]()~`&gt;#+-=|{}.!
+  silently mangled:  0
+PAIRED and unescaped in plain MarkdownV2:
+  hard 400 error  : 14   []()&gt;#+-=|{}.!
+  silently eaten  :  4   _*~`</code></pre>
+
+<p>Two numbers, one conclusion. Every reserved character will stop a message. Four of them will let it through with holes.</p>
+
+<h2>FAQ</h2>
+<div class="faq">
+<details><summary>Which characters must be escaped in Telegram MarkdownV2?</summary>
+<p>All eighteen listed in the <a href="https://core.telegram.org/bots/api#markdownv2-style" rel="noopener">Bot API docs</a>: <code>_ * [ ] ( ) ~ ` &gt; # + - = | { } . !</code>. Tested one at a time, every single one returns a 400 when it appears unescaped in plain text. The documentation is accurate here.</p></details>
+
+<details><summary>Why does my Telegram message lose characters instead of returning an error?</summary>
+<p>Because four of the reserved characters open an entity that a second occurrence closes: underscore, asterisk, tilde and backtick. Two of the same character is valid markup, so the API accepts it and consumes both delimiters as formatting instead of delivering them as text.</p></details>
+
+<details><summary>Is HTML parse mode safer than MarkdownV2?</summary>
+<p>For untrusted text, yes. HTML mode had one fatal character in testing, the less-than sign, and an unescaped ampersand was accepted and rendered literally. MarkdownV2 has eighteen reserved characters, four of which fail silently. HTML also maps onto the escaper your standard library already ships.</p></details>
+
+<details><summary>What breaks when I migrate from Markdown to MarkdownV2?</summary>
+<p>Fourteen characters that were harmless become fatal. Legacy Markdown rejected only <code>_</code>, <code>*</code>, <code>[</code> and <code>`</code> in the same test; the other fourteen passed through. Those fourteen &mdash; full stops, hyphens, exclamation marks &mdash; are what starts returning 400 after the switch.</p></details>
+
+<details><summary>Can I test parse errors without a real chat?</summary>
+<p>Yes. Parse errors come back before Telegram resolves the chat, so sending to a chat ID that does not exist still returns the real parse error. A valid string sent to the same bogus chat returns "chat not found" instead, which is how you tell the two layers apart.</p></details>
+</div>
+
+<p>More measurements from the same bot: <a href="/blog/telegram-bot-api-validates-before-chat-exists/">where the Bot API validates an inline keyboard</a>, <a href="/blog/telegram-4096-character-limit/">what the 4096-character limit counts</a>, and <a href="/blog/dead-telegram-bot-update-queue/">what happens to an update queue after you switch the bot off</a>.</p>
+
+<a class="back" href="/blog/">&larr; Back to Blog</a>
+</article>
+<footer>&copy; 2026 Charlie Morrison Digital &middot; <a href="/about/">About</a> &middot; <a href="/blog/">Blog</a></footer>
+</body>
+</html>

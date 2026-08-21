@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram Keeps 100 Message Entities and Drops the Rest</title>
+<meta name="description" content="Send 150 message entities and the Bot API answers 200 OK with 100 stored. It also merges, splits, dedupes and re-sorts the array you sent. Measured live.">
+<meta name="keywords" content="telegram message entities limit, sendMessage entities array, telegram bot api entities, message entity offset utf-16, telegram entities overlap, telegram bot formatting limit">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-message-entities-limit-100/">
+<meta property="og:title" content="Telegram Keeps 100 Message Entities and Drops the Rest">
+<meta property="og:description" content="The Bot API documents the MessageEntity object in full and the entities array barely at all. Here is the ceiling, and the seven rewrites it performs on the way in.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-message-entities-limit-100/entities-probe.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Telegram Keeps 100 Message Entities and Drops the Rest","datePublished":"2026-08-21","dateModified":"2026-08-21","image":"https://charliemorrison.dev/blog/telegram-message-entities-limit-100/entities-probe.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How many message entities can a Telegram message have?","acceptedAnswer":{"@type":"Answer","text":"One hundred. Measured against the live Bot API, 100 entities are stored in full and 101 is the first array that loses data. The limit is on the array as a whole, not per entity type: 60 bold plus 60 italic on distinct ranges also came back with 100 stored."}},{"@type":"Question","name":"What happens if I send more than 100 entities to Telegram?","acceptedAnswer":{"@type":"Answer","text":"The call succeeds. You get 200 OK and a normal Message object, and the entities past the hundredth are silently discarded. Sending 400 entities returned 200 OK with 100 stored and no warning of any kind, so the only way to detect the loss is to compare the entities on the returned message against the array you sent."}},{"@type":"Question","name":"Can Telegram message entities overlap?","acceptedAnswer":{"@type":"Answer","text":"Yes, and partial overlap is accepted rather than rejected. A bold entity covering offsets 0 to 8 sent together with an italic entity covering 6 to 15 was accepted and stored as three non-overlapping fragments. Nesting behaves the same way: an outer entity is split at the boundary of the inner one."}},{"@type":"Question","name":"Does Telegram change the entities array I send?","acceptedAnswer":{"@type":"Answer","text":"Routinely. In testing it merged adjacent entities of the same type into one, deduplicated identical entities, re-sorted the array by offset, dropped zero-length entities, split nested entities into fragments, and discarded every other formatting entity sharing a range with a code entity."}},{"@type":"Question","name":"Which entity arrays does the Telegram Bot API reject?","acceptedAnswer":{"@type":"Answer","text":"Structurally impossible ones: a negative offset, an entity that ends past the end of the text, an unrecognised type string, a text_link with no url field, a custom_emoji with no custom_emoji_id, and a URL whose scheme it cannot parse. Everything else that is merely odd is accepted and normalised."}},{"@type":"Question","name":"Can I validate entities against a fake chat ID like I can with parse_mode?","acceptedAnswer":{"@type":"Answer","text":"No. Parse errors from parse_mode are returned before Telegram resolves the chat, but entity validation happens after. Sending a broken entities array to a non-existent chat returns chat not found, not the entity error, so every entity test costs a message in a real chat."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:10px;border:1px solid #e0e0e0}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+code{background:#f4f4f8;padding:2px 6px;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:20px 0;font-size:.9em;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+blockquote{border-left:4px solid #6c5ce7;background:#f8f8fc;padding:12px 18px;margin:20px 0;color:#444;font-style:italic}
+blockquote p:last-child{margin-bottom:0}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0}
+.comparison{width:100%;min-width:420px;border-collapse:collapse;margin:0}
+.comparison th,.comparison td{padding:10px 14px;border:1px solid #e0e0e0;text-align:left}
+.comparison th{background:#f0f0f5;font-weight:600}
+.comparison tr:hover{background:#f8f8fc}
+.cta-box{background:linear-gradient(135deg,#6c5ce710,#a29bfe10);border:2px solid #6c5ce7;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#6c5ce7}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box .alt a{background:none;color:#6c5ce7;padding:0;font-weight:600;display:inline;margin:0}
+.note{background:#fff9e6;border-left:4px solid #f0a500;border-radius:8px;padding:16px 20px;margin:24px 0}
+.note p:last-child{margin-bottom:0}
+.back{display:inline-block;margin-top:32px;color:#6c5ce7;text-decoration:none}
+.faq{margin:20px 0}
+.faq details{margin-bottom:12px;padding:12px;background:#f8f9fa;border-radius:8px}
+.faq summary{cursor:pointer;font-weight:600;color:#1a1a2e}
+.faq details p{margin:10px 0 0}
+footer{text-align:center;padding:28px 20px;color:#999;font-size:.9em;border-top:1px solid #eee;margin-top:40px}
+footer a{color:#6c5ce7;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>Telegram Keeps 100 Message Entities and Drops the Rest</h1>
+<div class="meta">By Charlie Morrison &middot; August 21, 2026 &middot; 9 min read</div>
+
+<p>Every Telegram bot library eventually stops using <code>parse_mode</code> and starts building the <code>entities</code> array by hand. It happens the first time you have to format text that contains something a user typed, because escaping user input into MarkdownV2 is a losing game and the entities array skips the parser entirely.</p>
+
+<p>The Bot API documents the <a href="https://core.telegram.org/bots/api#messageentity" rel="noopener">MessageEntity object</a> exhaustively &mdash; every type, every optional field. What it does not document is the <em>array</em>. How many will it take? What does it do with two entities that overlap? With one that repeats? With one that sits outside the text?</p>
+
+<p>I sent 31 <code>sendMessage</code> calls to find out, and read the entities back off every message the API accepted rather than trusting the status code. The headline number is the one nobody warns you about:</p>
+
+<ul>
+  <li><strong>The ceiling is 100 entities, and it is enforced silently.</strong> Send 150 and you get <code>200 OK</code>, a normal <code>Message</code> object, and 100 stored entities. Nothing in the response says the other 50 are gone.</li>
+  <li><strong>Seven distinct rewrites happen to well-formed arrays before storage.</strong> Merged, deduplicated, re-sorted, split, truncated. What you read back is frequently not what you sent.</li>
+  <li><strong>Only structurally impossible arrays are refused</strong> &mdash; a negative offset, an entity running past the end of the text, a type that does not exist.</li>
+</ul>
+
+<figure>
+  <img src="entities-probe.png" alt="Terminal output from a live Telegram Bot API probe: 101 and above return 200 OK with only 100 entities stored, seven well-formed arrays are rewritten on the way in, and four malformed ones return 400">
+  <figcaption>Verbatim output from the probe. The dropped entities produce no error &mdash; the count is only visible if you read the returned message back.</figcaption>
+</figure>
+
+<h2>Why the status code is the wrong thing to check</h2>
+
+<p>This measurement only exists because of a design choice in the probe: after every accepted call it reads <code>result.entities</code> off the message the API hands back and diffs it against the array that went out.</p>
+
+<p>That felt like over-engineering when I wrote it. It turned out to be the entire finding. Eleven of the eighteen arrays I sent were accepted, and only <strong>three</strong> of those eleven came back unchanged. An "accepted" entity array and a "stored as sent" entity array are two different outcomes, and the status code cannot tell them apart.</p>
+
+<p>If you take one habit away from this: <strong>after a formatted send, compare <code>len(response.entities)</code> to the length of what you sent.</strong> It is two lines, and it is the only signal you get.</p>
+
+<h2>The ceiling: 100, then a cliff</h2>
+
+<p>I built messages of <em>n</em> single-character words with one bold entity per word, walked <em>n</em> up, and counted what came back.</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Entities sent</th><th>HTTP status</th><th>Entities stored</th></tr>
+<tr><td>99</td><td>200 OK</td><td>99</td></tr>
+<tr><td>100</td><td>200 OK</td><td>100</td></tr>
+<tr><td>101</td><td>200 OK</td><td>100</td></tr>
+<tr><td>150</td><td>200 OK</td><td>100</td></tr>
+<tr><td>400</td><td>200 OK</td><td>100</td></tr>
+</table>
+</div>
+
+<p>One hundred exactly, and 101 is the first array that loses data. There is no 400, no warning field, no truncation flag. The survivors are the first hundred by offset &mdash; at 150 entities the last stored one sat at offset 198, which is word 100 of 150. The tail of your message simply arrives unformatted.</p>
+
+<p>The limit is on the array, not on any one type. A message carrying 60 bold entities and 60 italic entities on distinct ranges &mdash; 120 in total, no type exceeding 100 on its own &mdash; also came back with 100 stored, containing both types. So you cannot buy headroom by spreading formatting across different types.</p>
+
+<div class="note">
+<p><strong>Where this bites in practice:</strong> anything that formats a list. A leaderboard that bolds every player name, a log dump that wraps each timestamp in <code>code</code>, a digest that links every headline. One entity per row means the hundred-and-first row loses its formatting, and it does so on exactly the messages that are long enough for nobody to read them closely in testing.</p>
+</div>
+
+<h2>The seven quiet rewrites</h2>
+
+<p>Now the accepted-but-changed cases &mdash; eight arrays, seven distinct behaviours. Each returned <code>200 OK</code> and a stored array that differed from the one sent.</p>
+
+<h3>Adjacent entities of the same type are merged</h3>
+
+<p>Sending <code>bold[0,5]</code> and <code>bold[5,6]</code> &mdash; two entities that touch &mdash; stores a single <code>bold[0,11]</code>. Harmless for rendering, and worth knowing if you round-trip entities through your own code and expect the boundaries to survive.</p>
+
+<h3>Identical entities are deduplicated</h3>
+
+<p>Two copies of <code>bold[0,5]</code> store as one. Also harmless, and the reason a naive "apply formatting rules in a loop" implementation never notices it is emitting duplicates.</p>
+
+<h3>The array is re-sorted by offset</h3>
+
+<p>Sending <code>bold</code> at offset 16 followed by <code>italic</code> at offset 0 stores them in the opposite order: italic first. The Bot API does not require you to sort the array, and it will not preserve your order either. Anything comparing entity arrays for equality needs to sort first.</p>
+
+<h3>Nested entities are split at the inner boundary</h3>
+
+<p>This is the one that surprised me. Sending an outer <code>bold[0,11]</code> with an inner <code>italic[6,5]</code> &mdash; two entities &mdash; stores <strong>three</strong>:</p>
+
+<pre><code>sent:   bold[0,11]  italic[6,5]
+stored: bold[0,6]   bold[6,5]   italic[6,5]</code></pre>
+
+<p>The outer bold is cut in two at the point where the italic starts, and the fragments are stored alongside it. The rendering is identical; the array is not. If your code asserts that a formatted message round-trips to the same entity count, nesting alone will break that assertion.</p>
+
+<h3>Partial overlap is legal</h3>
+
+<p>Telegram's <a href="https://core.telegram.org/api/entities" rel="noopener">core API documentation on entities</a> describes a nesting model, which reads like a prohibition on entities that cross each other's boundaries. The Bot API does not enforce one. <code>bold[0,8]</code> with <code>italic[6,9]</code> &mdash; overlapping in the middle, neither containing the other &mdash; was accepted, and stored as three fragments that carve the overlap out:</p>
+
+<pre><code>sent:   bold[0,8]  italic[6,9]
+stored: bold[0,6]  italic[6,9]  bold[6,2]</code></pre>
+
+<p>So the model really is nesting-only; the API just reaches that model by rewriting your array instead of refusing it.</p>
+
+<h3>Zero-length entities vanish</h3>
+
+<p><code>bold[0,0]</code> is accepted and stored as nothing at all &mdash; one entity in, zero out. This is the failure mode of every "highlight the search term" feature ever written, because a zero-length match is what you get when the term is not found and nobody guarded the length.</p>
+
+<h3><code>code</code> annihilates everything sharing its range</h3>
+
+<p>The most consequential of the seven. Six entities on one range &mdash; bold, italic, underline, strikethrough, spoiler and code &mdash; store as a single <code>code</code> entity. The other five are discarded. Sending just <code>code</code> plus <code>bold</code> on the same range gives the same result.</p>
+
+<p>That is defensible, since monospace formatting is not composable with the rest. What is not obvious is that it happens without a word of complaint: a template that wraps a value in <code>code</code> and a highlighter that bolds a match inside it will silently disagree, and the highlighter always loses.</p>
+
+<div class="cta-box pack">
+<h3>Telegram in Production</h3>
+<p>The measured limits, the failure modes and the boilerplate that survives them: escaping, rate limits, update queues and webhook handling, in one pack.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-message-entities-limit-100">Get the pack &mdash; $19</a>
+</div>
+
+<h2>What it does refuse</h2>
+
+<p>Four categories, all of them structurally impossible rather than merely strange:</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Array sent</th><th>Error returned</th></tr>
+<tr><td><code>offset: -1</code></td><td>receive an entity with incorrect offset -1</td></tr>
+<tr><td><code>offset</code> equal to text length</td><td>entity beginning at UTF-16 offset 21 ends after the end of the text at UTF-16 offset 22</td></tr>
+<tr><td><code>length</code> running past the end</td><td>same message, with the computed end offset</td></tr>
+<tr><td><code>type: "sparkle"</code></td><td>can't parse MessageEntity: Unsupported type specified</td></tr>
+<tr><td><code>text_link</code> with no <code>url</code></td><td>can't parse MessageEntity: Can't find field "url"</td></tr>
+<tr><td><code>custom_emoji</code> with no id</td><td>can't parse MessageEntity: Can't find field "custom_emoji_id"</td></tr>
+</table>
+</div>
+
+<p>Two details worth pulling out of that table. First, the out-of-range error quotes <strong>UTF-16 offsets</strong> explicitly, which is a useful confirmation that entity offsets really are counted in UTF-16 code units &mdash; unlike the 4096-character cap, which <a href="/blog/telegram-4096-character-limit/">counts code points</a>. In a message containing emoji or anything else outside the Basic Multilingual Plane, the two units disagree, and this is the one place the API tells you which it is using.</p>
+
+<p>Second, a <code>text_link</code> pointing at <code>javascript:alert(1)</code> is rejected &mdash; with the delightfully wrong-sounding message <em>"entity URL is invalid: Wrong port number specified in the URL"</em>. The URL is refused, which is what matters; the parser has simply read everything after the first colon as a port. Do not match on that string, because it describes a parser's confusion rather than the actual problem.</p>
+
+<h2>Entity errors arrive after the chat is resolved</h2>
+
+<p>A previous measurement on this bot found that <a href="/blog/telegram-bot-api-validates-before-chat-exists/">MarkdownV2 parse errors are returned before Telegram resolves the chat</a>, which makes a non-existent chat ID a free validator: send to <code>chat_id=1</code>, and a broken string still returns its real parse error while a valid one returns "chat not found".</p>
+
+<p>I opened this probe by assuming the same trick would work for entities, and it does not. A deliberately broken array &mdash; an entity starting past the end of the text &mdash; sent to <code>chat_id=1</code> returns <strong>"chat not found"</strong>, not the entity error. Both layers are behind chat resolution.</p>
+
+<p>That is a real operational difference between the two formatting paths, and it cost me a rewrite of the probe halfway through: every entity test has to be a real message in a real chat, sent and then deleted. It also means you cannot lint entity arrays against the live API in CI without a throwaway chat to send them to.</p>
+
+<h2>Five lines that would have caught all of this</h2>
+
+<p>Every finding above is invisible to code that checks <code>response.ok</code> and moves on. It is visible to code that does this:</p>
+
+<pre><code>r = bot.send_message(chat_id, text, entities=ents)
+if len(r.entities or []) != len(ents):
+    log.warning("telegram normalised entities: sent %d, stored %d",
+                len(ents), len(r.entities or []))</code></pre>
+
+<p>A mismatch is not automatically a bug &mdash; merging and deduplication are benign, and nesting will trip it every time. But a message that sent 140 and stored 100 is telling you that forty pieces of formatting never reached the user, and that is the only place it will ever be written down.</p>
+
+<h2>Every number, in one place</h2>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Question</th><th>Measured answer</th></tr>
+<tr><td>Maximum entities stored</td><td>100, array-wide, not per type</td></tr>
+<tr><td>Behaviour past the limit</td><td>200 OK, first 100 by offset kept, rest dropped silently</td></tr>
+<tr><td>Adjacent same-type entities</td><td>merged into one</td></tr>
+<tr><td>Duplicate entities</td><td>deduplicated</td></tr>
+<tr><td>Array order</td><td>re-sorted by offset</td></tr>
+<tr><td>Nested entities</td><td>outer split at the inner boundary; count grows</td></tr>
+<tr><td>Partially overlapping entities</td><td>accepted, rewritten into non-overlapping fragments</td></tr>
+<tr><td>Zero-length entity</td><td>accepted, stored as nothing</td></tr>
+<tr><td><code>code</code> sharing a range</td><td>survives; all other types on that range discarded</td></tr>
+<tr><td>Offset units in error messages</td><td>UTF-16 code units</td></tr>
+<tr><td>Validation vs chat resolution</td><td>after &mdash; unlike <code>parse_mode</code> errors</td></tr>
+</table>
+</div>
+
+<h2>The probe</h2>
+
+<p>Stdlib-only Python, takes a bot token and a chat ID. It runs the phase-0 chat-resolution check, walks the ceiling with a binary search, then sends each degenerate array and diffs the stored entities against the sent ones. Every message it sends to the real chat is deleted immediately after it is read back. Point it at a demo bot.</p>
+
+<pre><code>$ python3 tg-entities-probe.py --chat &lt;your own chat id&gt;
+
+entity validation runs before chat resolution: False
+ceiling: 100 stored (101, 150 and 400 all store 100)
+accepted and kept as sent  :  3
+accepted and REWRITTEN     :  8
+refused with 400           :  7</code></pre>
+
+<p>Three arrays out of eleven survive contact with the API unchanged. That ratio is the finding; the ceiling is just its most expensive instance.</p>
+
+<h2>FAQ</h2>
+<div class="faq">
+<details><summary>How many message entities can a Telegram message have?</summary>
+<p>One hundred. Measured live: 100 entities are stored in full, and 101 is the first array that loses data. The limit applies to the array as a whole, not per type &mdash; 60 bold plus 60 italic on distinct ranges also stored 100.</p></details>
+
+<details><summary>What happens if I send more than 100 entities?</summary>
+<p>The call succeeds. You get <code>200 OK</code> and a normal <code>Message</code>, and everything past the hundredth is discarded without a warning. Sending 400 returned 200 OK with 100 stored. Comparing the returned entity count against what you sent is the only way to detect it.</p></details>
+
+<details><summary>Can Telegram message entities overlap?</summary>
+<p>Partial overlap is accepted rather than rejected. <code>bold[0,8]</code> with <code>italic[6,9]</code> &mdash; offset and length, so they cross in the middle &mdash; was stored as three non-overlapping fragments. Nesting behaves the same way: the outer entity is split at the inner one's boundary, so two entities in can be three entities out.</p></details>
+
+<details><summary>Does Telegram change the entities array I send?</summary>
+<p>Routinely. It merges adjacent same-type entities, deduplicates identical ones, re-sorts by offset, drops zero-length entities, splits nested ones into fragments, and discards every other formatting type sharing a range with a <code>code</code> entity.</p></details>
+
+<details><summary>Which entity arrays does the Bot API reject?</summary>
+<p>Structurally impossible ones: a negative offset, an entity ending past the end of the text, an unrecognised type, a <code>text_link</code> with no <code>url</code>, a <code>custom_emoji</code> with no <code>custom_emoji_id</code>, and a URL whose scheme it cannot parse. Anything merely odd is accepted and normalised.</p></details>
+
+<details><summary>Are entity offsets counted in UTF-16 or code points?</summary>
+<p>UTF-16 code units, and the API says so in its own error text: "entity beginning at UTF-16 offset 21 ends after the end of the text". Note that the 4096-character message cap is counted differently &mdash; in code points &mdash; so the two limits disagree on emoji.</p></details>
+
+<details><summary>Can I validate entities against a fake chat ID?</summary>
+<p>No. <code>parse_mode</code> errors are returned before chat resolution, but entity validation happens after it, so a broken array sent to a non-existent chat returns "chat not found". Every entity test costs a real message in a real chat.</p></details>
+</div>
+
+<p>More measurements from the same bot: <a href="/blog/telegram-markdownv2-escaping-tested/">which MarkdownV2 characters delete themselves</a>, <a href="/blog/telegram-4096-character-limit/">what the 4096-character limit actually counts</a>, and <a href="/blog/telegram-bot-api-validates-before-chat-exists/">where the Bot API validates an inline keyboard</a>.</p>
+
+<a class="back" href="/blog/">&larr; Back to Blog</a>
+</article>
+<footer>&copy; 2026 Charlie Morrison Digital &middot; <a href="/about/">About</a> &middot; <a href="/blog/">Blog</a></footer>
+</body>
+</html>

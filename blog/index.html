@@ -20,6 +20,18 @@ gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{
 <div class="container">
 <h1>Blog</h1>
 <div class="post">
+<h2><a href="/blog/telegram-inline-keyboard-300-button-limit/">Telegram Stores 12 Inline Buttons Per Row and 300 Total</a></h2>
+<div class="meta">August 22, 2026</div>
+<p>Send 4000 buttons in one row and the Bot API returns 200 OK with 12 stored. The row cap is 12, the keyboard cap is 300, and neither one raises an error.</p>
+<a class="read-more" href="/blog/telegram-inline-keyboard-300-button-limit/">Read more &rarr;</a>
+</div>
+<div class="post">
+<h2><a href="/blog/telegram-message-entities-limit-100/">Telegram Keeps 100 Message Entities and Drops the Rest</a></h2>
+<div class="meta">August 21, 2026</div>
+<p>Send 150 message entities and the Bot API answers 200 OK with 100 stored. It also merges, splits, dedupes and re-sorts the array you sent. Measured live.</p>
+<a class="read-more" href="/blog/telegram-message-entities-limit-100/">Read more &rarr;</a>
+</div>
+<div class="post">
 <h2><a href="/blog/telegram-markdownv2-escaping-tested/">Four Telegram Characters Do Not Break Your Message. They Delete It.</a></h2>
 <div class="meta">August 19, 2026</div>
 <p>MarkdownV2 lists eighteen reserved characters and treats them as one problem. They are two problems. Fourteen fail with a 400 you cannot miss; four are accepted and quietly remove themselves from what your user receives. 126 live API calls, and the rule underneath the docs.</p>
@@ -28,7 +40,7 @@ gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{
 <div class="post">
 <h2><a href="/blog/telegram-bot-api-validates-before-chat-exists/">Half of Telegram's Bot API Errors Arrive Before It Checks Your Chat Exists</a></h2>
 <div class="meta">August 17, 2026</div>
-<p>I sent a malformed keyboard to a chat that does not exist and Telegram told me it was malformed anyway. Two validation layers, a fixed order, and one of them is testable with no chat at all. Also: the API accepted 1000 buttons in one row and 2000 rows, so "max 8 per row" is a rendering convention, not a rule.</p>
+<p>I sent a malformed keyboard to a chat that does not exist and Telegram told me it was malformed anyway. Two validation layers, a fixed order, and one of them is testable with no chat at all. Updated 22 August: the size figures in this post were corrected &mdash; a row stores 12 buttons, not 1000.</p>
 <a class="read-more" href="/blog/telegram-bot-api-validates-before-chat-exists/">Read more &rarr;</a>
 </div>
 <div class="post">
@@ -120,6 +132,18 @@ gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{
 <div class="meta">July 18, 2026</div>
 <p>The title changed, the paycheck did not. That is its own negotiation, and almost nobody writes scripts for it because the leverage of a competing offer is gone. I fed a realistic "promoted but underpaid" case into my free salary generator and read the raw output: it led with evidence I was already doing the job, put the number second, and asked about the formal process. Here is what it got right, and the two things you still have to do by hand.</p>
 <a href="/blog/promoted-no-raise-salary-negotiation-script/" class="read-more">Read more &rarr;</a>
+</div>
+<div class="post">
+<h2><a href="/blog/i-ran-4-salary-tones-through-ai-detector/">I Generated the Same Counter-Offer in 4 Tones and Ran Each Through an AI Detector</a></h2>
+<div class="meta">July 16, 2026</div>
+<p>I generated the same lowball counter-offer in all 4 tones of a free salary script tool, then ran each through an AI detector. The 'Confident' one read most like a bot. Free test, real scores.</p>
+<a class="read-more" href="/blog/i-ran-4-salary-tones-through-ai-detector/">Read more &rarr;</a>
+</div>
+<div class="post">
+<h2><a href="/blog/i-tested-resume-section-headings-ats/">I Renamed My Resume Headings and the ATS Score Dropped 13 Points</a></h2>
+<div class="meta">July 13, 2026</div>
+<p>Same resume, same words, only the section headings changed — 'Work Experience' became 'Where I've Made an Impact.' The ATS score fell from 78 to 65. Here is exactly what the parser stopped seeing.</p>
+<a class="read-more" href="/blog/i-tested-resume-section-headings-ats/">Read more &rarr;</a>
 </div>
 <div class="post">
 <h2><a href="/blog/recruiter-phone-screen-questions/">Recruiter Phone Screen: 15 Questions, Zero About Pay</a></h2>

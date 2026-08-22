@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram Stores 12 Inline Buttons Per Row and 300 Total</title>
+<meta name="description" content="Send 4000 buttons in one row and the Bot API returns 200 OK with 12 stored. The row cap is 12, the keyboard cap is 300, and neither one raises an error.">
+<meta name="keywords" content="telegram inline keyboard limit, inline_keyboard max buttons, callback_data 64 bytes, telegram buttons per row, reply_markup limit, telegram bot api keyboard">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-inline-keyboard-300-button-limit/">
+<meta property="og:title" content="Telegram Stores 12 Inline Buttons Per Row and 300 Total">
+<meta property="og:description" content="I published 1000 buttons OK five days ago. That number came from a status code. Reading the keyboard back off the message says 12 per row and 300 in total.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-inline-keyboard-300-button-limit/keyboard-probe.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Telegram Stores 12 Inline Buttons Per Row and 300 Total","datePublished":"2026-08-22","dateModified":"2026-08-22","image":"https://charliemorrison.dev/blog/telegram-inline-keyboard-300-button-limit/keyboard-probe.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How many buttons can a Telegram inline keyboard have?","acceptedAnswer":{"@type":"Answer","text":"Three hundred in total, and twelve in any single row. Both caps are enforced by silent truncation rather than by an error: sending 301 buttons returns 200 OK with 300 stored, and sending 13 buttons in one row returns 200 OK with 12 stored. The total cap counts buttons and not rows, so 300 rows of one button each are stored in full."}},{"@type":"Question","name":"Why does my Telegram inline keyboard lose buttons?","acceptedAnswer":{"@type":"Answer","text":"Because it exceeded 12 buttons in a row or 300 buttons overall and the Bot API truncated it without saying so. The call returns 200 OK and a normal Message object. The only way to see the loss is to compare the reply_markup on the returned message against the keyboard you sent."}},{"@type":"Question","name":"Is callback_data limited in bytes or characters?","acceptedAnswer":{"@type":"Answer","text":"Bytes. The documented limit of 64 is 64 UTF-8 bytes, so 64 ASCII characters are accepted but 33 Cyrillic characters (66 bytes) and 17 emoji (68 bytes) are both refused with BUTTON_DATA_INVALID. Python's len() counts characters, so the check that passes locally is not the check the API runs."}},{"@type":"Question","name":"What happens if a button has both url and callback_data?","acceptedAnswer":{"@type":"Answer","text":"The call is accepted and the callback_data is silently discarded. Reading the stored markup back shows a button carrying only the url, so the callback handler never fires and nothing in the response indicates that half the button was dropped."}},{"@type":"Question","name":"Can I validate an inline keyboard against a fake chat ID?","acceptedAnswer":{"@type":"Answer","text":"Only partially. Parse errors are returned before the chat is resolved, but limits are enforced after it. Of sixteen cases that passed against chat_id=1, eight were refused by a real chat, including every over-length callback_data and every invalid URL scheme. A bogus chat is a parser, not a validator."}},{"@type":"Question","name":"What is the maximum request size for the Telegram Bot API?","acceptedAnswer":{"@type":"Answer","text":"One mebibyte. A request body of 1,048,447 bytes was accepted and one of 1,048,643 bytes returned HTTP 413 Request Entity Too Large, bracketing 1,048,576 bytes. The 413 arrives as well-formed Bot API JSON with error_code 413, so normal error handling parses it."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:10px;border:1px solid #e0e0e0}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+code{background:#f4f4f8;padding:2px 6px;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:20px 0;font-size:.9em;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+blockquote{border-left:4px solid #6c5ce7;background:#f8f8fc;padding:12px 18px;margin:20px 0;color:#444;font-style:italic}
+blockquote p:last-child{margin-bottom:0}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0}
+.comparison{width:100%;min-width:420px;border-collapse:collapse;margin:0}
+.comparison th,.comparison td{padding:10px 14px;border:1px solid #e0e0e0;text-align:left}
+.comparison th{background:#f0f0f5;font-weight:600}
+.comparison tr:hover{background:#f8f8fc}
+.cta-box{background:linear-gradient(135deg,#6c5ce710,#a29bfe10);border:2px solid #6c5ce7;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#6c5ce7}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box .alt a{background:none;color:#6c5ce7;padding:0;font-weight:600;display:inline;margin:0}
+.note{background:#fff9e6;border-left:4px solid #f0a500;border-radius:8px;padding:16px 20px;margin:24px 0}
+.note p:last-child{margin-bottom:0}
+.back{display:inline-block;margin-top:32px;color:#6c5ce7;text-decoration:none}
+.faq{margin:20px 0}
+.faq details{margin-bottom:12px;padding:12px;background:#f8f9fa;border-radius:8px}
+.faq summary{cursor:pointer;font-weight:600;color:#1a1a2e}
+.faq details p{margin:10px 0 0}
+footer{text-align:center;padding:28px 20px;color:#999;font-size:.9em;border-top:1px solid #eee;margin-top:40px}
+footer a{color:#6c5ce7;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>Telegram Stores 12 Inline Buttons Per Row and 300 Total</h1>
+<div class="meta">By Charlie Morrison &middot; August 22, 2026 &middot; 9 min read</div>
+
+<p>Five days ago I published a post about inline keyboard limits whose title said <em>1000 buttons OK</em>. That number was wrong, and the way it was wrong is more useful than the number itself.</p>
+
+<p>It came from a status code. I had sent a thousand buttons in a single row, the API had returned <code>200 OK</code>, and I wrote down <em>accepted</em>. What I never did was look at the message afterwards. When I finally did, the row had twelve buttons in it. The other 988 were gone, and nothing anywhere in the response had mentioned them.</p>
+
+<p>So this is the same probe run properly: every keyboard sent to a real chat, the <code>reply_markup</code> read back off the returned message, and the two compared field by field. The corrected numbers are smaller and much stranger than the ones I published.</p>
+
+<ul>
+  <li><strong>A row holds 12 buttons.</strong> Send 13, or 100, or 4000 &mdash; you get <code>200 OK</code> and 12 stored, every time.</li>
+  <li><strong>A keyboard holds 300 buttons.</strong> Not 300 rows: 300 buttons, however you arrange them.</li>
+  <li><strong>Neither cap produces an error.</strong> There is no warning field, no truncation flag, no changed status code.</li>
+  <li><strong>The wall that <em>does</em> error is somewhere else entirely</strong> &mdash; a 1 MiB request body, measured here to the byte.</li>
+</ul>
+
+<figure>
+  <img src="keyboard-probe.png" alt="Terminal output from a live Telegram Bot API probe showing that 13, 100 and 4000 buttons in one row all return 200 OK with 12 stored, that 301 buttons store as 300, that callback_data is limited in bytes rather than characters, and that a 1,048,643 byte request body returns HTTP 413">
+  <figcaption>Verbatim output across the passes. Everything above 300 is a <code>200 OK</code>; the only genuine error in the whole picture is the 413 at the bottom.</figcaption>
+</figure>
+
+<h2>The setup</h2>
+
+<p>One throwaway bot, nothing in production. Two recorded passes of 73 and 46 API calls, then four follow-up passes to pin the boundaries down. Every keyboard that the API accepted was sent to a real private chat, read back, and the message deleted immediately afterwards, because &mdash; as the last section explains &mdash; a chat that does not exist cannot tell you the truth about limits.</p>
+
+<p>The probe is standard library only. Each verdict quoted below came out of a run on 22 August 2026.</p>
+
+<h2>The row cap is 12, and it truncates in silence</h2>
+
+<p>The <a href="https://core.telegram.org/bots/api#inlinekeyboardmarkup" rel="noopener">InlineKeyboardMarkup</a> documentation describes the field as an array of arrays of buttons and puts no number on either dimension. The number on the inner array is twelve.</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Buttons sent in one row</th><th>Response</th><th>Buttons stored</th></tr>
+<tr><td>12</td><td>200 OK</td><td>12</td></tr>
+<tr><td>13</td><td>200 OK</td><td>12</td></tr>
+<tr><td>100</td><td>200 OK</td><td>12</td></tr>
+<tr><td>4000</td><td>200 OK</td><td>12</td></tr>
+</table>
+</div>
+
+<p>This is the cap that bites in practice, because twelve is small enough to reach by accident and large enough that nobody tests past it. A row built from a list &mdash; time slots, pages, languages, a set of tags &mdash; sits comfortably under twelve during development and quietly loses its tail in production the first time a user has thirteen of something.</p>
+
+<p>Note that the truncation is not a rendering artefact. The buttons are not present-but-hidden, waiting for a wider screen. They are absent from the stored message: the API returns a keyboard with twelve buttons in it, and a <code>callback_query</code> for the thirteenth can never arrive because the thirteenth does not exist.</p>
+
+<h2>The keyboard cap is 300, and it counts buttons rather than rows</h2>
+
+<p>My first guess was that the outer array had its own limit, parallel to the inner one. It does not. What exists is a budget of 300 buttons that you may spend on any shape you like.</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Keyboard sent</th><th>Stored</th></tr>
+<tr><td>300 rows &times; 1 button</td><td>300 rows, 300 buttons</td></tr>
+<tr><td>301 rows &times; 1 button</td><td>300 rows, 300 buttons</td></tr>
+<tr><td>600 buttons at 2 per row</td><td>150 rows, 300 buttons</td></tr>
+<tr><td>600 buttons at 12 per row</td><td>25 rows, 300 buttons</td></tr>
+<tr><td>12,800 buttons at 8 per row</td><td>38 rows, 300 buttons</td></tr>
+</table>
+</div>
+
+<p>Three hundred single-button rows are stored in full, so there is no row limit hiding underneath at 100 or 150. Change the width and the row count moves to whatever divides 300 &mdash; 150 rows of two, 25 rows of twelve &mdash; while the button total stays nailed to 300.</p>
+
+<p>The two caps also compose in the direction you would hope. Sending 600 buttons at 13 per row gives 25 rows of 12: each row is first truncated to twelve, and the 300 budget is then spent on what survived, not on what was sent. The result is that an over-wide keyboard loses buttons twice, and the arithmetic that predicts how many you keep is not the arithmetic of what you sent.</p>
+
+<h2>callback_data is measured in bytes, and your language hides it</h2>
+
+<p>The <a href="https://core.telegram.org/bots/api#inlinekeyboardbutton" rel="noopener">InlineKeyboardButton</a> docs are precise here and almost everyone misreads them anyway: <code>callback_data</code> is <em>1-64 bytes</em>. Bytes. Not characters.</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>callback_data</th><th>len()</th><th>Bytes</th><th>Verdict</th></tr>
+<tr><td>64 &times; <code>a</code></td><td>64</td><td>64</td><td>accepted</td></tr>
+<tr><td>65 &times; <code>a</code></td><td>65</td><td>65</td><td>400 <code>BUTTON_DATA_INVALID</code></td></tr>
+<tr><td>32 &times; <code>&#1103;</code></td><td>32</td><td>64</td><td>accepted</td></tr>
+<tr><td>33 &times; <code>&#1103;</code></td><td>33</td><td>66</td><td>400 <code>BUTTON_DATA_INVALID</code></td></tr>
+<tr><td>16 &times; emoji</td><td>16</td><td>64</td><td>accepted</td></tr>
+<tr><td>17 &times; emoji</td><td>17</td><td>68</td><td>400 <code>BUTTON_DATA_INVALID</code></td></tr>
+</table>
+</div>
+
+<p>Read the middle rows again. A string of 33 characters is refused while a string of 64 characters is accepted. Any length check written as <code>len(data) &lt;= 64</code> in Python &mdash; or <code>.length</code> in JavaScript, which counts UTF-16 code units and has its own disagreement with the bytes &mdash; passes the exact payloads the API rejects.</p>
+
+<p>This is a localisation bug waiting for a specific user. <code>callback_data=f"city:{name}"</code> is fine for every Latin city name you test with and dies on a Cyrillic or Greek one, and it dies at the API rather than in your code, so the traceback points at the send call and not at the string that caused it. The fix is one character wide: check <code>len(data.encode())</code>, not <code>len(data)</code>.</p>
+
+<div class="note">
+<p><strong>A related trap in the same field.</strong> An empty <code>callback_data</code> is not treated as a short string, it is treated as an absent field &mdash; and the resulting error is <em>&ldquo;Text buttons are unallowed in the inline keyboard&rdquo;</em>, which describes a button with no action at all. If you see that message while staring at code that clearly sets <code>callback_data</code>, the value is an empty string.</p>
+</div>
+
+<h2>Half of what a fake chat accepts, a real chat refuses</h2>
+
+<p>In the earlier post I found that some Bot API errors arrive before Telegram resolves the chat, which makes <code>chat_id=1</code> look like a free keyboard linter: no test user, no spam, no consent required. That finding is real, and I then leaned on it much too hard.</p>
+
+<p>Sixteen cases passed the cheap check. Eight of them were refused by a real chat.</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Case</th><th>Against <code>chat_id=1</code></th><th>Against a real chat</th></tr>
+<tr><td><code>callback_data</code> 65 bytes</td><td>passed</td><td>400 <code>BUTTON_DATA_INVALID</code></td></tr>
+<tr><td><code>callback_data</code> 66 bytes</td><td>passed</td><td>400 <code>BUTTON_DATA_INVALID</code></td></tr>
+<tr><td><code>callback_data</code> 128 bytes</td><td>passed</td><td>400 <code>BUTTON_DATA_INVALID</code></td></tr>
+<tr><td><code>callback_data</code> 68 bytes</td><td>passed</td><td>400 <code>BUTTON_DATA_INVALID</code></td></tr>
+<tr><td><code>url: "javascript:alert(1)"</code></td><td>passed</td><td>400, invalid URL</td></tr>
+<tr><td><code>url: "/foo"</code></td><td>passed</td><td>400, URL host is empty</td></tr>
+<tr><td><code>web_app</code> over http</td><td>passed</td><td>400, only HTTPS links are allowed</td></tr>
+<tr><td><code>pay: true</code>, not an invoice</td><td>passed</td><td>400 <code>BUTTON_TYPE_INVALID</code></td></tr>
+</table>
+</div>
+
+<p>The pattern is clean once you see it. The early layer is a <em>parser</em>: it answers questions about the shape of the request &mdash; is this JSON, is this an array, does this button have an action field &mdash; and it can answer them without knowing who the message is for. Everything that is a <em>limit</em> or a <em>policy</em> lives behind chat resolution.</p>
+
+<p>So a bogus chat ID will tell you that your keyboard builder emitted a malformed button, and it will cheerfully wave through the oversized <code>callback_data</code> that is going to break you in production. It is a syntax check that looks like a validator. If you were planning to lint keyboards in CI this way &mdash; I was &mdash; it catches roughly the half of the problems you would have caught yourself.</p>
+
+<p>One detail worth carrying: the <code>javascript:</code> URL is refused with <em>&ldquo;Wrong port number specified in the URL&rdquo;</em>. The parser reads everything after the first colon as a port, so the message names the wrong problem entirely. It is the second time that string has come up in this cluster, and it is still a bad thing to match on.</p>
+
+<div class="cta-box pack">
+<h3>Telegram in Production</h3>
+<p>The measured limits, the failure modes and the boilerplate that survives them: escaping, rate limits, update queues and webhook handling, in one pack.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-inline-keyboard-300-button-limit">Get the pack &mdash; $19</a>
+</div>
+
+<h2>Four rewrites that happen on the way in</h2>
+
+<p>Truncation is not the only thing done to a keyboard between <code>sendMessage</code> and storage. Reading the markup back turned up four more edits, all silent.</p>
+
+<h3>A button with both <code>url</code> and <code>callback_data</code> loses the callback</h3>
+
+<p>Sent a button carrying both, the API stores only the <code>url</code>. The response is <code>200 OK</code> and the button looks right to the user; it simply opens a link instead of firing the handler you wrote, and the handler is never called by anything. This is the most dangerous item on the list, because a keyboard builder that sets a default <code>callback_data</code> on every button and then adds a <code>url</code> to some of them will produce exactly this and never report it.</p>
+
+<h3>An empty label deletes its row</h3>
+
+<p>A button whose <code>text</code> is <code>""</code> does not raise an error. Its row is removed. Send three rows where the first has an empty label and two are ordinary, and the stored keyboard has two rows. Send a keyboard whose only button has an empty label and the message arrives <em>with no keyboard at all</em> &mdash; still <code>200 OK</code>, still a normal <code>Message</code>, just nothing to press.</p>
+
+<p>A missing translation key that renders as an empty string is enough to do this. A label of <code>" "</code>, one space, survives intact, which means the difference between a keyboard and no keyboard can be one character of whitespace in a locale file.</p>
+
+<h3>Empty rows are dropped, unknown fields are dropped</h3>
+
+<p><code>[[a], [], [b]]</code> stores as <code>[[a], [b]]</code>, so a row-builder that emits an empty row for a filtered-out group is harmless. Unrecognised keys on a button object are stripped without complaint too &mdash; useful to know before you try smuggling your own metadata through.</p>
+
+<h3>URLs come back normalised</h3>
+
+<p><code>https://example.com</code> is stored as <code>https://example.com/</code>. Trivial on its own, but it breaks the obvious way of detecting everything else on this page: if you compare the stored markup to what you sent and assert equality, the trailing slash makes every URL button a false positive. Compare fields you care about, not whole objects.</p>
+
+<h2>The only real error is 1 MiB, and it is the request, not the keyboard</h2>
+
+<p>Since no keyboard size produces an error, I went looking for what does. Sending ever-larger keyboards, the first genuine refusal appeared at roughly 15,000 buttons &mdash; and it was <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/413" rel="noopener">HTTP 413 Request Entity Too Large</a>, which is a statement about the request, not the markup.</p>
+
+<p>Isolating payload size as the only variable brackets it precisely:</p>
+
+<pre><code>1048447 B body  ->  200 OK
+1048643 B body  ->  413 Request Entity Too Large
+1 MiB           =   1048576 B</code></pre>
+
+<p>129 bytes under the line passes, 67 bytes over it fails. The cap is one mebibyte of request body, and it is shared by everything in the request &mdash; text, keyboard, every other parameter &mdash; rather than belonging to <code>reply_markup</code>.</p>
+
+<p>The 413 arrives as well-formed Bot API JSON (<code>{"ok": false, "error_code": 413, "description": "Request Entity Too Large"}</code>), so ordinary error handling parses it rather than choking on an HTML error page. That is a small kindness worth knowing about, since a 413 from a reverse proxy usually is not JSON.</p>
+
+<h2>What to do with this</h2>
+
+<p>Four things, in the order they will save you time:</p>
+
+<ol>
+  <li><strong>Cap your rows at 12 and your keyboards at 300 in your own builder</strong>, and raise your own error when a caller exceeds either. The API will not tell you, so this has to be your check.</li>
+  <li><strong>Measure <code>callback_data</code> in bytes.</strong> <code>len(data.encode())</code>. If you accept user-supplied text into that field at all, truncate on bytes or hash it and keep a lookup.</li>
+  <li><strong>Paginate rather than truncate.</strong> 300 buttons is generous for a real interface, but a list that <em>can</em> exceed it will, and the failure is invisible. Page the list and the ceiling stops mattering.</li>
+  <li><strong>Read the markup back at least once in your test suite.</strong> Not the status code &mdash; the <code>reply_markup</code> on the returned <code>Message</code>. Every finding on this page, including the one that corrected my own headline, is invisible from a status code.</li>
+</ol>
+
+<p>That last point is the whole lesson, and I had to learn it twice. A <code>200 OK</code> from the Bot API means the request was accepted. It does not mean the thing you sent is the thing that now exists.</p>
+
+<h2>FAQ</h2>
+<div class="faq">
+<details><summary>How many buttons can a Telegram inline keyboard have?</summary>
+<p>Three hundred in total and twelve per row, both enforced by silent truncation. 301 buttons store as 300; 13 buttons in a row store as 12. The total counts buttons rather than rows, so 300 single-button rows are kept in full.</p></details>
+
+<details><summary>Why does my inline keyboard lose buttons?</summary>
+<p>It went over 12 in a row or 300 overall and was truncated without an error. The call returns <code>200 OK</code> and a normal <code>Message</code>. Compare the <code>reply_markup</code> on the returned message with what you sent &mdash; that difference is the only signal you get.</p></details>
+
+<details><summary>Is callback_data limited in bytes or characters?</summary>
+<p>Bytes: 64 UTF-8 bytes. 64 ASCII characters pass, 33 Cyrillic characters (66 bytes) and 17 emoji (68 bytes) are both refused with <code>BUTTON_DATA_INVALID</code>. Check <code>len(data.encode())</code>.</p></details>
+
+<details><summary>What happens if a button has both url and callback_data?</summary>
+<p>It is accepted and the <code>callback_data</code> is discarded. The stored button carries only the <code>url</code>, so the callback handler never fires and nothing in the response says why.</p></details>
+
+<details><summary>Can I validate an inline keyboard against a fake chat ID?</summary>
+<p>Only the shape of it. Parse errors precede chat resolution; limits and policies follow it. Eight of sixteen cases that passed against <code>chat_id=1</code> were refused by a real chat, including every over-length <code>callback_data</code> and every bad URL scheme.</p></details>
+
+<details><summary>What is the maximum request size for the Bot API?</summary>
+<p>One mebibyte. 1,048,447 bytes was accepted and 1,048,643 bytes returned HTTP 413, bracketing 1,048,576. It applies to the whole request body, not to <code>reply_markup</code> alone, and the 413 comes back as parseable Bot API JSON.</p></details>
+
+<details><summary>Does an empty button label cause an error?</summary>
+<p>No &mdash; it removes the row. If that row was the only one, the message arrives with no keyboard at all, still as a <code>200 OK</code>. A single space survives, so a missing translation string is enough to delete a keyboard.</p></details>
+</div>
+
+<p>More measurements from the same bot: <a href="/blog/telegram-bot-api-validates-before-chat-exists/">which errors arrive before Telegram checks your chat exists</a> &mdash; the post this one corrects &mdash; plus <a href="/blog/telegram-message-entities-limit-100/">the 100-entity ceiling and the rewrites around it</a> and <a href="/blog/telegram-4096-character-limit/">what the 4096-character limit actually counts</a>.</p>
+
+<a class="back" href="/blog/">&larr; Back to Blog</a>
+</article>
+<footer>&copy; 2026 Charlie Morrison Digital &middot; <a href="/about/">About</a> &middot; <a href="/blog/">Blog</a></footer>
+</body>
+</html>

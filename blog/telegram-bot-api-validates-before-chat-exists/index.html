@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Telegram Inline Keyboard Limits, Measured: 1000 Buttons OK</title>
-<meta name="description" content="The Bot API accepted 1000 buttons in one row and 2000 rows. The only size limit it enforces is callback_data at 64 bytes. Measured live, probe script included.">
+<title>Telegram Inline Keyboard Limits: Which Errors Come First</title>
+<meta name="description" content="Some Bot API errors arrive before Telegram resolves your chat, and some do not. Where the boundary sits, measured live -- plus a correction on the size limits.">
 <meta name="keywords" content="telegram inline keyboard max buttons per row, callback_data 64 bytes limit, BUTTON_DATA_INVALID, telegram bot api validation, reply_markup limits, telegram bot api chat not found">
 <link rel="canonical" href="https://charliemorrison.dev/blog/telegram-bot-api-validates-before-chat-exists/">
-<meta property="og:title" content="Telegram Inline Keyboard Limits, Measured: 1000 Buttons OK">
+<meta property="og:title" content="Telegram Inline Keyboard Limits: Which Errors Come First">
 <meta property="og:description" content="Half of Telegram's Bot API errors arrive before it checks your chat exists. That makes one layer testable with no chat at all. Here is the boundary, measured.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://charliemorrison.dev/blog/telegram-bot-api-validates-before-chat-exists/validation-layers.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Telegram Inline Keyboard Limits, Measured: 1000 Buttons OK","datePublished":"2026-08-17","dateModified":"2026-08-17","image":"https://charliemorrison.dev/blog/telegram-bot-api-validates-before-chat-exists/validation-layers.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the maximum number of buttons per row in a Telegram inline keyboard?","acceptedAnswer":{"@type":"Answer","text":"The Bot API does not enforce one. A row of 1000 buttons was accepted in testing, as were 2000 rows. The widely repeated limit of 8 buttons per row is a rendering convention for narrow screens, not a server rule."}},{"@type":"Question","name":"What is the callback_data size limit?","acceptedAnswer":{"@type":"Answer","text":"64 bytes, and it is enforced exactly. Bisecting the boundary live, 64 bytes was accepted and 65 bytes was rejected with BUTTON_DATA_INVALID."}},{"@type":"Question","name":"Why does Telegram return chat not found instead of telling me my keyboard is wrong?","acceptedAnswer":{"@type":"Answer","text":"Because size and length checks run after the chat is resolved. Only structural parse errors, such as a button with no action or an empty message text, are returned before Telegram looks for the chat."}},{"@type":"Question","name":"Can I validate a Telegram inline keyboard without sending a message to anyone?","acceptedAnswer":{"@type":"Answer","text":"Partly. Structural errors can be checked by sending to a chat ID that does not exist, using a bot token and no chat. Size limits cannot, because those checks only run after the chat resolves."}},{"@type":"Question","name":"Does Telegram accept a button with an empty label?","acceptedAnswer":{"@type":"Answer","text":"Yes. An empty button text is accepted and delivered. It renders as a thin strip and still fires its callback_data when tapped, so this check has to live in your own code."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Telegram Inline Keyboard Limits: Which Errors Come First","datePublished":"2026-08-17","dateModified":"2026-08-22","image":"https://charliemorrison.dev/blog/telegram-bot-api-validates-before-chat-exists/validation-layers.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the maximum number of buttons per row in a Telegram inline keyboard?","acceptedAnswer":{"@type":"Answer","text":"Twelve per row, and 300 buttons in the whole keyboard. Corrected on 22 August 2026: the earlier figure of 1000 was read from a status code. The API returns 200 OK and then silently stores only the first 12 buttons of a row, so the loss is invisible unless you read the keyboard back off the returned message."}},{"@type":"Question","name":"What is the callback_data size limit?","acceptedAnswer":{"@type":"Answer","text":"64 bytes, and it is enforced exactly. Bisecting the boundary live, 64 bytes was accepted and 65 bytes was rejected with BUTTON_DATA_INVALID."}},{"@type":"Question","name":"Why does Telegram return chat not found instead of telling me my keyboard is wrong?","acceptedAnswer":{"@type":"Answer","text":"Because size and length checks run after the chat is resolved. Only structural parse errors, such as a button with no action or an empty message text, are returned before Telegram looks for the chat."}},{"@type":"Question","name":"Can I validate a Telegram inline keyboard without sending a message to anyone?","acceptedAnswer":{"@type":"Answer","text":"Partly. Structural errors can be checked by sending to a chat ID that does not exist, using a bot token and no chat. Size limits cannot, because those checks only run after the chat resolves."}},{"@type":"Question","name":"Does Telegram accept a button with an empty label?","acceptedAnswer":{"@type":"Answer","text":"The call is accepted, but the button is not delivered. Corrected on 22 August 2026: reading the stored markup back shows that a button with an empty label has its whole row removed, and if that was the only row the message arrives with no keyboard at all. A label of a single space survives."}}]}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
@@ -57,7 +57,11 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 <nav><a href="/">Charlie Morrison Digital</a></nav>
 <article>
 <h1>Half of Telegram's Bot API Errors Arrive Before It Checks Your Chat Exists</h1>
-<div class="meta">By Charlie Morrison &middot; August 17, 2026 &middot; 8 min read</div>
+<div class="meta">By Charlie Morrison &middot; August 17, 2026 &middot; updated August 22, 2026 &middot; 8 min read</div>
+
+<div class="note">
+<p><strong>Correction, 22 August 2026.</strong> The size numbers in this post were read off status codes without checking what the message actually stored, and two of them are wrong. A row does <em>not</em> hold 1000 buttons &mdash; it holds <strong>12</strong>, and a whole keyboard holds <strong>300</strong>. Both caps truncate silently behind a <code>200 OK</code>, which is exactly why counting status codes missed them. An empty button label is not "delivered as a thin strip" either; it deletes its row. The two-layer validation finding below still holds, but it covers less ground than I claimed: of sixteen cases that pass against a fake chat, eight are refused by a real one. Corrected measurements, with the keyboard read back off every message: <a href="/blog/telegram-inline-keyboard-300-button-limit/">Telegram stores 12 inline buttons per row and 300 total</a>.</p>
+</div>
 
 <p>I found this by making a mistake. I was probing inline keyboard limits against the Bot API and I did not want to spam a real conversation while doing it, so I sent the first test to <code>chat_id=1</code>, a chat that does not exist, expecting Telegram to reject everything with the same useless line and force me to find a real chat.</p>
 
@@ -105,9 +109,9 @@ callback_data 65 bytes        -&gt;  Bad Request: chat not found
 <tr><th>case</th><th>real chat</th></tr>
 <tr><td><code>callback_data</code> 64 bytes</td><td>accepted</td></tr>
 <tr><td><code>callback_data</code> 65 bytes</td><td><code>BUTTON_DATA_INVALID</code></td></tr>
-<tr><td>1000 buttons in one row</td><td>accepted</td></tr>
-<tr><td>2000 rows</td><td>accepted</td></tr>
-<tr><td>button label <code>""</code></td><td>accepted</td></tr>
+<tr><td>1000 buttons in one row</td><td>accepted &mdash; <strong>but only 12 stored</strong> <a href="/blog/telegram-inline-keyboard-300-button-limit/">(corrected)</a></td></tr>
+<tr><td>2000 rows</td><td>accepted &mdash; <strong>but only 300 buttons stored</strong> <a href="/blog/telegram-inline-keyboard-300-button-limit/">(corrected)</a></td></tr>
+<tr><td>button label <code>""</code></td><td>accepted &mdash; <strong>but the row is deleted</strong> <a href="/blog/telegram-inline-keyboard-300-button-limit/">(corrected)</a></td></tr>
 <tr><td><code>inline_keyboard: []</code></td><td>accepted</td></tr>
 <tr><td>text 4097 characters</td><td><em>message is too long</em></td></tr>
 </table>
@@ -176,7 +180,7 @@ callback_data 65 bytes        -&gt;  Bad Request: chat not found
 <div class="faq">
 <h2>FAQ</h2>
 <details><summary>What is the maximum number of buttons per row in a Telegram inline keyboard?</summary>
-<p>The Bot API does not enforce one. A row of 1000 buttons was accepted in testing, as were 2000 rows. The widely repeated limit of 8 buttons per row is a rendering convention for narrow screens, not a server rule.</p></details>
+<p><strong>Corrected 22 August 2026:</strong> twelve per row, and 300 in the whole keyboard. The original answer here said 1000, which came from a status code rather than from the stored message &mdash; the API returns <code>200 OK</code> and keeps only the first 12 buttons of a row. <a href="/blog/telegram-inline-keyboard-300-button-limit/">The corrected measurements</a>.</p></details>
 <details><summary>What is the callback_data size limit?</summary>
 <p>64 bytes, and it is enforced exactly. Bisecting the boundary live, 64 bytes was accepted and 65 bytes was rejected with <code>BUTTON_DATA_INVALID</code>.</p></details>
 <details><summary>Why does Telegram return "chat not found" instead of telling me my keyboard is wrong?</summary>
@@ -184,7 +188,7 @@ callback_data 65 bytes        -&gt;  Bad Request: chat not found
 <details><summary>Can I validate a Telegram inline keyboard without sending a message to anyone?</summary>
 <p>Partly. Structural errors can be checked by sending to a chat ID that does not exist, using a bot token and no chat. Size limits cannot, because those checks only run after the chat resolves.</p></details>
 <details><summary>Does Telegram accept a button with an empty label?</summary>
-<p>Yes. An empty button text is accepted and delivered. It renders as a thin strip and still fires its <code>callback_data</code> when tapped, so this check has to live in your own code.</p></details>
+<p><strong>Corrected 22 August 2026:</strong> the call is accepted, but the button is not delivered &mdash; the row containing it is removed, and if it was the only row the message arrives with no keyboard at all. A single-space label survives. <a href="/blog/telegram-inline-keyboard-300-button-limit/">Measured here</a>.</p></details>
 </div>
 
 <p>More measurements from the same bot: <a href="/blog/i-messaged-18-telegram-game-bots/">what eighteen game bots actually reply</a>, and <a href="/blog/anonymous-telegram-bots-see-your-username/">what an "anonymous" bot operator receives when you press Start</a>.</p>

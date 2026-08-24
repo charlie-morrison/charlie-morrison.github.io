@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{domains:["charliemorrison.dev","botcraftgroup.com"]}});</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram Bot Commands: 100 Max, Two Silent Rewrites</title>
+<meta name="description" content="setMyCommands refuses 101 commands outright instead of truncating. Uppercase is rejected, /help is stored as help, and duplicates vanish without a warning.">
+<meta name="keywords" content="setMyCommands limit, telegram bot commands limit, BOT_COMMAND_INVALID, BOT_COMMANDS_TOO_MUCH, telegram bot command menu, getMyCommands, telegram bot command scope">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-setmycommands-limits-tested/">
+<meta property="og:title" content="Telegram Bot Commands: 100 Max, Two Silent Rewrites">
+<meta property="og:description" content="Two of the ways a command list fails are loud 400s. Two are 200 OK with a menu you did not send. Measured against a live bot, every verdict read back.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-setmycommands-limits-tested/bot-commands-limits.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Telegram Bot Commands: 100 Max, Two Silent Rewrites","datePublished":"2026-08-24","dateModified":"2026-08-24","image":"https://charliemorrison.dev/blog/telegram-setmycommands-limits-tested/bot-commands-limits.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How many commands can a Telegram bot have?","acceptedAnswer":{"@type":"Answer","text":"One hundred. Sending 101 returns HTTP 400 with BOT_COMMANDS_TOO_MUCH and the entire list is rejected, so the bot keeps whatever menu it had before. Unlike inline keyboards, which silently truncate past their limit, the command list is all-or-nothing."}},{"@type":"Question","name":"Why does setMyCommands return BOT_COMMAND_INVALID?","acceptedAnswer":{"@type":"Answer","text":"The command name contains a character outside lowercase ASCII letters, digits and underscores. Uppercase letters are the most common cause: Help and HELP are both refused rather than lowercased. Hyphens, dots, spaces, Cyrillic and emoji are refused for the same reason."}},{"@type":"Question","name":"Should I include the slash when calling setMyCommands?","acceptedAnswer":{"@type":"Answer","text":"It makes no difference to the result but it hides a rewrite. Sending /help is accepted and stored as help, with the leading slash stripped. Any code that compares what it sent against what getMyCommands returns will see a mismatch that is not an error."}},{"@type":"Question","name":"What happens if two commands have the same name?","acceptedAnswer":{"@type":"Answer","text":"The list is accepted with 200 OK and quietly deduplicated. Sending three commands where two share a name stores two, and the surviving description is the one from the last occurrence. Nothing in the response indicates that an entry was dropped."}},{"@type":"Question","name":"How long can a Telegram bot command and description be?","acceptedAnswer":{"@type":"Answer","text":"The command is 1 to 32 characters and the description is 1 to 256 characters. Both boundaries are enforced with a clear 400: command length must not exceed 32 and command description length must not exceed 256. Empty values for either field are refused."}},{"@type":"Question","name":"Does setting commands for one chat remove the global ones?","acceptedAnswer":{"@type":"Answer","text":"No. Scopes shadow rather than replace. After setting a chat-scoped list, the default scope still returns its own commands and the chat scope returns its own. Deleting the chat scope leaves the default untouched, and that chat falls back to it."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:10px;border:1px solid #e0e0e0}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+code{background:#f4f4f8;padding:2px 6px;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:20px 0;font-size:.9em;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+blockquote{border-left:4px solid #6c5ce7;background:#f8f8fc;padding:12px 18px;margin:20px 0;color:#444;font-style:italic}
+blockquote p:last-child{margin-bottom:0}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0}
+.comparison{width:100%;min-width:420px;border-collapse:collapse;margin:0}
+.comparison th,.comparison td{padding:10px 14px;border:1px solid #e0e0e0;text-align:left}
+.comparison th{background:#f0f0f5;font-weight:600}
+.comparison tr:hover{background:#f8f8fc}
+.cta-box{background:linear-gradient(135deg,#6c5ce710,#a29bfe10);border:2px solid #6c5ce7;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#6c5ce7}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box .alt a{background:none;color:#6c5ce7;padding:0;font-weight:600;display:inline;margin:0}
+.note{background:#fff9e6;border-left:4px solid #f0a500;border-radius:8px;padding:16px 20px;margin:24px 0}
+.note p:last-child{margin-bottom:0}
+.back{display:inline-block;margin-top:32px;color:#6c5ce7;text-decoration:none}
+.faq{margin:20px 0}
+.faq details{margin-bottom:12px;padding:12px;background:#f8f9fa;border-radius:8px}
+.faq summary{cursor:pointer;font-weight:600;color:#1a1a2e}
+.faq details p{margin:10px 0 0}
+footer{text-align:center;padding:28px 20px;color:#999;font-size:.9em;border-top:1px solid #eee;margin-top:40px}
+footer a{color:#6c5ce7;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>Telegram Bot Commands: 100 Max, Two Silent Rewrites</h1>
+<div class="meta">By Charlie Morrison &middot; August 24, 2026 &middot; 8 min read</div>
+
+<p>The command menu is the one part of a Telegram bot that users see before they type anything. It is also configured through an endpoint that answers <code>true</code> and moves on, which means the list you sent and the list your users get are two different objects that you have no particular reason to compare.</p>
+
+<p>So I compared them. Every case below was set with <code>setMyCommands</code> and then read back with <a href="https://core.telegram.org/bots/api#getmycommands" rel="noopener">getMyCommands</a> before anything was concluded about it, because a boolean return value is not evidence about state.</p>
+
+<p>Four behaviours came out of it. Two are loud, well-documented 400s. Two are <code>200 OK</code> with a menu you did not send.</p>
+
+<ul>
+  <li><strong>The 100-command ceiling is a wall, not a truncation.</strong> 101 commands are rejected outright and your old menu survives untouched.</li>
+  <li><strong>The charset is enforced, not normalised.</strong> <code>Help</code> is refused. It is not lowercased for you.</li>
+  <li><strong>A leading slash is silently stripped.</strong> <code>/help</code> goes in, <code>help</code> comes out.</li>
+  <li><strong>Duplicate names are silently deduplicated</strong>, and the last description wins.</li>
+</ul>
+
+<figure>
+  <img src="bot-commands-limits.png" alt="Terminal output from a live Telegram Bot API probe showing 100 commands accepted and 101 rejected with BOT_COMMANDS_TOO_MUCH, uppercase and hyphenated command names refused with BOT_COMMAND_INVALID, a leading slash stripped from /help, duplicate commands deduplicated with the last description kept, and chat scopes shadowing rather than replacing the default scope">
+  <figcaption>Verbatim verdicts from the run. The red block is what the API tells you about; the yellow block is what it does without telling you.</figcaption>
+</figure>
+
+<h2>The setup</h2>
+
+<p>One throwaway demo bot with nothing in production behind it, and a probe that is standard library only. Each phase sets a list, reads it back, records the pair, and clears the list before the next phase so that no phase inherits the previous one's state.</p>
+
+<p>That last detail matters more than it sounds. The command list is bot-wide persistent server state, not a per-request parameter. A phase that forgets to clean up does not fail &mdash; it silently contaminates the phase after it, and you get a result that is real but is about the wrong input.</p>
+
+<h2>The ceiling is 100, and it refuses rather than truncates</h2>
+
+<p>The <a href="https://core.telegram.org/bots/api#setmycommands" rel="noopener">setMyCommands documentation</a> states at most 100 commands, and that is exactly right. What it does not say is what happens on 101, and there are two plausible answers with very different consequences.</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Commands sent</th><th>Response</th><th>Commands stored</th></tr>
+<tr><td>1</td><td>200 OK</td><td>1</td></tr>
+<tr><td>50</td><td>200 OK</td><td>50</td></tr>
+<tr><td>100</td><td>200 OK</td><td>100</td></tr>
+<tr><td>101</td><td>400 <code>BOT_COMMANDS_TOO_MUCH</code></td><td>0 &mdash; nothing changed</td></tr>
+<tr><td>150</td><td>400 <code>BOT_COMMANDS_TOO_MUCH</code></td><td>0 &mdash; nothing changed</td></tr>
+</table>
+</div>
+
+<p>It refuses. The whole list is rejected as a unit, and the bot keeps whatever menu it already had.</p>
+
+<p>This is worth dwelling on because it is the <em>opposite</em> of how the neighbouring endpoint behaves. An inline keyboard past its limit is <a href="/blog/telegram-inline-keyboard-300-button-limit/">truncated in silence &mdash; 4000 buttons in a row return 200 OK with 12 stored</a>. Same API, same kind of oversized array, and the failure modes are mirror images: the keyboard gives you a success and less data than you sent, the command list gives you an error and no change at all.</p>
+
+<p>Refusing is by far the friendlier of the two, but it has a failure mode of its own, and it is a deployment-shaped one. A bot that generates its command list dynamically &mdash; one entry per configured workflow, per tenant, per feature flag &mdash; crosses 100 on a Tuesday, gets a 400 during startup, logs it at whatever level your framework picked, and carries on serving a menu that is now several releases stale. Nothing is broken. The menu is simply frozen at the last list small enough to fit, and every user sees a version of the bot that no longer exists.</p>
+
+<h2>The charset is enforced, not cleaned up</h2>
+
+<p>The documented rule is lowercase English letters, digits and underscores, 1 to 32 characters. Every part of that is true and enforced, and the important word is <em>enforced</em>.</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Command sent</th><th>Result</th></tr>
+<tr><td><code>help</code>, <code>top10</code>, <code>my_cmd</code></td><td>accepted, stored verbatim</td></tr>
+<tr><td><code>1cmd</code></td><td>accepted &mdash; a digit may lead</td></tr>
+<tr><td><code>Help</code>, <code>HELP</code></td><td>400 <code>BOT_COMMAND_INVALID</code></td></tr>
+<tr><td><code>my-cmd</code>, <code>my.cmd</code>, <code>my cmd</code></td><td>400 <code>BOT_COMMAND_INVALID</code></td></tr>
+<tr><td>Cyrillic, emoji</td><td>400 <code>BOT_COMMAND_INVALID</code></td></tr>
+<tr><td><code>""</code></td><td>400 command must be non-empty</td></tr>
+<tr><td>33 characters</td><td>400 command length must not exceed 32</td></tr>
+</table>
+</div>
+
+<p>Uppercase is the one that catches people, because Telegram itself is case-insensitive when a user <em>types</em> a command &mdash; sending <code>/HELP</code> in a chat reaches a bot that registered <code>help</code>. It is easy to generalise from that to "the API will lowercase my list for me". It will not. It rejects the entire call, which means one capital letter in one generated entry takes down the whole menu update, not just its own row.</p>
+
+<p>If your command names come from anything user-editable or config-editable &mdash; a tenant name, a workflow slug, a YAML file someone hand-writes &mdash; normalise before you send: lowercase it, replace anything outside <code>[a-z0-9_]</code>, truncate to 32, and drop entries that end up empty. The API's answer to a bad name is to discard the good ones next to it.</p>
+
+<p>Non-English commands are simply not possible. The description field takes any Unicode you like, so a Ukrainian or Arabic bot can have a fully localised menu of <em>descriptions</em> hanging off ASCII command names, and that is the only shape available.</p>
+
+<div class="cta-box pack">
+<h3>Telegram in Production</h3>
+<p>The measured limits, the failure modes and the boilerplate that survives them: escaping, rate limits, update queues and webhook handling, in one pack.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-setmycommands-limits-tested">Get the pack &mdash; $19</a>
+</div>
+
+<h2>Two rewrites that happen on the way in</h2>
+
+<p>Everything above announces itself. These two do not.</p>
+
+<h3>The leading slash is stripped</h3>
+
+<p>Send <code>{"command": "/help"}</code> and the call succeeds. Read it back and the stored command is <code>help</code>. The slash is a display convention, not part of the name, and the API quietly normalises it away.</p>
+
+<p>On its own this is harmless &mdash; arguably it is the API being helpful. It stops being harmless the moment you write the obvious reconciliation check:</p>
+
+<pre><code>sent = [{"command": "/help", "description": "Show help"}]
+bot.set_my_commands(sent)
+live = bot.get_my_commands()
+assert [c.command for c in live] == [c["command"] for c in sent]  # fails</code></pre>
+
+<p>The assertion fails on a bot that is configured perfectly correctly. Which way you resolve that matters: strip the slash in your own comparison, rather than "fixing" it by sending the slash-prefixed form everywhere, because the difference is only ever cosmetic and the check is the thing you actually want to keep.</p>
+
+<h3>Duplicate names are deduplicated, last one wins</h3>
+
+<p>This is the one I would not have gone looking for. Send three commands where two share a name:</p>
+
+<pre><code>[{"command": "same",  "description": "first"},
+ {"command": "same",  "description": "second"},
+ {"command": "other", "description": "third"}]</code></pre>
+
+<p>The response is <code>200 OK</code>. The stored list has <strong>two</strong> entries: <code>same</code> with the description <em>second</em>, and <code>other</code>. The first occurrence is gone, and nothing in the response mentions that the list shrank.</p>
+
+<p>Duplicates are not something anyone writes deliberately, which is exactly why this bites &mdash; they arrive from merging. A base command set plus a per-tenant set, a default menu extended by a plugin, a list assembled by concatenating two config files. The merge produces a collision, the collision resolves to whichever entry was appended last, and the menu ends up describing a command differently from what the code that registered it first believed.</p>
+
+<p>Order is otherwise preserved exactly. Sending <code>zebra, alpha, middle</code> stores <code>zebra, alpha, middle</code> &mdash; no alphabetical sort, so the sequence in the menu is the sequence in your array and it is yours to control.</p>
+
+<h2>The description field</h2>
+
+<p>Less exciting, and it behaves exactly as advertised: 1 to 256 characters, both boundaries hard.</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Description length</th><th>Result</th></tr>
+<tr><td>0</td><td>400 command description must be non-empty</td></tr>
+<tr><td>1</td><td>accepted</td></tr>
+<tr><td>256</td><td>accepted</td></tr>
+<tr><td>257</td><td>400 command description length must not exceed 256</td></tr>
+</table>
+</div>
+
+<p>An empty description is a 400 rather than a shrug, which is the right choice and worth knowing if you build descriptions from a translation catalogue: a missing key that resolves to <code>""</code> takes down the entire <code>setMyCommands</code> call, not just its own entry. In practice 256 is far more room than the menu can display comfortably; the useful limit is closer to whatever fits on a phone.</p>
+
+<h2>Scopes shadow, they do not replace</h2>
+
+<p><a href="https://core.telegram.org/bots/api#botcommandscope" rel="noopener">Command scopes</a> let you show different menus to different chats, and the mechanism is layered rather than destructive.</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Action</th><th>Default scope</th><th>Chat scope</th></tr>
+<tr><td>set default <code>[global1]</code></td><td><code>[global1]</code></td><td>&mdash;</td></tr>
+<tr><td>then set chat scope <code>[local1]</code></td><td><code>[global1]</code></td><td><code>[local1]</code></td></tr>
+<tr><td>then delete chat scope</td><td><code>[global1]</code></td><td><code>[]</code></td></tr>
+</table>
+</div>
+
+<p>Writing a chat-scoped list leaves the default completely intact, and deleting the chat scope leaves the default intact too &mdash; that chat simply falls back to it at display time. So the scoped list is an override, and removing an override is safe.</p>
+
+<p>One consequence to keep in mind when debugging: <code>getMyCommands</code> with no scope argument returns the <em>default</em> scope, not "the commands this user sees". If a tester reports the wrong menu, querying the bare endpoint will happily show you a correct-looking list while the chat-scoped override that is actually being displayed sits somewhere you did not ask about. Pass the same scope you are debugging.</p>
+
+<p>For teardown, <code>deleteMyCommands</code> and <code>setMyCommands</code> with an empty array are equivalent &mdash; both leave <code>getMyCommands</code> returning <code>[]</code>. Use whichever reads better; there is no hidden difference between them.</p>
+
+<h2>What to do with this</h2>
+
+<ol>
+  <li><strong>Normalise command names before sending.</strong> Lowercase, strip to <code>[a-z0-9_]</code>, cut to 32 characters, drop empties. One bad name rejects the whole list, so this is cheap insurance on any dynamically built menu.</li>
+  <li><strong>Deduplicate your list yourself, and decide which one wins.</strong> The API's answer is "the last one", chosen for you and applied without comment. If you merge command sets from more than one source, collapse collisions where you can still see them.</li>
+  <li><strong>Treat a failed <code>setMyCommands</code> as a real error at startup.</strong> The call failing does not degrade the bot in any visible way &mdash; it just freezes the menu. That makes it precisely the kind of failure that gets logged at <code>warning</code> and lives for months.</li>
+  <li><strong>Read the list back once in your test suite.</strong> Compare with the slash stripped, and assert on the length too. Both silent rewrites on this page show up instantly in a round-trip and never show up in a return value.</li>
+</ol>
+
+<p>That last habit is the one that keeps paying out across this whole API. Most libraries &mdash; <a href="https://docs.python-telegram-bot.org/en/stable/telegram.bot.html#telegram.Bot.set_my_commands" rel="noopener">python-telegram-bot</a> among them &mdash; return the API's boolean straight through, so <code>True</code> is the most any wrapper can honestly give you. It means the request was accepted. Whether the menu now matches the array you built is a separate question, and there is exactly one way to answer it.</p>
+
+<h2>FAQ</h2>
+<div class="faq">
+<details><summary>How many commands can a Telegram bot have?</summary>
+<p>One hundred. 101 returns <code>BOT_COMMANDS_TOO_MUCH</code> and the whole list is rejected, so the previous menu stays live. There is no truncation to 100 &mdash; it is all or nothing.</p></details>
+
+<details><summary>Why does setMyCommands return BOT_COMMAND_INVALID?</summary>
+<p>A command name contains something outside lowercase ASCII letters, digits and underscores. Uppercase is the usual culprit and is refused rather than lowercased; hyphens, dots, spaces, Cyrillic and emoji fail the same way. A digit may lead, so <code>1cmd</code> is fine.</p></details>
+
+<details><summary>Should I include the slash in setMyCommands?</summary>
+<p>You can &mdash; <code>/help</code> is accepted and stored as <code>help</code>. The slash is stripped silently, so any code comparing sent against stored needs to strip it too or it will report a mismatch on a correctly configured bot.</p></details>
+
+<details><summary>What happens if two commands share a name?</summary>
+<p>The call succeeds and the list is deduplicated without warning. The description from the <em>last</em> occurrence survives. Watch for this when merging command sets from multiple sources.</p></details>
+
+<details><summary>How long can a command and its description be?</summary>
+<p>Command 1&ndash;32 characters, description 1&ndash;256. All four boundaries return a clear 400 when crossed, and empty values for either field are refused.</p></details>
+
+<details><summary>Does a chat-scoped command list delete the global one?</summary>
+<p>No. Scopes shadow rather than replace: the default scope keeps its own list, and deleting a chat scope leaves the default untouched so that chat falls back to it.</p></details>
+
+<details><summary>Can Telegram bot commands be non-English?</summary>
+<p>The names cannot &mdash; they are ASCII only. Descriptions accept any Unicode, so a localised menu means English command names with translated descriptions.</p></details>
+
+<details><summary>Is deleteMyCommands different from sending an empty array?</summary>
+<p>No. Both leave <code>getMyCommands</code> returning an empty list, for the same scope.</p></details>
+</div>
+
+<p>More measurements from the same bot: <a href="/blog/telegram-inline-keyboard-300-button-limit/">the inline keyboard caps that truncate instead of erroring</a> &mdash; the mirror image of this endpoint &mdash; plus <a href="/blog/telegram-markdownv2-escaping-tested/">which MarkdownV2 characters break a message and which delete it</a> and <a href="/blog/telegram-bot-api-validates-before-chat-exists/">which errors arrive before Telegram checks your chat exists</a>.</p>
+
+<a class="back" href="/blog/">&larr; Back to Blog</a>
+</article>
+<footer>&copy; 2026 Charlie Morrison Digital &middot; <a href="/about/">About</a> &middot; <a href="/blog/">Blog</a></footer>
+</body>
+</html>

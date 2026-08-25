@@ -38,4 +38,9 @@ Allow: /
 User-agent: IndexNowBot
 Allow: /
 
+# The root sitemap covers this repo only. Project pages (GitHub Pages project repos served
+# under /<name>/) ship their own sitemaps and must be listed here too — otherwise crawlers
+# have no discovery path to them at all.
 Sitemap: https://charliemorrison.dev/sitemap.xml
+Sitemap: https://charliemorrison.dev/colors-of-rating/sitemap.xml
+Sitemap: https://charliemorrison.dev/keepsake-journals/sitemap.xml

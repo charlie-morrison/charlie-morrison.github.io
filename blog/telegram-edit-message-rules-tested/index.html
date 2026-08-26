@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{domains:["charliemorrison.dev","botcraftgroup.com"]}});</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram editMessageText: Your Keyboard Vanishes (Tested)</title>
+<meta name="description" content="Editing a bot message without reply_markup silently deletes its inline keyboard. Measured against a live bot, with the control run that proves it.">
+<meta name="keywords" content="editMessageText, telegram message is not modified, telegram bot edit message, editMessageCaption, deleteMessage telegram bot, telegram inline keyboard disappears, telegram bot edit keyboard">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-edit-message-rules-tested/">
+<meta property="og:title" content="Telegram editMessageText: Your Keyboard Vanishes (Tested)">
+<meta property="og:description" content="One of these failures is a loud 400 you catch in testing. One is a 200 OK that quietly removes your buttons in production. Measured, with controls.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-edit-message-rules-tested/edit-message-rules.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Telegram editMessageText: Your Keyboard Vanishes (Tested)","datePublished":"2026-08-26","dateModified":"2026-08-26","image":"https://charliemorrison.dev/blog/telegram-edit-message-rules-tested/edit-message-rules.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why does Telegram say message is not modified?","acceptedAnswer":{"@type":"Answer","text":"Because an edit that changes nothing is treated as an error rather than a no-op. The full error text names both halves of the comparison: content and reply markup. Telegram compares the pair, so the same text sent with a different inline keyboard succeeds, and the same text with the same keyboard returns HTTP 400."}},{"@type":"Question","name":"Does editMessageText remove the inline keyboard?","acceptedAnswer":{"@type":"Answer","text":"Yes, if you omit reply_markup. An edit is a replacement of the message content and markup together, not a patch of the text alone. In my run on 26 August 2026 the call returned 200 OK and the buttons were gone. To keep a keyboard through a text edit you must send it again with the edit."}},{"@type":"Question","name":"Can I use editMessageText on a photo message?","acceptedAnswer":{"@type":"Answer","text":"No. It returns HTTP 400 with there is no text in the message to edit. A photo carries a caption, so editMessageCaption is the correct call. The mirror also holds: editMessageCaption on a plain text message returns there is no caption in the message to edit. The method is fixed by how the message was originally sent."}},{"@type":"Question","name":"What is the maximum length when editing a Telegram message?","acceptedAnswer":{"@type":"Answer","text":"The same limits that apply to sending. Text accepts 4096 characters and returns MESSAGE_TOO_LONG at 4097. A media caption accepts 1024 characters and returns MEDIA_CAPTION_TOO_LONG at 1025. Editing to an empty string is refused with message text is empty."}},{"@type":"Question","name":"Does editing a Telegram message change its message_id?","acceptedAnswer":{"@type":"Answer","text":"No. The message_id is stable across an edit and the original date field is preserved. Telegram adds an edit_date field to the message object, which is how a client knows to show the edited marker. Any stored reference to the message stays valid."}},{"@type":"Question","name":"Is deleteMessage idempotent?","acceptedAnswer":{"@type":"Answer","text":"No. The first call returns true and the second returns HTTP 400 with message to delete not found. Retry logic that treats every non-200 as a failure will report a successful cleanup as an error, and a retry after a network timeout can produce exactly this."}},{"@type":"Question","name":"Can a bot edit a message older than 48 hours?","acceptedAnswer":{"@type":"Answer","text":"I did not measure this, and I am not going to repeat the common claim as if I had. A single probe run cannot produce a 48-hour-old message. What I can report is that editing a message id that does not exist returns message to edit not found, which is a different string from the one Telegram uses for messages that are too old to edit."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:10px;border:1px solid #e0e0e0}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+code{background:#f4f4f8;padding:2px 6px;border-radius:4px;font-size:.92em}
+pre{background:#0f172a;color:#e2e8f0;padding:16px 18px;border-radius:10px;overflow-x:auto;margin:20px 0;font-size:.9em;line-height:1.55}
+pre code{background:none;padding:0;color:inherit}
+blockquote{border-left:4px solid #6c5ce7;background:#f8f8fc;padding:12px 18px;margin:20px 0;color:#444;font-style:italic}
+blockquote p:last-child{margin-bottom:0}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0}
+.comparison{width:100%;min-width:420px;border-collapse:collapse;margin:0}
+.comparison th,.comparison td{padding:10px 14px;border:1px solid #e0e0e0;text-align:left}
+.comparison th{background:#f0f0f5;font-weight:600}
+.comparison tr:hover{background:#f8f8fc}
+.cta-box{background:linear-gradient(135deg,#6c5ce710,#a29bfe10);border:2px solid #6c5ce7;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#6c5ce7}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box .alt a{background:none;color:#6c5ce7;padding:0;font-weight:600;display:inline;margin:0}
+.note{background:#fff9e6;border-left:4px solid #f0a500;border-radius:8px;padding:16px 20px;margin:24px 0}
+.note p:last-child{margin-bottom:0}
+.back{display:inline-block;margin-top:32px;color:#6c5ce7;text-decoration:none}
+.faq{margin:20px 0}
+.faq details{margin-bottom:12px;padding:12px;background:#f8f9fa;border-radius:8px}
+.faq summary{cursor:pointer;font-weight:600;color:#1a1a2e}
+.faq details p{margin:10px 0 0}
+footer{text-align:center;padding:28px 20px;color:#999;font-size:.9em;border-top:1px solid #eee;margin-top:40px}
+footer a{color:#6c5ce7;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>Telegram editMessageText: Your Keyboard Vanishes (Tested)</h1>
+<div class="meta">By Charlie Morrison &middot; August 26, 2026 &middot; 9 min read</div>
+
+<p>Most Bot API methods are interesting when they fail. Editing is the one where <em>success</em> is the problem.</p>
+
+<p>A bot that edits its own messages &mdash; a live scoreboard, a progress bar, a menu that changes as you click through it &mdash; will at some point call <code>editMessageText</code>, get <code>200 OK</code>, and quietly ship a message missing something the user was relying on. Nothing in the response says so.</p>
+
+<p>So I measured the surface against a live throwaway bot: what an edit compares, what it replaces, which method applies to which message, the length boundaries, and what a delete does when you call it twice. Every verdict below was read back from the returned <code>Message</code> object rather than inferred from <code>ok: true</code>, and the finding this post is named after got an independent control run before I was willing to write it down.</p>
+
+<ul>
+  <li><strong>A no-op edit is an error</strong>, and the thing it compares is the content <em>and</em> the reply markup as a pair &mdash; not the text.</li>
+  <li><strong>An edit that omits <code>reply_markup</code> deletes the inline keyboard.</strong> 200 OK, buttons gone.</li>
+  <li><strong>The edit method is fixed by how the message was sent</strong>, not by what it currently contains.</li>
+  <li><strong>The length limits on an edit are the send limits</strong> &mdash; 4096 for text, 1024 for a caption, and both refuse rather than truncate.</li>
+  <li><strong><code>deleteMessage</code> is not idempotent.</strong> The second call is a 400.</li>
+</ul>
+
+<figure>
+  <img src="edit-message-rules.png" alt="Terminal output from a live Telegram Bot API probe showing that a repeated identical edit returns 400 message is not modified, that the same text with a new reply markup succeeds, that editMessageText with reply_markup omitted returns 200 OK with the inline keyboard removed, that editMessageText on a photo and editMessageCaption on a text message both return 400, that text is capped at 4096 and captions at 1024 characters, and that deleting the same message twice returns message to delete not found">
+  <figcaption>Verbatim verdicts from the run. The red lines are the failures you catch in testing. The yellow line is the one that reaches production.</figcaption>
+</figure>
+
+<h2>The setup</h2>
+
+<p>One demo bot with nothing in production behind it, one private chat, and a standard-library probe. Each phase sends a fresh message, acts on it, and reads the resulting <code>Message</code> object; every message created is deleted at the end, in a <code>finally</code> block so a crash mid-run still cleans up.</p>
+
+<p>Transport errors are retried, so a network timeout can never be recorded as an API verdict &mdash; a timeout logged as a measurement is worse than no measurement at all. A Telegram-level error, meaning an HTTP 400 with a JSON body, is treated as data rather than as a failure. That distinction is the whole point of the exercise: the 400s are the documented, honest half of this API.</p>
+
+<h2>The no-op edit is an error, and it compares more than the text</h2>
+
+<p>Send a message, then edit it to exactly the text it already has:</p>
+
+<pre><code>400 Bad Request: message is not modified: specified new message content
+and reply markup are exactly the same as a current content and reply
+markup of the message</code></pre>
+
+<p>The first half of that is widely known and widely worked around with a <code>try/except</code> that swallows it. The second half is the part worth reading, because the error string is unusually forthcoming: it names <strong>content and reply markup</strong>, together. That is the comparison.</p>
+
+<p>Which predicts something testable. If Telegram compared the text alone, then re-sending the same text with a <em>different</em> keyboard would still be "not modified". It is not:</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Edit</th><th>Result</th></tr>
+<tr><td>Same text, same markup</td><td>400 <code>message is not modified</code></td></tr>
+<tr><td>Same text, <strong>new</strong> markup</td><td>200 OK &mdash; markup stored</td></tr>
+<tr><td>Changed text</td><td>200 OK</td></tr>
+</table>
+</div>
+
+<p>This matters for a very common bot shape: the message whose text is a fixed prompt and whose keyboard is the state &mdash; a quiz that says "Pick one" above four options, a paginated list with a static header, a settings panel. All of those update the markup while the text stays put, and none of them will ever hit "not modified", as long as the keyboard genuinely differs.</p>
+
+<p>The inverse is where it bites. A bot that re-sends the <em>same</em> keyboard on every tick &mdash; a refresh loop, a poller that redraws unconditionally &mdash; hits 400 on every tick where nothing changed. That is not a bug to suppress; it is the API telling you that you are making a network call to change nothing.</p>
+
+<h2>The keyboard you did not mention is the keyboard you deleted</h2>
+
+<p>This is the finding the post is named after, and the only one here that will not show up in your tests.</p>
+
+<p>Take a message that has an inline keyboard. Edit only its text, the way you would naturally write it &mdash; chat id, message id, new text, done:</p>
+
+<pre><code>editMessageText(chat_id=..., message_id=..., text="updated")
+-&gt; 200 OK
+-&gt; reply_markup in the returned Message: absent</code></pre>
+
+<p>The buttons are gone. The call succeeded. Nothing warned you.</p>
+
+<p>The mental model that produces this bug is that an edit is a patch &mdash; you name the field you want changed and the rest is left alone. It is not. <a href="https://core.telegram.org/bots/api#editmessagetext" rel="noopener">The <code>editMessageText</code> documentation</a> lists <code>reply_markup</code> as an ordinary optional parameter, and an omitted optional parameter reads naturally as "leave it". What actually happens is that the edit <em>replaces</em> content and markup as a unit, and an absent keyboard is a keyboard set to nothing.</p>
+
+<p>I did not want to publish that on the strength of one absent field in one response, because "the response object didn't include it" is weaker evidence than it looks &mdash; APIs omit empty fields for all sorts of reasons. So I ran a discriminator.</p>
+
+<p>After the markup-omitted edit, re-apply the <strong>same</strong> keyboard the message originally had. There are only two possible outcomes, and they disagree:</p>
+
+<ul>
+  <li>If the keyboard is still on the message, re-applying it changes nothing &rarr; <code>400 message is not modified</code>.</li>
+  <li>If the keyboard was removed, re-applying it <em>is</em> a change &rarr; <code>200 OK</code>.</li>
+</ul>
+
+<p>Result: <code>200 OK</code>. The keyboard was genuinely gone.</p>
+
+<p>And because a discriminator that always returns OK would prove nothing at all, the same call went to a second message that had been left untouched &mdash; same keyboard, never edited. That one returned <code>400 message is not modified</code>, exactly as it must if the test is measuring what I claim. Both halves agree: <strong>the markup-omitted edit removed the keyboard.</strong></p>
+
+<div class="note">
+<p><strong>The practical rule:</strong> if a message has an inline keyboard and you are editing its text, send the keyboard again in the same call. Not because the API is broken &mdash; because "edit" here means "replace", and every field you leave out is a field you cleared.</p>
+</div>
+
+<p>The production failure is quiet and delayed. The user sees the new text arrive, correctly, and the buttons they were about to press are simply gone. There is no error in your logs to correlate it with, because there was no error &mdash; the same class of problem as <a href="/blog/telegram-inline-keyboard-300-button-limit/">an oversized inline keyboard being silently truncated instead of rejected</a>.</p>
+
+<h3>Removing a keyboard on purpose</h3>
+
+<p>The deliberate version is <code>editMessageReplyMarkup</code> with an empty <code>inline_keyboard</code>. In my run it returned <code>message is not modified</code> &mdash; because the previous phase had <em>already</em> removed the keyboard, so an empty markup was no change at all. That error is a consequence of the finding above, not a separate rule. On a message that still has its buttons, the same call clears them and returns 200.</p>
+
+<h2>The method is fixed by how the message was sent</h2>
+
+<p>A photo with a caption and a text message look similar in a chat and are not interchangeable to the API:</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Call</th><th>Target</th><th>Result</th></tr>
+<tr><td><code>editMessageText</code></td><td>photo message</td><td>400 <code>there is no text in the message to edit</code></td></tr>
+<tr><td><code>editMessageCaption</code></td><td>photo message</td><td>200 OK</td></tr>
+<tr><td><code>editMessageCaption</code></td><td>text message</td><td>400 <code>there is no caption in the message to edit</code></td></tr>
+</table>
+</div>
+
+<p>The symmetry is the useful part. Neither method degrades into the other, and the error text tells you precisely which assumption you got wrong. Whether a message carries text or a caption was decided at send time and an edit cannot change it.</p>
+
+<p>Generic code is where this surfaces &mdash; a helper handed a stored <code>message_id</code> that does not track whether the id came from <code>sendMessage</code> or <code>sendPhoto</code>. If you keep message ids in a database in order to edit them later, keep the message <em>type</em> next to the id. The API will not infer it for you.</p>
+
+<h2>The boundaries on an edit are the boundaries on a send</h2>
+
+<p>No surprises here, which is itself worth recording &mdash; an edit does not get a different budget:</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Edit to</th><th>Result</th><th>Stored</th></tr>
+<tr><td>Text, 4096 chars</td><td>200 OK</td><td>4096</td></tr>
+<tr><td>Text, 4097 chars</td><td>400 <code>MESSAGE_TOO_LONG</code></td><td>unchanged</td></tr>
+<tr><td>Text, empty string</td><td>400 <code>message text is empty</code></td><td>unchanged</td></tr>
+<tr><td>Caption, 1024 chars</td><td>200 OK</td><td>1024</td></tr>
+<tr><td>Caption, 1025 chars</td><td>400 <code>MEDIA_CAPTION_TOO_LONG</code></td><td>unchanged</td></tr>
+</table>
+</div>
+
+<p>Every one refuses rather than truncating, and the previous content survives &mdash; the same all-or-nothing behaviour <a href="/blog/telegram-4096-character-limit/">the 4096-character limit shows on a send</a>. A bot that grows a message by appending, such as a running log, therefore does not degrade at the ceiling: it stops updating, at full length, until someone notices.</p>
+
+<p>One detail for anyone matching on error strings: the style is inconsistent. <code>MESSAGE_TOO_LONG</code> and <code>MEDIA_CAPTION_TOO_LONG</code> are uppercase constants, while <code>message text is empty</code> is lowercase prose. Both arrive in the same <code>description</code> field. Match the substring you actually saw; do not assume a house style exists.</p>
+
+<h2>What survives an edit</h2>
+
+<p>The identity of the message is stable, which is the reassuring result of the set:</p>
+
+<ul>
+  <li><code>message_id</code> is unchanged &mdash; a stored reference stays valid across any number of edits.</li>
+  <li>The original <code>date</code> is preserved. An edit does not re-stamp the message as new.</li>
+  <li>An <code>edit_date</code> field appears on the returned object. That is what a client uses to show the "edited" marker, and it is a reliable way for your own code to tell an edited message from a fresh one.</li>
+</ul>
+
+<h2>Deleting twice is an error</h2>
+
+<p><code>deleteMessage</code> returns <code>true</code>, and then:</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<tr><th>Call</th><th>Result</th></tr>
+<tr><td>Delete</td><td>200 OK, <code>result: true</code></td></tr>
+<tr><td>Delete the same message again</td><td>400 <code>message to delete not found</code></td></tr>
+<tr><td>Edit a deleted message</td><td>400 <code>message to edit not found</code></td></tr>
+</table>
+</div>
+
+<p>So deletion is not idempotent, which is an awkward property for cleanup code. The realistic path to hitting it is a retry, not a double-click: your delete succeeds on Telegram's side, the response is lost to a timeout, the retry fires the same call, and the second attempt returns 400. A wrapper that treats any non-2xx as a failure will report a cleanup that <em>worked</em> as an error &mdash; the retry manufactures a problem out of a success.</p>
+
+<p>Treat <code>message to delete not found</code> as a synonym for "already gone" in cleanup paths. The <a href="https://core.telegram.org/bots/api#deletemessage" rel="noopener"><code>deleteMessage</code> reference</a> is worth reading for its other constraints too &mdash; the ones about message age and permissions, which is where the next section starts.</p>
+
+<h2>What I did not measure</h2>
+
+<p>There is a widely repeated claim that a bot cannot edit or delete a message older than 48 hours. I cannot confirm or deny it from this run, and I am not going to repeat it as though I had.</p>
+
+<p>The reason is structural rather than an oversight: a single run cannot produce a 48-hour-old message. Reaching backwards instead &mdash; editing and deleting very low message ids in the same chat &mdash; returns <code>message to edit not found</code> and <code>message to delete not found</code>, which is the <em>absence</em> error, not an age error. Those ids never existed there, so the test measured nothing about age.</p>
+
+<p>What it does establish is that "not found" means "no such message" rather than "too old to touch". If you are handling the age rule, do not key on that string &mdash; it answers a different question. The clean measurement needs a message left in place and re-probed two days later.</p>
+
+<h2>What to change in your code</h2>
+
+<ol>
+  <li><strong>Re-send <code>reply_markup</code> on every text edit of a message that has buttons.</strong> The single highest-value line in this post. Omitting it clears them, silently.</li>
+  <li><strong>Store the message type alongside the message id</strong> if you plan to edit later. Text and caption are not interchangeable and the API will not guess.</li>
+  <li><strong>Do not blanket-suppress <code>message is not modified</code>.</strong> It is a signal that a redraw path is firing when nothing changed &mdash; on a rate-limited API, that is wasted budget. It is also harmless to hit deliberately, so it makes a cheap change-detector.</li>
+  <li><strong>Treat "message to delete not found" as success</strong> in cleanup and retry paths.</li>
+  <li><strong>Match error substrings, not error styles.</strong> Some are uppercase constants, some are prose.</li>
+</ol>
+
+<p>If you work through a library rather than raw HTTP, the same rules apply underneath &mdash; wrappers such as <a href="https://docs.python-telegram-bot.org/en/stable/telegram.bot.html" rel="noopener">python-telegram-bot's <code>Bot</code> class</a> pass <code>reply_markup</code> straight through, so an omitted argument is an omitted parameter on the wire, with exactly the effect above.</p>
+
+<div class="cta-box pack">
+<h3>Telegram in Production</h3>
+<p>The measured limits, the failure modes and the boilerplate that survives them: escaping, rate limits, update queues and webhook handling, in one pack.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/710851ec-08d5-447b-b022-1053d3469d15?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-edit-message-rules-tested">Get the pack &mdash; $19</a>
+</div>
+
+<h2>FAQ</h2>
+
+<div class="faq">
+<details><summary>Why does Telegram say "message is not modified"?</summary>
+<p>An edit that changes nothing is an error rather than a no-op. The error text names both halves of the comparison &mdash; content <em>and</em> reply markup &mdash; and Telegram compares the pair. The same text with a different keyboard succeeds; the same text with the same keyboard is a 400.</p></details>
+
+<details><summary>Does editMessageText remove the inline keyboard?</summary>
+<p>Yes, if you omit <code>reply_markup</code>. An edit replaces content and markup together rather than patching the text, so an absent keyboard means no keyboard. The call returns 200 OK and the buttons are gone. Send the keyboard again with the edit to keep it.</p></details>
+
+<details><summary>Can I use editMessageText on a photo?</summary>
+<p>No &mdash; it returns <code>there is no text in the message to edit</code>. Use <code>editMessageCaption</code>. The mirror holds as well: <code>editMessageCaption</code> on a plain text message is refused the same way. Which method applies is decided by how the message was sent.</p></details>
+
+<details><summary>What is the maximum length when editing a message?</summary>
+<p>The send limits, unchanged: 4096 characters of text (4097 gives <code>MESSAGE_TOO_LONG</code>) and 1024 characters of caption (1025 gives <code>MEDIA_CAPTION_TOO_LONG</code>). Both refuse rather than truncate, and an empty string is rejected outright.</p></details>
+
+<details><summary>Does editing change the message_id?</summary>
+<p>No. The <code>message_id</code> and the original <code>date</code> both survive; Telegram adds an <code>edit_date</code> field. Stored references remain valid across any number of edits.</p></details>
+
+<details><summary>Is deleteMessage idempotent?</summary>
+<p>No. The second delete returns <code>message to delete not found</code>. This is most often reached by a retry after a lost response, so cleanup code should treat that error as "already gone" rather than as a failure.</p></details>
+
+<details><summary>Can a bot edit a message older than 48 hours?</summary>
+<p>I did not measure it &mdash; a single run cannot age a message two days. Editing a non-existent id returns <code>message to edit not found</code>, which is the absence error and says nothing about age. Do not key age handling on that string.</p></details>
+</div>
+
+<p>More measurements from the same bot: <a href="/blog/telegram-inline-keyboard-300-button-limit/">the inline keyboard caps that truncate instead of erroring</a>, <a href="/blog/telegram-setmycommands-limits-tested/">the command list that refuses 101 entries and silently rewrites two things</a>, and <a href="/blog/telegram-markdownv2-escaping-tested/">which MarkdownV2 characters break a message and which delete it</a> &mdash; the last one matters here, because an edit re-parses your entities from scratch.</p>
+
+<a class="back" href="/blog/">&larr; Back to Blog</a>
+</article>
+<footer>&copy; 2026 Charlie Morrison Digital &middot; <a href="/about/">About</a> &middot; <a href="/blog/">Blog</a></footer>
+</body>
+</html>

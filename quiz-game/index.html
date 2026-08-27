@@ -422,7 +422,7 @@ tg.sendData(JSON.stringify({action:'quiz_score',score:state.score,correct:state.
 
 function challengeFriend(){
 const text=`⚔️ ${userName} scored ${state.score} points in Tech Quiz! Can you beat that?\n\n🧠 ${state.correct}/${state.questions.length} correct, 🔥 ${state.bestStreak} streak\n\nPlay now:`;
-const url=`https://t.me/charlie_dl_bot?start=quiz`;
+const url=`https://charliemorrison.dev/quiz-game/`;
 if(tg&&tg.openTelegramLink){
 tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
 }else{
@@ -432,7 +432,7 @@ window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encode
 
 function inviteFriends(){
 const text=`🧠 I'm playing Tech Quiz — AI, Crypto, Web Dev, Security questions!\n\n🔥 My best: ${stats.best} points\n\nJoin and challenge me:`;
-const url=`https://t.me/charlie_dl_bot?start=quiz`;
+const url=`https://charliemorrison.dev/quiz-game/`;
 if(tg&&tg.openTelegramLink){
 tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
 }else{

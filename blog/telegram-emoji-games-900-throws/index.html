@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{domains:["charliemorrison.dev","botcraftgroup.com"]}});</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Threw 900 Telegram Emoji Dice. All 6 Games Are Fair</title>
+<meta name="description" content="Telegram has six playable emoji games, not one. I threw 900 of them, counted every face, and decoded the slot machine's 1-64 value. Nothing is rigged.">
+<meta name="keywords" content="telegram dice game, telegram emoji games, telegram slot machine, are telegram dice random, telegram games without bot, telegram dice fair">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-emoji-games-900-throws/">
+<meta property="og:title" content="I Threw 900 Telegram Emoji Dice. All 6 Games Are Fair">
+<meta property="og:description" content="Six playable emoji, 900 throws, every result counted. No house edge — and the slot machine's jackpot is 1 in 16, not 1 in 64.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-emoji-games-900-throws/dice-run.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"I Threw 900 Telegram Emoji Dice. All 6 Games Are Fair","datePublished":"2026-08-28","dateModified":"2026-08-28","image":"https://charliemorrison.dev/blog/telegram-emoji-games-900-throws/dice-run.png","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about/"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Are Telegram's emoji dice fair?","acceptedAnswer":{"@type":"Answer","text":"In this test, yes. Across 900 throws — 100 each of dice, darts, bowling, basketball and football, plus 400 slot machine spins — every game's distribution was statistically indistinguishable from a fair draw at the 0.05 level. No face was missing, no face was over-represented beyond ordinary sampling noise, and the slot machine's four jackpot combinations came up at exactly the predicted 6.25 per cent."}},{"@type":"Question","name":"How many emoji games does Telegram have?","acceptedAnswer":{"@type":"Answer","text":"Six. The die, darts, bowling, basketball, football and the slot machine. The die, darts and bowling return values 1 to 6; basketball and football return 1 to 5; the slot machine returns 1 to 64. They are all sent the same way — the emoji on its own as the entire message."}},{"@type":"Question","name":"Do you need a bot to play Telegram dice games?","acceptedAnswer":{"@type":"Answer","text":"No. Send the emoji by itself as a whole message in any chat — a direct message, a group, or your own Saved Messages — and Telegram animates it and returns a result. There is no bot, no setup and no permission involved. It has to be the entire message, though: send it alongside other text and it stays an ordinary emoji."}},{"@type":"Question","name":"What does the Telegram slot machine's 1-64 value mean?","acceptedAnswer":{"@type":"Answer","text":"It is not a score. It is three reels packed into one integer. Subtract one from the value and read it as a three-digit base-4 number: each pair of bits is one reel, and the four symbols are bar, berries, lemon and seven. Decoding 400 spins this way gave each reel a roughly 25 per cent share of each symbol, which is what the encoding predicts."}},{"@type":"Question","name":"What are the odds of a jackpot on the Telegram slot machine?","acceptedAnswer":{"@type":"Answer","text":"One in sixteen, not one in sixty-four. Only four of the 64 values are three-of-a-kind — 1, 22, 43 and 64 — so the predicted rate is 4/64, or 6.25 per cent. Over 400 spins I recorded 25 jackpots, which is 6.25 per cent exactly. Three sevens is value 64, and it is no rarer than three lemons."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+.meta a{color:#667eea;text-decoration:none}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+a{color:#667eea}
+code{background:#f1f3f5;padding:2px 6px;border-radius:4px;font-size:.92em}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box.pack{background:linear-gradient(135deg,#f6ad5510,#dd6b2010);border-color:#dd6b20}
+.cta-box.pack h3{color:#c05621}
+.cta-box.pack a{background:linear-gradient(135deg,#f6ad55,#dd6b20)}
+.cta-box .alt a{background:none;color:#667eea;padding:0;font-weight:600;display:inline;margin:0}
+.cta-box.pack .alt a{background:none;color:#c05621}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:12px;border:1px solid #e5e7eb}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.95em}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f8f9fa}
+td.fair{color:#2b8a3e;font-weight:600;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:560px){
+table{font-size:.86em;margin:16px 0}
+th,td{padding:8px 7px}
+td.fair{white-space:normal}
+h1{font-size:1.6em}
+}
+.note{background:#fffbea;border-left:4px solid #f0c000;padding:14px 18px;border-radius:8px;margin:24px 0;font-size:.96em}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+
+<h1>I Threw 900 Telegram Emoji Dice. All 6 Games Are Fair</h1>
+<p class="meta">By <a href="/about/">Charlie Morrison</a> &middot; 28 August 2026</p>
+
+<p>Almost everyone who uses Telegram has sent the die emoji at some point and watched it roll. Far fewer people know that there are <strong>six</strong> of these, that they work in any chat with no bot and no setup, and that the number is decided by Telegram's server before the animation even starts.</p>
+
+<p>And as far as I can tell, nobody has bothered to check whether they are fair.</p>
+
+<p>That is not an academic question. In practice these get used to <em>decide things</em> &mdash; who pays the bill, who goes first, who does the forfeit. If you are settling a bill with a die emoji you are trusting a random number generator you have never seen, in an app that has every commercial reason to make its animations feel exciting rather than be flat.</p>
+
+<p>So I threw 900 of them and counted every single result.</p>
+
+<p>The short version: all six are statistically indistinguishable from a fair draw, there is no house edge and no streak-breaking, and the slot machine's mysterious 1-64 number turns out not to be a score at all. It is three reels packed into one integer &mdash; which means the jackpot is <strong>1 in 16, not 1 in 64</strong>, and most people playing it have the odds wrong by a factor of four.</p>
+
+<h2>There are six of them, not one</h2>
+
+<p>Here is the full set, with the range each one returns:</p>
+
+<div class="tw">
+<table>
+<tr><th>Emoji</th><th>Game</th><th>Returns</th><th>What a high value means</th></tr>
+<tr><td>&#127922;</td><td>Die</td><td>1&ndash;6</td><td>The face shown, exactly like a real die</td></tr>
+<tr><td>&#127919;</td><td>Darts</td><td>1&ndash;6</td><td>6 is the bullseye, 1 misses the board</td></tr>
+<tr><td>&#127923;</td><td>Bowling</td><td>1&ndash;6</td><td>6 is a strike, 1 is a gutter ball</td></tr>
+<tr><td>&#127936;</td><td>Basketball</td><td>1&ndash;5</td><td>4 and 5 go in, the rest miss</td></tr>
+<tr><td>&#9917;</td><td>Football</td><td>1&ndash;5</td><td>3, 4 and 5 are goals</td></tr>
+<tr><td>&#127920;</td><td>Slot machine</td><td>1&ndash;64</td><td>Three reels &mdash; see below, it is not a score</td></tr>
+</table>
+</div>
+
+<p>The practical detail that most round-ups skip: <strong>the emoji has to be the entire message.</strong> Send &#127922; on its own and Telegram treats it as a throw, animates it, and everyone in the chat sees the same result. Type "let's roll &#127922;" and it stays an ordinary emoji sitting in a sentence. That single rule is the difference between "this doesn't work on my phone" and a working game.</p>
+
+<p>It works in a direct message, in a group, in a channel, and in your own Saved Messages. No bot is involved at any point.</p>
+
+<h2>Why the fairness question is worth asking</h2>
+
+<p>Because the result is <em>not</em> generated on your phone. Telegram's own protocol documentation describes the dice as a media type where the server sends back a <code>value</code> field alongside the emoji &mdash; the outcome arrives with the message. The animation you watch for two seconds is a replay of a decision that was already made.</p>
+
+<p>That is the right design &mdash; it is the only way everyone in a group sees the same roll &mdash; but it does mean the number is entirely Telegram's to choose. Nothing about the interface lets you verify it. So the only way to find out is to throw a lot of them and count.</p>
+
+<h2>How I threw 900 of them</h2>
+
+<p>I used Telegram's client protocol to send throws automatically and record what came back. Three decisions shaped the test:</p>
+
+<p><strong>Everything went into Saved Messages.</strong> That is my own cloud storage &mdash; no other human received a single one of the 900. Flooding somebody's DM with hundreds of dice to satisfy my curiosity was not on the table, and a throwaway group was not available either: my account has been spam-limited at the account level since late July, so Telegram refuses to let it create new groups or channels. Saved Messages sidesteps both problems, and afterwards the script deletes exactly the messages it sent, by ID.</p>
+
+<p><strong>Throws were paced half a second apart.</strong> Not for politeness &mdash; for validity. Hammering the endpoint invites rate limiting, and a run that silently drops throws produces a distribution with holes in it that look like findings.</p>
+
+<p><strong>The value is read from the stored message, not from the send confirmation.</strong> This one I got wrong first and had to fix. My initial version read the result off the response to each send, and it crashed partway through the run: the library I was using could not parse one of the objects Telegram returned, because the server's schema has moved on since that library's last update. The throws themselves had landed perfectly &mdash; 20 dice were sitting in the chat when I went to look. So I rebuilt the probe to fire the throws, tolerate the unparseable response, and then read the values back out of the chat history afterwards. Same authoritative field, via a path that works. Any throw whose message cannot be found afterwards is counted as lost rather than quietly folded into the tally; the final run lost zero of 900.</p>
+
+<figure>
+<img src="dice-run.png" alt="Terminal output showing 900 Telegram emoji dice throws and chi-square fairness verdicts for all six games">
+<figcaption>The actual run. 500 throws across five games, then 400 slot machine spins, then the fairness test.</figcaption>
+</figure>
+
+<h2>The results: nothing is rigged</h2>
+
+<p>Here is what 100 throws of each game produced.</p>
+
+<div class="tw">
+<table>
+<tr><th>Game</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+<tr><td>&#127922; Die</td><td>12</td><td>21</td><td>16</td><td>19</td><td>18</td><td>14</td></tr>
+<tr><td>&#127919; Darts</td><td>9</td><td>19</td><td>17</td><td>19</td><td>16</td><td>20</td></tr>
+<tr><td>&#127923; Bowling</td><td>21</td><td>16</td><td>17</td><td>13</td><td>16</td><td>17</td></tr>
+<tr><td>&#127936; Basketball</td><td>18</td><td>22</td><td>24</td><td>18</td><td>18</td><td>&mdash;</td></tr>
+<tr><td>&#9917; Football</td><td>17</td><td>16</td><td>19</td><td>20</td><td>28</td><td>&mdash;</td></tr>
+</table>
+</div>
+
+<p>Look at the football row and you will see why counting alone is not enough. A goal-scoring 5 came up 28 times out of 100, against an expected 20. That <em>looks</em> like a thumb on the scale &mdash; the app flattering you with goals.</p>
+
+<p>It is not. The question a statistician asks is not "did every outcome come up equally often", because with 100 throws it never will. The question is whether the gap between what you saw and what you expected is larger than random sampling would routinely produce. That is what a <a href="https://en.wikipedia.org/wiki/Pearson%27s_chi-squared_test" rel="noopener">chi-squared goodness-of-fit test</a> measures, and for football it returns 4.50 against a threshold of 9.488. Well inside noise.</p>
+
+<p><strong>All five passed, none of them close to the line.</strong> The full set of chi-squared values: die 3.32, darts 4.88, bowling 2.00, basketball 1.60, football 4.50 &mdash; against a threshold of 11.07 for the six-sided games and 9.49 for the five-sided ones.</p>
+
+<p>The slot machine got 400 spins instead of 100, because 64 possible outcomes need more data than six do. Every single value from 1 to 64 appeared at least once, and the distribution across all 64 came out at 50.24 against a threshold of 82.53. Also fair.</p>
+
+<p>So: no house edge that a sample this size could detect, no outcome that never appears, no evidence of the app deciding anything. If you use &#127922; to pick who pays, it is picking honestly.</p>
+
+<h2>The slot machine is three reels wearing one number</h2>
+
+<p>This is the part I did not expect to find, and it is the one thing here with real practical consequences.</p>
+
+<p>The slot machine returns a number from 1 to 64, and if you have ever wondered what your 43 meant, the answer is that it is not a score and there is no "better" or "worse" 43. Subtract one, and read the result as a three-digit number in base 4. Each pair of bits is one reel; the four symbols are bar, berries, lemon and seven.</p>
+
+<p>That is a claim, so I checked it two ways against the 400 spins.</p>
+
+<p><strong>Check one:</strong> if the decode is right, each reel independently must land on each of its four symbols about a quarter of the time. Decoded, reel one came out 26.0 / 25.8 / 23.8 / 24.5 per cent across the four symbols. Reels two and three landed in the same neighbourhood.</p>
+
+<p><strong>Check two, the one that settles it:</strong> the decode says exactly four of the 64 values are three-of-a-kind &mdash; values 1, 22, 43 and 64. That predicts a jackpot rate of 4/64, which is 6.25 per cent. Over 400 spins I recorded <strong>25 jackpots. That is 6.25 per cent, to the decimal.</strong></p>
+
+<figure>
+<img src="slot-decode.png" alt="Decoding the Telegram slot machine 1-64 value into three base-4 reels, with per-reel marginals and observed jackpot rate">
+<figcaption>Predicted 6.25 per cent, measured 6.25 per cent. The 1-64 value is three reels packed into one integer.</figcaption>
+</figure>
+
+<p>Two things follow, and both contradict what people assume:</p>
+
+<ul>
+<li><strong>The jackpot is 1 in 16, not 1 in 64.</strong> There are four winning combinations, not one. Spin the slot machine sixteen times and you should expect to see three-of-a-kind once.</li>
+<li><strong>Three sevens is not the rare one.</strong> Value 64 is seven-seven-seven and value 1 is bar-bar-bar, and they are exactly equally likely &mdash; as are three lemons and three berries. In my run, berries actually came up most often (8 times against sevens' 7), which is noise, but noise that only makes sense once you know all four are equiprobable.</li>
+</ul>
+
+<div class="cta-box">
+<h3>Want the run sheet instead of the maths?</h3>
+<p>The free <strong>Telegram Game Night Planner</strong> turns all of this into a timed night you can paste straight into a group chat &mdash; rounds, host lines and poll questions with the options already separated. No signup, runs in your browser.</p>
+<a href="/telegram-game-night-planner/?src=emoji-dice">Build a game night &rarr;</a>
+<span class="alt">Or play the free <a href="/quiz-game/">Tech Quiz Mini App</a> if you want something already built.</span>
+</div>
+
+<h2>What this means at an actual game night</h2>
+
+<p>Four things I would now do differently:</p>
+
+<p><strong>Use the dice for real decisions without hedging.</strong> Who pays, who goes first, who picks the film. It is a fair draw, and unlike a physical die in a video call, everybody sees the same result at the same time with no argument about camera angles.</p>
+
+<p><strong>Rotate between &#127922;, &#127919; and &#127923; freely.</strong> All three return 1&ndash;6 with the same flat distribution, so they are drop-in replacements for one another. Using a different one each round is pure variety at zero cost to fairness.</p>
+
+<p><strong>Do not use basketball or football for a 1&ndash;6 decision.</strong> They only go up to 5. It sounds obvious written down, and it is exactly the kind of thing nobody notices until two people roll and someone insists there must have been a six.</p>
+
+<p><strong>The slot machine makes a decent jackpot round.</strong> At 1 in 16, a group of eight each taking one spin has roughly a 40 per cent chance that somebody hits three-of-a-kind &mdash; frequent enough to be worth playing for, rare enough to feel like something.</p>
+
+<h2>What I could not verify, and will not pretend I did</h2>
+
+<p>Three honest limits on the above.</p>
+
+<p><strong>I measured numbers, not animations.</strong> The mapping in my first table &mdash; darts 6 is a bullseye, bowling 6 is a strike, basketball 4 and 5 go in &mdash; comes from Telegram's <a href="https://core.telegram.org/bots/api#senddice" rel="noopener">Bot API documentation</a>, not from my run. What I can say from the data is that every value in every documented range does occur, so no outcome is unreachable. I did not sit and watch 900 animations to confirm which one draws which frame.</p>
+
+<p><strong>100 throws catches a gross bias, not a subtle one.</strong> If Telegram shaved two or three percentage points off some outcome, a sample this size would not reliably see it &mdash; you would need thousands of throws per game. "Fair" here means "no detectable bias at this sample size", which is a real result but not a proof.</p>
+
+<p><strong>The schema is moving.</strong> Telegram's <a href="https://core.telegram.org/api/dice" rel="noopener">protocol definition for animated dice</a> now carries a <code>game_outcome</code> field on the dice media object alongside <code>value</code> &mdash; newer than the library I was throwing with, which is part of why my first run crashed. The outcome looks to be becoming something the server states explicitly rather than something clients infer from the number. Nothing in my results depends on that, but if you go and measure this yourself in a year, expect the shape to have changed.</p>
+
+<div class="note">
+<strong>One distinction worth carrying around.</strong> A bot can send a real &#127922; &mdash; it is the same server draw, equally fair. But a bot that <em>tells you</em> the result in text ("You rolled a 5!") generated that number itself, and you have no way to check it. If it matters, look for the animated emoji rather than a sentence. Related: <a href="/blog/i-messaged-18-telegram-game-bots/">I messaged 18 recommended game bots and seven never replied</a> &mdash; a bot's fairness is moot if its backend is switched off.
+</div>
+
+<h2>Running this yourself</h2>
+
+<p>You do not need my script. Open Saved Messages, send each of the six emoji on its own, and you have verified the mechanism in about fifteen seconds. To test fairness you need volume and a tally, which means automating it &mdash; and if you do, throw into your own Saved Messages rather than a group, pace the sends, and read the values back out of the chat rather than trusting the send response.</p>
+
+<p>The most useful thing you can do with fifteen seconds, though, is simply learn that there are six of these. Most people are still only using one.</p>
+
+<div class="cta-box pack">
+<h3>Running the night in a group chat?</h3>
+<p>Dice are the easy part. A group is a different problem: people answer forty minutes apart, and a round falls apart the moment two replies land at once. <strong>The Telegram Party Pack</strong> is built for that &mdash; 255 prompts across six games, a host guide for a 60-minute night in a chat, and the poll, spoiler-tag and threading mechanics that keep a round readable when nobody is in the same room. Copy-paste blocks for every round, PDF included.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-emoji-games-900-throws">Get the pack &mdash; $9.99</a>
+<span class="alt">The emoji games above stay free forever &mdash; they are Telegram's, not mine. <a href="/telegram-party-pack/">See what's in the pack</a> before you buy.</span>
+</div>
+
+<p>More on the games themselves: <a href="/blog/best-telegram-party-games-2026/">the party games worth playing on Telegram</a>, and <a href="/blog/how-to-run-a-telegram-game-night/">how to actually run a game night in a group chat</a>.</p>
+
+<a class="back" href="/blog/">&larr; All posts</a>
+</article>
+<footer>
+<p>&copy; 2026 <a href="/">Charlie Morrison Digital</a> &middot; <a href="/about/">About</a></p>
+</footer>
+</body>
+</html>

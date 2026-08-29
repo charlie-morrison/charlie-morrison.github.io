@@ -134,7 +134,9 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 
 <p>Scheduling does exist, in the Telegram app, on your side: compose the message, hold the send button, pick a time. That's how you have the rules card land in the group at 20:00 without being awake for it. It is not something you can automate through a bot, and if a tool promises you that, it is doing something else.</p>
 
-<h2>Two mechanics worth adding on purpose</h2>
+<h2>Three mechanics worth adding on purpose</h2>
+
+<p><strong>Emoji dice for turn order and tie-breaks.</strong> Telegram's &#127922; &#127919; &#127936; &#9917; &#127923; &#127920; emoji are not decoration &mdash; each one is sent as a real roll and comes back carrying a hidden value, so everyone in the group sees the same result and nobody has to trust the host's "I rolled a 6". It needs no bot and no setup. I <a href="/blog/telegram-emoji-games-900-throws/">threw 900 of them to check whether the odds are honest</a>, and they are: no detectable bias in any of the six games. Worth knowing before you pick one as a decider &mdash; the ranges differ, so &#9917; football counts three of its five outcomes as a goal while &#127936; basketball counts only two. Use a single &#127922; to pick who starts, and settle ties the same way.</p>
 
 <p><strong>Self-closing rounds.</strong> A poll can carry an open period. I set 30 seconds and it was created with a 30-second life. This is the closest Telegram gets to a turn timer. It ends the round for you, so the game doesn't die of one person "answering later", and it applies pressure that makes answers funnier.</p>
 

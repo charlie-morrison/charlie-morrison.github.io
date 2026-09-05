@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{domains:["charliemorrison.dev","botcraftgroup.com"]}});</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram Quiz Game: 6 Bots Tested, 0 Send a Real Quiz</title>
+<meta name="description" content="I messaged the six bots every list calls a Telegram quiz bot. Not one sent a native quiz poll. What each really does, and how to run a quiz tonight.">
+<meta name="keywords" content="telegram quiz game, telegram quiz bot, telegram trivia bot, quizbot telegram, telegram chat games, telegram group quiz">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-quiz-bots-tested-2026/">
+<meta property="og:title" content="Telegram Quiz Game: 6 Bots Tested, 0 Send a Real Quiz">
+<meta property="og:description" content="Six &quot;Telegram quiz bots&quot;, one /start each. Four are builders or text rounds, one refuses outside a group, one never answered. The quiz poll is something you make.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-quiz-bots-tested-2026/quiz-bot-census.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Telegram Quiz Game: 6 Bots Tested, 0 Send a Real Quiz","datePublished":"2026-09-05","dateModified":"2026-09-05","image":"https://charliemorrison.dev/blog/telegram-quiz-bots-tested-2026/quiz-bot-census.png","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about/"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the best Telegram quiz bot for a group?","acceptedAnswer":{"@type":"Answer","text":"For a group that wants to play together in the chat, @QuizariumBot is the only one of the six tested that runs a live round inside the group — it refuses to work in a private chat at all. @triviabot fires questions as plain text with /A /B /C /D commands and works in both. @QuizBot does not run a quiz: it builds one from questions you write, then gives you a link to share. Tested 5 September 2026."}},{"@type":"Question","name":"Does a Telegram quiz bot send a real quiz poll?","acceptedAnswer":{"@type":"Answer","text":"None of the six bots tested on 5 September 2026 delivered Telegram's native quiz poll on contact. A native quiz poll is a MessageMediaPoll object with quiz set true — it renders inside the chat, everyone taps an answer in place, and the correct answer is part of the object. Every bot tested answered with plain text, buttons, or a refusal instead."}},{"@type":"Question","name":"How do I make a quiz in Telegram myself?","acceptedAnswer":{"@type":"Answer","text":"Open the chat where you want the quiz, tap the attachment or paperclip icon, choose Poll, and switch the poll type to Quiz. You then mark one answer correct and can add an explanation. This is Telegram's built-in quiz mode, shipped with Polls 2.0 in January 2020. No bot is involved, and it is the same object @QuizBot asks you to send it."}},{"@type":"Question","name":"Are Telegram quiz answers anonymous in a group?","acceptedAnswer":{"@type":"Answer","text":"Not with @QuizBot. Its own warning during quiz creation reads: 'this bot can't create anonymous polls. Users in groups will see votes from other members.' A quiz poll you compose yourself in the Telegram app can be anonymous, so if you care who sees whose answers, build it in the app rather than through the bot."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+.meta a{color:#667eea;text-decoration:none}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+a{color:#667eea}
+code{background:#f1f3f5;padding:2px 6px;border-radius:4px;font-size:.92em}
+blockquote{border-left:4px solid #cbd5e1;background:#f8fafc;padding:12px 18px;margin:20px 0;border-radius:0 8px 8px 0;color:#334155}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box.pack{background:linear-gradient(135deg,#f6ad5510,#dd6b2010);border-color:#dd6b20}
+.cta-box.pack h3{color:#c05621}
+.cta-box.pack a{background:linear-gradient(135deg,#f6ad55,#dd6b20)}
+.cta-box .alt a{background:none;color:#667eea;padding:0;font-weight:600;display:inline;margin:0}
+.cta-box.pack .alt a{background:none;color:#c05621}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:12px;border:1px solid #e5e7eb}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.95em}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f8f9fa}
+td.yes{color:#2b8a3e;font-weight:600;white-space:nowrap}
+td.no{color:#c92a2a;font-weight:600;white-space:nowrap}
+td.mid{color:#b45309;font-weight:600;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:560px){
+h1{font-size:1.6em}
+/* Multi-column tables cannot fit 375px: the last column renders off-screen
+   behind a scroll nobody can see. Stack each row into a labelled card. */
+table{font-size:.92em;margin:16px 0;border:0}
+table thead{position:absolute;left:-9999px}
+table tr{display:block;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:14px;padding:4px 0}
+table td{display:block;width:auto;border:0;padding:6px 14px}
+table td::before{content:attr(data-l);display:block;font-size:.74em;text-transform:uppercase;letter-spacing:.05em;color:#8b8b96;margin-bottom:1px}
+td.yes,td.no,td.mid{white-space:normal}
+}
+.note{background:#fffbea;border-left:4px solid #f0c000;padding:14px 18px;border-radius:8px;margin:24px 0;font-size:.96em}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+
+<h1>Telegram Quiz Game: 6 Bots Tested, 0 Send a Real Quiz</h1>
+<p class="meta">By <a href="/about/">Charlie Morrison</a> &middot; 5 September 2026</p>
+
+<p>There is a question every &ldquo;best Telegram quiz bot&rdquo; list skips, and it is the only one that decides whether your evening works: <strong>where does the quiz actually happen, and who gets to answer it?</strong></p>
+
+<p>Because there is a version where six friends tap answers into the group chat and the bar fills up in front of everyone, and there is a version where one person plays alone on their phone while five people watch. Both are called a Telegram quiz game. Both appear in the same list, described in the same sentence.</p>
+
+<p>So on 5 September 2026 I sent <code>/start</code> to six bots the lists recommend and read what came back. Not their bios: the actual message objects. <strong>Not one of them delivered a real quiz.</strong> Two are builders that interview you first, one fires plain text with slash-commands, one refuses to work outside a group, one never answered at all, and one turned out not to be a quiz bot in the first place.</p>
+
+<p>The interesting part is what that adds up to. The thing everyone is looking for, the quiz that plays inside the chat, is not something a bot hands you. It is something <em>you</em> make, and every bot in the list is a wrapper around asking you to make it.</p>
+
+<h2>The four things &ldquo;quiz bot&rdquo; can mean</h2>
+
+<p>Before counting anything, the categories have to be separable by something a machine can read:</p>
+
+<ul>
+<li><strong>Native quiz poll.</strong> A <code>MessageMediaPoll</code> object with <code>quiz</code> set true. It renders <em>inside</em> the chat: everyone taps an answer in place, the bar fills for the room, and the correct answer plus an optional explanation live in the object itself. Telegram shipped this with <a href="https://telegram.org/blog/polls-2-0-vmq" rel="nofollow">Polls 2.0 on 23 January 2020</a>. This is the only mechanism where a group plays the same question at the same moment.</li>
+<li><strong>In-chat text round.</strong> The bot posts the question as ordinary text and watches for replies. The group can play together, but there is no answer object. Scoring is the bot&rsquo;s word for it, and the questions scroll away like any other message.</li>
+<li><strong>Mini App.</strong> One person opens a separate application inside Telegram. Everyone else sees a button. This is <a href="/blog/telegram-gaming-platform-2026/">where most surviving game bots went</a>.</li>
+<li><strong>Builder.</strong> The bot does not run a quiz at all. It interviews you in a private chat, assembles a quiz from questions you write, and hands you a link to share later.</li>
+</ul>
+
+<p>Those four are invisible in a screenshot and invisible in every listicle. They are trivially visible in the objects Telegram returns.</p>
+
+<h2>How I counted it</h2>
+
+<p>Two passes per handle, both recording what came back rather than what the bot claims.</p>
+
+<p><strong>Pass A &mdash; inline.</strong> Fire an empty inline query. If the results carry a <code>web_app</code> button or a <code>startapp=</code> link, the bot&rsquo;s answer to &ldquo;play&rdquo; is an app. An error saying inline mode is off is a real verdict, not a failure.</p>
+
+<p><strong>Pass B &mdash; <code>/start</code> in a private chat.</strong> Then classify the reply objects. A poll with <code>quiz</code> true is a native quiz poll. A poll without it is just a poll. A web-view button is a Mini App. Text only gets disambiguated by whether the bot says it needs a group, and when it does I record the phrase verbatim rather than paraphrasing it.</p>
+
+<p>Anything unreadable is recorded as blind with the exception named, never folded into &ldquo;no quiz&rdquo;. &ldquo;Found nothing&rdquo; and &ldquo;could not look&rdquo; are identical in a total and opposite in meaning.</p>
+
+<figure>
+<img src="quiz-bot-census.png" alt="Terminal output: six Telegram quiz bots probed, none returning a native quiz poll, followed by a nine-message walk through @QuizBot's quiz builder ending in a KeyboardButtonRequestPoll">
+<figcaption>Both runs, unedited: the six-handle census on top, the walk through @QuizBot&rsquo;s builder underneath. The last line is the whole story: <code>quiz_poll_seen: False</code>.</figcaption>
+</figure>
+
+<h2>What each bot actually did</h2>
+
+<div class="tw">
+<table>
+<thead><tr><th>Bot</th><th>What it sent back</th><th>Who can play</th></tr></thead>
+<tbody>
+<tr><td data-l="Bot">@QuizBot</td><td data-l="What it sent back" class="mid">Builder. &ldquo;This bot will help you create a quiz with a series of multiple choice questions.&rdquo;</td><td data-l="Who can play">You, alone, writing questions</td></tr>
+<tr><td data-l="Bot">@vote</td><td data-l="What it sent back" class="mid">Builder. &ldquo;Let&rsquo;s create a new poll. First, select the type of poll.&rdquo;</td><td data-l="Who can play">You, alone, writing questions</td></tr>
+<tr><td data-l="Bot">@triviabot</td><td data-l="What it sent back" class="yes">A question, instantly, as plain text: &ldquo;How many nations border Chile? /A 4 /B 2 /C 5 /D 3&rdquo;</td><td data-l="Who can play">Anyone in the chat, by typing a command</td></tr>
+<tr><td data-l="Bot">@QuizariumBot</td><td data-l="What it sent back" class="mid">A refusal: &ldquo;Yes, it&rsquo;s my command, but you can use it only within a group chat.&rdquo;</td><td data-l="Who can play">A group, and only a group</td></tr>
+<tr><td data-l="Bot">@trivia_quizbot</td><td data-l="What it sent back" class="no">Nothing. Resolved fine, never replied.</td><td data-l="Who can play">Nobody</td></tr>
+<tr><td data-l="Bot">@wordibot</td><td data-l="What it sent back" class="no">&ldquo;This is a word guess game&rdquo; &mdash; not a quiz bot at all</td><td data-l="Who can play">Two players, in any chat</td></tr>
+</tbody>
+</table>
+</div>
+
+<p><strong>Native quiz polls delivered: zero out of six.</strong></p>
+
+<p>The most useful row is @triviabot, and it is useful in a way its listing does not tell you. It does not wait to be added anywhere. Send it <code>/start</code> in a private chat and it has already asked you something, with the four options rendered as <code>/A</code>, <code>/B</code>, <code>/C</code>, <code>/D</code> commands. That is a real in-chat round with a real question, but as plain text, which means no tap-to-answer, no visible bar, and nothing stopping the fastest reader from shouting the answer before anyone else has finished reading.</p>
+
+<p>@QuizariumBot is the honest opposite. It will not entertain you in a private chat at all, and its refusal spells out why: <em>&ldquo;If you want to play alone, you still should create a group.&rdquo;</em> That is a bot with an opinion about how it should be used, and for a group quiz night the opinion is the right one. It matches what I found when I checked <a href="/blog/telegram-games-for-2-players/">which bots survive with only two players</a>. Quizarium was already in the group-only column there.</p>
+
+<h2>The official quiz bot does not build the quiz. You do.</h2>
+
+<p>@QuizBot is Telegram&rsquo;s own, named in Telegram&rsquo;s own <a href="https://telegram.org/blog/polls-2-0-vmq" rel="nofollow">Polls 2.0 announcement</a>. If any bot in the set hands you a quiz, it should be this one. So I walked its whole creation flow with a script that sends the next input and records whatever comes back, rather than following a remembered path.</p>
+
+<p>Nine bot messages later, here is where it stops. Title: accepted. Description: accepted. Then:</p>
+
+<blockquote>Good. Now send me a poll with your first question. Alternatively, you can send me a message with text or media that will be shown before this question.<br><br>Warning: this bot can&rsquo;t create anonymous polls. Users in groups will see votes from other members.</blockquote>
+
+<p>I sent the question as text, the way you would type it to a person. It said <em>&ldquo;Great! Now use the button to send me the question related to this message&rdquo;</em>. My text had been filed as a preamble, not a question. I sent the four answer options next. Each one came back with the same sentence, four times:</p>
+
+<blockquote>Only one message with text or media can be shown before this question. Please use the &lsquo;Create a question&rsquo; button to send me the quiz question in the form of a poll.</blockquote>
+
+<p>That button is worth naming precisely, because it is the punchline. Its type is <code>KeyboardButtonRequestPoll</code>, a button that does not send anything to the bot at all. It asks <em>your Telegram app</em> to open its native poll composer so you can build a quiz poll, which your app then hands over.</p>
+
+<p>So the official quiz bot cannot be talked to in words. It requires the native quiz poll as its <strong>input</strong>. Every route through the ecosystem ends at the same object, and the bots are packaging around it.</p>
+
+<div class="cta-box pack">
+<h3>Want a game night that needs no bot at all?</h3>
+<p>The Telegram Party Pack is 255 group-chat game prompts that run on nothing but the chat you already have &mdash; no bot to add, no app to open, nothing that can go silent next spring.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-quiz-bots-tested-2026">Get the pack &mdash; $9.99</a>
+<span class="alt">Or start with the <a href="/blog/best-telegram-party-games-2026/">free party games list</a>.</span>
+</div>
+
+<h2>How to run a real quiz tonight, in about a minute</h2>
+
+<p>Given all of the above, the fastest route to a quiz your whole group can play is the one with no bot in it:</p>
+
+<ol>
+<li>Open the group chat. Tap the paperclip / attachment icon.</li>
+<li>Choose <strong>Poll</strong>, then switch the poll type to <strong>Quiz</strong>.</li>
+<li>Type the question and the options, and tap the one that is correct.</li>
+<li>Optionally add an explanation &mdash; it appears after someone answers, which is where the &ldquo;actually, here&rsquo;s why&rdquo; goes.</li>
+<li>Send. Everyone taps in the chat, and a correct answer gets confetti.</li>
+</ol>
+
+<p>Repeat for as many questions as you want. If you would rather have a numbered quiz with a score at the end, that is exactly what @QuizBot assembles. You will just be composing each question as a poll anyway, so start there and let the bot staple them together.</p>
+
+<p>Two limits worth knowing before you plan a long evening. Answers through @QuizBot are <strong>not anonymous in a group</strong>, by its own warning above. And the poll object itself has hard ceilings. I <a href="/blog/telegram-poll-limits-game-night/">measured what breaks a quiz night</a> earlier this year: the caps on options, question length and explanation text are exact, and the explanation cap is the one people hit first. The <a href="https://core.telegram.org/bots/api#sendpoll" rel="nofollow">Bot API reference for <code>sendPoll</code></a> lists the same numbers if you are building this programmatically.</p>
+
+<h2>What I could not measure</h2>
+
+<p>Four boundaries, stated because a result without them is half a result.</p>
+
+<p><strong>I only sent <code>/start</code>.</strong> A bot that greets you with text may well fire quiz polls later, after a command I did not send. What the census shows is what a new user gets on contact, the moment most people decide whether a bot works, not the bot&rsquo;s full repertoire.</p>
+
+<p><strong>Every probe ran in a private chat.</strong> That is precisely why @QuizariumBot reads as a refusal: in a group it would have played. I did not add six bots to a live group, so &ldquo;who can play&rdquo; in the table is read from what each bot says and does in a DM, not from six group sessions.</p>
+
+<p><strong>@trivia_quizbot&rsquo;s silence is a six-second silence.</strong> It resolved as a real account and did not answer within the window. That is a finding about a six-second wait, not a death certificate.</p>
+
+<p><strong>I could not mint a quiz poll from my own client to sit in the table as a control.</strong> My library version serialises the &ldquo;correct answer&rdquo; field against an older schema and the request dies before it leaves the machine. With integers instead it reaches Telegram and gets rejected as &ldquo;not an existing answer&rdquo;. Which is its own small confirmation of the thesis: the quiz poll is a client-composed object first and an API object second. The evidence that it is the atom of this system is @QuizBot demanding one, not one I produced.</p>
+
+<h2>What this tells you</h2>
+
+<p>&ldquo;Telegram quiz bot&rdquo; is a category that mostly does not contain what its name promises. Of six, one plays a text round anywhere, one plays properly but only in a group, two are form-fillers, one is silent, and one is a word game that wandered into the list. The object everybody actually wants ships with Telegram, sits behind the paperclip icon, and takes under a minute to use.</p>
+
+<p>This is the same shape of answer I keep getting from this corner of Telegram. When I <a href="/blog/i-messaged-18-telegram-game-bots/">messaged eighteen recommended game bots</a>, seven were already dead. When I checked <a href="/blog/telegram-gaming-platform-2026/">Telegram&rsquo;s own decade-old games platform</a>, it worked perfectly and had exactly one user. The bots churn; the built-in mechanisms quietly keep working.</p>
+
+<p>So the practical rule holds for quizzes too: before you plan an evening around a bot somebody recommended in an article, spend fifteen seconds sending it <code>/start</code> yourself. In every pass I have run, the article is older than the bot&rsquo;s last working day, and in this one, the feature you wanted was never in the bot to begin with.</p>
+
+<a class="back" href="/blog/">&larr; All posts</a>
+</article>
+<footer>
+<p>&copy; 2026 <a href="/">Charlie Morrison Digital</a> &middot; <a href="/about/">About</a></p>
+</footer>
+</body>
+</html>

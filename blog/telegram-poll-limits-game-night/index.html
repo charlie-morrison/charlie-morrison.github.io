@@ -180,6 +180,8 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 
 <p>None of this is exotic. It is the difference between a round that lands and a round where somebody says "wait, I can see the answer" &mdash; which, in a group chat, is the whole game.</p>
 
+<p>One thing these limits do not tell you is who is supposed to send the poll in the first place. I later messaged <a href="/blog/telegram-quiz-bots-tested-2026/">the six bots the lists call Telegram quiz bots</a>: not one of them delivers a quiz poll, and Telegram&rsquo;s own @QuizBot refuses to accept a question typed as text, because it wants the poll object you compose yourself.</p>
+
 <div class="cta-box pack">
 <h3>Building the bot that sends these polls?</h3>
 <p><strong>Telegram in Production</strong> ships the limits above as working code: <code>check_poll</code> and <code>build_poll</code> raise on the hard walls <em>and</em> on the three payloads Telegram accepts and then quietly rewrites, which are the ones that bite in production. With it come an <code>initData</code> validator that survives Bot API 8.0 (Python and Node), a systemd unit linter for the two failure modes that cost me weeks of silent breakage, and a one-page pre-ship checklist. 55 tests, no dependencies, runnable straight from the zip.</p>

@@ -156,6 +156,7 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 </table>
 
 <p>A bot may hand out files two and a half times larger than it is allowed to pick up. For most bots this never surfaces, because they only ever send things they generated themselves. For anything that processes what users send it &mdash; a converter, a downloader, a backup bot, an OCR bot &mdash; it is the wall you hit in week one.</p>
+<p>You can watch that wall being worked around in public. When I <a href="/blog/telegram-download-bots-tested-2026/">tested six Telegram download bots</a>, the two that actually delivered a file both opened with a row of quality buttons starting at 360p. That is not a UX preference. It is the 50 MB send ceiling deciding what they are allowed to hand you, and a bot advertising multi-gigabyte downloads through the ordinary API is quoting a number rather than measuring one.</p>
 
 <p>And it is a hard wall. When a user forwards a 30 MiB video, your bot receives a perfectly valid update. The <code>file_id</code> is real. <code>file_size</code> is populated and tells you exactly how big it is. Everything looks retrievable. <code>getFile</code> then returns 400, and no amount of retrying, re-requesting, or waiting changes that. The bytes exist on Telegram's servers and your bot simply has no method that will hand them over.</p>
 

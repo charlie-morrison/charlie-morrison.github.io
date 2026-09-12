@@ -210,6 +210,19 @@ function showSummary() {
   const titleIdx = Math.min(Math.floor(sessionStats.total / SUMMARY_INTERVAL) - 1, i18n.funTitles.length - 1);
   document.getElementById('summary-title').textContent = i18n.funTitles[titleIdx];
 
+  // Play-depth signal. Added 2026-09-12 because the only depth event we had was
+  // `pack_cta_view`, which is also the offer — so 0 of them over 180 days could
+  // mean "nobody plays 20 rounds" OR "the gate is set wrong", and we could not
+  // tell which. This fires at every summary (every 10 rounds), so the next read
+  // can size the drop-off before anyone touches PACK_CTA_AFTER.
+  try {
+    gtag('event', 'party_game_summary', {
+      rounds: sessionStats.total,
+      surface: tg ? 'telegram' : 'browser',
+      lang: isEn ? 'en' : 'uk'
+    });
+  } catch (e) {}
+
   maybeShowPackCta();
 
   showScreen('summary');

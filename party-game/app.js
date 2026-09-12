@@ -1,5 +1,10 @@
 // Telegram WebApp
 const tg = window.Telegram?.WebApp;
+// `tg` alone is NOT a surface test: telegram-web-app.js is loaded on every visit,
+// so window.Telegram.WebApp exists in a plain browser too and every event was
+// reporting surface:'telegram'. initData is empty outside Telegram — that is the
+// real test, and it is the one party_game_open in index.html already used.
+const inTelegram = !!(window.Telegram?.WebApp?.initData);
 if (tg) {
   tg.ready();
   tg.expand();
@@ -218,7 +223,7 @@ function showSummary() {
   try {
     gtag('event', 'party_game_summary', {
       rounds: sessionStats.total,
-      surface: tg ? 'telegram' : 'browser',
+      surface: inTelegram ? 'telegram' : 'browser',
       lang: isEn ? 'en' : 'uk'
     });
   } catch (e) {}
@@ -244,14 +249,14 @@ function maybeShowPackCta() {
   box.classList.add('visible');
   if (!packCtaSeen) {
     packCtaSeen = true;
-    try { gtag('event', 'pack_cta_view', { rounds: sessionStats.total, surface: tg ? 'telegram' : 'browser' }); } catch (e) {}
+    try { gtag('event', 'pack_cta_view', { rounds: sessionStats.total, surface: inTelegram ? 'telegram' : 'browser' }); } catch (e) {}
   }
 }
 
 function openPack() {
   const url = 'https://charliemorrison.lemonsqueezy.com/checkout/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98'
             + '?utm_source=miniapp&utm_medium=summary&utm_campaign=telegram&utm_content=party_game';
-  try { gtag('event', 'pack_cta_click', { rounds: sessionStats.total, surface: tg ? 'telegram' : 'browser' }); } catch (e) {}
+  try { gtag('event', 'pack_cta_click', { rounds: sessionStats.total, surface: inTelegram ? 'telegram' : 'browser' }); } catch (e) {}
   if (tg?.openLink) tg.openLink(url); else window.open(url, '_blank');
 }
 

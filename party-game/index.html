@@ -54,6 +54,10 @@ gtag('config','G-SE8T01PLBJ');
     <div class="share-section">
       <button class="share-btn" onclick="shareBot()">📢 Запросити друзів</button>
     </div>
+    <!-- The app was a dead end: 54 opens in 90 days and no way back to anything
+         we wrote. Two contextual links, English UI only (the guides are in
+         English), tagged so the visits are attributable. -->
+    <div id="menu-links" class="menu-links"></div>
   </div>
 
   <!-- Game Screen -->
@@ -139,6 +143,14 @@ if (typeof i18n !== 'undefined') {
   document.querySelector('.rather-btn .game-name').textContent = isEn ? 'Would You Rather?' : 'Що б ти обрав?';
   document.querySelector('.random-btn').textContent = i18n.random;
   document.querySelector('.share-btn').textContent = i18n.invite;
+  if (isEn) {
+    const box = document.getElementById('menu-links');
+    if (box) {
+      box.innerHTML =
+        '<a href="https://charliemorrison.dev/blog/how-to-run-a-telegram-game-night/?src=miniapp">How to run a game night in a group chat</a>' +
+        '<a href="https://charliemorrison.dev/blog/best-telegram-party-games-2026/?src=miniapp">The 3 party formats, tested</a>';
+    }
+  }
   document.querySelector('#next-btn').textContent = i18n.next;
   document.querySelector('.share-question-btn').textContent = i18n.share;
   document.querySelector('.react-btn.drink').textContent = i18n.iDid;

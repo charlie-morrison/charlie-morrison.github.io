@@ -368,3 +368,9 @@ h1 { font-size: 2em; margin: 20px 0 4px; }
   transition: all 0.2s;
 }
 .pack-cta-btn:active { transform: scale(0.97); }
+
+/* Menu footer links back to the site. Quiet by design: the game is the point,
+   these are the exit for someone who wants the written version. */
+.menu-links { margin-top: 22px; display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 400px; }
+.menu-links a { color: var(--hint); font-size: 0.85em; text-decoration: none; border-bottom: 1px solid transparent; padding: 2px 0; }
+.menu-links a:hover, .menu-links a:active { color: var(--btn); border-bottom-color: var(--btn); }

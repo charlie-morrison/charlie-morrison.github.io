@@ -51,6 +51,11 @@ let sessionStats = { total: 0, truth: 0, dare: 0, never: 0, rather: 0, drinks: 0
 const SUMMARY_INTERVAL = 10;
 const SHARE_NUDGE_INTERVAL = 5;
 let lastSummaryAt = 0;   // guards the summary gate (see nextQuestion)
+// Depth markers are scoped to the page load, like sessionStats itself (which is
+// never reset — starting a second game keeps counting up). So each mark can only
+// be reached once anyway; depthSent is the explicit guard for that.
+const DEPTH_MARKS = [1, 3, 5];  // below SUMMARY_INTERVAL on purpose (see nextQuestion)
+const depthSent = {};
 let nudgeDismissed = false;
 
 function pick(arr, mode) {
@@ -140,6 +145,24 @@ function nextQuestion() {
   questionCount++;
   sessionStats.total++;
   document.getElementById('counter').textContent = '#' + questionCount;
+
+  // Early depth markers. Added 2026-09-20: the 8 days party_game_summary has
+  // been live produced 7 opens and exactly 1 summary, i.e. ~86% of players
+  // leave before round 10 — but summary only fires at 10/20/30, so we are
+  // blind over precisely the stretch where they go. n=1 cannot locate a
+  // drop-off, and guessing at PACK_CTA_AFTER off it is the bet this event
+  // exists to replace. Milestones stay below the summary so the two never
+  // double-count; fires once per milestone per session.
+  if (DEPTH_MARKS.indexOf(sessionStats.total) !== -1 && !depthSent[sessionStats.total]) {
+    depthSent[sessionStats.total] = true;
+    try {
+      gtag('event', 'party_game_depth', {
+        rounds: sessionStats.total,
+        surface: inTelegram ? 'telegram' : 'browser',
+        lang: isEn ? 'en' : 'uk'
+      });
+    } catch (e) {}
+  }
 
   let mode = currentMode;
   if (mode === 'random') {

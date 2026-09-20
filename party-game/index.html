@@ -19,7 +19,13 @@ gtag('config','G-SE8T01PLBJ');
     var qs=new URLSearchParams(location.search);
     var src=qs.get('tgWebAppStartParam')||qs.get('startapp')||qs.get('src')||'direct';
     var inTg=!!(window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initData);
-    gtag('event','party_game_open',{source:src,surface:inTg?'telegram':'browser'});
+    // Same language formula as questions.js (telegram-web-app.js is loaded
+    // synchronously above, so initDataUnsafe is already here). Carried on the
+    // open event because the paid pack is English-only: without lang here we
+    // cannot tell "nobody reaches the offer" from "the offer is never eligible".
+    var u=window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initDataUnsafe&&window.Telegram.WebApp.initDataUnsafe.user;
+    var ul=((u&&u.language_code)||navigator.language||'uk').substring(0,2);
+    gtag('event','party_game_open',{source:src,surface:inTg?'telegram':'browser',lang:['uk','ru','be'].indexOf(ul)===-1?'en':'uk'});
   }catch(e){}
 })();
 </script>

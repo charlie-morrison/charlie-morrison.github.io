@@ -1,0 +1,6 @@
+# Backup snapshots taken before edits (AGENTS.md §Бекап перед значною правкою).
+# The convention puts them next to the edited file — but this repo is published
+# by GitHub Pages, so an untracked .bak sitting in party-game/ or blog/ is one
+# `git add -A` away from going live. Ignore them here; they stay on disk as the
+# rollback, they just can never be committed.
+*.bak-*

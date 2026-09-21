@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{domains:["charliemorrison.dev","botcraftgroup.com"]}});</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram Board Game Bots: 22 Tested, 7 Actually Play</title>
+<meta name="description" content="I asked Telegram's search for chess, checkers and backgammon bots. 22 came back, 7 play, and &quot;board game&quot; returns nothing at all. Tested 21 Sep 2026.">
+<meta name="keywords" content="telegram chess bot, telegram checkers bot, telegram backgammon bot, telegram board game bot, play chess on telegram">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-board-game-bots-2026/">
+<meta property="og:title" content="Telegram Board Game Bots: 22 Tested, 7 Actually Play">
+<meta property="og:description" content="The biggest chess bot on Telegram has 98,410 monthly users and sends a message my client cannot render at all. Searching board game returns zero accounts.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-board-game-bots-2026/board-game-bot-census.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Telegram Board Game Bots: 22 Tested, 7 Actually Play", "datePublished": "2026-09-21", "dateModified": "2026-09-21", "image": "https://charliemorrison.dev/blog/telegram-board-game-bots-2026/board-game-bot-census.png", "author": {"@type": "Person", "name": "Charlie Morrison", "url": "https://charliemorrison.dev/about/"}, "publisher": {"@type": "Organization", "name": "Charlie Morrison Digital"}, "mainEntityOfPage": "https://charliemorrison.dev/blog/telegram-board-game-bots-2026/"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is there a chess bot for Telegram?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, several. On 21 September 2026 @RichChessBot, @ChessBot, @ChessNowBot and @chessy_bot all responded. Telegram counted 98,410 monthly users on @RichChessBot, the largest in this census. Most of them are played through inline mode rather than by adding the bot to your group: you type the bot's username in any chat and pick a time control from the results."}}, {"@type": "Question", "name": "Can I add a chess bot to a Telegram group?", "acceptedAnswer": {"@type": "Answer", "text": "Often not. @ChessBot and @ChessNowBot both carry Telegram's bot_nochats flag, which means the platform itself refuses to let them be added to a group. They send the game into a chat as an inline result instead, so the game appears in the group without the bot joining it. The checkers bots in this census, @checkerstgybot and @StartCheckersBot, can be added."}}, {"@type": "Question", "name": "Why does searching board game on Telegram return nothing?", "acceptedAnswer": {"@type": "Answer", "text": "Because Telegram's account search matches names and usernames, not topics. On 21 September 2026 the query board game returned zero accounts and the Russian word for chess returned zero accounts, while the English word chess returned six bots. Search the specific game name in English, such as chess, checkers or backgammon."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+.meta a{color:#667eea;text-decoration:none}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+a{color:#667eea}
+code{background:#f1f3f5;padding:2px 6px;border-radius:4px;font-size:.92em}
+blockquote{border-left:4px solid #cbd5e1;background:#f8fafc;padding:12px 18px;margin:20px 0;border-radius:0 8px 8px 0;color:#334155}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box.pack{background:linear-gradient(135deg,#f6ad5510,#dd6b2010);border-color:#dd6b20}
+.cta-box.pack h3{color:#c05621}
+.cta-box.pack a{background:linear-gradient(135deg,#f6ad55,#dd6b20)}
+.cta-box .alt a{background:none;color:#667eea;padding:0;font-weight:600;display:inline;margin:0}
+.cta-box.pack .alt a{background:none;color:#c05621}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:12px;border:1px solid #e5e7eb}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.95em}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f8f9fa}
+td.yes{color:#2b8a3e;font-weight:600;white-space:nowrap}
+td.no{color:#c92a2a;font-weight:600;white-space:nowrap}
+td.mid{color:#b45309;font-weight:600;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:560px){
+h1{font-size:1.6em}
+/* Multi-column tables cannot fit 375px: the last column renders off-screen
+   behind a scroll nobody can see. Stack each row into a labelled card. */
+table{font-size:.92em;margin:16px 0;border:0}
+table thead{position:absolute;left:-9999px}
+table tr{display:block;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:14px;padding:4px 0}
+table td{display:block;width:auto;border:0;padding:6px 14px}
+table td::before{content:attr(data-l);display:block;font-size:.74em;text-transform:uppercase;letter-spacing:.05em;color:#8b8b96;margin-bottom:1px}
+td.yes,td.no,td.mid{white-space:normal}
+}
+.note{background:#fffbea;border-left:4px solid #f0c000;padding:14px 18px;border-radius:8px;margin:24px 0;font-size:.96em}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+
+<h1>Telegram Board Game Bots: 22 Tested, 7 Actually Play</h1>
+<p class="meta">By <a href="/about/">Charlie Morrison</a> &middot; 21 September 2026</p>
+
+<p>A card game in a group chat has one hard problem: everyone has to see their own hand and nobody else&rsquo;s. A board game has the opposite problem. Chess, checkers and backgammon have no secrets at all &mdash; the whole point is that both players stare at the same position. What they need instead is a <em>surface</em>: one picture of the board that changes after every move, sitting somewhere two people can both reach.</p>
+
+<p>Telegram gives a bot three ways to build that surface, and the three families I tested each picked a different one. On the evening of 21 September 2026 I asked Telegram&rsquo;s own search which board game bots exist, messaged every one it returned, and wrote down what happened. Same method as the <a href="/blog/telegram-card-game-bots-2026/">card game census</a> two nights earlier.</p>
+
+<p><strong>22 bots came back. 7 play a game. 8 never answered, at twelve seconds or at forty.</strong> The biggest one has 98,410 monthly users and replies with a message my client cannot render a single character of. And the most obvious search term in the whole set &mdash; &ldquo;board game&rdquo; &mdash; returns zero accounts.</p>
+
+<figure>
+<a href="board-game-bot-census.png"><img src="board-game-bot-census.png" alt="Terminal output of a Telegram bot census: ten search queries returning 22 board game bot accounts, then a verdict for each probed bot with Telegram's monthly active user count, the inline test result, the privacy flag and the first line of its reply."></a>
+<figcaption>The whole run: what Telegram&rsquo;s account search returned per query, then what each bot did when messaged. MAU is Telegram&rsquo;s own field. Every verdict comes from the recorded replies, not from a bot&rsquo;s description. Tap the image for full size.</figcaption>
+</figure>
+
+<h2>How the list was built</h2>
+
+<p>Bot directories keep an entry alive for years after the server behind it has stopped paying rent. So this list did not come from a directory. It came from the platform: the Telegram search box calls an API method named <code>contacts.search</code>, and that method only returns accounts that exist at the moment you ask.</p>
+
+<p>Ten queries, fixed in writing before anything was measured: <code>chess</code>, <code>chess bot</code>, <code>шахматы</code>, <code>шахи</code>, <code>checkers</code>, <code>шашки</code>, <code>backgammon</code>, <code>нарды</code>, <code>domino</code>, <code>board game</code>. Each returned up to fifty accounts; I kept the bots and threw away the humans and the groups. That gave 22 distinct bot accounts.</p>
+
+<p>Five I never messaged, because their own names said what they were: two Domino&rsquo;s Pizza ordering bots, a gift-trading tool called <code>@LIQUID_checkers_bot</code>, a Google Sheets checker, and <code>@chessybot</code> &mdash; called &ldquo;Chest 🐝&rdquo;, one letter from the real <code>@chessy_bot</code>, nothing to do with chess. The remaining 17 each got a private <code>/start</code>, then their own registered game command if they had one, then an inline query as a liveness control. Anything silent at twelve seconds got a second pass at forty.</p>
+
+<h2>The word that finds nothing</h2>
+
+<p>Before any bot answered, the search itself said something. <code>шахматы</code>, the Russian word for chess &mdash; the single most-typed chess word in Telegram&rsquo;s largest language region &mdash; returned <strong>zero accounts</strong>. Not zero bots. Zero accounts of any kind. <code>board game</code> returned zero as well. <code>шахи</code>, the Ukrainian word, returned three accounts and no bots.</p>
+
+<p>Meanwhile <code>chess</code> returned six bots and <code>chess bot</code> returned nine. The bots exist; the Cyrillic query cannot see them. That is not censorship or a regional block, it is how the method works: <code>contacts.search</code> matches usernames and display names, and every chess bot in this census named itself in Latin script. <code>@checkerstgybot</code> is the exception that proves it &mdash; it calls itself &ldquo;Шашки в Телеграмм&rdquo; and it is the only bot the query <code>шашки</code> found.</p>
+
+<p>Then there is <code>domino</code>. Two bots, both pizza: <code>@DominosUA_official_bot</code> and <code>@Dominos_UA_Bot</code>. No domino game on that shelf at all &mdash; the same trap the card census hit, where the Russian word for &ldquo;cards&rdquo; returned fuel-card sellers. The generic word belongs to whoever commercialised it first, and games lose that fight.</p>
+
+<div class="note"><strong>If you are looking for one of these games:</strong> type the English name of the specific game. Not &ldquo;board game&rdquo;, not the Cyrillic name, not &ldquo;domino&rdquo;. <code>chess</code>, <code>checkers</code> and <code>backgammon</code> are the three words that return actual games.</div>
+
+<h2>The biggest bot sends a message I cannot read</h2>
+
+<p><code>@RichChessBot</code> carries 98,410 monthly users on Telegram&rsquo;s own counter &mdash; 118 times the next-largest bot in this census. Its description promises chess &ldquo;using Telegram&rsquo;s revolutionary rich text formatting&rdquo;, and says it works in groups and channels.</p>
+
+<p>It answered <code>/start</code> in under twelve seconds. The reply contained <strong>zero characters of text, zero formatting entities and zero buttons.</strong> Its <code>/games</code> command returned exactly the same thing. What the message did carry was a media object that the MTProto library I use reports as <code>messageMediaUnsupported</code>, which Telegram&rsquo;s API reference defines in one line: &ldquo;<a href="https://core.telegram.org/constructor/messageMediaUnsupported" rel="nofollow">Current version of the client does not support this media type</a>.&rdquo;</p>
+
+<p>That is not a dead bot and it is not an empty message. The bot is sending something built on a newer API layer than my reader understands, and the reader is doing the correct thing: refusing to guess. In an up-to-date official Telegram app, those 98,410 people are presumably seeing a chessboard.</p>
+
+<p>It still matters. If you open this bot in an old client, on a desktop build you have not updated, or through a third-party app, you may get a blank message and conclude it is broken. It isn&rsquo;t &mdash; your client is behind. And anything that reads Telegram programmatically, from an archive to an accessibility tool, sees nothing here at all.</p>
+
+<p>I logged this as &ldquo;runs a game&rdquo; rather than &ldquo;silent&rdquo;, and that distinction is the whole discipline of this census. A reply you cannot parse is still a reply.</p>
+
+<h2>Chess is played through inline mode, not in your group</h2>
+
+<p>Here is the structural finding, and it surprised me. <code>@ChessBot</code> and <code>@ChessNowBot</code> both carry a typed platform flag called <code>bot_nochats</code>. That flag means Telegram itself will refuse to let you add the bot to a group. You <em>cannot</em> put them in your chat, no matter what admin rights you offer.</p>
+
+<p>They are not crippled by that. They use <a href="https://core.telegram.org/bots/inline" rel="nofollow">inline mode</a> instead. You type the bot&rsquo;s username in any chat &mdash; a group, a channel, a DM &mdash; and its results appear above your keyboard. <code>@ChessNowBot</code> offered me three: &ldquo;Bullet (1|0)&rdquo;, &ldquo;Blitz (3|2)&rdquo; and &ldquo;Rapid (10|5)&rdquo;, each one a ready-made game invitation, with the sample text &ldquo;Creating a gaming session&rdquo;. Its <code>/start</code> reply spells out the trick explicitly: type <code>@ChessNowBot</code> and a space, and &ldquo;the first person to click Join&rdquo; becomes your opponent.</p>
+
+<p><code>@chessy_bot</code> takes it further and is the most interesting bot in the census. It answered <strong>nothing</strong> to <code>/start</code>, at twelve seconds and at forty. By the rules of every previous census I have run, that is a silent bot. But its inline query came back with two live results, each one a rendered board: &ldquo;White (bottom): Charlie &mdash; waiting for a black side.&rdquo; Its own description says it: <em>works inline only</em>.</p>
+
+<p>So silence in a private message is not a verdict here. That is the mirror image of a mistake I made in this series back on 16 September, when I read an inline <em>timeout</em> as proof that a bot was switched off and had to correct three published posts. Both errors come from the same place: treating one channel&rsquo;s silence as a fact about the whole server.</p>
+
+<p>Why does chess, a game with no hidden information, end up inline anyway? Because the bot never needs to read your group. A <a href="https://core.telegram.org/constructor/keyboardButtonSwitchInline" rel="nofollow">switch-inline button</a> lets the game be <em>sent into</em> a chat rather than hosted inside it: nothing joins, nothing gets admin rights, nothing sees the other 400 messages. That is the opposite of the party and word game bots in this series, which have to be in the room to referee it.</p>
+
+<div class="cta-box">
+<h3>Want a round without adding a bot?</h3>
+<p>The free Party Game runs inside Telegram itself, so there&rsquo;s nothing to add to your group, no admin rights, and nothing reading the chat: Would You Rather, Never Have I Ever, Truth or Dare and quiz rounds, from two players up.</p>
+<a href="https://t.me/charlie_party_bot/partygame?startapp=boardgame">Open the Party Game</a>
+<span class="alt">No Telegram? It runs in a browser too: <a href="https://charliemorrison.dev/party-game/?src=boardgame">charliemorrison.dev/party-game</a></span>
+</div>
+
+<h2>Checkers is the family that still joins your group</h2>
+
+<p>Checkers was the only query that returned bots you can actually add to a chat, and it returned two working ones.</p>
+
+<p><code>@checkerstgybot</code> is Russian-language, calls itself version 2.1, and sent a menu with a &ldquo;👥 Добавить в группу&rdquo; button wired to a <code>?startgroup=</code> link &mdash; the standard add-to-group invite. Its inline query returned a live board rendered as text: &ldquo;Charlie ⚪ 🆚 ❔❔❔ ⚫ / Ходит: 👉 Charlie&rdquo;. It also carries the <code>bot_chat_history</code> flag, which means <strong>privacy mode is off</strong>: once in your group, it receives every message, not just the ones addressed to it. That is normal for a bot that watches for moves typed as plain text, and it is still worth knowing before you add it. Telegram explains the setting in its <a href="https://core.telegram.org/bots/features" rel="nofollow">bot features guide</a>.</p>
+
+<p><code>@StartCheckersBot</code> is the English one, and it took the third route: a <a href="https://en.wikipedia.org/wiki/Draughts" rel="nofollow">draughts</a> Mini App. Its <code>/start</code> offers &ldquo;🌎 Play Online&rdquo;, which opens a web view hosted on a Cloudflare Workers domain, plus a &ldquo;🤗 Play with Friend&rdquo; switch-inline button. Its inline results are &ldquo;New Classic Checkers Game&rdquo; and &ldquo;New <a href="https://en.wikipedia.org/wiki/Russian_draughts" rel="nofollow">Russian Checkers</a> Game&rdquo; &mdash; two rule sets, which is more care than most of this census showed. Privacy mode is on.</p>
+
+<p>So all three surfaces appear in one family: a group-resident bot, an inline invitation, and a Mini App web view. If you want a board game running <em>inside</em> your group chat rather than sent into it, checkers is currently the only one of these four games where that works.</p>
+
+<h2>Backgammon: one game, one password desk, one scoreboard</h2>
+
+<p>The <code>backgammon</code> query returned four bots and exactly one of them plays <a href="https://en.wikipedia.org/wiki/Backgammon" rel="nofollow">backgammon</a>.</p>
+
+<p><code>@NardyOnlineBot</code> &mdash; 836 monthly users, the only other bot in this census with a visible user count &mdash; is the real one. It opened with &ldquo;Welcome to the legendary strategy game&rdquo;, offered a rules button and a language switch, and said you can play contacts or a bot, that games are saved when you close the window, and that they continue across devices. That last detail tells you it is a Mini App with server-side state, not a chat game.</p>
+
+<p><code>@backgammon_verify_bot</code> sounds like a game and is a help desk: &ldquo;This bot verifies your account and helps reset your password in Backgammon Online.&rdquo; It is the support appendix of a website, sitting in the game&rsquo;s search results.</p>
+
+<p><code>@kalian_nards_championship_bot</code> never answered, but its registered command list gives it away: <code>/endgame</code>, <code>/today</code>, <code>/statistic</code>, <code>/playerstable</code>, <code>/addquote</code>. That is not a game engine. That is a scoreboard for a real-life backgammon championship among friends, where the games happen on an actual board and the bot only keeps the table. Its privacy mode is off, which fits &mdash; it needs to read the chat.</p>
+
+<p><code>@backgammon_world_bot</code> pointed at a site called BACKGAMMON.INK and never replied to anything.</p>
+
+<h2>The eight that never answered</h2>
+
+<p>Eight of the 17 I messaged were silent at twelve seconds and again at forty: <code>@chess_bot</code>, <code>@chess_botbot_bot</code>, <code>@chessplatform_bot</code>, <code>@chesss_bot</code>, <code>@ninja_chess_bot</code>, <code>@CryptoCheckersGameBot</code>, <code>@backgammon_world_bot</code> and <code>@kalian_nards_championship_bot</code>.</p>
+
+<p>The pattern in the handles is the giveaway: <code>@chess_bot</code>, <code>@chesss_bot</code>, <code>@chess_botbot_bot</code>. Name squats and abandoned starts &mdash; short, obvious usernames claimed early, kept forever, serving nothing. <code>@chessplatform_bot</code> still has &ldquo;a proper description with features will go here later&rdquo; as its bio, in Russian. <code>@checkersBot</code>, which did answer, answered with &ldquo;The bot is currently under development. Would you like to be notified when it&rsquo;s ready?&rdquo;</p>
+
+<p>Two of the eight produced an inline <strong>timeout</strong> &mdash; Telegram forwarded a query to their server and waited for a reply that never came. That is the closest thing to evidence of a switched-off backend this test can produce, but after September&rsquo;s correction I record it as a reading, not a verdict. The other six have inline mode disabled, so there is no signal about them in either direction.</p>
+
+<p>Compare the ratios across this series: 8 of 17 silent for board games, 10 of 26 for card games, 29 of 43 for spy games. Board and card game bots survive; the novelty party bots do not. A chess bot does one durable thing forever, which makes it cheap to keep running.</p>
+
+<div class="cta-box pack">
+<h3>For a group that would rather not add a bot</h3>
+<p>The Telegram Party Pack is 255 group-chat prompts &mdash; 45 Never Have I Ever statements, 30 Would You Rather dilemmas, 110 Truth or Dare &mdash; as copy-paste text and ready-made poll blocks. There are no board games in it. It&rsquo;s for the nights when you want the chat itself to play, without handing a stranger&rsquo;s bot a seat in it.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-board-game-bots-2026">Get the pack &mdash; $9.99</a>
+<span class="alt">Or see which <a href="/blog/telegram-card-game-bots-2026/">card game bots</a> still deal.</span>
+</div>
+
+<h2>What I could not test</h2>
+
+<p><strong>No game was played to the end.</strong> I read menus, opened inline results and got one board rendered as text. A bot can present a flawless opening screen and still lose your position on move nine.</p>
+
+<p><strong>The group pass did not run.</strong> Everything about group behaviour here is read from Telegram&rsquo;s typed flags &mdash; <code>bot_nochats</code> and <code>bot_chat_history</code> &mdash; not from watching a bot referee a live game. Those flags are the platform&rsquo;s own record, so they are reliable about permissions and silent about quality.</p>
+
+<p><strong>Silent is not dead.</strong> Six of the eight quiet ones have inline mode switched off, so this test has no channel to reach them at all. <code>@chessy_bot</code> is the standing proof that a bot can ignore private messages and still work perfectly.</p>
+
+<p><strong>The MAU field is patchy.</strong> Telegram exposed a monthly user count for only two of the 22. No number is not evidence of a small bot.</p>
+
+<h2>If you just want to play tonight</h2>
+
+<ol>
+<li><strong>Chess with one person, in any chat: <code>@ChessNowBot</code>.</strong> Type its username and a space in the chat you want to play in, pick Bullet, Blitz or Rapid, and the first person to click Join is your opponent. You never add anything to the group.</li>
+<li><strong>Chess with the most users behind it: <code>@RichChessBot</code>.</strong> 98,410 monthly users, works in groups and channels &mdash; but update your Telegram app first, because on an old client its board may arrive as a blank message.</li>
+<li><strong>Checkers actually inside your group: <code>@checkerstgybot</code></strong> (Russian interface, privacy mode off, so it reads the whole chat) <strong>or <code>@StartCheckersBot</code></strong> (English, Mini App, privacy mode on).</li>
+<li><strong>Backgammon: <code>@NardyOnlineBot</code>.</strong> The only one of four that plays. Games survive closing the window.</li>
+<li><strong>Send <code>/start</code> in private and wait fifteen seconds</strong> before you commit to anything &mdash; with the one caveat this census added: if the bot&rsquo;s description says it works inline, try the inline query before writing it off.</li>
+</ol>
+
+<p>If you are planning a whole evening rather than one match, <a href="/blog/how-to-run-a-telegram-game-night/">the game night guide</a> covers what breaks first in a busy chat, and <a href="/blog/best-telegram-party-games-2026/">the party games list</a> has games that need no bot at all. For two people specifically, <a href="/blog/telegram-games-for-2-players/">the two-player list</a> is the closer match to this one.</p>
+
+<p>Bots change fast, so the date at the top matters more than the ranking. Fifteen seconds of <code>/start</code> beats any list, this one included.</p>
+
+<p><a class="back" href="/blog/">&larr; Back to all posts</a></p>
+
+</article>
+<footer>
+<p>&copy; 2026 <a href="/">Charlie Morrison Digital</a> &middot; <a href="/about/">About</a> &middot; <a href="/blog/">Blog</a></p>
+</footer>
+</body>
+</html>

@@ -29,7 +29,11 @@ gtag('config','G-SE8T01PLBJ');
   }catch(e){}
 })();
 </script>
-<script src='//libtl.com/sdk.js' data-zone='10917064' data-sdk='show_10917064'></script>
+<!-- async: the ad SDK is only called at round 10 behind a typeof check (app.js),
+     but loaded sync it held the whole menu back until 140 KB arrived from a third
+     party: +3 s of blank screen at a 3 s SDK delay (measured 2026-09-27), at the
+     exact stage where 2 of 4 players left without tapping a game. -->
+<script async src='//libtl.com/sdk.js' data-zone='10917064' data-sdk='show_10917064'></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>

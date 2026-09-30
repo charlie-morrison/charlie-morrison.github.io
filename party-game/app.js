@@ -301,7 +301,9 @@ function openShare(url, text, kind) {
   let shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}`;
   if (text) shareUrl += `&text=${encodeURIComponent(text)}`;
   try { gtag('event', 'party_game_share', { kind: kind, surface: inTelegram ? 'telegram' : 'browser' }); } catch (e) {}
-  if (tg?.openTelegramLink) {
+  // Branch on initData, not on the method: telegram-web-app.js defines
+  // openTelegramLink in a plain browser too, where it replaces the game tab.
+  if (inTelegram && tg?.openTelegramLink) {
     tg.openTelegramLink(shareUrl);
   } else {
     window.open(shareUrl, '_blank');

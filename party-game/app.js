@@ -288,19 +288,19 @@ function continueGame() {
   nextQuestion();
 }
 
-function shareResults() {
-  const userId = tg?.initDataUnsafe?.user?.id || '';
-  const name = tg?.initDataUnsafe?.user?.first_name || 'Хтось';
-  const refLink = `https://t.me/charlie_party_bot/partygame`;
+// Every share goes through t.me/share/url, inside Telegram too. The old
+// in-Telegram path was switchInlineQuery(''), which pastes "@charlie_party_bot"
+// and waits for the bot's inline answer — but the bot backend was switched off
+// on 28.05, so the query times out and nothing is shared (measured 30.09:
+// 10 s timeout twice, control @gif 50 results in 0.3 s). The question text built
+// for that path was never used. Links point at the Mini App, not the bot's DM
+// (a dead /start). startapp=share_* lands in party_game_open.source.
+const APP_LINK = `https://t.me/${BOT_USERNAME}/partygame`;
 
-  let text = `🎲 ${name} ${i18n.played} ${sessionStats.total} ${i18n.rounds}\n`;
-  if (sessionStats.truth) text += `🎯 ${sessionStats.truth} ${isEn ? 'truths' : 'правд'}\n`;
-  if (sessionStats.dare) text += `🔥 ${sessionStats.dare} ${isEn ? 'dares' : 'дій'}\n`;
-  if (sessionStats.never) text += `🍺 ${sessionStats.never} "${isEn ? 'never' : 'ніколи'}" (${i18n.confessions}: ${sessionStats.drinks})\n`;
-  if (sessionStats.rather) text += `⚖️ ${sessionStats.rather} ${isEn ? 'tough choices' : 'складних виборів'}\n`;
-  text += `\n${i18n.playToo} ${refLink}`;
-
-  const shareUrl = `https://t.me/share/url?text=${encodeURIComponent(text)}`;
+function openShare(url, text, kind) {
+  let shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}`;
+  if (text) shareUrl += `&text=${encodeURIComponent(text)}`;
+  try { gtag('event', 'party_game_share', { kind: kind, surface: inTelegram ? 'telegram' : 'browser' }); } catch (e) {}
   if (tg?.openTelegramLink) {
     tg.openTelegramLink(shareUrl);
   } else {
@@ -308,33 +308,33 @@ function shareResults() {
   }
 }
 
-function shareBot() {
+function shareResults() {
   const userId = tg?.initDataUnsafe?.user?.id || '';
-  const refLink = `https://t.me/${BOT_USERNAME}?start=ref_${userId}`;
-  const text = isEn ? '🎲 Play Truth or Dare with friends!' : '🎲 Грай у Правду чи Дію з друзями!';
+  const name = tg?.initDataUnsafe?.user?.first_name || (isEn ? 'Someone' : 'Хтось');
 
-  if (tg?.switchInlineQuery) {
-    // Share via inline
-    tg.switchInlineQuery('', ['users', 'groups', 'channels']);
-  } else {
-    window.open(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent(text)}`, '_blank');
-  }
+  let text = `🎲 ${name} ${i18n.played} ${sessionStats.total} ${i18n.rounds}\n`;
+  if (sessionStats.truth) text += `🎯 ${sessionStats.truth} ${isEn ? 'truths' : 'правд'}\n`;
+  if (sessionStats.dare) text += `🔥 ${sessionStats.dare} ${isEn ? 'dares' : 'дій'}\n`;
+  if (sessionStats.never) text += `🍺 ${sessionStats.never} "${isEn ? 'never' : 'ніколи'}" (${i18n.confessions}: ${sessionStats.drinks})\n`;
+  if (sessionStats.rather) text += `⚖️ ${sessionStats.rather} ${isEn ? 'tough choices' : 'складних виборів'}\n`;
+  text += `\n${i18n.playToo}`;
+  openShare(`${APP_LINK}?startapp=share_results`, text, 'results');
+}
+
+function shareBot() {
+  const text = isEn ? '🎲 Play Truth or Dare with friends!' : '🎲 Грай у Правду чи Дію з друзями!';
+  openShare(`${APP_LINK}?startapp=share_invite`, text, 'invite');
 }
 
 function shareQuestion() {
   let text = '';
   if (Array.isArray(currentQuestion)) {
-    text = `⚖️ Що б ти обрав?\n🅰️ ${currentQuestion[0]}\n🅱️ ${currentQuestion[1]}`;
+    text = isEn ? `⚖️ Would you rather?\n🅰️ ${currentQuestion[0]}\n🅱️ ${currentQuestion[1]}`
+                : `⚖️ Що б ти обрав?\n🅰️ ${currentQuestion[0]}\n🅱️ ${currentQuestion[1]}`;
   } else {
     text = currentQuestion;
   }
-  text += isEn ? `\n\n🎲 Play → @${BOT_USERNAME}` : `\n\n🎲 Грати → @${BOT_USERNAME}`;
-
-  if (tg?.switchInlineQuery) {
-    tg.switchInlineQuery('', ['users', 'groups', 'channels']);
-  } else {
-    window.open(`https://t.me/share/url?text=${encodeURIComponent(text)}`, '_blank');
-  }
+  openShare(`${APP_LINK}?startapp=share_question`, text, 'question');
 }
 
 // Init

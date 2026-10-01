@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true});</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Bingo for Telegram Groups: Cards, Caller, Check</title>
+<meta name="description" content="Play 75-ball bingo in a Telegram group without a bot: one link deals every player a card, the host draws numbers, and any claimed bingo is checked by name. Free, no signup.">
+<link rel="canonical" href="https://charliemorrison.dev/bingo/">
+<meta property="og:title" content="Free Bingo for Telegram Groups: Cards, Caller, Check">
+<meta property="og:description" content="One link in the group chat deals every player their own card. No bot, no deposit, no signup.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#111827;color:#e5e7eb;min-height:100vh;padding:16px;display:flex;flex-direction:column;align-items:center}
+main{width:100%;max-width:440px;display:flex;flex-direction:column;gap:14px}
+h1{font-size:24px;text-align:center;margin-top:6px}
+.sub{color:#9ca3af;font-size:14px;text-align:center;line-height:1.45}
+.box{background:#1f2937;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.box h2{font-size:16px}
+label{font-size:13px;color:#9ca3af}
+input{width:100%;padding:11px 12px;border-radius:10px;border:1px solid #374151;background:#111827;color:#f9fafb;font-size:16px}
+button{background:#6366f1;color:#fff;border:0;border-radius:10px;padding:12px 14px;font-size:15px;font-weight:600;cursor:pointer}
+button.sec{background:#374151}
+button:active{transform:scale(.97)}
+button:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.code{font-family:ui-monospace,Menlo,monospace;font-size:22px;letter-spacing:3px;text-align:center;color:#fde68a}
+.link{font-family:ui-monospace,Menlo,monospace;font-size:13px;word-break:break-all;background:#111827;padding:8px;border-radius:8px}
+.card{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.card .h{font-weight:800;text-align:center;color:#a5b4fc;font-size:18px;padding:4px 0}
+.card .c{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#111827;border:2px solid #374151;border-radius:9px;font-size:19px;font-weight:700;cursor:pointer;user-select:none}
+.card .c.m{background:#4f46e5;border-color:#818cf8;color:#fff}
+.card .c.d{border-color:#34d399}
+.card .c.free{background:#065f46;border-color:#34d399;font-size:12px}
+.ball{font-size:46px;font-weight:800;text-align:center;color:#fde68a}
+.hist{display:flex;flex-wrap:wrap;gap:4px}
+.hist span{background:#111827;border-radius:6px;padding:3px 6px;font-size:13px;font-family:ui-monospace,Menlo,monospace}
+.ok{color:#34d399;font-weight:700}.no{color:#f87171;font-weight:700}
+.hide{display:none}
+.foot{font-size:13px;color:#9ca3af;text-align:center;line-height:1.6;margin:10px 0 20px}
+.foot a{color:#a5b4fc}
+</style>
+</head>
+<body>
+<main>
+<h1>🎱 Bingo for a Telegram group</h1>
+<p class="sub">No bot, no deposit, no signup. The host starts a game and drops one link in the chat. Everyone gets their own 75-ball card from their name. The host calls numbers and checks any "BINGO!" by name.</p>
+
+<section id="start" class="box">
+<h2>Host a game</h2>
+<button id="newGame">Start a new game</button>
+<label for="joinCode">…or open a card for a game code someone posted</label>
+<div class="row"><input id="joinCode" placeholder="Game code, e.g. K7Q2MX" maxlength="6" autocapitalize="characters"><button class="sec" id="joinBtn">Open</button></div>
+</section>
+
+<section id="host" class="box hide">
+<h2>You are the caller</h2>
+<div class="code" id="hostCode"></div>
+<label>Post this in the group chat:</label>
+<div class="link" id="hostLink"></div>
+<div class="row"><button class="sec" id="copyLink">Copy link</button><button class="sec" id="shareLink">Share to Telegram</button></div>
+<div class="ball" id="ball">–</div>
+<div class="row"><button id="draw">Draw next number</button><button class="sec" id="copyBall">Copy call</button></div>
+<label id="histLabel">Called: 0 of 75</label>
+<div class="hist" id="hist"></div>
+<h2 style="margin-top:6px">Someone shouted BINGO?</h2>
+<div class="row"><input id="checkName" placeholder="Their name, exactly as typed"><button class="sec" id="checkBtn">Check</button></div>
+<div id="checkOut"></div>
+<button class="sec" id="endGame">End game</button>
+</section>
+
+<section id="player" class="box hide">
+<h2>Your card · game <span id="pCode"></span></h2>
+<div id="nameRow"><label for="pName">Your name (the caller checks your card by it)</label>
+<div class="row"><input id="pName" placeholder="e.g. Olena" maxlength="24"><button id="pGo">Get my card</button></div></div>
+<div id="pCard" class="card hide"></div>
+<p class="sub hide" id="pHint">Tap a number when the caller calls it. Five in a row, column or diagonal → shout BINGO in the chat.</p>
+</section>
+
+<p class="foot">How it works and why we built it: <a href="/blog/telegram-bingo-bots-2026/">we tested 36 Telegram bingo bots</a>.<br>
+Want a party game that runs inside Telegram? <a href="/party-game/?src=bingo">Free Party Game Mini App</a>.<br>
+<a href="/">Charlie Morrison Digital</a></p>
+</main>
+<script>
+(function(){
+var A="ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+function fnv(s){var h=2166136261>>>0;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return h}
+function rng(seed){var a=seed>>>0;return function(){a=(a+0x6D2B79F5)>>>0;var t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
+function norm(n){return n.trim().replace(/\s+/g," ").toLowerCase()}
+function card(code,name){var r=rng(fnv(code.toUpperCase()+"|"+norm(name))),cols=[];
+ for(var c=0;c<5;c++){var pool=[];for(var n=c*15+1;n<=c*15+15;n++)pool.push(n);
+  for(var i=pool.length-1;i>0;i--){var j=Math.floor(r()*(i+1)),t=pool[i];pool[i]=pool[j];pool[j]=t}
+  cols.push(pool.slice(0,5))}
+ cols[2][2]=0;return cols} // cols[c][row]; 0 = free centre
+function letter(n){return "BINGO"[Math.floor((n-1)/15)]}
+function lines(cols,has){var L=[],r,c;
+ for(r=0;r<5;r++){var ok=true;for(c=0;c<5;c++)if(!has(cols[c][r]))ok=false;if(ok)L.push("row "+(r+1))}
+ for(c=0;c<5;c++){var ok2=true;for(r=0;r<5;r++)if(!has(cols[c][r]))ok2=false;if(ok2)L.push("column "+"BINGO"[c])}
+ var d1=true,d2=true;for(r=0;r<5;r++){if(!has(cols[r][r]))d1=false;if(!has(cols[4-r][r]))d2=false}
+ if(d1)L.push("diagonal ↘");if(d2)L.push("diagonal ↙");return L}
+function $(id){return document.getElementById(id)}
+function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+function grid(cols,cellCls){var g=el("div","card");"BINGO".split("").forEach(function(l){g.appendChild(el("div","h",l))});
+ for(var r=0;r<5;r++)for(var c=0;c<5;c++){var n=cols[c][r];g.appendChild(el("div","c"+(n===0?" free":cellCls(n)),n===0?"FREE":String(n)))}return g}
+function show(id){["start","host","player"].forEach(function(s){$(s).classList.toggle("hide",s!==id)})}
+function ev(n,p){try{gtag("event",n,p||{})}catch(e){}}
+function base(){return location.origin+location.pathname}
+function newCode(){var b=new Uint32Array(6),s="";crypto.getRandomValues(b);for(var i=0;i<6;i++)s+=A[b[i]%A.length];return s}
+function key(code){return "bingo_host_"+code}
+function hostLoad(code){try{return JSON.parse(localStorage.getItem(key(code)))||[]}catch(e){return[]}}
+function hostSave(code,d){localStorage.setItem(key(code),JSON.stringify(d))}
+var H=null;
+function renderHost(){var d=hostLoad(H);$("hostCode").textContent=H;$("hostLink").textContent=base()+"?g="+H;
+ $("ball").textContent=d.length?letter(d[d.length-1])+"-"+d[d.length-1]:"–";
+ $("histLabel").textContent="Called: "+d.length+" of 75";
+ var hs=$("hist");hs.textContent="";d.slice().reverse().forEach(function(n){hs.appendChild(el("span",null,letter(n)+"-"+n))});
+ $("draw").disabled=d.length>=75}
+function host(code){H=code;localStorage.setItem("bingo_last_host",code);show("host");renderHost()}
+$("newGame").onclick=function(){var c=newCode();hostSave(c,[]);ev("bingo_host",{});host(c)};
+$("draw").onclick=function(){var d=hostLoad(H),left=[];for(var n=1;n<=75;n++)if(d.indexOf(n)<0)left.push(n);
+ if(!left.length)return;var b=new Uint32Array(1);crypto.getRandomValues(b);d.push(left[b[0]%left.length]);hostSave(H,d);
+ ev("bingo_draw",{count:d.length});renderHost()};
+function copy(t,btn){var done=function(){var o=btn.textContent;btn.textContent="Copied";setTimeout(function(){btn.textContent=o},1200)};
+ if(navigator.clipboard)navigator.clipboard.writeText(t).then(done,function(){prompt("Copy:",t)});else prompt("Copy:",t)}
+$("copyLink").onclick=function(){copy("Bingo! Open your card: "+base()+"?g="+H,this)};
+$("shareLink").onclick=function(){ev("bingo_share",{});window.open("https://t.me/share/url?url="+encodeURIComponent(base()+"?g="+H)+"&text="+encodeURIComponent("Bingo! Open your card, type your name, and I'll call the numbers here."),"_blank")};
+$("copyBall").onclick=function(){var d=hostLoad(H);if(d.length){var n=d[d.length-1];copy(letter(n)+"-"+n,this)}};
+$("checkBtn").onclick=function(){var nm=$("checkName").value;if(!norm(nm))return;var d=hostLoad(H),cols=card(H,nm);
+ var has=function(n){return n===0||d.indexOf(n)>=0},L=lines(cols,has);ev("bingo_check",{won:L.length>0});
+ var out=$("checkOut");out.textContent="";
+ out.appendChild(L.length?el("p","ok","BINGO is real: "+L.join(", ")):el("p","no","Not yet: no full line with the numbers called so far."));
+ var g=grid(cols,function(n){return has(n)?" m":""});g.style.marginTop="8px";out.appendChild(g)};
+$("endGame").onclick=function(){if(confirm("End this game? The called numbers are forgotten.")){localStorage.removeItem(key(H));localStorage.removeItem("bingo_last_host");location.href=base()}};
+var P=null;
+function renderCard(name){var cols=card(P,name),mk="bingo_marks_"+P+"_"+norm(name),m;
+ try{m=JSON.parse(localStorage.getItem(mk))||[]}catch(e){m=[]}
+ var pc=$("pCard");pc.textContent="";"BINGO".split("").forEach(function(l){pc.appendChild(el("div","h",l))});
+ for(var r=0;r<5;r++)for(var c=0;c<5;c++)(function(n){var d=el("div","c"+(n===0?" free":m.indexOf(n)>=0?" m":""),n===0?"FREE":String(n));
+  if(n)d.onclick=function(){var i=m.indexOf(n);if(i<0)m.push(n);else m.splice(i,1);localStorage.setItem(mk,JSON.stringify(m));d.classList.toggle("m")};pc.appendChild(d)})(cols[c][r]);
+ pc.classList.remove("hide");$("pHint").classList.remove("hide");$("nameRow").classList.add("hide")}
+function player(code){P=code;show("player");$("pCode").textContent=code;var last=localStorage.getItem("bingo_name_"+code);if(last){renderCard(last)}}
+$("pGo").onclick=function(){var nm=$("pName").value;if(!norm(nm))return;localStorage.setItem("bingo_name_"+P,nm);ev("bingo_card",{});renderCard(nm)};
+$("joinBtn").onclick=function(){var c=$("joinCode").value.trim().toUpperCase();if(/^[A-Z0-9]{6}$/.test(c))location.href=base()+"?g="+c};
+var q=new URLSearchParams(location.search).get("g");
+if(q&&/^[A-Za-z0-9]{6}$/.test(q)){q=q.toUpperCase();if(localStorage.getItem(key(q)))host(q);else player(q)}
+else{var lh=localStorage.getItem("bingo_last_host");if(lh&&localStorage.getItem(key(lh)))host(lh)}
+window.__bingo={card:card,lines:lines};
+})();
+</script>
+</body>
+</html>

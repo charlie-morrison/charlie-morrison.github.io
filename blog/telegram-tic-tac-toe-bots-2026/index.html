@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{domains:["charliemorrison.dev","botcraftgroup.com"]}});</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic-Tac-Toe Bots on Telegram: 53 Tested, 9 Let You Play</title>
+<meta name="description" content="53 tic-tac-toe bots from Telegram’s search, messaged 4 Oct 2026: 37 silent, 4 subscription gates, 1 fake anonymous message, and which ones just let you play.">
+<meta name="keywords" content="tic tac toe telegram bot, tic tac toe telegram, xo bot telegram, noughts and crosses telegram, крестики нолики бот телеграм, хрестики нулики бот">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-tic-tac-toe-bots-2026/">
+<meta property="og:title" content="Tic-Tac-Toe Bots on Telegram: 53 Tested, 9 Let You Play">
+<meta property="og:description" content="Most tic-tac-toe bots on Telegram are silent. Four make you subscribe first, and one sends a fake anonymous message whose Block button opens another bot. The biggest one works inline in any chat.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-tic-tac-toe-bots-2026/ttt-bot-census.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Tic-Tac-Toe Bots on Telegram: 53 Tested, 9 Let You Play", "datePublished": "2026-10-05", "dateModified": "2026-10-05", "image": "https://charliemorrison.dev/blog/telegram-tic-tac-toe-bots-2026/ttt-bot-census.png", "author": {"@type": "Person", "name": "Charlie Morrison", "url": "https://charliemorrison.dev/about/"}, "publisher": {"@type": "Organization", "name": "Charlie Morrison Digital"}, "mainEntityOfPage": "https://charliemorrison.dev/blog/telegram-tic-tac-toe-bots-2026/"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the best tic-tac-toe bot on Telegram?", "acceptedAnswer": {"@type": "Answer", "text": "Of 53 tic-tac-toe bots tested on 4 October 2026, @xoBot is by far the most used (133,987 monthly users) and plays against you or a friend with no gate. Its account cannot be added to groups, so in a chat you call it inline: type @xoBot and a space in the message field. For a Ukrainian interface, @ttt_999_bot and @EasyXO_Bot also work inline."}}, {"@type": "Question", "name": "How do you play tic-tac-toe with a friend on Telegram?", "acceptedAnswer": {"@type": "Answer", "text": "Open your chat with the friend, type an inline bot's username followed by a space (for example @xoBot or @ttt_999_bot), pick the game card from the popup and send it. Nobody adds the bot to anything. Without any bot, send a numbered 1-9 grid and take turns replying with a copy that has one number replaced by your mark."}}, {"@type": "Question", "name": "Why does a tic-tac-toe bot ask me to subscribe to a channel?", "acceptedAnswer": {"@type": "Answer", "text": "Some bots use the game to grow channels. In this census four refused to play until you subscribe: three Arabic bots that all point to the same private channel invite, and @XOchatBot, which showed sponsor links and repeated the gate when I pressed 'I did it' without subscribing. Nine other bots let you play with no gate."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+.meta a{color:#667eea;text-decoration:none}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+a{color:#667eea}
+code{background:#f1f3f5;padding:2px 6px;border-radius:4px;font-size:.92em}
+blockquote{border-left:4px solid #cbd5e1;background:#f8fafc;padding:12px 18px;margin:20px 0;border-radius:0 8px 8px 0;color:#334155}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box.pack{background:linear-gradient(135deg,#f6ad5510,#dd6b2010);border-color:#dd6b20}
+.cta-box.pack h3{color:#c05621}
+.cta-box.pack a{background:linear-gradient(135deg,#f6ad55,#dd6b20)}
+.cta-box .alt a{background:none;color:#667eea;padding:0;font-weight:600;display:inline;margin:0}
+.cta-box.pack .alt a{background:none;color:#c05621}
+figure{margin:28px 0}
+figure img{width:100%;border-radius:12px;border:1px solid #e5e7eb}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.95em}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f8f9fa}
+td.yes{color:#2b8a3e;font-weight:600;white-space:nowrap}
+td.no{color:#c92a2a;font-weight:600;white-space:nowrap}
+td.mid{color:#b45309;font-weight:600;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:560px){
+h1{font-size:1.6em}
+/* Multi-column tables cannot fit 375px: the last column renders off-screen
+   behind a scroll nobody can see. Stack each row into a labelled card. */
+table{font-size:.92em;margin:16px 0;border:0}
+table thead{position:absolute;left:-9999px}
+table tr{display:block;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:14px;padding:4px 0}
+table td{display:block;width:auto;border:0;padding:6px 14px}
+table td::before{content:attr(data-l);display:block;font-size:.74em;text-transform:uppercase;letter-spacing:.05em;color:#8b8b96;margin-bottom:1px}
+td.yes,td.no,td.mid{white-space:normal}
+}
+.note{background:#fffbea;border-left:4px solid #f0c000;padding:14px 18px;border-radius:8px;margin:24px 0;font-size:.96em}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+
+<h1>Tic-Tac-Toe Bots on Telegram: 53 Tested, 9 Let You Play</h1>
+<p class="meta">By <a href="/about/">Charlie Morrison</a> &middot; 5 October 2026</p>
+
+<p>Tic-tac-toe is the one game everybody already knows how to play, which also makes it the one game nobody needs a bot to explain. It is even finished as a puzzle: Wikipedia calls it <a href="https://en.wikipedia.org/wiki/Tic-tac-toe" rel="nofollow">&ldquo;a solved game, with a forced draw assuming best play from both players&rdquo;</a>. So a tic-tac-toe bot has exactly two jobs. Give you a board you can tap, and give you somebody to play against. The extras are where this census went wrong.</p>
+
+<p>On 3 October 2026 I typed &ldquo;tic tac toe&rdquo; into Telegram&rsquo;s search, along with nine other phrasings in English, Russian and Ukrainian, and the next night I messaged every bot that came back looking like the game. <strong>60 bot accounts came back. 7 were plainly something else and I never messaged them. Of the 53 I did message, 37 said nothing at twelve seconds and again at forty. 16 answered, and 9 of those 16 let me play without first doing something for them.</strong></p>
+
+<p>The other seven are the interesting part. Four would not play until I subscribed to a channel or a sponsor. One subscribed me to a mailing list. And one opened with an advert, put me straight into a game with a real stranger, and two minutes after the game sent me an insult dressed up as an &ldquo;anonymous message&rdquo;, with a &ldquo;Block&rdquo; button that leads to a different bot.</p>
+
+<figure>
+<a href="ttt-bot-census.png"><img src="ttt-bot-census.png" alt="Terminal output of a Telegram bot census: ten search queries returning tic-tac-toe bot accounts, then a verdict for each of 53 probed bots with its monthly users, inline test and a short piece of evidence, a tally of 16 answered, 37 silent and 9 playable without a gate, and the follow-up button presses" width="1280" loading="lazy"></a>
+<figcaption>The whole run: what Telegram&rsquo;s account search returned for each query, what each bot did when I messaged it, and the buttons I pressed afterwards. Every verdict comes from the recorded replies, not from a bot&rsquo;s name. Tap the image for full size.</figcaption>
+</figure>
+
+<h2>How the list was built</h2>
+
+<p>The list came from the platform, not from a directory. Telegram&rsquo;s search box is an API method called <code>contacts.search</code>, and it only returns accounts that exist right now. I fixed ten queries before measuring anything: <code>tic tac toe</code>, <code>tic tac toe bot</code>, <code>tictactoe</code>, <code>tic tac toe game</code>, <code>noughts and crosses</code>, <code>xo game</code>, <code>xo bot</code>, the Russian <code>крестики нолики</code> and <code>крестики нолики бот</code>, and the Ukrainian <code>хрестики нулики</code>.</p>
+
+<p>Seven accounts were out before I sent a single message, each on its own name or description. One has a tic-tac-toe username and the display name &ldquo;Твоя Девушка&rdquo; (&ldquo;Your Girlfriend&rdquo;). Others were Draw and Guess, a Mafia club sign-up, Web3 quests, rental listings and a bot asking for your phone number. The last is a stack of shopping-channel links with 15,073 monthly users, more than every tic-tac-toe bot in the census except one.</p>
+
+<p>Each of the 53 got the same treatment: <code>/start</code> in a private chat, the bot&rsquo;s own help command if it registered one, and an inline query as a liveness check. Nothing that looked like a shop, a wallet, a deposit or a tournament got pressed. Anything silent at twelve seconds got a second pass at forty. Afterwards I pressed each working bot&rsquo;s own &ldquo;play against the bot&rdquo; button, and sent <code>/off</code> to the bot that had subscribed me to something.</p>
+
+<p>The monthly-user numbers come from a field on the bot&rsquo;s account, <code>bot_active_users</code>, which Telegram&rsquo;s API documents as <a href="https://core.telegram.org/constructor/user" rel="nofollow">&ldquo;Monthly Active Users (MAU) of this bot (may be absent for small bots)&rdquo;</a>. Ten of the 53 show one.</p>
+
+<h2>37 of 53 said nothing, twice</h2>
+
+<p>Most of the list is quiet. Twenty-two of the silent bots never even registered a command menu; the other fifteen registered <code>/start</code>, <code>/help</code>, <code>/newgame</code> or <code>/xo</code> and then didn&rsquo;t answer any of them. The names are almost the same name over and over: <code>@Tic_Tac_Toe_12_Bot</code>, <code>@Tic_Tac_Toe_18_Bot</code>, <code>@Tic_Tac_Toe_GameBot</code>, <code>@tic_tac_toeeee_bot</code>, <code>@Toe_tic_tac_bot</code>, <code>@Tac_tic_toe_bot</code>. Tic-tac-toe is a classic first bot project. The tutorial ends, and the username stays in search for free.</p>
+
+<p>Two of the silent ones are worth naming for a different reason. <code>@newxoxobot</code>&rsquo;s description promises you can &ldquo;wager Telegram Stars against real opponents&rdquo;, and it registered <code>/wallet</code> and <code>/deposit</code>. <code>@official_games_bot</code>, which is not official anything, says you can &ldquo;place bets using Telegram Stars&rdquo;. Both were silent. I sent only <code>/start</code> and deposited nothing. A silent bot with a deposit command is the one place where silence is the good outcome.</p>
+
+<div class="cta-box">
+<h3>Want a game that is definitely switched on?</h3>
+<p>The free Party Game runs inside Telegram itself, with nothing to add to your group and nothing reading the chat: Truth or Dare, Never Have I Ever and Would You Rather for when tic-tac-toe has run its course and more than two people want in.</p>
+<a href="https://t.me/charlie_party_bot/partygame?startapp=ttt">Open the Party Game</a>
+<span class="alt">No Telegram? It runs in a browser too: <a href="https://charliemorrison.dev/party-game/?src=ttt">charliemorrison.dev/party-game</a></span>
+</div>
+
+<h2>The big one: @xoBot</h2>
+
+<p><code>@xoBot</code> is the reason most people find a tic-tac-toe bot at all. Its account shows <strong>133,987 monthly users</strong>, roughly ten times the next bot down. It answers <code>/start</code> with five buttons (play with the bot, play with a friend, difficulty, language, stats) and a short manual. &ldquo;Play with bot&rdquo; asked me to pick a side, at Medium difficulty. In a game with a friend, the manual says, &ldquo;after 5 minutes the game will become expired and the message will be replaced by ⌛&rdquo;, so a forgotten game cleans itself up.</p>
+
+<p>One detail matters if you want to play in a group: <strong>you can&rsquo;t add <code>@xoBot</code> to one.</strong> Its account carries <code>bot_nochats</code>, the flag Telegram uses for bots that can&rsquo;t be added to groups. That sounds like a limit, and it is the opposite. The bot works <a href="https://core.telegram.org/bots/inline" rel="nofollow">inline</a>, the mode where you call it &ldquo;by typing its username and a query in the text input field in any chat&rdquo;. Type <code>@xoBot</code> and a space in any chat and the popup offers two cards, one with you as ❌ and one with you as ⭕. Send one and the game is a message in your chat. The bot receives what you typed after its name and the taps on its own board, not the rest of the conversation.</p>
+
+<p>It was also one of the four bots that worked between two people with nothing added when I tested <a href="/blog/telegram-games-for-2-players/">Telegram games for two players</a> in September. A month later it still does.</p>
+
+<h2>Two that speak Ukrainian, and the no-draw rule</h2>
+
+<p><code>@ttt_999_bot</code> doesn&rsquo;t do anything in a private chat except tell you how to use it: open a chat with a friend, type <code>@ttt_999_bot</code>, pick a mode, your friend presses &ldquo;Приєднатися&rdquo; (&ldquo;Join&rdquo;). The inline popup had two modes, and the second one is the idea I liked best in the whole census. <strong>&ldquo;Дедматч&rdquo; (Deathmatch): &ldquo;no draw. Each player has at most 3 marks: from the 4th move, the player&rsquo;s oldest mark is removed.&rdquo;</strong> A game that is a forced draw between two people who know it becomes a game you can actually lose, because the board keeps changing under you. The welcome also says only the two players can move, so a third person in the chat can&rsquo;t tap your square for you.</p>
+
+<p><code>@EasyXO_Bot</code> (564 monthly users) opens with a profile card: games played, wins, draws, rating, board size 3&times;3. <code>/playbot</code> drew a board straight away, with my name next to ❌. It also has <code>/playgpt</code>, &ldquo;a game with GPT-4 (adaptive difficulty)&rdquo; in its own words, and inline it offers &ldquo;play as ❌&rdquo;, &ldquo;play as ⭕&rdquo; and &ldquo;play with GPT&rdquo;. Its profile also ends with &ldquo;level up your shawarma&rdquo; and its help with &ldquo;motivation and support for your workouts!&rdquo;, two lines that have nothing to do with tic-tac-toe.</p>
+
+<h2>The rest that just let you play</h2>
+
+<ul>
+<li><code>@noughts_and_crosses_game_bot</code> is the simplest thing in the census: <code>/start</code> sends a score line and an empty board. I tapped the top-left square, it put my ❌ there and answered with a ⭕. No menu, no account, no inline mode.</li>
+<li><code>@gameXoX_bot</code> (Russian) has a menu with a random opponent, play with a friend, top players and your rating, and works inline in any chat with &ldquo;press here to play with a friend&rdquo;.</li>
+<li><code>@tictactoe2d_bot</code> goes the other way from Deathmatch: bigger boards. Its description offers 5&times;5, 7&times;7 or 9&times;9, quick matches with strangers or a private room for a friend. On a bigger board the forced draw goes away too.</li>
+<li><code>@xox_gamebot</code> is one button that challenges a friend through inline mode.</li>
+<li><code>@krestikiBot</code> (Russian, 10,288 monthly users) is tic-tac-toe as a whole economy: its display name says &ldquo;16 games&rdquo;, and its command list runs to tournaments, clans, lootboxes, skins, pets, a trading market, <code>/donate</code> and a store. Its inline mode returned 26 results, including &ldquo;explosive tic-tac-toe&rdquo; on 3&times;3 and 5&times;5. Playable, nothing blocked me, but built around spending.</li>
+</ul>
+
+<h2>Four that make you subscribe first</h2>
+
+<p><code>@XOchatBot</code> (11,943 monthly users) describes itself in English as a place to &ldquo;challenge your friends&rdquo;. In a private chat it answered in Russian: &ldquo;please subscribe to the sponsors before playing&rdquo;, with one subscribe link and three &ldquo;Launch&rdquo; buttons that open other bots, one of them a VPN bot. Underneath was &ldquo;✅ Я выполнил&rdquo; (&ldquo;I did it&rdquo;). I pressed it without subscribing to anything, and it sent the same gate again. So the button checks. You don&rsquo;t get a game for nothing here, you pay with four subscriptions.</p>
+
+<p>Three Arabic bots, <code>@Ofubot</code> (12,834 monthly users), <code>@xosBBot</code> (10,590) and <code>@Xo5_bot</code>, each answered with the same text: &ldquo;Sorry, dear. You must subscribe to the bot&rsquo;s channel to be able to use it,&rdquo; followed by <strong>the same private channel invite link</strong>, character for character. Three bot names, one channel collecting the subscribers. Between the two big ones that&rsquo;s over 23,000 monthly users being walked to the same place.</p>
+
+<p>I didn&rsquo;t join the channel to see what it posts. Tic-tac-toe has nothing to unlock, so a tic-tac-toe bot that wants something before the first move is selling something else.</p>
+
+<h2>The one that opened with an advert: @RockGameBot</h2>
+
+<p><code>@RockGameBot</code> (8,675 monthly users) plays rock-paper-scissors, tic-tac-toe and battleship, and wants to be added to your group chat (&ldquo;I can do a lot there&rdquo;). By default, Telegram&rsquo;s docs say, a bot in a group <a href="https://core.telegram.org/bots/features#privacy-mode" rel="nofollow">&ldquo;only see[s] relevant messages and commands&rdquo;</a>. This one has privacy mode off, so in a group it would get every message.</p>
+
+<p>Here is what happened, in order, all on the night of 4 October:</p>
+
+<ol>
+<li>Before the welcome, <code>/start</code> brought a message asking, in Russian, who I&rsquo;d like a video message with, and four buttons with different names on them. All four buttons open the same link to another bot.</li>
+<li>The welcome had a button &ldquo;Play ❎⭕&rdquo;. I expected a menu. It was random matchmaking: &ldquo;searching for a random player&rdquo;, and about thirty seconds later I was in a game with a real stranger. Having been matched with a person, I played the game out rather than walk away from them, and lost to a straight column. Eight rating points down.</li>
+<li>Less than two minutes after the game ended, the bot sent: <strong>&ldquo;📨 You&rsquo;ve been sent a new anonymous message&rdquo;</strong>, followed by a paragraph of insults (&ldquo;upstart, blockhead, windbag&rdquo; is the polite part). Under it were three buttons: &ldquo;Reply&rdquo;, &ldquo;Find out who&rdquo;, and &ldquo;Block&rdquo;.</li>
+</ol>
+
+<p>All three buttons, <strong>including &ldquo;Block&rdquo;</strong>, open the same link to a different bot, with a tracking code on the end. I didn&rsquo;t press any of them. RockGameBot&rsquo;s own menu has no anonymous messages, and I had never given anyone a link to message me anonymously. This is an advert for another bot, written to look like someone said something nasty about you. Pressing &ldquo;Block&rdquo; would block nobody; it would start the other bot.</p>
+
+<p>Telegram&rsquo;s real block is in the chat&rsquo;s own menu, never a button inside a message. How genuine anonymous-message bots work, and what they see about you, is in <a href="/blog/anonymous-message-apps-telegram-2026/">anonymous message apps for Telegram</a>. If a kid in your family plays here, this is what arrives in their chat after a game.</p>
+
+<h2>The mailing list and the two I couldn&rsquo;t read</h2>
+
+<p><code>@krestiky_noliky_bot</code> answered <code>/start</code> with &ldquo;Congratulations! You subscribed to Крестики-нолики. Use /off to pause the subscription,&rdquo; and an advert for Manybot, the constructor it was built with. It is not a game, it&rsquo;s a broadcast list with a game&rsquo;s name. <code>/off</code> worked.</p>
+
+<p><code>@TicTacToeRich_bot</code> and <code>@Xrestiki_bot</code> both answered, but with a message type my Telegram API client couldn&rsquo;t parse, so I can&rsquo;t tell you what they sent.</p>
+
+<h2>Tic-tac-toe in a Telegram chat without any bot</h2>
+
+<p>You don&rsquo;t need any of this to play, it&rsquo;s just slightly clumsier. A bot&rsquo;s board is one message that changes. Without a bot, nobody can edit someone else&rsquo;s message, so every move is a new one:</p>
+
+<ol>
+<li>One of you sends a numbered grid as three lines: <code>1 2 3</code>, <code>4 5 6</code>, <code>7 8 9</code>.</li>
+<li>To move, reply with the grid copied and your square replaced: <code>❌ 2 3</code>, <code>4 5 6</code>, <code>7 8 9</code>.</li>
+<li>The other player copies <em>that</em> message and replaces one of the numbers with ⭕. The numbers save you saying &ldquo;top left&rdquo;, and replies keep the game in order while the chat moves on.</li>
+</ol>
+
+<p>To pick who starts, send a 🎲 each. Telegram&rsquo;s server picks the number before the animation starts, and I tested how fair it is by <a href="/blog/telegram-emoji-games-900-throws/">throwing 900 of them</a>. And if two of you know the game well enough to draw every time, play Deathmatch by hand: when you place a fourth mark, take your oldest one off the board.</p>
+
+<p>The inline bots above still do it better, in one message with a score. And unlike most game bots, they never need to join your group.</p>
+
+<div class="cta-box pack">
+<h3>When more than two people want to play</h3>
+<p>Tic-tac-toe is a game for two. The Telegram Party Pack is for the rest of the chat: 110 Truth or Dare, 45 Never Have I Ever, 30 Would You Rather, 30 Most Likely To, 25 Paranoia and 15 Story Chain prompts, as copy-paste text and ready-made poll blocks, with a host guide. 255 in total, nothing that needs a bot.</p>
+<a href="https://charliemorrison.lemonsqueezy.com/checkout/buy/c7bd4341-6eb3-4acc-b8e1-7946e1413b98?utm_source=site&amp;utm_medium=blog&amp;utm_campaign=telegram&amp;utm_content=telegram-tic-tac-toe-bots-2026">Get the pack &mdash; $9.99</a>
+<span class="alt">Or see how to <a href="/blog/how-to-run-a-telegram-game-night/">run a game night in Telegram</a> without any pack.</span>
+</div>
+
+<h2>What I could not test</h2>
+
+<p><strong>No group pass.</strong> Everything here comes from private chats, inline queries, each bot&rsquo;s own text and buttons, and the flags on its account. The account I test from can&rsquo;t create groups, and I don&rsquo;t borrow strangers&rsquo; groups to test bots in. So &ldquo;works in a chat&rdquo; means &ldquo;its inline mode returned a game card&rdquo;, not &ldquo;I played a whole game in a group&rdquo;.</p>
+
+<p><strong>One game is not a review.</strong> I played one game to the end, and only because a stranger was on the other side. The bigger boards and the GPT mode are described from the bots&rsquo; own words.</p>
+
+<p><strong>Silent is not dead for good.</strong> In other censuses on this site, bots came back from silence within three weeks and others went quiet. The date at the top of this page matters more than the list.</p>
+
+<h2>If you want to play tonight</h2>
+
+<ol>
+<li><strong>Two of you, any chat:</strong> type <code>@xoBot</code> and a space and pick a side. Nothing gets added anywhere.</li>
+<li><strong>You want a game that isn&rsquo;t always a draw:</strong> <code>@ttt_999_bot</code> inline, Deathmatch mode, or the hand-played version above.</li>
+<li><strong>Avoid:</strong> any bot that wants a subscription, a deposit or a seat in your group before the first move. And never press &ldquo;Block&rdquo; inside a message.</li>
+<li><strong>More than two people:</strong> the free <a href="https://t.me/charlie_party_bot/partygame?startapp=ttt">Party Game</a>, or the <a href="/blog/best-telegram-party-games-2026/">party games list</a> for what holds up in a bigger group. For other two-player games, <a href="/blog/telegram-games-for-2-players/">Telegram games for two</a> has the rest.</li>
+</ol>
+
+<p><a class="back" href="/blog/">&larr; Back to all posts</a></p>
+
+</article>
+<footer>
+<p>&copy; 2026 <a href="/">Charlie Morrison Digital</a> &middot; <a href="/about/">About</a> &middot; <a href="/blog/">Blog</a></p>
+</footer>
+</body>
+</html>

@@ -104,7 +104,7 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 <p>These are the ones built in. You don&rsquo;t need to find them, and most people meet them by accident.</p>
 
 <ul>
-<li><strong><code>@gif</code></strong> &mdash; works. &ldquo;cat&rdquo; returned 50 GIFs in 0.21 seconds. Fifty is the most a bot is allowed to return for one query (the Bot API says &ldquo;No more than 50 results per query are allowed&rdquo;), so <code>@gif</code> filled the whole page.</li>
+<li><strong><code>@gif</code></strong> &mdash; works. &ldquo;cat&rdquo; returned 50 GIFs in 0.21 seconds. Fifty is the most a bot is allowed to return for one query (the <a href="https://core.telegram.org/bots/api#answerinlinequery" rel="nofollow">Bot API</a> says &ldquo;No more than 50 results per query are allowed&rdquo;), so <code>@gif</code> filled the whole page.</li>
 <li><strong><code>@vid</code></strong> &mdash; works, 15 YouTube videos. The odd one: <strong><code>@youtube</code> now opens the same account as <code>@vid</code>.</strong> Telegram&rsquo;s manual still describes <code>@youtube</code> as a bot that &ldquo;Shows a &lsquo;Sign in to YouTube&rsquo; button, then suggests personalized results&rdquo;. There&rsquo;s no sign-in any more, so the eleven names are ten bots.</li>
 <li><strong><code>@pic</code></strong> &mdash; works, 30 images, and <strong>4,422,346</strong> monthly users by the number Telegram shows on its profile. It now also shows a &ldquo;Create image with Alice AI&rdquo; button above the results. Alice is Yandex&rsquo;s assistant.</li>
 <li><strong><code>@sticker</code></strong> &mdash; works, but only with an emoji. Type a word and you get &ldquo;Enter one or more emoji&rdquo;. 😺 returned 43 stickers.</li>
@@ -159,7 +159,7 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 
 <h2>What an inline bot learns about you</h2>
 
-<p>An inline bot never sees your chat. It does see you. The Bot API describes what arrives with every inline query: a <code>from</code> field, &ldquo;Sender&rdquo;, which is your user account (ID, name, @username, language), and a <code>chat_type</code>, &ldquo;Type of the chat from which the inline query was sent&rdquo;, so the bot knows whether you&rsquo;re in a private chat, a group or a channel. It doesn&rsquo;t learn which group.</p>
+<p>An inline bot never sees your chat. It does see you. The <a href="https://core.telegram.org/bots/api#inlinequery" rel="nofollow">Bot API</a> describes what arrives with every inline query: a <code>from</code> field, &ldquo;Sender&rdquo;, which is your user account (ID, name, @username, language), and a <code>chat_type</code>, &ldquo;Type of the chat from which the inline query was sent&rdquo;, so the bot knows whether you&rsquo;re in a private chat, a group or a channel. It doesn&rsquo;t learn which group.</p>
 
 <p>Location is the one to watch. Bots can ask for it, and the docs say <code>location</code> is the &ldquo;Sender location, only for bots that request user location&rdquo;. Of the 38 bots here, exactly one has that flag on its account: <code>@foursquare</code>. That&rsquo;s why it&rsquo;s good at finding places nearby, and it&rsquo;s why your phone asks before it shares.</p>
 
@@ -169,7 +169,7 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 
 <p>You don&rsquo;t add an inline bot to a group. You just type its name in the message box, and anyone in the group can do it. The result goes out as your message with a small &ldquo;via @gif&rdquo; label.</p>
 
-<p>If it doesn&rsquo;t work in one particular group, the group is blocking it, not the bot. Admins control it with the same switch that covers GIFs and stickers. In the Bot API that permission is <code>can_send_other_messages</code>: &ldquo;True, if the user is allowed to send animations, games, stickers and use inline bots&rdquo;. In the app it&rsquo;s under the group&rsquo;s permissions, usually next to stickers and GIFs. So a group that turns off stickers to stop spam turns off inline bots too, whether it meant to or not.</p>
+<p>If it doesn&rsquo;t work in one particular group, the group is blocking it, not the bot. Admins control it with the same switch that covers GIFs and stickers. In the Bot API that permission is <a href="https://core.telegram.org/bots/api#chatpermissions" rel="nofollow"><code>can_send_other_messages</code></a>: &ldquo;True, if the user is allowed to send animations, games, stickers and use inline bots&rdquo;. In the app it&rsquo;s under the group&rsquo;s permissions, usually next to stickers and GIFs. So a group that turns off stickers to stop spam turns off inline bots too, whether it meant to or not.</p>
 
 <p>Games sent through <code>@gamebot</code> use Telegram&rsquo;s games platform, and the Bot API says &ldquo;A game message will also display high scores for the current chat&rdquo;, so a group gets its own leaderboard. Games with a fuller group mode, like Werewolf and Uno, still need the bot added to the group. Inline only handles your moves.</p>
 

@@ -13,8 +13,8 @@
 <meta property="og:description" content="Every list tells you which Telegram games to play. None tell you the chat mechanics that decide whether the round survives. I measured them.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://charliemorrison.dev/blog/how-to-run-a-telegram-game-night/telegram-poll-api-probe.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"How to Run a Telegram Game Night in a Group Chat","datePublished":"2026-07-29","dateModified":"2026-09-10","image":"https://charliemorrison.dev/blog/how-to-run-a-telegram-game-night/telegram-poll-api-probe.png","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about/"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How many options can a Telegram poll have?","acceptedAnswer":{"@type":"Answer","text":"Twelve. I tested it directly: a poll with 12 options was created normally, and a poll with 13 was rejected with \"poll can't have more than 12 options\". Many guides still say the limit is 10, which was true of an older version of the API. The question itself is capped at 300 characters and each individual option at 100 characters."}},{"@type":"Question","name":"Why can't I see who voted in my Telegram poll?","acceptedAnswer":{"@type":"Answer","text":"Because Telegram polls are anonymous unless you say otherwise. Anonymity is the default, so a poll you create in a hurry hides the votes. For accusation games like Most Likely To that is fatal — the whole point is seeing who picked whom. Turn anonymity off when you create the poll, and leave it on for confession-style rounds where hiding the vote is what makes people answer honestly."}},{"@type":"Question","name":"Can I schedule game-night messages from a Telegram bot?","acceptedAnswer":{"@type":"Answer","text":"No. The Bot API has no scheduling parameter, and it does not complain if you invent one — I sent a message with a schedule_date one hour in the future and the API returned success while delivering it immediately. Scheduling is a feature of the Telegram apps, not of bots: you compose the message yourself, hold the send button and pick a time."}},{"@type":"Question","name":"Do spoiler tags work inside a Telegram poll question?","acceptedAnswer":{"@type":"Answer","text":"No. Formatting is ignored inside poll questions, so a hidden answer written as ||spoiler|| arrives with the pipe characters visible as ordinary text — the answer is not hidden at all. Spoilers only work in normal messages. Send the poll, then reveal the answer in a separate message with the spoiler applied there."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"How to Run a Telegram Game Night in a Group Chat","datePublished":"2026-07-29","dateModified":"2026-10-11","image":"https://charliemorrison.dev/blog/how-to-run-a-telegram-game-night/telegram-poll-api-probe.png","author":{"@type":"Person","name":"Charlie Morrison","url":"https://charliemorrison.dev/about/"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do you play games on Telegram?","acceptedAnswer":{"@type":"Answer","text":"Five ways, none of which needs a separate app. Send one of six game emoji (🎲 🎯 🏀 ⚽ 🎳 🎰) on its own and Telegram's server rolls a result everyone sees; type @gamebot plus a space in any chat for inline games with a shared scoreboard; make a quiz poll from the attach menu; add a game bot such as a Mafia host to a group; or open a Mini App from a bot's button. The emoji, inline games and quiz polls all work in a one-to-one chat; most group bots do not."}},{"@type":"Question","name":"How many options can a Telegram poll have?","acceptedAnswer":{"@type":"Answer","text":"Twelve. I tested it directly: a poll with 12 options was created normally, and a poll with 13 was rejected with \"poll can't have more than 12 options\". Many guides still say the limit is 10, which was true of an older version of the API. The question itself is capped at 300 characters and each individual option at 100 characters."}},{"@type":"Question","name":"Why can't I see who voted in my Telegram poll?","acceptedAnswer":{"@type":"Answer","text":"Because Telegram polls are anonymous unless you say otherwise. Anonymity is the default, so a poll you create in a hurry hides the votes. For accusation games like Most Likely To that is fatal — the whole point is seeing who picked whom. Turn anonymity off when you create the poll, and leave it on for confession-style rounds where hiding the vote is what makes people answer honestly."}},{"@type":"Question","name":"Can I schedule game-night messages from a Telegram bot?","acceptedAnswer":{"@type":"Answer","text":"No. The Bot API has no scheduling parameter, and it does not complain if you invent one — I sent a message with a schedule_date one hour in the future and the API returned success while delivering it immediately. Scheduling is a feature of the Telegram apps, not of bots: you compose the message yourself, hold the send button and pick a time."}},{"@type":"Question","name":"Do spoiler tags work inside a Telegram poll question?","acceptedAnswer":{"@type":"Answer","text":"No. Formatting is ignored inside poll questions, so a hidden answer written as ||spoiler|| arrives with the pipe characters visible as ordinary text — the answer is not hidden at all. Spoilers only work in normal messages. Send the poll, then reveal the answer in a separate message with the spoiler applied there."}}]}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
@@ -65,7 +65,7 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 <nav><a href="/">Charlie Morrison Digital</a></nav>
 <article>
 <h1>How to Run a Telegram Game Night in a Group Chat</h1>
-<div class="meta">July 29, 2026 &middot; 9 min read &middot; by <a href="/about/">Charlie Morrison</a></div>
+<div class="meta">July 29, 2026 &middot; updated October 11, 2026 &middot; 14 min read &middot; by <a href="/about/">Charlie Morrison</a></div>
 
 <p>Every article about Telegram games answers the same question: <em>which</em> games. Truth or Dare, Never Have I Ever, Would You Rather, Most Likely To. Fine: that part is easy, and I've written one of those lists myself.</p>
 
@@ -74,6 +74,72 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 <p>Telegram has real tools for this: polls, quiz polls, spoiler text, pinned messages, self-closing rounds. Most of what's written about them is copied from other articles, and a fair amount of it is simply out of date. So rather than trust it, I sent <strong>24 live requests to Telegram's own API</strong>: real polls, real spoilers, real pins, and I wrote down exactly what came back.</p>
 
 <p>Seven of the 24 failed. Two of them "succeeded" while doing something other than what I asked, which is worse, because those are the two you ship to your friends without noticing.</p>
+
+<p>If you landed here asking the simpler question (how do you play a game on Telegram at all?), the next section answers that first. The game-night mechanics come after it.</p>
+
+<h2 id="ways-to-play">How to play games on Telegram: five ways, re-tested 11 October</h2>
+
+<p>"Telegram games" sounds like one feature. It's five different things, and they differ on the two questions that matter when friends are waiting: do you need to add a bot, and do you have to leave the chat? On 11 October 2026 I ran every one of them again from my own account, in my own Saved Messages, so nobody got spammed. Here is what each one is and how to start it.</p>
+
+<h3>1. Send a game emoji: no bot, one tap</h3>
+
+<p>Telegram has six emoji that are actually games: 🎲 dice, 🎯 darts, 🏀 basketball, ⚽ football, 🎳 bowling and 🎰 the slot machine. Send one of them <em>on its own</em>, with no other text, and it doesn't arrive as a picture. It arrives as an animation that ends on a result, and everyone in the chat sees the same result.</p>
+
+<p>That last part is the reason it works as a game. Your phone doesn't pick the number; Telegram's server does. I threw each of the six ten times (60 throws), and every value came back inside the server's reply to the send itself. The animation is just the reveal. Every result sat inside the range the <a href="https://core.telegram.org/bots/api#dice" rel="nofollow">Bot API documentation</a> gives: 1–6 for dice, darts and bowling, 1–5 for basketball and football, 1–64 for the slot machine. Two of my ten slot pulls landed on 64, the triple seven. That is luck at ten pulls, not a pattern; the odds are in <a href="/blog/telegram-emoji-games-900-throws/">the 900-throw count</a>.</p>
+
+<p>I also tested the obvious cheat: roll until you get a six, then forward that message into the group. The forwarded copy kept the original value (I rolled a 4, the forward also showed a 4) and it arrives with the "Forwarded from" label on it. So you can't re-roll by forwarding, and you can spot someone who tries.</p>
+
+<p><strong>Use it for:</strong> deciding who goes first, drinking-game rules, a quick highest-roll-wins round. Works in a group and in a one-to-one chat.</p>
+
+<h3>2. Type a game bot's name in any chat (inline games)</h3>
+
+<p>In any chat, including a private one, type <code>@gamebot</code> followed by a space. A strip of games appears above the keyboard. Pick one and Telegram posts a game card into the chat with a Play button. Each person who taps it plays on their own screen, and the scores come back to the same card, so the chat gets a leaderboard.</p>
+
+<p>This is Telegram's own games platform from 2016, and it is thinner than it sounds. When I queried <code>@gamebot</code> on 11 October it returned <strong>three</strong> games: Math Battle, Corsairs and LumberJack. All three came back as real game cards. The bigger name, <code>@gamee</code>, returned <strong>50</strong> results, and not one was a game card: each is a text message whose Play button is a <code>t.me/gamee/game?startapp=</code> link into Gamee's own Mini App. You can still play them, but you leave the chat to do it. I counted which game bots still use the original platform in <a href="/blog/telegram-gaming-platform-2026/">this test of the official three</a>. Other inline bots (dice variants, XO, quiz pickers) are in <a href="/blog/telegram-inline-bots-2026/">the inline bots list</a>.</p>
+
+<p><strong>Use it for:</strong> a high-score fight between friends who are each on their own phone.</p>
+
+<h3>3. Make a quiz poll: no bot, built into the attach menu</h3>
+
+<p>Tap the paperclip, choose <em>Poll</em>, switch on <em>Quiz mode</em> and mark the right answer. When someone votes, Telegram shows them right away whether they were correct, and you can add an explanation that appears when someone picks wrong or taps the lamp icon (<a href="https://core.telegram.org/bots/api#sendpoll" rel="nofollow">sendPoll</a> calls it <code>explanation</code>). I made one in Saved Messages ("Which emoji has 64 outcomes?") and it went through as a proper quiz, with no bot involved anywhere.</p>
+
+<p>This is the piece most quiz-bot recommendations skip. When I tested the six bots that lists call "Telegram quiz bots", <a href="/blog/telegram-quiz-bots-tested-2026/">none of them sent a native quiz</a>. The built-in poll does it better than the bots do. Its limits (12 options, 100 characters per option) are in the section below.</p>
+
+<p><strong>Use it for:</strong> trivia rounds, "guess the baby photo", anything with one right answer.</p>
+
+<figure>
+<img src="telegram-game-emoji-quiz-poll.png" width="560" height="1310" loading="lazy" style="max-width:280px;height:auto;display:block;margin:0 auto" alt="Telegram Web, Saved Messages: the six game emoji (dice, darts, basketball, football, bowling, slot machine) each showing its final result, followed by a native quiz poll asking which emoji has 64 outcomes">
+<figcaption>My Saved Messages on 11 October, no bot involved: six game emoji (the server returned 1, 5, 5, 3, 6 and 15) and a quiz poll made from the attach menu.</figcaption>
+</figure>
+
+<h3>4. Add a game bot to the group</h3>
+
+<p>This is what most people picture: a bot such as a Mafia or Werewolf host joins the group, hands out secret roles in private messages and runs the night/day cycle itself. Open the bot, tap <em>Add to group</em>, pick your group, then start the game with the command the bot lists (usually <code>/startgame</code> or <code>/new</code>). Some bots ask for admin rights so they can delete messages from "dead" players. Read what you're granting before you tap.</p>
+
+<p>Expect some to be dead. Of 29 Mafia and Werewolf bots that Telegram's own search returned, <a href="/blog/telegram-mafia-werewolf-bots-2026/">11 actually hosted a game</a>. And when I messaged 18 "best game bots" from popular lists, <a href="/blog/i-messaged-18-telegram-game-bots/">7 never replied</a>. Test the bot yourself an hour before the guests arrive, not in front of them.</p>
+
+<p><strong>Use it for:</strong> social-deduction games, word games and anything where the game has to keep secrets from part of the group.</p>
+
+<h3>5. Open a Mini App</h3>
+
+<p>A Mini App is a full web app that opens inside Telegram, usually from a bot's button or a <code>t.me/…?startapp=</code> link. It can do things a chat can't: timers, cards, a proper game board. The trade-off is that everyone is now looking at the app, not the chat, so the banter moves out of the group. Telegram documents how they work in its <a href="https://core.telegram.org/bots/webapps" rel="nofollow">Mini Apps reference</a>. Mine is the party game linked at the end of this post; it deals Truth, Dare, Never Have I Ever and Would You Rather prompts so the host doesn't have to type them.</p>
+
+<p><strong>Use it for:</strong> games that need a board or a timer, or a prompt deck so the host isn't improvising.</p>
+
+<h3>Which way to pick</h3>
+
+<div class="tw"><table>
+<tr><th>Way</th><th>Needs a bot</th><th>Works one-to-one</th><th>Stays in the chat</th><th>Start it</th></tr>
+<tr><td>Game emoji</td><td class="live">No</td><td class="live">Yes</td><td class="live">Yes</td><td>Send 🎲 🎯 🏀 ⚽ 🎳 or 🎰 alone</td></tr>
+<tr><td>Inline game</td><td>Yes, but no adding</td><td class="live">Yes</td><td class="live">Card and scores, yes</td><td>Type <code>@gamebot</code> + space</td></tr>
+<tr><td>Quiz poll</td><td class="live">No</td><td class="live">Yes</td><td class="live">Yes</td><td>Paperclip → Poll → Quiz mode</td></tr>
+<tr><td>Group game bot</td><td class="dead">Yes, added</td><td>Mostly no</td><td class="live">Yes</td><td>Bot profile → Add to group</td></tr>
+<tr><td>Mini App</td><td>Yes, but no adding</td><td class="live">Yes</td><td class="dead">No, opens an app</td><td>Bot button or <code>startapp</code> link</td></tr>
+</table></div>
+
+<p>Two friends and no group? Emoji, inline games and quiz polls all work in a private chat; most group bots don't. The <a href="/blog/telegram-games-for-2-players/">two-player test</a> found 4 of 11 game bots that do.</p>
+
+<p>Running a whole evening for a group? Then the question stops being "which way" and becomes "what breaks". That's the rest of this post.</p>
 
 <h2>How I tested it</h2>
 
@@ -174,6 +240,9 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 </div>
 
 <h2>FAQ</h2>
+
+<details><summary>How do you play games on Telegram?</summary>
+<p>Five ways, none of which needs a separate app. Send one of six game emoji (🎲 🎯 🏀 ⚽ 🎳 🎰) on its own and Telegram's server rolls a result everyone sees; type <code>@gamebot</code> plus a space in any chat for inline games with a shared scoreboard; make a quiz poll from the attach menu; add a game bot such as a Mafia host to a group; or open a Mini App from a bot's button. The emoji, inline games and quiz polls all work in a one-to-one chat; most group bots do not. <a href="#ways-to-play">The five ways, tested</a>.</p></details>
 
 <details><summary>How many options can a Telegram poll have?</summary>
 <p>Twelve. Tested directly: 12 options were created normally, 13 came back <code>poll can't have more than 12 options</code>. Plenty of guides still say ten, which was true of an older API version. The question is capped at 300 characters and each option at 100.</p></details>

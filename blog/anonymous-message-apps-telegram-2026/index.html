@@ -13,8 +13,8 @@
 <meta property="og:description" content="I sent a real /start to all 11 anonymous message bots the lists recommend, AnonyMeetBot included. Four replied, three went silent, two are gone. Tested August 2026.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://charliemorrison.dev/blog/anonymous-message-apps-telegram-2026/anon-bot-probe.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Anonymous Telegram Bots: I Tested 11, Only 4 Work","datePublished":"2026-04-08","dateModified":"2026-09-09","image":"https://charliemorrison.dev/blog/anonymous-message-apps-telegram-2026/anon-bot-probe.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which anonymous Telegram bots actually work in 2026?","acceptedAnswer":{"@type":"Answer","text":"Of the 11 handles recommended by pages currently ranking for this query, four replied to a real /start on 11 August 2026: @GPTAnonymousBot, @AnonyMeetBot, @chatbot and @LivegramBot. Only @GPTAnonymousBot does the NGL-style job of a personal link that collects anonymous messages."}},{"@type":"Question","name":"Are Telegram anonymous messages really anonymous?","acceptedAnswer":{"@type":"Answer","text":"The bot sits between sender and recipient and does not reveal the sender by default. But the bot operator can see both sides, so anonymity here means anonymous to the recipient, not anonymous to the service."}},{"@type":"Question","name":"What happened to NGL?","acceptedAnswer":{"@type":"Answer","text":"In July 2024 the FTC and the Los Angeles District Attorney settled with NGL Labs for $5 million: $4.5 million in consumer redress and a $500,000 civil penalty. The complaint covered fake messages that looked like they came from real people and a recurring charge of up to $9.99 a week."}},{"@type":"Question","name":"Why do so many recommended anonymous bots not answer?","acceptedAnswer":{"@type":"Answer","text":"Nobody who publishes these lists presses Start. Handles are copied between articles for years, so a bot that was abandoned in 2023 keeps being recommended in 2026 with nothing checking that it still runs."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Anonymous Telegram Bots: I Tested 11, Only 4 Work","datePublished":"2026-04-08","dateModified":"2026-10-14","image":"https://charliemorrison.dev/blog/anonymous-message-apps-telegram-2026/anon-bot-probe.png","author":{"@type":"Person","name":"Charlie Morrison"},"publisher":{"@type":"Organization","name":"Charlie Morrison Digital"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which anonymous Telegram bots actually work in 2026?","acceptedAnswer":{"@type":"Answer","text":"Of the 11 handles recommended by pages currently ranking for this query, four replied to a real /start on 11 August 2026: @GPTAnonymousBot, @AnonyMeetBot, @chatbot and @LivegramBot. Only @GPTAnonymousBot does the NGL-style job of a personal link that collects anonymous messages."}},{"@type":"Question","name":"Are Telegram anonymous messages really anonymous?","acceptedAnswer":{"@type":"Answer","text":"The bot sits between sender and recipient and does not reveal the sender by default. But the bot operator can see both sides, so anonymity here means anonymous to the recipient, not anonymous to the service."}},{"@type":"Question","name":"How do I send an anonymous message on Telegram without a bot?","acceptedAnswer":{"@type":"Answer","text":"To one person, you can't: the API call that sends a message has no anonymity option, so you need a bot. In groups, Telegram has its own tools. An admin can switch on Remain Anonymous and write as the group, a channel owner can post in public groups as the channel, polls hide who voted by default, and the Forwarded Messages privacy setting stops forwards linking back to your account."}},{"@type":"Question","name":"What happened to NGL?","acceptedAnswer":{"@type":"Answer","text":"In July 2024 the FTC and the Los Angeles District Attorney settled with NGL Labs for $5 million: $4.5 million in consumer redress and a $500,000 civil penalty. The complaint covered fake messages that looked like they came from real people and a recurring charge of up to $9.99 a week."}},{"@type":"Question","name":"Why do so many recommended anonymous bots not answer?","acceptedAnswer":{"@type":"Answer","text":"Nobody who publishes these lists presses Start. Handles are copied between articles for years, so a bot that was abandoned in 2023 keeps being recommended in 2026 with nothing checking that it still runs."}}]}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
@@ -58,7 +58,7 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 <nav><a href="/">Charlie Morrison Digital</a></nav>
 <article>
 <h1>Anonymous Telegram Bots: I Tested 11, Only 4 Work</h1>
-<div class="meta">By Charlie Morrison &middot; published April 8, 2026 &middot; tested and rewritten August 11, 2026 &middot; 8 min read</div>
+<div class="meta">By Charlie Morrison &middot; published April 8, 2026 &middot; tested and rewritten August 11, 2026 &middot; <a href="#without-a-bot">no-bot methods</a> added October 14, 2026 &middot; 10 min read</div>
 
 <p>Every article about anonymous messaging on Telegram &mdash; including the first version of this one &mdash; recommends bots by handle and moves on. None of them press Start. So on 11 August 2026 I took the eleven handles that the pages currently ranking for this query recommend, sent each one a real <code>/start</code> from my own account, and waited.</p>
 
@@ -190,6 +190,43 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 <li><strong>Anonymous is not untraceable.</strong> Serious abuse can still be pursued by law enforcement.</li>
 </ul>
 
+<h2 id="without-a-bot">How to send an anonymous message on Telegram without a bot</h2>
+
+<p>Most people who search &ldquo;how to send an anonymous message on Telegram&rdquo; are hoping for a hidden switch. There isn't one for direct messages. On 14 October 2026 I read the reference for the API call every Telegram app uses to send a text, <a href="https://core.telegram.org/method/messages.sendMessage" rel="noopener" target="_blank"><code>messages.sendMessage</code></a>: it takes 21 parameters and none of them makes the sender anonymous. The only identity switch is <code>send_as</code>, and that one is for groups, not for writing to a person. So if you want to message one person without them knowing it's you, you still need a bot from the list above.</p>
+
+<p>Inside groups and channels Telegram does have native tools, and nobody runs them except Telegram itself, so they can't go quiet the way a bot does. Here is what each one hides, and which I measured myself versus took from Telegram's own documentation.</p>
+
+<div class="table-wrap">
+<table class="comparison">
+<thead><tr><th>Method</th><th>Where it works</th><th>What others see</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Remain Anonymous (admin)</td><td>A group where you are an admin</td><td>The group's name, not yours</td><td><a href="https://telegram.org/blog/filters-anonymous-admins-comments" rel="noopener" target="_blank">Telegram blog, 30 Sep 2020</a>; <code>anonymous</code> flag in the admin-rights schema</td></tr>
+<tr><td>Post as your channel</td><td>Public groups</td><td>Your channel's name, not yours</td><td><a href="https://telegram.org/blog/protected-content-delete-by-date-and-more" rel="noopener" target="_blank">Telegram blog, 7 Dec 2021</a>; <code>send_as</code> in <code>sendMessage</code></td></tr>
+<tr><td>Anonymous poll</td><td>Groups, channels, chats</td><td>Totals, not who voted</td><td>Measured tonight: a new poll came back with public voters off</td></tr>
+<tr><td>Hide your name on forwards</td><td>Anywhere your messages get forwarded</td><td>Your name with no link to your account</td><td>Telegram FAQ (privacy settings for forwarded messages)</td></tr>
+<tr><td>Direct message to one person</td><td>&mdash;</td><td>Always you</td><td>Measured tonight: no anonymity parameter exists</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>1. Remain Anonymous: write to a group as the group</h3>
+
+<p>Telegram added this in September 2020, and the announcement says it plainly: &ldquo;The anonymized admin will be hidden in the list of group members, and their messages in the chat will be signed with the group name, similar to channel posts.&rdquo; Per the announcement, it's a toggle called <strong>Remain Anonymous</strong> in an admin's rights. The catch is the obvious one. You need to be an admin, and in a small group the members can usually work out which of the few admins wrote it. I didn't press this toggle myself for this update; the behaviour above is Telegram's description, and the <code>anonymous</code> flag is right there in the admin-rights object of the API schema.</p>
+
+<h3>2. Post as a channel in public groups</h3>
+
+<p>In December 2021 Telegram added &ldquo;an option to post anonymously in public groups on behalf of your channel&rdquo;. If you run a channel, you can write in a public group as that channel instead of as yourself, and the message carries the channel's identity. It's the closest native thing to a pen name. It hides your personal account, not your channel, so a channel you've promoted under your own name gives you nothing. Again, this one is from the announcement and from the <code>send_as</code> parameter in the schema, not from a test.</p>
+
+<h3>3. Anonymous polls: the one I could check end to end</h3>
+
+<p>I created a poll through the API without touching any privacy option. It came back with <code>public_voters</code> switched off, which means voters stay hidden unless whoever creates the poll chooses otherwise. The <a href="https://core.telegram.org/constructor/poll" rel="noopener" target="_blank">API documentation</a> defines that flag as &ldquo;whether cast votes are publicly visible to all users (non-anonymous poll)&rdquo;. Telegram even accepted it in Saved Messages, a chat with nobody but yourself. In a one-to-one chat it's pointless, since with two people the vote isn't hidden from anyone, but in a group it's the safest way to collect honest answers: no bot, nothing to stop working.</p>
+
+<h3>4. Hide your name when your messages get forwarded</h3>
+
+<p>Go to Settings &rarr; Privacy and Security &rarr; Forwarded Messages and choose who can link back to your account. <a href="https://telegram.org/faq" rel="noopener" target="_blank">Telegram's FAQ</a> lists this setting next to message deletion as part of keeping chats &ldquo;similar to talking face to face&rdquo;. Know what it covers. The message still shows your name. Nobody can tap through to your profile, and that's all. My own account was still on <em>Everybody</em> when I checked tonight, so if you've never opened this screen, yours probably is too.</p>
+
+<p><strong>The short version:</strong> to one person, use a bot and accept that its operator can see both sides. In a group, prefer Telegram's own tools, which don't die quietly the way most of the eleven bots in my test did.</p>
+
 <h2>How to set it up, once you have a bot that answers</h2>
 
 <ol>
@@ -216,6 +253,11 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 <details>
 <summary>Why do so many recommended bots not answer?</summary>
 <p>Because nobody publishing these lists presses Start. Handles get copied between articles for years, so a bot abandoned in 2023 is still being recommended in 2026 &mdash; and two of the eleven here no longer exist as usernames at all.</p>
+</details>
+
+<details>
+<summary>How do I send an anonymous message on Telegram without a bot?</summary>
+<p>To one person, you can't: the API call that sends a message has no anonymity option, so you need a bot. In groups, Telegram has its own tools. An admin can switch on Remain Anonymous and write as the group, a channel owner can post in public groups as the channel, polls hide who voted by default, and the Forwarded Messages privacy setting stops forwards linking back to your account.</p>
 </details>
 
 <details>

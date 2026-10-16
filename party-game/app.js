@@ -258,9 +258,12 @@ function showSummary() {
 }
 
 // Paid pack CTA — only after the player has actually played a while.
-// First summary (10 rounds) stays clean; from the second one on, someone who
-// has burned 20 questions is the one who genuinely runs out of material.
-const PACK_CTA_AFTER = 20;
+// Was 20 (second summary) until 2026-10-16. Depth read that night (funnel-read
+// --days 35, 27 players): 7 reached round 10, only 2 reached round 20 — the
+// drop-off sits between the first and second summary, so the 20-round gate hid
+// the offer from 5 of the 7 players who played at all (pack_cta_view: 2 in 35 d).
+// Now shown at the first summary. Re-read pack_cta_view/click 28 d later.
+const PACK_CTA_AFTER = 10;
 let packCtaSeen = false;
 
 function maybeShowPackCta() {

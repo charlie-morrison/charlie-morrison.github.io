@@ -40,6 +40,7 @@ button:disabled{opacity:.4;cursor:default}
 .hide{display:none}
 .foot{font-size:13px;color:#9ca3af;text-align:center;line-height:1.6;margin:10px 0 20px}
 .foot a{color:#a5b4fc}
+.txt p{font-size:15px;line-height:1.6;color:#d1d5db}.txt ul{margin:0 0 0 18px;font-size:15px;line-height:1.6;color:#d1d5db}.txt li{margin-bottom:6px}.txt a{color:#a5b4fc}.txt img{width:100%;height:auto;border-radius:8px;border:1px solid #374151;display:block}.txt code{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#fde68a}.txt .cap{font-size:13px;color:#9ca3af;text-align:center}
 </style>
 </head>
 <body>
@@ -78,7 +79,27 @@ button:disabled{opacity:.4;cursor:default}
 <p class="sub hide" id="pHint">Tap a number when the caller calls it. Five in a row, column or diagonal → shout BINGO in the chat.</p>
 </section>
 
-<p class="foot">How it works and why we built it: <a href="/blog/telegram-bingo-bots-2026/">we tested 36 Telegram bingo bots</a>.<br>
+<section id="bots" class="box txt">
+<h2>Why not a bingo bot? I messaged 27 of them</h2>
+<p>Before building this page, on 30 September 2026, I typed <em>bingo</em> into Telegram&rsquo;s search along with nine other spellings (<em>bingo bot</em>, <em>telegram bingo</em>, <em>bingo caller</em>, the Russian <em>бинго</em> and <em>лото</em>, and <em>tambola</em>, the Indian name for 90-ball). 36 accounts came back. I skipped 9 whose own descriptions showed they weren&rsquo;t the game. The biggest account in the whole set was one of those: a &ldquo;🇺🇦 КАЗИНО&rdquo; bot with 38,958 monthly users and nothing but casino referral links. I sent <code>/start</code> and an inline query to the other 27.</p>
+<p><strong>19 said nothing</strong>, at twelve seconds and again at forty, including <code>@LotoBingo_bot</code> (&ldquo;Lotto Bingo for your chat!&rdquo;) and <code>@BingoCallingBot</code>. <strong>8 answered, and none of them was bingo for a group of friends:</strong></p>
+<ul>
+<li><strong>Real money, three.</strong> <code>@zingo_bingo_bot</code> (17,470 monthly users) answered <code>/start</code> with &ldquo;You have received 10 birr for registration&rdquo;: pressing Start had opened an account with a balance in Ethiopian birr. <code>@Alpha_bingobot</code> led with &ldquo;FIRST DEPOSIT 25% BONUS&rdquo; and asked for a phone number. <code>@Bingo_GamesBot</code> promises you&rsquo;ll &ldquo;win money&rdquo;. I deposited nothing.</li>
+<li><strong>Minecraft, two</strong>: a case-opening web app and an account linker.</li>
+<li><strong>A meme</strong>: <code>@BingoImageBot</code> makes a picture-bingo about you that friends fill in. Plus a raffle bot and a channel-posting tool.</li>
+</ul>
+<p>The one real group bingo bot I found came through a dead one. <code>@BingoGame_rBot</code> never answered, but its description says &ldquo;The old bot is down!&rdquo; and points to <code>@gamiqobot</code>, which answered at once: bingo for 2&ndash;10 players, private cards, shared calls, added to your group as an admin. Its win rule is five lines, one for each letter, so it&rsquo;s a long game. I couldn&rsquo;t play it, because my test account can&rsquo;t create groups, so that&rsquo;s its own description, not a review. None of my ten searches returned it.</p>
+<a href="bingo-bot-census.png"><img src="bingo-bot-census.png" alt="Terminal output of the Telegram bingo bot census: ten search queries, a verdict for each of 27 messaged bots, 19 silent, 8 answered, none a group bingo game" width="1280" loading="lazy"></a>
+<p class="cap">The census, 30 September 2026: every search, every reply. Tap for full size.</p>
+<h2>How this page checks a claim without a bot</h2>
+<p>The hard part of bingo in a chat isn&rsquo;t the cards or the calls. It&rsquo;s checking a &ldquo;BINGO!&rdquo;, because nobody can look at anyone else&rsquo;s phone. A bot solves that by holding every card on its server, which is exactly the kind of server that goes silent. This page makes each card out of the game code plus the player&rsquo;s name, so the caller can rebuild any card at any moment by typing the name. Cards follow the <a href="https://en.wikipedia.org/wiki/Bingo_(American_version)" rel="nofollow">standard 75-ball layout</a>: B 1&ndash;15 through O 61&ndash;75, free centre. Draws use the phone&rsquo;s secure random generator and never repeat.</p>
+<a href="bingo-tool-host-and-player.png"><img src="bingo-tool-host-and-player.png" alt="Two phone screenshots of this bingo page: a player's 5 by 5 card with called numbers marked, and the caller's screen confirming her claim after 35 calls" width="700" loading="lazy"></a>
+<p class="cap">A test game on 1 October: after 35 calls Olena has the whole O column, and typing her name on the caller&rsquo;s screen rebuilds the same card.</p>
+<p>One way to cheat comes with that design: open the link as &ldquo;Olena&rdquo;, &ldquo;Olena 2&rdquo; and &ldquo;Olena 3&rdquo;, and claim with whichever card wins. The fix costs one message per player. Everyone posts the name they used in the chat before the first call, and the caller only checks names that were posted. Among friends that&rsquo;s plenty. For a real prize, use a bot that holds the cards, or don&rsquo;t play for prizes in a group chat at all. In TelegramTelegram notes that <a href="https://core.telegram.org/bots/features#what-features-do-bots-have">bots can&rsquo;t start conversations</a>, so evenrsquo;s own words, <a href="https://core.telegram.org/bots" rel="nofollow">Telegram notes that <a href="https://core.telegram.org/bots/features#what-features-do-bots-have">bots can&rsquo;t start conversations</a>, so evenldquo;Bots canTelegram notes that <a href="https://core.telegram.org/bots/features#what-features-do-bots-have">bots can&rsquo;t start conversations</a>, so evenrsquo;t start conversations with usersTelegram notes that <a href="https://core.telegram.org/bots/features#what-features-do-bots-have">bots can&rsquo;t start conversations</a>, so evenrdquo;</a>, so even a card-holding bot needs every player to open a chat with it first.</p>
+<p class="cap">This section replaced a separate bingo census post on 22 October 2026.</p>
+</section>
+
+<p class="foot">Why we built it: <a href="#bots">we tested 27 Telegram bingo bots</a>.<br>
 Want a party game that runs inside Telegram? <a href="/party-game/?src=bingo">Free Party Game Mini App</a>.<br>
 <a href="/">Charlie Morrison Digital</a></p>
 </main>

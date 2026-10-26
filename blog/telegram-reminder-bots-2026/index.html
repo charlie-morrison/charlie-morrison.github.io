@@ -13,7 +13,7 @@
 <meta property="og:description" content="Three sentences sent to every Telegram reminder bot: in 5 minutes, at 09:00 tomorrow, every day. One bot was a day late, one turned &#x27;every day&#x27; into once.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://charliemorrison.dev/blog/telegram-reminder-bots-2026/telegram-reminder-bot-every-day.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Telegram Reminder Bots: 82 Checked, 3 Actually Remind You", "datePublished": "2026-10-23", "dateModified": "2026-10-23", "image": "https://charliemorrison.dev/blog/telegram-reminder-bots-2026/telegram-reminder-bot-every-day.png", "author": {"@type": "Person", "name": "Charlie Morrison", "url": "https://charliemorrison.dev/about/"}, "publisher": {"@type": "Organization", "name": "Charlie Morrison Digital"}, "mainEntityOfPage": "https://charliemorrison.dev/blog/telegram-reminder-bots-2026/"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Telegram Reminder Bots: 82 Checked, 3 Actually Remind You", "datePublished": "2026-10-23", "dateModified": "2026-10-26", "image": "https://charliemorrison.dev/blog/telegram-reminder-bots-2026/telegram-reminder-bot-every-day.png", "author": {"@type": "Person", "name": "Charlie Morrison", "url": "https://charliemorrison.dev/about/"}, "publisher": {"@type": "Organization", "name": "Charlie Morrison Digital"}, "mainEntityOfPage": "https://charliemorrison.dev/blog/telegram-reminder-bots-2026/"}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the best Telegram reminder bot?", "acceptedAnswer": {"@type": "Answer", "text": "In this test @KindlyRemindlyBot was the only bot that got a 5-minute reminder, a next-morning reminder and a daily reminder right from plain English sentences, in the correct time zone. @SkeddyBot was just as punctual but turned “every day at 08:00” into a one-off."}}, {"@type": "Question", "name": "How do I set a daily reminder in Telegram?", "acceptedAnswer": {"@type": "Answer", "text": "Telegram itself only schedules one-off messages, so a repeating reminder needs a bot. Send the bot a sentence like “remind me every day at 08:00 to take vitamins” and check that its reply says “daily”. @KindlyRemindlyBot answered “Daily at 08:00” and showed the next date in every reminder."}}, {"@type": "Question", "name": "Can I set a reminder in Telegram without a bot?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, for a one-off. Hold the Send button, choose Schedule Message, and pick a time. In Saved Messages that works as a reminder to yourself. It doesn’t repeat."}}, {"@type": "Question", "name": "Why did my Telegram reminder come at the wrong time?", "acceptedAnswer": {"@type": "Answer", "text": "Usually the time zone. Some bots assume one without asking, and some only offer fixed offsets like UTC+3 that don’t follow clock changes. One bot in this test also put a 5-minute reminder on the next day. Check the date and zone in the bot’s confirmation."}}]}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -71,7 +71,7 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 <nav><a href="/">Charlie Morrison Digital</a></nav>
 <article>
 <h1>Telegram Reminder Bots: 82 Checked, 3 Actually Remind You</h1>
-<p class="meta">By <a href="/about/">Charlie Morrison</a> &middot; 23 October 2026 (tested 18&ndash;21 October)</p>
+<p class="meta">By <a href="/about/">Charlie Morrison</a> &middot; 23 October 2026, updated 26 October (tested 18&ndash;21 October)</p>
 
 <p>I searched Telegram for reminder bots on 18 October and got 79 of them. None had the verified badge. I added three more that a &ldquo;best Telegram bots&rdquo; list from April recommends, and sent all 82 the same few messages over four days. Three set a reminder from a plain sentence and then sent it. Only one of the three got all three tests right.</p>
 
@@ -87,7 +87,7 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 <li><strong>Test 3, every day.</strong> The same bots got <em>remind me every day at 08:00 to take vitamins</em>. A daily reminder has to fire on two mornings in a row to count.</li>
 </ul>
 
-<p>I was in Kyiv, which on these dates is UTC+3. Nothing was paid for, no channel was joined, and every reminder I created has since been deleted.</p>
+<p>I was in Kyiv, which on those dates was UTC+3. Nothing was paid for, no channel was joined, and every reminder I created has since been deleted.</p>
 
 <h2>The results</h2>
 
@@ -152,9 +152,11 @@ footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-
 
 <h2>Time zones, and the clock change on 25 October</h2>
 
-<p>On 25 October 2026 Ukraine moves its clocks back an hour, from UTC+3 to UTC+2. <a href="https://www.timeanddate.com/time/change/ukraine?year=2026" rel="noopener">Timeanddate</a> lists the change for 04:00 that Sunday, and the bill to stop changing clocks still hasn&rsquo;t come into force. Moscow stays at UTC+3. So until that date, a bot that quietly assumes Moscow time looks correct for Kyiv.</p>
+<p>On 25 October 2026 Ukraine moved its clocks back an hour, from UTC+3 to UTC+2. <a href="https://www.timeanddate.com/time/change/ukraine?year=2026" rel="noopener">Timeanddate</a> lists the change for 04:00 that Sunday, and the bill to stop changing clocks hadn&rsquo;t come into force. Moscow stayed at UTC+3. So until that date, a bot that quietly assumed Moscow time looked correct for Kyiv.</p>
 
-<p>@KindlyRemindlyBot and @SkeddyBot both store a named zone, &ldquo;Europe/Kyiv&rdquo; and &ldquo;Europe/Kiev&rdquo;. A named zone carries the clock change with it. @personal_reminding_bot never asked me for a zone, and its settings only offer fixed offsets, from UTC-5 to UTC+12, with no cities. A fixed offset doesn&rsquo;t move when the clocks do. Its 09:00 matched Kyiv this week because Kyiv and UTC+3 are the same until 25 October. I&rsquo;ll set one more reminder after the change and add the result here.</p>
+<p>@KindlyRemindlyBot and @SkeddyBot both store a named zone, &ldquo;Europe/Kyiv&rdquo; and &ldquo;Europe/Kiev&rdquo;. A named zone carries the clock change with it. @personal_reminding_bot never asked me for a zone, and its settings only offer fixed offsets, from UTC-5 to UTC+12, with no cities. A fixed offset doesn&rsquo;t move when the clocks do. Its 09:00 matched Kyiv in the test week because Kyiv and UTC+3 were the same until 25 October.</p>
+
+<p>On 26 October, the day after the change, I sent the same line to it and to @KindlyRemindlyBot at 22:52 Kyiv time: <em>remind me at 23:05 to check the clock</em>. @KindlyRemindlyBot set it for &ldquo;26 Oct 2026 at 23:05, Europe/Kyiv&rdquo; and rang at 23:05:01. @personal_reminding_bot set it for &ldquo;23:05 27.10.2026&rdquo;, in 23 hours 12 minutes. By its UTC+3 clock it was already 23:52, so 23:05 had passed, and 23:05 tomorrow in UTC+3 is 22:05 in Kyiv. Until you switch its offset to UTC+2 by hand, every reminder it sets rings an hour early, and one asked for within the next hour gets pushed to the next day as well. I deleted both reminders afterwards.</p>
 
 <p>If you set reminders across a clock change, check the zone setting says a city, not a number.</p>
 

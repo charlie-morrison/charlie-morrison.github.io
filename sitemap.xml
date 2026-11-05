@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://charliemorrison.dev/</loc><lastmod>2026-11-04</lastmod><priority>1.0</priority></url>
+<url><loc>https://charliemorrison.dev/</loc><lastmod>2026-11-05</lastmod><priority>1.0</priority></url>
 <url><loc>https://charliemorrison.dev/about/</loc><lastmod>2026-08-23</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/ai-developer-toolkit/</loc><lastmod>2026-08-23</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/anon-msg/</loc><lastmod>2026-09-16</lastmod><priority>0.8</priority></url>
@@ -14,7 +14,7 @@
 <url><loc>https://charliemorrison.dev/blog/anonymous-telegram-bots-see-your-username/</loc><lastmod>2026-08-23</lastmod><priority>0.9</priority></url>
 <url><loc>https://charliemorrison.dev/blog/best-ai-prompts-for-developers-2026/</loc><lastmod>2026-06-07</lastmod><priority>0.9</priority></url>
 <url><loc>https://charliemorrison.dev/blog/best-ai-tools-for-teachers-2026/</loc><lastmod>2026-08-23</lastmod><priority>0.9</priority></url>
-<url><loc>https://charliemorrison.dev/blog/best-ai-tools-small-business-2026/</loc><lastmod>2026-08-23</lastmod><priority>0.9</priority></url>
+<url><loc>https://charliemorrison.dev/blog/best-ai-tools-small-business-2026/</loc><lastmod>2026-11-05</lastmod><priority>0.9</priority></url>
 <url><loc>https://charliemorrison.dev/blog/best-free-ai-image-generators-2026/</loc><lastmod>2026-08-23</lastmod><priority>0.9</priority></url>
 <url><loc>https://charliemorrison.dev/blog/best-telegram-party-games-2026/</loc><lastmod>2026-10-31</lastmod><priority>0.9</priority></url>
 <url><loc>https://charliemorrison.dev/blog/dead-telegram-bot-update-queue/</loc><lastmod>2026-08-23</lastmod><priority>0.9</priority></url>
@@ -105,6 +105,7 @@
 <url><loc>https://charliemorrison.dev/blog/would-you-rather-telegram-bots-2026/</loc><lastmod>2026-10-03</lastmod><priority>0.9</priority></url>
 <url><loc>https://charliemorrison.dev/bots/</loc><lastmod>2026-09-16</lastmod><priority>0.9</priority></url>
 <url><loc>https://charliemorrison.dev/budget-planner/</loc><lastmod>2026-08-23</lastmod><priority>0.8</priority></url>
+<url><loc>https://charliemorrison.dev/cold-outreach-tracker/</loc><lastmod>2026-11-05</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/compare/big-interview-vs-pramp/</loc><lastmod>2026-06-13</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/compare/canva-resume-vs-resume-io/</loc><lastmod>2026-06-13</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/compare/chatgpt-resume-vs-resume-io/</loc><lastmod>2026-06-13</lastmod><priority>0.8</priority></url>
@@ -135,7 +136,7 @@
 <url><loc>https://charliemorrison.dev/cover-letter/</loc><lastmod>2026-06-07</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/cron-cookbook/</loc><lastmod>2026-06-03</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/follow-up-email/</loc><lastmod>2026-06-07</lastmod><priority>0.8</priority></url>
-<url><loc>https://charliemorrison.dev/freelancer-business-kit/</loc><lastmod>2026-08-23</lastmod><priority>0.8</priority></url>
+<url><loc>https://charliemorrison.dev/freelancer-business-kit/</loc><lastmod>2026-11-05</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/interview-prep/</loc><lastmod>2026-07-09</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/job-keywords/</loc><lastmod>2026-06-28</lastmod><priority>0.8</priority></url>
 <url><loc>https://charliemorrison.dev/job-search-toolkit/</loc><lastmod>2026-08-23</lastmod><priority>0.8</priority></url>

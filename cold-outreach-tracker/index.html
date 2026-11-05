@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cold Outreach Tracker Spreadsheet + SOP (Google Sheets)</title>
+<meta name="description" content="A 20-column cold email tracker for Google Sheets or Excel, plus a short outreach SOP and setup guide. The spreadsheet is free on GitHub; the guides are $9.99.">
+<link rel="canonical" href="https://charliemorrison.dev/cold-outreach-tracker/">
+<meta property="og:title" content="Cold Outreach Tracker Spreadsheet + SOP">
+<meta property="og:description" content="One sheet for cold outreach: ICP fit, a 4-touch cadence, next-touch dates, reply sentiment, booked calls. Free CSV on GitHub; the SOP and setup guide are $9.99.">
+<meta property="og:url" content="https://charliemorrison.dev/cold-outreach-tracker/">
+<meta property="og:type" content="product">
+<meta property="og:image" content="https://charliemorrison.dev/cold-outreach-tracker/tracker-sheet-full.png">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-SE8T01PLBJ');
+</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Cold Outreach Tracker + SOP","image":"https://charliemorrison.dev/cold-outreach-tracker/tracker-sheet-full.png","description":"A 20-column cold outreach tracker (CSV for Google Sheets or Excel) with an outreach SOP and a setup guide containing dropdowns, colour rules, an overdue-follow-up alert and six dashboard formulas.","brand":{"@type":"Brand","name":"Charlie Morrison Digital"},"offers":{"@type":"Offer","price":"9.99","priceCurrency":"USD","url":"https://charliemorrison.lemonsqueezy.com/checkout/buy/5649e792-d6e1-4996-ae16-547d811ef9ef?utm_source=site&utm_medium=product&utm_campaign=outreach&utm_content=cold-outreach-tracker","availability":"https://schema.org/InStock"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is the spreadsheet in the paid pack different from the free one on GitHub?","acceptedAnswer":{"@type":"Answer","text":"No. The CSV in the ZIP and the CSV in the free GitHub repository are the same file. What you pay for is the two guides: the outreach SOP and the setup guide with the dashboard formulas."}},{"@type":"Question","name":"Does it send emails or track opens?","acceptedAnswer":{"@type":"Answer","text":"No. It is a spreadsheet. You send from your own email tool and record what happened; the Opened? column is filled in by you from whatever your tool reports."}},{"@type":"Question","name":"Does it work in Excel?","acceptedAnswer":{"@type":"Answer","text":"The CSV imports into Excel (Data, From Text/CSV) and the formulas are standard. The setup steps for dropdowns and colour rules are written for Google Sheets menus, so in Excel you would find the equivalent commands yourself."}},{"@type":"Question","name":"What exactly do I download?","acceptedAnswer":{"@type":"Answer","text":"A ZIP of about 7 KB: cold-outreach-tracker.csv, a README, 01-sop.md (the outreach playbook, about 520 words) and 02-setup.md (the setup guide, about 240 words). All text, in English."}},{"@type":"Question","name":"My formulas show an error. Why?","acceptedAnswer":{"@type":"Answer","text":"If your spreadsheet locale uses a comma as the decimal separator, which is most of Europe, Google Sheets expects a semicolon between formula arguments. Replace each comma inside the formulas with a semicolon."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.65}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+.wrap{max-width:800px;margin:40px auto;padding:0 20px}
+.tag{display:inline-block;background:#f0f0ff;color:#667eea;padding:4px 14px;border-radius:12px;font-size:.85em;margin-bottom:16px}
+h1{font-size:2.1em;margin-bottom:12px;line-height:1.25}
+.desc{font-size:1.15em;color:#555;margin-bottom:24px}
+figure{margin:8px 0 28px}
+.shot{display:block;overflow-x:auto;border:1px solid #e6e6ef;border-radius:10px}
+.shot img{display:block;max-width:none;width:1244px;height:auto}
+figcaption{color:#666;font-size:.9em;margin-top:8px}
+.price{font-size:2em;font-weight:700;color:#764ba2;margin-bottom:8px}
+.pricenote{color:#777;font-size:.92em;margin-bottom:20px}
+.buy{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:16px 40px;border-radius:8px;text-decoration:none;font-weight:700;font-size:1.15em}
+.buy:hover{opacity:.9}
+section{margin:44px 0}
+h2{font-size:1.5em;margin-bottom:14px}
+h3{font-size:1.1em;margin:22px 0 6px}
+p{margin-bottom:14px}
+ul{margin:0 0 14px 22px}
+li{padding:4px 0}
+.cols{display:flex;flex-wrap:wrap;gap:16px}
+.col{flex:1 1 300px;border:1px solid #e6e6ef;border-radius:12px;padding:18px 20px}
+.col.free{background:#f3fbf6;border-color:#cdeadb}
+.col.paid{background:#fafaff}
+.col h3{margin-top:0}
+.col ul{margin-bottom:0}
+code{background:#f4f4f8;padding:1px 5px;border-radius:4px;font-size:.88em;white-space:nowrap}
+pre{background:#f4f4f8;border-radius:8px;padding:12px 14px;overflow-x:auto;font-size:.85em;margin-bottom:14px}
+.note{background:#fff8ec;border:1px solid #f3dcb2;border-radius:12px;padding:16px 20px}
+.faq dt{font-weight:700;margin-top:18px}
+.faq dd{margin:6px 0 0 0;color:#555}
+a{color:#667eea}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+
+<div class="wrap">
+<span class="tag">Sales &amp; outreach</span>
+<h1>Cold Outreach Tracker + SOP</h1>
+<p class="desc">One spreadsheet for people who send their own cold emails: who you contacted, how good a fit they are, which touch they're on, when the next one is due, and whether anything turned into a call. No CRM subscription.</p>
+
+<figure>
+<a class="shot" href="tracker-sheet-full.png"><img src="tracker-sheet.png" alt="The Cold Outreach Tracker in Google Sheets: Status dropdown with Replied in yellow and Bounced in red, overdue Next Touch Date cells in orange, Channel and Reply Sentiment dropdowns, Booked Call, Won and Notes columns" width="1244" height="175"></a>
+<figcaption>The shipped CSV imported into Google Sheets on 5 Nov 2026, with the setup guide's dropdowns and colour rules applied (columns Status to Notes; <a href="tracker-sheet-full.png">full sheet</a>). The orange dates are the overdue-follow-up alert firing: the sample rows are dated June.</figcaption>
+</figure>
+
+<div class="price">$9.99</div>
+<p class="pricenote">Instant download &middot; ZIP with the CSV and two short guides &middot; English &middot; single-user licence</p>
+<a class="buy" href="https://charliemorrison.lemonsqueezy.com/checkout/buy/5649e792-d6e1-4996-ae16-547d811ef9ef?utm_source=site&amp;utm_medium=product&amp;utm_campaign=outreach&amp;utm_content=cold-outreach-tracker">Get the tracker + SOP</a>
+
+<section>
+<h2>Free or paid: what you actually get</h2>
+<p>The spreadsheet is free. It lives in a <a href="https://github.com/charlie-morrison/cold-outreach-tracker">public GitHub repository</a>, and the CSV there is byte-for-byte the same file as the one in the paid ZIP. If all you want is the sheet, take it from GitHub and don't buy anything.</p>
+<div class="cols">
+<div class="col free">
+<h3>Free on GitHub</h3>
+<ul>
+<li>The 20-column tracker CSV</li>
+<li>A quickstart: import, freeze the header, add the Status dropdown</li>
+<li>A summary of the 4-touch follow-up sequence</li>
+</ul>
+</div>
+<div class="col paid">
+<h3>Paid ZIP adds</h3>
+<ul>
+<li><b>01-sop.md</b>: the outreach playbook (about 520 words)</li>
+<li><b>02-setup.md</b>: dropdowns for three columns, Status colours, the overdue-follow-up alert and six dashboard formulas (about 240 words)</li>
+<li>A README and a licence to use it for your own outreach</li>
+</ul>
+</div>
+</div>
+<p style="margin-top:14px">That is the whole product: two short text guides on top of a free sheet. It is priced as that, not as a course.</p>
+</section>
+
+<section>
+<h2>The 20 columns</h2>
+<p>Grouped by what they're for. Every row is one person, not one company: a named contact with a role converts, a generic inbox doesn't.</p>
+<ul>
+<li><b>Who:</b> Date Added, Company, Contact Name, Role, Email, LinkedIn / Source, Segment</li>
+<li><b>Should you send at all:</b> ICP Fit (1-5). The SOP's rule is to never send to a 1 or 2.</li>
+<li><b>Where they are:</b> Status, Touch #, Last Touch Date, Next Touch Date, Channel</li>
+<li><b>What happened:</b> Opened?, Replied?, Reply Sentiment, Booked Call?, Won?, Deal Value (USD)</li>
+<li><b>Context:</b> Notes</li>
+</ul>
+<p>The column that does the work is <b>Next Touch Date</b>. You set it every time you log a touch, and after setup any date that has already passed turns orange, so the follow-ups you owe are the first thing you see when you open the sheet.</p>
+</section>
+
+<section>
+<h2>What the SOP covers</h2>
+<ul>
+<li><b>Building the list:</b> one tight segment before volume, verify addresses before sending, mark bounces and never re-add them.</li>
+<li><b>Sending infrastructure:</b> a separate lookalike domain, SPF, DKIM and DMARC, about two weeks of warm-up, 20-40 sends a day per mailbox. Gmail's own <a href="https://support.google.com/a/answer/81126">sender guidelines</a> require SPF or DKIM from every sender and a spam rate under 0.3%, with stricter rules, DMARC included, above 5,000 messages a day.</li>
+<li><b>The 4-touch sequence:</b> the ask, the proof (+3 days), a new angle (+4), the breakup (+5), with what each email should and shouldn't contain.</li>
+<li><b>Reading replies:</b> "not now" is a positive with a date. Only Booked Call? counts as a conversion.</li>
+<li><b>A 15-minute weekly review:</b> reply rate, meeting rate and pipeline value, and what to change if replies stay under 3% after 100 sends.</li>
+<li><b>Failure modes:</b> broad lists, skipped follow-ups, links in the first email, sending from your real domain.</li>
+</ul>
+</section>
+
+<section>
+<h2>The setup guide, and a fix we made to it</h2>
+<p>The setup guide turns the CSV into a working sheet in about five minutes: dropdowns on Status, Reply Sentiment and Channel (Google's help on <a href="https://support.google.com/docs/answer/186103">in-cell dropdowns</a> if you haven't made one before), colour rules on Status, a custom-formula rule that highlights overdue follow-ups, and six formulas for a small dashboard: contacts, emails sent, reply rate, meeting rate, open pipeline value and won revenue.</p>
+<div class="note">
+<p><b>Correction, 5 Nov 2026.</b> While building the sheet in the screenshot above, we found that two of the six formulas were wrong. Reply rate and meeting rate divided by every row whose status isn't "New", and that includes the empty rows below your data, so a fresh sheet showed about 0.1% instead of the real rate. On the three sample rows the original reply-rate formula returned 0.1%; the corrected one returns 33.3% (one reply out of three contacts touched). The corrected versions:</p>
+<pre>Reply rate:   =IFERROR(COUNTIF(O2:O1000,"Yes")/(COUNTIF(I2:I1000,"&lt;&gt;New")-COUNTBLANK(I2:I1000)),0)
+Meeting rate: =IFERROR(COUNTIF(Q2:Q1000,"Yes")/(COUNTIF(I2:I1000,"&lt;&gt;New")-COUNTBLANK(I2:I1000)),0)</pre>
+<p style="margin-bottom:0">If you bought the pack before this date, paste these over the two lines in <code>02-setup.md</code>. The other four formulas were correct.</p>
+</div>
+</section>
+
+<section>
+<h2>Who it's for, and who it isn't</h2>
+<p>It fits a freelancer, founder or small agency sending somewhere between 20 and 200 cold emails a week by hand, who keeps losing track of who is due a follow-up. It doesn't fit a team that needs shared inboxes, automatic sequences or open tracking. That's what outreach tools and CRMs are for, and a spreadsheet won't replace them.</p>
+</section>
+
+<section class="faq">
+<h2>Questions</h2>
+<dl>
+<dt>Is the spreadsheet in the paid pack different from the free one?</dt>
+<dd>No. Same file. You pay for the two guides.</dd>
+<dt>Does it send emails or track opens?</dt>
+<dd>No. It's a spreadsheet. You send from your own email tool and record what happened. You fill in the Opened? column yourself from whatever your tool reports.</dd>
+<dt>Does it work in Excel?</dt>
+<dd>The CSV imports into Excel (Data &rarr; From Text/CSV) and the formulas are standard. The dropdown and colour steps are written for Google Sheets menus, so in Excel you'd use the equivalent commands.</dd>
+<dt>What exactly do I download?</dt>
+<dd>A ZIP of about 7 KB: <code>cold-outreach-tracker.csv</code>, a README, <code>01-sop.md</code> and <code>02-setup.md</code>. All plain text.</dd>
+<dt>My formulas show an error. Why?</dt>
+<dd>If your spreadsheet's locale uses a comma as the decimal separator (most of Europe), Google Sheets expects <code>;</code> between formula arguments. Replace each comma inside the formulas with a semicolon. We hit this ourselves: the overdue-alert rule was rejected on a Ukrainian-locale sheet and accepted on an English one.</dd>
+</dl>
+</section>
+
+<section>
+<h2>Related</h2>
+<ul>
+<li><a href="https://github.com/charlie-morrison/cold-outreach-tracker">The free tracker on GitHub</a>: CSV, quickstart and follow-up summary</li>
+<li><a href="/freelancer-business-kit/">Freelancer's AI Business Kit</a>: prompts and templates for finding and handling clients</li>
+<li><a href="/blog/best-ai-tools-small-business-2026/">Best AI tools for small business owners</a>, including tools that write outreach emails</li>
+</ul>
+</section>
+
+<p style="color:#777;font-size:.92em">Built and written by <a href="/about">Charlie Morrison</a>. The screenshot and the formula results on this page come from a real Google Sheet built from the shipped CSV on 5 Nov 2026.</p>
+
+<a href="/" class="back">&larr; Browse all products</a>
+</div>
+
+<footer>
+<p>&copy; 2026 Charlie Morrison Digital.</p>
+<p style="margin-top:8px"><a href="/tools/">Free Tools</a> &middot; <a href="/blog/">Blog</a> &middot; <a href="https://charliemorrison.lemonsqueezy.com">Store</a></p>
+</footer>
+</body>
+</html>

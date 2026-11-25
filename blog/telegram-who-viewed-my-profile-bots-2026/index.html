@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SE8T01PLBJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-SE8T01PLBJ",{send_page_view:true,linker:{domains:["charliemorrison.dev","botcraftgroup.com"]}});</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who Viewed My Telegram Profile? I Tested 32 Bots</title>
+<meta name="description" content="I sent /start to 32 Telegram bots that promise to show who viewed your profile. None showed a viewer, 16 asked for something first, 12 never answered.">
+<meta name="keywords" content="who viewed my telegram profile, telegram profile viewer bot, telegram profile visitors, who visited my telegram profile, telegram profile views">
+<link rel="canonical" href="https://charliemorrison.dev/blog/telegram-who-viewed-my-profile-bots-2026/">
+<meta property="og:title" content="Who Viewed My Telegram Profile? I Tested 32 Bots">
+<meta property="og:description" content="32 Telegram bots that promise to show who viewed your profile, each sent /start. None showed a viewer; twelve pushed the same channel.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://charliemorrison.dev/blog/telegram-who-viewed-my-profile-bots-2026/telegram-who-viewed-my-profile-bots.jpg">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Who Viewed My Telegram Profile? I Tested 32 Bots", "datePublished": "2026-11-25", "dateModified": "2026-11-25", "image": "https://charliemorrison.dev/blog/telegram-who-viewed-my-profile-bots-2026/telegram-who-viewed-my-profile-bots.jpg", "author": {"@type": "Person", "name": "Charlie Morrison", "url": "https://charliemorrison.dev/about/"}, "publisher": {"@type": "Organization", "name": "Charlie Morrison Digital"}, "mainEntityOfPage": "https://charliemorrison.dev/blog/telegram-who-viewed-my-profile-bots-2026/"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can you see who viewed your Telegram profile?", "acceptedAnswer": {"@type": "Answer", "text": "No. Telegram doesn't show profile views to anyone, and bots don't receive them either: there is no profile-view update in the Bot API. You can only see who watched your own Stories."}}, {"@type": "Question", "name": "Do Telegram profile viewer bots work?", "acceptedAnswer": {"@type": "Answer", "text": "In my test of 32 of them in November 2026, none showed a single profile viewer. Twelve never answered /start at all, even two days later. Sixteen of the 20 that answered asked me to join a channel, invite people, pay or check a subscription first, and three turned out to be unrelated bots."}}, {"@type": "Question", "name": "Are profile viewer bots safe?", "acceptedAnswer": {"@type": "Answer", "text": "Pressing Start shows the bot your name and username, as with any bot. What they ask for next costs more. Twelve of the bots I tested send you to the same advertising channel with 3.4 million subscribers. One lists everyone who opens your shared link, by Telegram name and username."}}, {"@type": "Question", "name": "Can I see who viewed my Telegram profile picture?", "acceptedAnswer": {"@type": "Answer", "text": "No. Telegram has no viewer list for profile photos either. You can limit who sees your photo in Settings, then Privacy and Security."}}]}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a2e;line-height:1.8}
+nav{background:#1a1a2e;padding:12px 20px}nav a{color:#fff;text-decoration:none;font-weight:600}
+article{max-width:720px;margin:40px auto;padding:0 20px}
+h1{font-size:2em;margin-bottom:8px;line-height:1.3}
+.meta{color:#999;margin-bottom:32px}
+.meta a{color:#667eea;text-decoration:none}
+h2{font-size:1.4em;margin:32px 0 12px;color:#1a1a2e}
+h3{font-size:1.15em;margin:20px 0 8px;color:#333}
+p{margin-bottom:16px;color:#333}
+ul,ol{margin:0 0 16px 24px;color:#333}
+li{margin-bottom:8px}
+a{color:#667eea}
+code{background:#f1f3f5;padding:2px 6px;border-radius:4px;font-size:.92em}
+blockquote{border-left:4px solid #cbd5e1;background:#f8fafc;padding:12px 18px;margin:20px 0;border-radius:0 8px 8px 0;color:#334155}
+.cta-box{background:linear-gradient(135deg,#667eea10,#764ba210);border:2px solid #667eea;border-radius:12px;padding:24px;margin:32px 0;text-align:center}
+.cta-box h3{margin-bottom:8px;color:#764ba2}
+.cta-box a{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:12px}
+.cta-box .alt{display:block;margin-top:14px;font-size:.9em;color:#666}
+.cta-box.pack{background:linear-gradient(135deg,#f6ad5510,#dd6b2010);border-color:#dd6b20}
+.cta-box.pack h3{color:#c05621}
+.cta-box.pack a{background:linear-gradient(135deg,#f6ad55,#dd6b20)}
+.cta-box .alt a{background:none;color:#667eea;padding:0;font-weight:600;display:inline;margin:0}
+.cta-box.pack .alt a{background:none;color:#c05621}
+figure{margin:28px 0}
+figure img{width:100%;height:auto;border-radius:12px;border:1px solid #e5e7eb}
+figcaption{color:#777;font-size:.9em;margin-top:8px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.95em}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#f8f9fa}
+td.yes{color:#2b8a3e;font-weight:600;white-space:nowrap}
+td.no{color:#c92a2a;font-weight:600;white-space:nowrap}
+td.mid{color:#b45309;font-weight:600;white-space:nowrap}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:560px){
+h1{font-size:1.6em}
+/* Multi-column tables cannot fit 375px: the last column renders off-screen
+   behind a scroll nobody can see. Stack each row into a labelled card. */
+table{font-size:.92em;margin:16px 0;border:0}
+table thead{position:absolute;left:-9999px}
+table tr{display:block;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:14px;padding:4px 0}
+table td{display:block;width:auto;border:0;padding:6px 14px}
+table td::before{content:attr(data-l);display:block;font-size:.74em;text-transform:uppercase;letter-spacing:.05em;color:#8b8b96;margin-bottom:1px}
+td.yes,td.no,td.mid{white-space:normal}
+}
+.note{background:#fffbea;border-left:4px solid #f0c000;padding:14px 18px;border-radius:8px;margin:24px 0;font-size:.96em}
+.back{display:inline-block;margin-top:32px;color:#667eea;text-decoration:none}
+footer{background:#1a1a2e;color:#999;text-align:center;padding:30px 20px;margin-top:60px}footer a{color:#667eea;text-decoration:none}
+.faq details{border:1px solid #e5e7eb;border-radius:10px;padding:12px 16px;margin-bottom:10px}.faq summary{font-weight:600;cursor:pointer}.faq p{margin:10px 0 0}
+</style>
+</head>
+<body>
+<nav><a href="/">Charlie Morrison Digital</a></nav>
+<article>
+<h1>Who Viewed My Telegram Profile? I Tested 32 Bots</h1>
+<p class="meta">By <a href="/about/">Charlie Morrison</a> &middot; 25 November 2026 (tested 23–25 November 2026)</p>
+
+<!-- 11-23 draft (sh-night2): every number below is from assets/tg-w48-profileviewer-discovery.json, -corpus.json, -probe.json and
+     drafts/w48candidates/NOTES.md §11-23. LATE_* = late re-reads 11-24 and 11-25 (w48_dirlate.py on the probe file). If any of the
+     12 silent bots answered late: recount 20/12, the gate classes, 16 of 20, FAQ, DESC. Builder refuses while FILL is left. -->
+
+<p>Type "who viewed my Telegram profile" into Telegram's search and you get a page of bots that promise to tell you. They have names like Who Visited Me, Profile Visitors and Who Viewed My Profile, in English, Arabic, Persian and Russian. I wanted to know what they actually do when you press Start.</p>
+
+<p>The short answer comes first, because it decides everything else: Telegram doesn't tell anyone who looked at their profile, and it doesn't tell bots either. So on 23 November 2026 I sent <code>/start</code> to all 32 bots that claim to know, and wrote down what each one asked for before it would show me anything. None of them showed me a single viewer. Sixteen asked me to do something first, and twelve of those sent me to the same channel.</p>
+
+<h2>What Telegram shows you, and what it doesn't</h2>
+
+<p>A bot only learns what Telegram's servers send it. The full list is the <code>Update</code> object in the <a href="https://core.telegram.org/bots/api#update" rel="noopener">Bot API documentation</a>: new messages, edited messages, reactions, button presses, inline queries, polls, people joining or leaving a chat, payments and a few more. There is no update for "someone opened this person's profile". A bot that says it can see your profile visitors is claiming data Telegram never hands to bots.</p>
+
+<p>Telegram does show one kind of viewer list, and it's probably where the idea comes from. If you post a Story, you can see who watched it. The method behind that, <a href="https://core.telegram.org/api/stories" rel="noopener"><code>stories.getStoryViewsList</code></a>, "can only be used for stories posted by the current user". It works for your own stories and nothing else.</p>
+
+<p>And if what you really want is the opposite, to be seen less, that's built in. <a href="https://telegram.org/faq" rel="noopener">Telegram's FAQ</a> answers "Can I hide my 'last seen' time?" with "You can choose who sees this info in Privacy and Security settings." The same menu has a setting for who sees your profile photo.</p>
+
+<h2>How I tested</h2>
+
+<p>I wrote the rules down before the first search.</p>
+
+<ul>
+<li><strong>Which bots.</strong> Every bot Telegram's global search returned for eight queries: <em>profile viewer</em>, <em>who viewed my profile</em>, <em>profile visitors</em>, <em>who visited</em>, <em>profile views</em>, <em>who viewed</em>, <em>stalker</em> and <em>profile guests</em>. That gave 39 bots. Seven were about other apps (four Instagram viewers, one each for LinkedIn, Snapchat and a Minecraft server), so I left them out. The other 32 say, in their own name, that they show who visited your Telegram profile.</li>
+<li><strong>The web.</strong> I also read the top ten Google results for <em>telegram profile viewer bot</em>. They were profile-lookup scrapers and an open-source bot that shows your own user ID. None of them named a bot that shows profile visitors, so the list stayed at 32.</li>
+<li><strong>What I did.</strong> One <code>/start</code> in a private chat, then a 15-second wait. I read each answer and the labels on its buttons. I didn't press any button, join any channel, share my phone number, invite anyone or pay. A day and two days later I read every silent chat again to catch late answers.</li>
+<li><strong>Pacing.</strong> At least 18 seconds between messages, and no more than 60 messages from the account that evening.</li>
+<li><strong>Predictions, written before the first message:</strong> no bot shows a real list of profile viewers, and at least half of those that answer put something between you and the "result".</li>
+</ul>
+
+<h2>What 32 bots did when I pressed Start</h2>
+
+<p>Twenty answered within 15 seconds. The other twelve never did: I read those chats again a day later and two days later, and all twelve were still empty. Only one of the 32 shows a monthly user count in its profile, and that count is 1.</p>
+
+<table>
+<thead><tr><th>What the bot did</th><th>Bots</th><th>What it wanted</th></tr></thead>
+<tbody>
+<tr><td data-l="What the bot did">"Subscribe to our channel first"</td><td class="no" data-l="Bots">13</td><td data-l="What it wanted">Join a channel, then press Start again. Twelve of them link to the same channel.</td></tr>
+<tr><td data-l="What the bot did">"Add 10 people to see your visitors"</td><td class="no" data-l="Bots">1</td><td data-l="What it wanted">Invite ten people through your personal link.</td></tr>
+<tr><td data-l="What the bot did">Paid plans</td><td class="no" data-l="Bots">1</td><td data-l="What it wanted">Choose a plan from its "Tariffs" button.</td></tr>
+<tr><td data-l="What the bot did">"Check subscription" buttons</td><td class="mid" data-l="Bots">1</td><td data-l="What it wanted">Buttons for "Check subscription" and "I sent it".</td></tr>
+<tr><td data-l="What the bot did">A promise and nothing else</td><td class="mid" data-l="Bots">1</td><td data-l="What it wanted">Nothing. It said it would show me who saw my profile, then stopped.</td></tr>
+<tr><td data-l="What the bot did">A different bot entirely</td><td class="mid" data-l="Bots">3</td><td data-l="What it wanted">Nothing. A sticker downloader, an AI photo enhancer and a contact form.</td></tr>
+<tr><td data-l="What the bot did">No answer</td><td class="no" data-l="Bots">12</td><td data-l="What it wanted">Nothing, then or later.</td></tr>
+</tbody>
+</table>
+
+<p>So both predictions held. No bot showed me a viewer, and 16 of the 20 that answered wanted a subscription, invites, money or a check-in before they would do anything. That's 80%.</p>
+
+<figure><img src="telegram-who-viewed-my-profile-bots.jpg" alt="Two Telegram chats. Top: a bot called who visited my profile? answers /start with: I am a bot that shows you who viewed your profile. Anyone who opens your link will appear with their name and username. Number of members you added (0). To see all your visitors, you need to add (10) people to the bot. Buttons: Who visited my profile, Those you added, invitation link, My visitors. Bottom: an Arabic-named bot answers /start in Arabic asking me to subscribe to the bot's channel through a t.me invite link, then send /start again" width="896" height="1034" loading="lazy"><figcaption>Two of the 32, 23 November 2026. Top: the referral gate, ten invites before you see anything. Bottom: one of the twelve bots that answer with the same Arabic text and the same channel link.</figcaption></figure>
+
+<h2>Twelve bots, one channel</h2>
+
+<p>The biggest group was the strangest. Twelve bots with different usernames (three of them called "Who visited my profile", two "Profile visitors", one "Who?", one "BotSee Who Viewed my profile" and five with Arabic names; one has "crypto" in its username) all answered <code>/start</code> with the same Arabic message, word for word: "Sorry, dear. You have to subscribe to the bot's channel to be able to use it." Then came an invite link, and then "Subscribe, then send /start".</p>
+
+<p>It was the same link in all twelve. I didn't join, but Telegram will tell you what's behind an invite link without joining. It's a public channel called قناة فسنجون (the Fasngon channel), with 3,399,385 subscribers on 23 November and 3,400,515 a day later. Its description calls it the channel of a bot called Fasngon and names one more bot "for funding", whose display name translates as "(Bot) Advertisements" and which has 41,079 monthly users. It also carries a line for people being blackmailed or abused through channels and groups that were "funded" through it.</p>
+
+<p>Put together, that's what these bots are for. A "who visited my profile" name gets people to press Start, and the forced subscription turns each press into a subscriber for a channel whose description sends advertisers to that bot. Whether any of the twelve would show you something after you join, I can't say, because joining is exactly the thing I wasn't going to do. But nothing in Telegram's API would give them visitors to show.</p>
+
+<p>A thirteenth bot, with a Persian welcome, did the same with a different channel: a "top tweets" channel with 42,614 subscribers that talks about "life and society" and has nothing to do with profiles.</p>
+
+<h2>The one that does show visitors, and why you should be careful</h2>
+
+<p>One bot, built with a free bot maker called Echo Maker, was more honest than the rest, if you read closely: "Anyone who opens <strong>your link</strong> will appear with their name and username." So it doesn't watch your profile at all. It gives you a link to share, and logs the people who tap it. To see the whole list, you first have to add ten people to the bot.</p>
+
+<p>The link is the part worth knowing about. Its "My visitors" button opens a Mini App, a small web page that runs inside Telegram. Telegram gives every Mini App some data about whoever opens it: according to <a href="https://core.telegram.org/bots/webapps#webappuser" rel="noopener">the Mini Apps documentation</a>, that's your user ID, first and last name, username, language and, where your privacy settings allow it, your profile photo. I read this Mini App's page code without opening it inside Telegram. It loads Telegram's Mini App script, reads that user data and calls an address on a third-party domain.</p>
+
+<p>So the "visitor" in this scheme is whoever trusted a friend's link. Opening a bot's link and pressing Start shows that bot your name and username, and that's all this one needs to list you as a visitor. If someone sends you a "see who checks my profile" link, that's the price of tapping it. That's a much smaller trick than the bot's name suggests, but it's the only real data any of these bots could collect. I wrote about the same mechanism from the other side in <a href="/blog/anonymous-telegram-bots-see-your-username/">"anonymous" bots that still see your @username</a>.</p>
+
+<h2>Bots that are something else</h2>
+
+<p>Three bots had a profile-viewer name and a different job:</p>
+
+<ul>
+<li>"Who Viewed My Profile" (@Cheetybot) answered "Download stickers and videos", in Persian, from a Manybot template.</li>
+<li>"Who visited me?" (@Whovisitedme_bot) offered to "enhance your photo quality with AI".</li>
+<li>"Telegram profile views" (@Whoseesmyprofielbot) is a Livegram contact form: "You can contact us using this bot."</li>
+</ul>
+
+<p>Three more never got as far as profiles. One promised "It will show you who did see your profile" and offered nothing else. A Russian one showed "Start", "Next", "Check subscription" and "I sent it" buttons, which is the shape of another subscription gate. The bot called "Stalker-bot" welcomed me to something called "Privat" and asked me to choose a plan from its "Tariffs" button.</p>
+
+<p>Seven of the twenty that answered name the bot builder they were made with: Manybot three, Echo Maker two, Livegram and Nemiling one each. The twelve forced-subscription bots name no builder, but all of them point to the Fasngon channel. That explains why there are so many and why they look alike. Echo Maker's own profile advertises 40 free templates and more than 50 million bots made, and a popular search term does the marketing. I've seen the same pattern before, in <a href="/blog/telegram-dating-bots-2026/">dating bots that turned out to be ad links</a>.</p>
+
+<h2>What to do instead</h2>
+
+<ul>
+<li><strong>Don't press Start on a profile-viewer bot</strong>, and if you already did, don't join the channel it asks for or invite anyone. You won't get a list of viewers. You'll only make the channel bigger.</li>
+<li><strong>Don't open "see who visits me" links from friends.</strong> The person who sent it may not know that opening it and pressing Start shows your name and username to whoever runs the bot.</li>
+<li><strong>If you want to know who's interested, post a Story.</strong> It's the one place Telegram shows you who looked.</li>
+<li><strong>If you want to be seen less,</strong> go to Settings, then Privacy and Security, and choose who sees your last seen time and your profile photo.</li>
+</ul>
+
+<h2>Questions</h2>
+
+<details><summary>Can you see who viewed your Telegram profile?</summary>
+<p>No. Telegram doesn't show profile views to anyone, and bots don't receive them either: there is no profile-view update in the Bot API. You can only see who watched your own Stories.</p></details>
+
+<details><summary>Do Telegram profile viewer bots work?</summary>
+<p>In my test of 32 of them in November 2026, none showed a single profile viewer. Twelve never answered <code>/start</code> at all, even two days later. Sixteen of the 20 that answered asked me to join a channel, invite people, pay or check a subscription first, and three turned out to be unrelated bots.</p></details>
+
+<details><summary>Are profile viewer bots safe?</summary>
+<p>Pressing Start shows the bot your name and username, as with any bot. What they ask for next costs more. Twelve of the bots I tested send you to the same advertising channel with 3.4 million subscribers. One lists everyone who opens your shared link, by Telegram name and username.</p></details>
+
+<details><summary>Can I see who viewed my Telegram profile picture?</summary>
+<p>No. Telegram has no viewer list for profile photos either. You can limit who sees your photo in Settings, then Privacy and Security.</p></details>
+
+<div class="cta-box">
+<h3>A Telegram game that doesn't want your followers</h3>
+<p>The free Party Game runs Truth or Dare, Never Have I Ever and Would You Rather as a Mini App inside Telegram. There's no channel to join and no one to invite.</p>
+<a href="https://t.me/charlie_party_bot/partygame?startapp=profileviewers">Open the Party Game</a>
+<span class="alt">More bots I tested: <a href="/blog/telegram-anonymous-chat-bots-tested-2026/">anonymous chat bots</a>.</span>
+</div>
+
+<h2>Related reading</h2>
+<ul>
+<li><a href="/blog/anonymous-telegram-bots-see-your-username/">"Anonymous" Telegram bots still see your @username</a></li>
+<li><a href="/blog/anonymous-message-apps-telegram-2026/">Anonymous message apps on Telegram</a></li>
+<li><a href="/blog/telegram-anonymous-chat-bots-tested-2026/">Telegram anonymous chat bots, tested</a></li>
+<li><a href="/blog/telegram-dating-bots-2026/">Telegram dating bots: 22 tested</a></li>
+</ul>
+
+
+<p><a class="back" href="/blog/">&larr; Back to all posts</a></p>
+
+</article>
+<footer>
+<p>&copy; 2026 <a href="/">Charlie Morrison Digital</a> &middot; <a href="/about/">About</a> &middot; <a href="/blog/">Blog</a></p>
+</footer>
+</body>
+</html>
